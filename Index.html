@@ -3,16 +3,24 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SBP - Sell Buy Pakistan</title>
+  <title>SBP - تصویر اپلوڈ</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <h1>پروڈکٹ شامل کریں</h1>
+
+  <h1>SBP - پروڈکٹ تصویر اپلوڈ</h1>
 
   <div class="upload-box">
-    <label for="uploadImage">تصویر اپلوڈ کریں</label>
+    <label for="uploadImage">📷 گیلری سے تصویر چنیں</label>
     <input type="file" id="uploadImage" accept="image/*">
-    <img id="preview" src="" alt="Preview" style="display:none; width:200px; margin-top:10px;">
+
+    <!-- Preview -->
+    <img id="preview" src="" alt="Preview" style="display:none;">
+
+    <!-- Loading -->
+    <p id="loading" style="display:none;">اپلوڈ ہو رہی ہے...</p>
+
+    <!-- Result Link -->
     <p id="imageUrl"></p>
   </div>
 
