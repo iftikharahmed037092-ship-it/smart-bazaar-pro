@@ -1,31 +1,62 @@
-const CLOUD_NAME = "tmdzy5c0"; // آپ کا Cloud Name
-const UPLOAD_PRESET = "sbp_unsigned"; // جو ہم نے بنایا
+body {
+  font-family: system-ui, sans-serif;
+  background: #f0f4f8;
+  text-align: center;
+  padding: 20px;
+  direction: rtl;
+}
 
-document.getElementById('uploadImage').addEventListener('change', async function(e) {
-  const file = e.target.files[0];
-  if(!file) return;
+h1 {
+  color: #2e7d32;
+  margin-bottom: 30px;
+}
 
-  const formData = new FormData();
-  formData.append('file', file);
-  formData.append('upload_preset', UPLOAD_PRESET);
+.upload-box {
+  background: white;
+  padding: 30px;
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  max-width: 400px;
+  margin: 0 auto;
+}
 
-  // Preview دکھائیں
-  document.getElementById('preview').src = URL.createObjectURL(file);
-  document.getElementById('preview').style.display = 'block';
+label {
+  background: #2e7d32;
+  color: white;
+  padding: 12px 24px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 16px;
+  display: inline-block;
+}
 
-  try {
-    const res = await fetch(`https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`, {
-      method: 'POST',
-      body: formData
-    });
+label:hover {
+  background: #1b5e20;
+}
 
-    const data = await res.json();
-    console.log("تصویر کا لنک:", data.secure_url);
+input[type="file"] {
+  display: none;
+}
 
-    document.getElementById('imageUrl').innerHTML =
-      `لنک کاپی کریں: <a href="${data.secure_url}" target="_blank">${data.secure_url}</a>`;
+#preview {
+  width: 100%;
+  max-width: 300px;
+  border-radius: 12px;
+  margin-top: 20px;
+  border: 2px solid #ddd;
+}
 
-  } catch(error) {
-    alert("اپلوڈ میں مسئلہ: " + error);
-  }
-});
+#loading {
+  color: #ff9800;
+  font-weight: bold;
+  margin-top: 15px;
+}
+
+#imageUrl {
+  word-break: break-all;
+  margin-top: 15px;
+}
+#imageUrl a {
+  color: #1976d2;
+  text-decoration: none;
+}
