@@ -1,62 +1,46 @@
-body {
-  font-family: system-ui, sans-serif;
-  background: #f0f4f8;
-  text-align: center;
-  padding: 20px;
-  direction: rtl;
-}
+const CLOUD_NAME = "tmdzy5c0"; // آپ کا Cloud Name
+const UPLOAD_PRESET = "sbp_unsigned"; // Cloudinary میں یہ نام سے Preset بنائیں
 
-h1 {
-  color: #2e7d32;
-  margin-bottom: 30px;
-}
+const uploadInput = document.getElementById('uploadImage');
+const preview = document.getElementById('preview');
+const loading = document.getElementById('loading');
+const imageUrl = document.getElementById('imageUrl');
 
-.upload-box {
-  background: white;
-  padding: 30px;
-  border-radius: 16px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-  max-width: 400px;
-  margin: 0 auto;
-}
+uploadInput.addEventListener('change', async function(e) {
+  const file = e.target.files[0];
+  if(!file) return;
 
-label {
-  background: #2e7d32;
-  color: white;
-  padding: 12px 24px;
-  border-radius: 10px;
-  cursor: pointer;
-  font-size: 16px;
-  display: inline-block;
-}
+  // 1. Preview دکھائیں
+  preview.src = URL.createObjectURL(file);
+  preview.style.display = 'block';
+  loading.style.display = 'block';
+  imageUrl.innerHTML = "";
 
-label:hover {
-  background: #1b5e20;
-}
+  const formData = new FormData();
+  formData.append('file', file);
+  formData.append('upload_preset', UPLOAD_PRESET);
 
-input[type="file"] {
-  display: none;
-}
+  try {
+    // 2. Cloudinary پر بھیجیں
+    const res = await fetch(`https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`, {
+      method: 'POST',
+      body: formData
+    });
 
-#preview {
-  width: 100%;
-  max-width: 300px;
-  border-radius: 12px;
-  margin-top: 20px;
-  border: 2px solid #ddd;
-}
+    const data = await res.json();
+    loading.style.display = 'none';
 
-#loading {
-  color: #ff9800;
-  font-weight: bold;
-  margin-top: 15px;
-}
+    if(data.secure_url) {
+      console.log("تصویر کا لنک:", data.secure_url);
+      imageUrl.innerHTML = `✅ اپلوڈ ہو گیا! <br> <a href="${data.secure_url}" target="_blank">لنک کاپی کریں</a>`;
+      alert("تصویر کامیابی سے اپلوڈ ہو گئی!");
+    } else {
+      throw new Error(data.error.message);
+    }
 
-#imageUrl {
-  word-break: break-all;
-  margin-top: 15px;
-}
-#imageUrl a {
-  color: #1976d2;
-  text-decoration: none;
-}
+  } catch(error) {
+    loading.style.display = 'none';
+    alert("اپلوڈ میں مسئلہ: " + error.message);
+    console.error(error);
+  }
+});
