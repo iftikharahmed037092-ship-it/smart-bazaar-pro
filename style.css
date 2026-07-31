@@ -143,3 +143,52 @@ body {
     padding-bottom: 140px; /* موبائل نیویگیشن بار + سانس */
   }
 }
+/* FOOTER */
+.main-footer {
+  background: #1B5E20; /* Dark Green */
+  color: #E8F5E9;
+  padding: 50px 5% 0;
+  margin-top: 40px;
+}
+.footer-top {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 40px;
+  padding-bottom: 40px;
+}
+.footer-col h4 {
+  color: #FFFFFF;
+  font-size: 18px;
+  margin-bottom: 20px;
+}
+.footer-col p, .footer-col a {
+  font-size: 14px;
+  line-height: 1.8;
+  color: #C8E6C9;
+  text-decoration: none;
+  display: block;
+  margin-bottom: 10px;
+}
+.footer-col a:hover {
+  color: #FFFFFF;
+}
+.social-icons a {
+  font-size: 22px;
+  margin-right: 12px;
+  display: inline-block;
+}
+.footer-bottom {
+  text-align: center;
+  border-top: 1px solid #2E7D32;
+  padding: 20px 0;
+  font-size: 13px;
+  color: #A5D6A7;
+}
+
+/* RESPONSIVE FOOTER */
+@media (max-width: 992px) {
+  .footer-top { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 600px) {
+  .footer-top { grid-template-columns: 1fr; }
+  }
