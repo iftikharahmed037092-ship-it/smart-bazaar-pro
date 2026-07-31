@@ -13,7 +13,7 @@
       direction: rtl;
     }
     h1 { color: #2e7d32; margin-bottom: 30px; }
-   .upload-box {
+  .upload-box {
       background: white;
       padding: 30px;
       border-radius: 16px;
@@ -54,8 +54,8 @@
   </div>
 
   <script>
-    const CLOUD_NAME = "tmdzy5c0";
-    const UPLOAD_PRESET = "smartbazaar"; // <- یہ والا نام 100% کنفرم ہے
+    const CLOUD_NAME = "qsvzrok7"; // <- نئی ID کا Cloud Name
+    const UPLOAD_PRESET = "smartbazaar"; // <- یہ والا Preset
 
     document.getElementById('uploadImage').addEventListener('change', async function(e) {
       const file = e.target.files[0];
@@ -69,7 +69,7 @@
       const formData = new FormData();
       formData.append('file', file);
       formData.append('upload_preset', UPLOAD_PRESET);
-      formData.append('folder', 'smart-bazaar-pro'); // ساری تصویریں اس فولڈر میں جائیں گی
+      formData.append('folder', 'smart-bazaar-pro');
 
       try {
         const res = await fetch(`https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`, {
