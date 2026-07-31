@@ -118,3 +118,20 @@ body { background: #F7FBF8; }
   .product-grid { grid-template-columns: repeat(2, 1fr); gap: 15px; }
   .product-card img { height: 150px; }
 }
+
+
+/* MOBILE BOTTOM SPACING FIX */
+@media (max-width: 768px) {
+  body {
+    padding-bottom: 80px; /* موبائل کے نیچے 80px خالی جگہ چھوڑ دیں */
+  }
+
+  .products {
+    padding-bottom: 40px; /* پروڈکٹ سیکشن کے نیچے بھی فاصلہ */
+  }
+
+  /* آخری کارڈ کے نیچے بھی تھوڑا فاصلہ */
+  .product-grid {
+    padding-bottom: 20px;
+  }
+}
