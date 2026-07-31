@@ -120,18 +120,14 @@ body { background: #F7FBF8; }
 }
 
 
-/* MOBILE BOTTOM SPACING FIX */
+/* سب کے لیے نیچے جگہ */
+body {
+  padding-bottom: 60px; /* ڈیسک ٹاپ + موبائل دونوں کے لیے */
+}
+
+/* موبائل کے لیے تھوڑا زیادہ */
 @media (max-width: 768px) {
   body {
-    padding-bottom: 80px; /* موبائل کے نیچے 80px خالی جگہ چھوڑ دیں */
-  }
-
-  .products {
-    padding-bottom: 40px; /* پروڈکٹ سیکشن کے نیچے بھی فاصلہ */
-  }
-
-  /* آخری کارڈ کے نیچے بھی تھوڑا فاصلہ */
-  .product-grid {
-    padding-bottom: 20px;
+    padding-bottom: 100px; /* موبائل نیویگیشن بار کے لیے */
   }
 }
