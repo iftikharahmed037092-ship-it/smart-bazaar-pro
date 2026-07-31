@@ -1,96 +1,55 @@
 <!DOCTYPE html>
-<html lang="ur" dir="rtl">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SBP - تصویر اپلوڈ</title>
-  <style>
-    body {
-      font-family: system-ui, sans-serif;
-      background: #f0f4f8;
-      text-align: center;
-      padding: 20px;
-      direction: rtl;
-    }
-    h1 { color: #2e7d32; margin-bottom: 30px; }
-  .upload-box {
-      background: white;
-      padding: 30px;
-      border-radius: 16px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-      max-width: 400px;
-      margin: 0 auto;
-    }
-    label {
-      background: #2e7d32;
-      color: white;
-      padding: 12px 24px;
-      border-radius: 10px;
-      cursor: pointer;
-      font-size: 16px;
-      display: inline-block;
-      transition: 0.3s;
-    }
-    label:hover { background: #1b5e20; }
-    input[type="file"] { display: none; }
-    #preview { width: 100%; max-width: 300px; border-radius: 12px; margin-top: 20px; border: 2px solid #ddd; }
-    #loading { color: #ff9800; font-weight: bold; margin-top: 15px; }
-    #imageUrl { word-break: break-all; margin-top: 15px; }
-    #imageUrl a { color: #1976d2; text-decoration: none; }
-    #imageUrl a:hover { text-decoration: underline; }
-  </style>
+  <title>Smart Bazaar Pro - Buy & Sell Anything</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-  <h1>SBP - پروڈکٹ تصویر اپلوڈ</h1>
-
-  <div class="upload-box">
-    <label for="uploadImage">📷 گیلری سے تصویر چنیں</label>
-    <input type="file" id="uploadImage" accept="image/*">
-
-    <img id="preview" src="" alt="Preview" style="display:none;">
-    <p id="loading" style="display:none;">اپلوڈ ہو رہی ہے...</p>
-    <p id="imageUrl"></p>
+  <!-- TOP BAR -->
+  <div class="top-bar">
+    <div class="top-left">Deliver to: <span>Location</span></div>
+    <div class="top-right">
+      <a href="#">Sell on Smart Bazaar Pro</a>
+      <a href="#">Track Order</a>
+      <a href="#">Help & Support</a>
+    </div>
   </div>
 
-  <script>
-    const CLOUD_NAME = "qsvzf0k7"; // <- نئی ID کا Cloud Name
-    const UPLOAD_PRESET = "smartbazaar"; // <- یہ والا Preset
+  <!-- MAIN HEADER -->
+  <header class="main-header">
+    <div class="logo">🛒 <span>Smart</span>Bazaar Pro</div>
+    
+    <div class="search-box">
+      <input type="text" placeholder="Search for products, brands and more...">
+      <select><option>All Categories</option></select>
+      <button class="search-btn">🔍</button>
+    </div>
 
-    document.getElementById('uploadImage').addEventListener('change', async function(e) {
-      const file = e.target.files[0];
-      if(!file) return;
+    <div class="header-icons">
+      <a href="#">👤<span>Login / Signup</span></a>
+      <a href="#">❤️<span>Wishlist</span></a>
+      <a href="#">🛒<span>Cart</span></a>
+    </div>
 
-      document.getElementById('preview').src = URL.createObjectURL(file);
-      document.getElementById('preview').style.display = 'block';
-      document.getElementById('loading').style.display = 'block';
-      document.getElementById('imageUrl').innerHTML = "";
+    <button class="mobile-menu-btn">☰</button>
+  </header>
 
-      const formData = new FormData();
-      formData.append('file', file);
-      formData.append('upload_preset', UPLOAD_PRESET);
-      formData.append('folder', 'smart-bazaar-pro');
+  <!-- NAVBAR -->
+  <nav class="navbar">
+    <div class="all-categories">☰ All Categories</div>
+    <div class="nav-links">
+      <a href="#">Home</a>
+      <a href="#">Deals</a>
+      <a href="#">Top Sellers</a>
+      <a href="#">New Arrivals</a>
+      <a href="#">Brands</a>
+      <a href="#">Stores</a>
+    </div>
+  </nav>
 
-      try {
-        const res = await fetch(`https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`, {
-          method: 'POST',
-          body: formData
-        });
-
-        const data = await res.json();
-        document.getElementById('loading').style.display = 'none';
-
-        if(data.secure_url) {
-          document.getElementById('imageUrl').innerHTML = `✅ اپلوڈ ہو گیا! <br> <a href="${data.secure_url}" target="_blank">تصویر کا لنک: یہاں کلک کریں</a>`;
-        } else {
-          document.getElementById('imageUrl').innerText = "❌ Error: " + data.error.message;
-        }
-
-      } catch(error) {
-        document.getElementById('loading').style.display = 'none';
-        document.getElementById('imageUrl').innerText = "❌ مسئلہ: " + error;
-      }
-    });
-  </script>
+  <script src="script.js"></script>
 </body>
 </html>
