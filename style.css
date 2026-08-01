@@ -222,3 +222,108 @@ display:none;
 }
 
 }
+
+/*==================================================
+SMARTBAZAAR PRO
+HEADER CSS - PART 8
+MAIN HEADER
+==================================================*/
+
+/*==============================
+MAIN HEADER
+==============================*/
+
+.main-header{
+width:100%;
+background:var(--white);
+border-bottom:1px solid var(--border);
+}
+
+.main-header .container{
+height:90px;
+display:flex;
+align-items:center;
+justify-content:space-between;
+gap:25px;
+}
+
+/*==============================
+HEADER LEFT
+==============================*/
+
+.header-left{
+display:flex;
+align-items:center;
+gap:18px;
+flex-shrink:0;
+}
+
+/*==============================
+MENU BUTTON
+==============================*/
+
+.menu-btn{
+width:46px;
+height:46px;
+display:flex;
+align-items:center;
+justify-content:center;
+border:1px solid var(--border);
+border-radius:var(--radius-md);
+background:var(--white);
+font-size:20px;
+color:var(--text);
+cursor:pointer;
+transition:var(--transition);
+}
+
+.menu-btn:hover{
+background:var(--primary);
+color:var(--white);
+}
+
+/*==============================
+LOGO
+==============================*/
+
+.logo{
+display:flex;
+align-items:center;
+gap:12px;
+}
+
+.logo-icon{
+width:50px;
+height:50px;
+border-radius:50%;
+background:var(--primary);
+display:flex;
+align-items:center;
+justify-content:center;
+color:var(--white);
+font-size:22px;
+}
+
+.logo-text{
+display:flex;
+flex-direction:column;
+line-height:1.2;
+font-size:24px;
+font-weight:700;
+color:var(--text);
+}
+
+.logo-text strong{
+color:var(--primary);
+}
+
+/*==============================
+HEADER CENTER
+==============================*/
+
+.header-center{
+flex:1;
+display:flex;
+justify-content:center;
+}
+  
