@@ -3,8 +3,89 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Smart Bazaar Pro - Buy & Sell Anything</title>
-  <link rel="stylesheet" href="style.css">
+  <title>SmartBazaar Pro</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: Arial, sans-serif; }
+    body { background: #f8f9fa; }
+
+    /* TOP BAR */
+    .top-bar {
+      background: #f5f5f5;
+      padding: 8px 5%;
+      font-size: 12px;
+      display: flex;
+      justify-content: space-between;
+      color: #555;
+    }
+    .top-bar-right a { margin-left: 20px; text-decoration: none; color: #555; }
+    .top-bar-right a:hover { color: #1B5E20; }
+
+    /* MAIN HEADER */
+    .main-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 15px 5%;
+      background: white;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      gap: 20px;
+    }
+    .logo { font-size: 24px; color: #1B5E20; font-weight: bold; white-space: nowrap; }
+    .logo b { color: #FF5722; }
+
+    .search-bar {
+      display: flex;
+      flex: 1;
+      border: 2px solid #1B5E20;
+      border-radius: 8px;
+      overflow: hidden;
+      max-width: 600px;
+    }
+    .search-bar input { flex: 1; border: none; padding: 10px 15px; outline: none; font-size: 14px; }
+    .search-bar select { border: none; border-left: 1px solid #ddd; padding: 0 10px; background: #f5f5f5; }
+    .search-bar button { background: #1B5E20; color: white; border: none; padding: 0 20px; cursor: pointer; font-size: 18px; }
+
+    .header-icons { display: flex; gap: 25px; white-space: nowrap; }
+    .header-icons a { text-decoration: none; color: #333; font-size: 14px; }
+    .cart-count { background: #FF5722; color: white; border-radius: 50%; padding: 2px 6px; font-size: 12px; }
+
+    /* CATEGORY NAV */
+    .category-nav { padding: 10px 5%; background: white; border-bottom: 1px solid #eee; }
+    .all-cat-btn { background: #1B5E20; color: color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; }
+
+    /* HERO BANNER */
+    .hero-banner { text-align: center; padding: 40px 5%; background: #E8F5E9; }
+    .hero-banner h2 { font-size: 28px; color: #1B5E20; }
+    .hero-banner p { margin: 10px 0 20px; }
+    .hero-banner button { background: #1B5E20; color: white; border: none; padding: 12px 30px; border-radius: 8px; cursor: pointer; }
+    .hero-banner img { width: 100%; max-width: 1000px; border-radius: 12px; margin-top: 20px; }
+
+    /* FEATURES BAR */
+    .features-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      padding: 20px 5%;
+      background: white;
+      text-align: center;
+      font-size: 14px;
+      gap: 20px;
+    }
+    .features-bar span { font-size: 24px; display: block; margin-bottom: 5px; }
+
+    /* MOBILE RESPONSIVE - سرچ بار اب نہیں چھپے گا */
+    @media (max-width: 992px) {
+      .main-header { flex-wrap: wrap; }
+      .search-bar { order: 3; width: 100%; margin: 10px 0 0 0; max-width: 100%; }
+      .top-bar-right a:nth-child(1) { display: none; }
+      .features-bar { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 600px) {
+      .header-icons { gap: 10px; font-size: 12px; }
+    }
+  </style>
 </head>
 <body>
 
@@ -27,7 +108,7 @@
     </div>
 
     <div class="search-bar">
-      <input type="text" placeholder="Search for products, brands and more...">
+      <input type="text" id="searchInput" placeholder="Search for products, brands and more...">
       <select>
         <option>All Categories</option>
         <option>Mobiles</option>
@@ -67,8 +148,13 @@
 
   <!-- YAHAN TUMHARA PURANA PRODUCT GRID WALA CODE RAHEGA -->
 
-  <!-- FOOTER WALA CODE YAHAN RAHEGA -->
-
-<script src="script.js"></script>
+<script>
+  // ابھی کے لیے سرچ بار صرف Enter دبانے پر کام کرے گا
+  document.getElementById('searchInput').addEventListener('keyup', function(e){
+    if(e.key === 'Enter'){
+      alert('You searched for: ' + this.value);
+    }
+  })
+</script>
 </body>
 </html>
