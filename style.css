@@ -326,4 +326,59 @@ flex:1;
 display:flex;
 justify-content:center;
 }
-  
+
+
+/*==============================
+SEARCH FORM
+==============================*/
+
+.search-form{
+width:100%;
+height:54px;
+display:flex;
+align-items:center;
+background:var(--white);
+border:2px solid var(--primary);
+border-radius:50px;
+overflow:hidden;
+}
+
+.search-category{
+width:180px;
+height:100%;
+padding:0 18px;
+border-right:1px solid var(--border);
+font-size:15px;
+color:var(--text);
+background:transparent;
+cursor:pointer;
+}
+
+.search-input{
+flex:1;
+height:100%;
+padding:0 20px;
+font-size:15px;
+color:var(--text);
+background:transparent;
+}
+
+.search-input::placeholder{
+color:#888;
+}
+
+.search-btn{
+width:65px;
+height:100%;
+display:flex;
+align-items:center;
+justify-content:center;
+background:var(--primary);
+color:var(--white);
+font-size:20px;
+transition:var(--transition);
+}
+
+.search-btn:hover{
+background:var(--primary-dark);
+}
