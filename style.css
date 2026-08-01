@@ -690,3 +690,136 @@ display:none;
 
 }
 
+/*==================================================
+SMARTBAZAAR PRO
+HEADER POLISH
+PART 14
+==================================================*/
+
+/* Container */
+
+.container{
+max-width:1400px;
+width:100%;
+margin:auto;
+padding:0 18px;
+}
+
+/* Main Header */
+
+.main-header{
+background:#ffffff;
+box-shadow:0 3px 15px rgba(0,0,0,.06);
+}
+
+.main-header .container{
+height:88px;
+display:flex;
+align-items:center;
+gap:24px;
+}
+
+/* Logo */
+
+.logo{
+text-decoration:none;
+display:flex;
+align-items:center;
+gap:12px;
+}
+
+.logo-icon{
+width:54px;
+height:54px;
+border-radius:50%;
+background:#2e7d32;
+display:flex;
+align-items:center;
+justify-content:center;
+color:#fff;
+font-size:22px;
+box-shadow:0 8px 20px rgba(46,125,50,.25);
+}
+
+.logo-text{
+font-size:30px;
+font-weight:800;
+color:#222;
+}
+
+.logo-text strong{
+color:#2e7d32;
+}
+
+/* Search */
+
+.header-center{
+flex:1;
+}
+
+.search-form{
+height:56px;
+border:2px solid #2e7d32;
+border-radius:40px;
+overflow:hidden;
+background:#fff;
+box-shadow:0 4px 15px rgba(46,125,50,.08);
+}
+
+.search-input{
+font-size:16px;
+}
+
+.search-btn{
+width:60px;
+background:#2e7d32;
+color:#fff;
+}
+
+.search-btn:hover{
+background:#1f5d25;
+}
+
+/* Right Icons */
+
+.header-right{
+gap:16px;
+}
+
+.action-icon{
+width:48px;
+height:48px;
+border-radius:50%;
+background:#fff;
+border:1px solid #e5e5e5;
+}
+
+.action-icon:hover{
+transform:translateY(-2px);
+}
+
+.badge{
+background:#ff3b30;
+}
+
+/* Navigation */
+
+.navbar{
+background:#fff;
+box-shadow:0 2px 8px rgba(0,0,0,.04);
+}
+
+.nav-menu{
+gap:34px;
+}
+
+.nav-menu a{
+font-size:15px;
+font-weight:600;
+}
+
+
+
+
+
+
