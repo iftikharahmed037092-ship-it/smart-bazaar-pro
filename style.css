@@ -1098,3 +1098,55 @@ width:52px;
 }
 
 }
+
+
+/*====================================
+PART 16
+HEADER FLEX FIX
+====================================*/
+
+.main-header .container{
+
+display:flex;
+align-items:center;
+flex-wrap:nowrap;
+
+}
+
+.header-left{
+
+flex:0 0 auto;
+
+}
+
+.header-center{
+
+flex:1 1 auto;
+min-width:0;
+
+}
+
+.header-right{
+
+flex:0 0 auto;
+display:flex;
+align-items:center;
+gap:12px;
+
+}
+
+.search-form{
+
+width:100%;
+
+}
+
+.search-input{
+
+min-width:0;
+
+}
+
+
+
+
