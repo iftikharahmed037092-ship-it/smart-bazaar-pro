@@ -971,4 +971,61 @@ background:red !important;
 }
 
 
+/*==================================================
+SMARTBAZAAR PRO
+HEADER CSS - PART 15
+TEMP DESKTOP VIEW
+==================================================*/
 
+@media (max-width:992px){
+
+.top-bar{
+display:block !important;
+}
+
+.navbar{
+display:block !important;
+}
+
+.logo-text{
+display:flex !important;
+}
+
+.action-content{
+display:flex !important;
+}
+
+.search-category{
+display:block !important;
+width:180px !important;
+}
+
+.main-header .container{
+height:90px !important;
+}
+
+}
+
+@media (max-width:768px){
+
+.top-bar{
+display:block !important;
+}
+
+.navbar{
+display:block !important;
+}
+
+.logo-text{
+display:flex !important;
+}
+
+.action-content{
+display:flex !important;
+}
+
+.search-category{
+display:block !important;
+}
+
+}
