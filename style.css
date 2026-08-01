@@ -382,3 +382,222 @@ transition:var(--transition);
 .search-btn:hover{
 background:var(--primary-dark);
 }
+
+
+/*==================================================
+SMARTBAZAAR PRO
+HEADER CSS - PART 10
+HEADER RIGHT
+==================================================*/
+
+/*==============================
+HEADER RIGHT
+==============================*/
+
+.header-right{
+display:flex;
+align-items:center;
+gap:20px;
+flex-shrink:0;
+}
+
+/*==============================
+HEADER ACTION
+==============================*/
+
+.header-action{
+display:flex;
+align-items:center;
+gap:10px;
+color:var(--text);
+transition:var(--transition);
+position:relative;
+}
+
+.header-action:hover{
+color:var(--primary);
+}
+
+/*==============================
+ACTION ICON
+==============================*/
+
+.action-icon{
+position:relative;
+width:46px;
+height:46px;
+display:flex;
+align-items:center;
+justify-content:center;
+border:1px solid var(--border);
+border-radius:50%;
+background:var(--white);
+font-size:20px;
+transition:var(--transition);
+}
+
+.header-action:hover .action-icon{
+background:var(--primary);
+color:var(--white);
+}
+
+/*==============================
+ACTION CONTENT
+==============================*/
+
+.action-content{
+display:flex;
+flex-direction:column;
+line-height:1.2;
+}
+
+.action-content small{
+font-size:12px;
+color:var(--text-light);
+}
+
+.action-content strong{
+font-size:15px;
+font-weight:600;
+}
+
+/*==============================
+BADGE
+==============================*/
+
+.badge{
+position:absolute;
+top:-6px;
+right:-6px;
+width:20px;
+height:20px;
+border-radius:50%;
+background:#e53935;
+color:#fff;
+font-size:11px;
+font-weight:700;
+display:flex;
+align-items:center;
+justify-content:center;
+border:2px solid #fff;
+}
+
+/*==================================================
+SMARTBAZAAR PRO
+HEADER CSS - PART 11
+RESPONSIVE
+==================================================*/
+
+/*==============================
+LAPTOP
+==============================*/
+
+@media (max-width:1200px){
+
+.logo-text{
+display:none;
+}
+
+.header-right{
+gap:14px;
+}
+
+.search-category{
+width:140px;
+}
+
+}
+
+/*==============================
+TABLET
+==============================*/
+
+@media (max-width:992px){
+
+.main-header .container{
+height:80px;
+}
+
+.search-category{
+display:none;
+}
+
+.action-content{
+display:none;
+}
+
+.header-right{
+gap:10px;
+}
+
+}
+
+/*==============================
+MOBILE
+==============================*/
+
+@media (max-width:768px){
+
+.main-header .container{
+height:72px;
+gap:12px;
+}
+
+.logo-icon{
+width:42px;
+height:42px;
+font-size:18px;
+}
+
+.menu-btn{
+width:42px;
+height:42px;
+}
+
+.search-input{
+font-size:14px;
+padding:0 14px;
+}
+
+.search-btn{
+width:52px;
+}
+
+.header-right{
+gap:8px;
+}
+
+.action-icon{
+width:42px;
+height:42px;
+font-size:18px;
+}
+
+}
+
+/*==============================
+SMALL MOBILE
+==============================*/
+
+@media (max-width:480px){
+
+.main-header .container{
+padding:0 10px;
+}
+
+.header-left{
+gap:10px;
+}
+
+.search-btn{
+width:48px;
+}
+
+.badge{
+width:18px;
+height:18px;
+font-size:10px;
+}
+
+}
+
