@@ -124,3 +124,101 @@ ROOT VARIABLES
 --transition:.3s ease;
 
 }
+
+/*==================================================
+SMARTBAZAAR PRO
+HEADER CSS - PART 4
+TOP BAR
+==================================================*/
+
+/*==============================
+CONTAINER
+==============================*/
+
+.container{
+width:100%;
+max-width:1400px;
+margin:auto;
+padding:0 20px;
+}
+
+/*==============================
+TOP BAR
+==============================*/
+
+.top-bar{
+width:100%;
+height:42px;
+background:var(--white);
+border-bottom:1px solid var(--border);
+}
+
+.top-bar .container{
+height:100%;
+display:flex;
+align-items:center;
+justify-content:space-between;
+}
+
+/*==============================
+LEFT & RIGHT
+==============================*/
+
+.top-left,
+.top-right{
+display:flex;
+align-items:center;
+gap:22px;
+}
+
+/*==============================
+TOP ITEMS
+==============================*/
+
+.top-item{
+display:flex;
+align-items:center;
+gap:8px;
+font-size:14px;
+font-weight:500;
+color:var(--text-light);
+transition:var(--transition);
+}
+
+.top-item i{
+font-size:15px;
+color:var(--primary);
+transition:var(--transition);
+}
+
+.top-item:hover{
+color:var(--primary);
+}
+
+.top-item:hover i{
+transform:translateY(-2px);
+}
+
+/*==============================
+RESPONSIVE
+==============================*/
+
+@media(max-width:992px){
+
+.top-right{
+gap:14px;
+}
+
+.top-item span{
+display:none;
+}
+
+}
+
+@media(max-width:768px){
+
+.top-bar{
+display:none;
+}
+
+}
