@@ -3,114 +3,129 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SmartBazaar Pro</title>
+<title>SmartBazaar Pro - Pakistan's #1 Marketplace</title>
 <style>
 :root{
-  --primary: #1B5E20;
-  --accent: #FF5722;
+  --primary: #1B5E20; /* Green */
+  --accent: #FF5722; /* Orange */
   --bg: #ffffff;
-  --text: #333;
+  --bg-light: #F5F5F5;
+  --text: #212121;
+  --border: #E0E0E0;
+  --shadow: 0 4px 12px rgba(0,0,0,0.08);
 }
-*{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',Arial,sans-serif}
-body{background:#f8f9fa;color:var(--text)}
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins','Segoe UI',Arial,sans-serif}
+body{background:var(--bg-light);color:var(--text)}
 
-/* PART 1: TOP INFO BAR */
+/* PART 1: TOP BAR */
 .top-bar{
-  background:#f1f1f1;
-  padding:8px 5%;
-  font-size:12px;
-  display:flex;
-  justify-content:space-between;
-  animation:fadeIn 0.6s ease;
+  background:var(--bg-light);padding:8px 5%;font-size:12px;display:flex;
+  justify-content:space-between;border-bottom:1px solid var(--border);animation:fadeIn 0.5s
 }
-.top-bar a{margin-left:18px;text-decoration:none;color:#555;transition:color 0.3s}
-.top-bar a:hover{color:var(--primary)}
+.top-bar a{margin-left:20px;text-decoration:none;color:#555;transition:all 0.3s}
+.top-bar a:hover{color:var(--primary);transform:translateY(-1px)}
 @keyframes fadeIn{from{opacity:0}to{opacity:1}}
 
-/* PART 2 + 3 + 4: MAIN HEADER */
+/* PART 2: MAIN HEADER */
 .main-header{
   display:flex;align-items:center;justify-content:space-between;
-  padding:15px 5%;background:var(--bg);box-shadow:0 2px 10px rgba(0,0,0,0.08);
-  position:sticky;top:0;z-index:9999;transition:all 0.3s ease;
+  padding:12px 5%;background:rgba(255,255,255,0.85);backdrop-filter:blur(10px); /* Glass Effect */
+  box-shadow:var(--shadow);position:sticky;top:0;z-index:9999;transition:all 0.4s ease;
+  border-bottom:1px solid var(--border);
 }
-.main-header.shrink{padding:8px 5%;box-shadow:0 4px 15px rgba(0,0,0,0.12)} /* Scroll پر چھوٹا */
+.main-header.shrink{padding:6px 5%} /* Shrink on Scroll */
 
-.logo{font-size:26px;color:var(--primary);font-weight:800;cursor:pointer;transition:transform 0.3s} /* PART 3 */
-.logo:hover{transform:scale(1.05)} /* Hover Zoom */
-.logo b{color:var(--accent)}
+/* PART 3: PRO LOGO */
+.logo{display:flex;align-items:center;gap:10px;cursor:pointer;transition:transform 0.3s}
+.logo:hover{transform:scale(1.04)}
+.logo svg{width:40px;height:40px}
+.logo-text{font-size:22px;font-weight:800;color:var(--primary)}
+.logo-text b{color:var(--accent)}
+.logo-tag{font-size:9px;color:#777;display:block;margin-top:-4px}
 
-.search-wrap{flex:1;max-width:650px;margin:0 30px;position:relative} /* PART 4 */
-.search-bar{display:flex;border:2px solid var(--primary);border-radius:10px;overflow:hidden;background:white}
-.search-bar input{flex:1;border:none;padding:12px 15px;outline:none;font-size:14px}
-.search-bar select{border:none;border-left:1px solid #ddd;padding:0 12px;background:#f8f8f8}
-.search-bar button{background:var(--primary);color:white;border:none;padding:0 22px;cursor:pointer;font-size:18px;transition:background 0.3s}
-.search-bar button:hover{background:#144d18}
+/* PART 4: SUPER SEARCH */
+.search-wrap{flex:1;max-width:680px;margin:0 25px;position:relative}
+.search-bar{display:flex;border:2px solid var(--primary);border-radius:12px;overflow:hidden;background:white;transition:box-shadow 0.3s}
+.search-bar:focus-within{box-shadow:0 0 0 3px rgba(27,94,32,0.2)} /* Focus Glow */
+.search-bar input{flex:1;border:none;padding:12px 16px;outline:none;font-size:14px}
+.search-bar select{border:none;border-left:1px solid var(--border);padding:0 12px;background:var(--bg-light);font-weight:500}
+.search-btn{background:linear-gradient(135deg,var(--primary),#2E7D32);color:white;border:none;padding:0 24px;cursor:pointer;font-size:18px;transition:all 0.3s} /* Gradient Button */
+.search-btn:hover{filter:brightness(1.1)}
+.search-btn:active{transform:scale(0.95)} /* Press Effect */
 
-/* Search Suggestions */
 .suggestions{
-  position:absolute;top:110%;left:0;right:0;background:white;border-radius:8px;
-  box-shadow:0 5px 20px rgba(0,0,0,0.1);display:none;max-height:300px;overflow-y:auto;z-index:100
+  position:absolute;top:115%;left:0;right:0;background:white;border-radius:10px;
+  box-shadow:var(--shadow);display:none;padding:10px 0;z-index:100;border:1px solid var(--border)
 }
-.suggestions div{padding:10px 15px;cursor:pointer}
+.sug-title{font-size:11px;color:#777;padding:5px 15px;font-weight:600}
+.suggestions div{padding:10px 15px;cursor:pointer;display:flex;justify-content:space-between}
 .suggestions div:hover{background:#E8F5E9}
 
-.header-icons{display:flex;gap:25px;align-items:center}
-.header-icons a{text-decoration:none;color:var(--text);font-size:14px;position:relative;text-align:center}
-.icon-count{position:absolute;top:-8px;right:-10px;background:var(--accent);color:white;border-radius:50%;font-size:10px;padding:2px 5px}
+.header-icons{display:flex;gap:28px}
+.icon-box{text-align:center;text-decoration:none;color:var(--text);font-size:12px;position:relative;transition:color 0.3s}
+.icon-box:hover{color:var(--primary)}
+.icon-box span{font-size:22px;display:block}
+.icon-count{position:absolute;top:-5px;right:5px;background:var(--accent);color:white;border-radius:50%;font-size:10px;padding:2px 5px;font-weight:bold}
 
 /* PART 6: NAV MENU */
-.nav-menu{display:flex;gap:30px;padding:12px 5%;background:white;border-bottom:1px solid #eee}
-.nav-menu a{text-decoration:none;color:var(--text);font-weight:500;position:relative;transition:color 0.3s}
+.nav-menu{display:flex;gap:35px;padding:14px 5%;background:white;border-bottom:1px solid var(--border)}
+.nav-menu a{text-decoration:none;color:var(--text);font-weight:500;position:relative;padding-bottom:4px;transition:all 0.3s}
 .nav-menu a:hover{color:var(--primary)}
-.nav-menu a::after{content:'';position:absolute;bottom:-4px;left:0;width:0;height:2px;background:var(--primary);transition:width 0.3s}
-.nav-menu a:hover::after{width:100%} /* Underline Animation */
+.nav-menu a::after{content:'';position:absolute;bottom:0;left:50%;width:0;height:2px;background:var(--accent);transition:all 0.3s;transform:translateX(-50%)}
+.nav-menu a:hover::after{width:100%} /* Glow Underline */
 
 /* PART 11: MOBILE */
-.hamburger{display:none;font-size:24px;cursor:pointer}
+.mobile-bottom{display:none}
 @media(max-width:992px){
-  .nav-menu,.top-bar{display:none}
+  .top-bar,.nav-menu{display:none}
   .search-wrap{order:3;width:100%;margin:10px 0 0 0;max-width:100%}
   .main-header{flex-wrap:wrap}
-  .hamburger{display:block}
   .header-icons{gap:15px}
+  .mobile-bottom{display:flex;position:fixed;bottom:0;left:0;right:0;background:white;box-shadow:0 -2px 10px rgba(0,0,0,0.1);justify-content:space-around;padding:8px 0;z-index:9999}
 </style>
 </head>
 <body>
 
 <!-- PART 1 -->
 <div class="top-bar">
-  <div>📍 Deliver to: <b>Peshawar</b> | 🌐 <a href="#">English/اردو</a> | 💰 <a href="#">PKR</a></div>
+  <div>📍 Deliver to: <b>Peshawar</b> | 🌐 <a href="#">English / اردو</a> | 💰 <a href="#">PKR</a></div>
   <div>
-    <a href="#">📞 Support</a>
+    <a href="#">🎧 Help Center</a>
     <a href="#">📦 Track Order</a>
-    <a href="#">Sell on SmartBazaar</a>
+    <a href="#">🏪 Sell on SmartBazaar</a>
   </div>
 </div>
 
 <!-- PART 2 + 3 + 4 -->
 <header class="main-header" id="header">
-  <div class="hamburger">☰</div>
-  
-  <div class="logo" onclick="window.location='#'">🛒 SmartBazaar <b>Pro</b></div> <!-- PART 3 -->
+  <div class="logo" onclick="window.location='#'"> <!-- PART 3 -->
+    <svg viewBox="0 0 24 24" fill="var(--primary)"><path d="M7 4V2H5v2H2v2h2v12c0 1.1.9 2 2 2h11v-2H7V4zm14 12h-4l-3-6h10l-3 6z"/></svg>
+    <div>
+      <div class="logo-text">SmartBazaar <b>Pro</b></div>
+      <div class="logo-tag">Pakistan's Trusted Marketplace</div>
+    </div>
+  </div>
 
   <div class="search-wrap"> <!-- PART 4 -->
     <div class="search-bar">
-      <input type="text" id="searchInput" placeholder="Search for products, brands and more...">
-      <select><option>All Categories</option><option>Mobiles</option><option>Electronics</option></select>
-      <button>🔍</button>
+      <input type="text" id="searchInput" placeholder="Search products, brands, categories...">
+      <select><option>All</option><option>Mobiles</option><option>Fashion</option></select>
+      <button class="search-btn">🔍</button>
     </div>
     <div class="suggestions" id="suggestions">
-      <div>iPhone 15 Pro</div>
-      <div>Samsung S24</div>
-      <div>Nike Shoes</div>
+      <div class="sug-title">RECENT SEARCHES</div>
+      <div>iPhone 15 <span>🔍</span></div>
+      <div class="sug-title">TRENDING NOW</div>
+      <div>Nike Air Max <span>🔥</span></div>
+      <div>Samsung S24 Ultra <span>🔥</span></div>
     </div>
   </div>
 
   <div class="header-icons">
-    <a href="#">👤<br>Account</a>
-    <a href="#">❤️<br>Wishlist <span class="icon-count">3</span></a>
-    <a href="#">🛒<br>Cart <span class="icon-count">2</span></a>
-    <a href="#">🔔<br>Alerts</a>
+    <a href="#" class="icon-box"><span>👤</span>Account</a>
+    <a href="#" class="icon-box"><span>❤️</span>Wishlist <b class="icon-count">3</b></a>
+    <a href="#" class="icon-box"><span>🛒</span>Cart <b class="icon-count">2</b></a>
+    <a href="#" class="icon-box"><span>🔔</span>Alerts</a>
   </div>
 </header>
 
@@ -119,20 +134,28 @@ body{background:#f8f9fa;color:var(--text)}
   <a href="#">Home</a>
   <a href="#">Categories</a>
   <a href="#">Deals</a>
+  <a href="#">New Arrivals</a>
   <a href="#">Brands</a>
-  <a href="#">Sellers</a>
+  <a href="#">Stores</a>
   <a href="#">Contact</a>
 </nav>
 
-<div style="height:1500px;padding:20px">Scroll down to test sticky header</div>
+<!-- MOBILE BOTTOM NAV -->
+<div class="mobile-bottom">
+  <a href="#" class="icon-box"><span>🏠</span>Home</a>
+  <a href="#" class="icon-box"><span>🔍</span>Search</a>
+  <a href="#" class="icon-box"><span>🛒</span>Cart</a>
+  <a href="#" class="icon-box"><span>👤</span>Account</a>
+</div>
+
+<div style="height:1500px"></div>
 
 <script>
-// Sticky Header Shrink on Scroll - Part 2 Animation
+// Header Shrink
 window.addEventListener('scroll',()=>{
   document.getElementById('header').classList.toggle('shrink', window.scrollY > 50)
 })
-
-// Search Suggestions Show/Hide - Part 4
+// Search Suggestions
 const search = document.getElementById('searchInput')
 const sug = document.getElementById('suggestions')
 search.addEventListener('focus',()=> sug.style.display='block')
