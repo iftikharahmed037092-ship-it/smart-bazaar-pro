@@ -921,3 +921,20 @@ padding-left:28px;
 .category-list li a:hover i{
 color:var(--white);
 }
+
+
+@media(max-width:992px){
+
+.hero-left{
+order:2;
+}
+
+.hero-center{
+order:1;
+}
+
+.hero-right{
+order:3;
+}
+
+}
