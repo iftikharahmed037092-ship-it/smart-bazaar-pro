@@ -1264,3 +1264,123 @@ SLIDING SLIDER
     display:block;
     object-fit:cover;
 }
+
+
+/*==================================================
+SMARTBAZAAR PRO
+PART 15.1
+MOBILE CATEGORY SCROLL
+==================================================*/
+
+@media (max-width:768px){
+
+.hero-left{
+
+    width:100%;
+    overflow-x:auto;
+
+    scrollbar-width:none;
+
+    -ms-overflow-style:none;
+
+}
+
+.hero-left::-webkit-scrollbar{
+
+    display:none;
+
+}
+
+.category-list{
+
+    display:flex;
+
+    gap:12px;
+
+    flex-wrap:nowrap;
+
+    width:max-content;
+
+    padding:8px 0;
+
+}
+
+}
+
+/*==================================================
+SMARTBAZAAR PRO
+PART 15.2
+CATEGORY CAPSULE DESIGN
+==================================================*/
+
+.category-list li a{
+
+display:flex;
+align-items:center;
+gap:8px;
+
+padding:12px 20px;
+
+border-radius:999px;
+
+font-size:14px;
+font-weight:600;
+
+white-space:nowrap;
+
+transition:var(--transition);
+
+box-shadow:var(--shadow-sm);
+
+}
+
+.category-list li:nth-child(1) a{
+background:#e3f2fd;
+color:#1565c0;
+}
+
+.category-list li:nth-child(2) a{
+background:#ede7f6;
+color:#5e35b1;
+}
+
+.category-list li:nth-child(3) a{
+background:#e8f5e9;
+color:#2e7d32;
+}
+
+.category-list li:nth-child(4) a{
+background:#fce4ec;
+color:#c2185b;
+}
+
+.category-list li:nth-child(5) a{
+background:#fff3e0;
+color:#ef6c00;
+}
+
+.category-list li:nth-child(6) a{
+background:#f3e5f5;
+color:#8e24aa;
+}
+
+.category-list li:nth-child(7) a{
+background:#e0f7fa;
+color:#00838f;
+}
+
+.category-list li:nth-child(8) a{
+background:#f1f8e9;
+color:#558b2f;
+}
+
+.category-list li a:hover{
+
+transform:translateY(-3px);
+
+box-shadow:var(--shadow-md);
+
+}
+
+
+
