@@ -686,3 +686,96 @@ height:48px;
 
 }
 
+/*==================================================
+SMARTBAZAAR PRO
+HEADER CSS - PART 13
+NAVBAR
+==================================================*/
+
+/*==============================
+NAVBAR
+==============================*/
+
+.navbar{
+width:100%;
+background:var(--primary);
+box-shadow:var(--shadow-sm);
+}
+
+.navbar .container{
+display:flex;
+align-items:center;
+justify-content:center;
+min-height:56px;
+}
+
+/*==============================
+NAV MENU
+==============================*/
+
+.nav-menu{
+display:flex;
+align-items:center;
+justify-content:center;
+flex-wrap:wrap;
+gap:8px;
+width:100%;
+}
+
+/*==============================
+NAV LINKS
+==============================*/
+
+.nav-menu li{
+list-style:none;
+}
+
+.nav-menu li a{
+display:block;
+padding:16px 18px;
+font-size:15px;
+font-weight:500;
+color:var(--white);
+border-radius:var(--radius-sm);
+transition:var(--transition);
+}
+
+.nav-menu li a:hover,
+.nav-menu li a.active{
+background:rgba(255,255,255,.15);
+}
+
+/*==============================
+TABLET
+==============================*/
+
+@media(max-width:992px){
+
+.navbar .container{
+justify-content:flex-start;
+overflow-x:auto;
+}
+
+.nav-menu{
+flex-wrap:nowrap;
+width:max-content;
+}
+
+.nav-menu li a{
+padding:14px 16px;
+font-size:14px;
+}
+
+}
+
+/*==============================
+MOBILE
+==============================*/
+
+@media(max-width:768px){
+
+.navbar{
+display:none;
+}
+
+}
