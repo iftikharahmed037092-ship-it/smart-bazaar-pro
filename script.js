@@ -13,15 +13,14 @@ let currentSlide = 0;
 
 function showSlide(index){
 
-    slides.forEach(slide=>{
-        slide.classList.remove("active");
-    });
+    const slidesContainer = document.querySelector(".slides");
+
+    slidesContainer.style.transform = `translateX(-${index * 100}%)`;
 
     dots.forEach(dot=>{
         dot.classList.remove("active");
     });
 
-    slides[index].classList.add("active");
     dots[index].classList.add("active");
 
 }
