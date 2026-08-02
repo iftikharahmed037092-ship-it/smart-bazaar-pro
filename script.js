@@ -61,3 +61,20 @@ dots.forEach((dot,index)=>{
     });
 
 });
+
+
+/*==============================
+AUTO SLIDER
+==============================*/
+
+setInterval(()=>{
+
+    currentSlide++;
+
+    if(currentSlide>=slides.length){
+        currentSlide=0;
+    }
+
+    showSlide(currentSlide);
+
+},5000);
