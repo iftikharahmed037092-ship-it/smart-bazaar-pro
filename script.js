@@ -1,114 +1,71 @@
-/*==================================================
-SMARTBAZAAR PRO
-HERO JS - PART 14.9
-COMPLETE SLIDER
-==================================================*/
+const slides = document.querySelector(".slides");
+const slide = document.querySelectorAll(".slide");
 
-const slidesContainer = document.querySelector(".slides");
-const slides = document.querySelectorAll(".slide");
+const prev = document.querySelector(".prev-btn");
+const next = document.querySelector(".next-btn");
+
 const dots = document.querySelectorAll(".dot");
 
-const prevBtn = document.querySelector(".prev-btn");
-const nextBtn = document.querySelector(".next-btn");
+let index = 0;
 
-let currentSlide = 0;
-let autoSlide;
+function updateSlider(){
 
-/*==============================
-SHOW SLIDE
-==============================*/
+    slides.style.transform = `translateX(-${index * 100}%)`;
 
-function showSlide(index){
+    dots.forEach(dot=>dot.classList.remove("active"));
 
-    slidesContainer.style.transform =
-    `translateX(-${index * 100}%)`;
-
-    dots.forEach(dot=>{
-        dot.classList.remove("active");
-    });
-
-    dots[index].classList.add("active");
-
-}
-
-/*==============================
-NEXT
-==============================*/
-
-function nextSlide(){
-
-    currentSlide++;
-
-    if(currentSlide >= slides.length){
-        currentSlide = 0;
+    if(dots[index]){
+        dots[index].classList.add("active");
     }
 
-    showSlide(currentSlide);
-
 }
 
-/*==============================
-PREVIOUS
-==============================*/
+next.addEventListener("click",()=>{
 
-function prevSlide(){
+    index++;
 
-    currentSlide--;
-
-    if(currentSlide < 0){
-        currentSlide = slides.length - 1;
+    if(index >= slide.length){
+        index = 0;
     }
 
-    showSlide(currentSlide);
+    updateSlider();
 
-}
+});
 
-/*==============================
-BUTTON EVENTS
-==============================*/
+prev.addEventListener("click",()=>{
 
-nextBtn.addEventListener("click",nextSlide);
+    index--;
 
-prevBtn.addEventListener("click",prevSlide);
+    if(index < 0){
+        index = slide.length - 1;
+    }
 
-/*==============================
-DOT EVENTS
-==============================*/
+    updateSlider();
 
-dots.forEach((dot,index)=>{
+});
+
+dots.forEach((dot,i)=>{
 
     dot.addEventListener("click",()=>{
 
-        currentSlide = index;
+        index = i;
 
-        showSlide(currentSlide);
+        updateSlider();
 
     });
 
 });
 
-/*==============================
-AUTO SLIDER
-==============================*/
+setInterval(()=>{
 
-function startSlider(){
+    index++;
 
-    autoSlide = setInterval(nextSlide,5000);
+    if(index >= slide.length){
+        index = 0;
+    }
 
-}
+    updateSlider();
 
-function stopSlider(){
+},5000);
 
-    clearInterval(autoSlide);
-
-}
-
-const heroBanner = document.querySelector(".hero-banner");
-
-heroBanner.addEventListener("mouseenter",stopSlider);
-
-heroBanner.addEventListener("mouseleave",startSlider);
-
-startSlider();
-
-showSlide(currentSlide);
+updateSlider();
