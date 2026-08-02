@@ -871,3 +871,53 @@ gap:15px;
 }
 
 }
+
+/*==================================================
+SMARTBAZAAR PRO
+HERO CSS - PART 14.3
+LEFT CATEGORY PANEL
+==================================================*/
+
+.category-title{
+padding:18px 20px;
+font-size:18px;
+font-weight:700;
+color:var(--white);
+background:var(--primary);
+border-radius:var(--radius-md) var(--radius-md) 0 0;
+}
+
+.category-list{
+padding:10px 0;
+}
+
+.category-list li a{
+display:flex;
+align-items:center;
+gap:12px;
+padding:14px 20px;
+color:var(--text);
+font-size:15px;
+transition:var(--transition);
+border-bottom:1px solid var(--border);
+}
+
+.category-list li:last-child a{
+border-bottom:none;
+}
+
+.category-list li a i{
+width:20px;
+color:var(--primary);
+text-align:center;
+}
+
+.category-list li a:hover{
+background:var(--primary);
+color:var(--white);
+padding-left:28px;
+}
+
+.category-list li a:hover i{
+color:var(--white);
+}
