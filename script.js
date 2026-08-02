@@ -1,21 +1,27 @@
 /*==================================================
 SMARTBAZAAR PRO
 HERO JS - PART 14.9
-SLIDER CONTROLS
+COMPLETE SLIDER
 ==================================================*/
 
+const slidesContainer = document.querySelector(".slides");
 const slides = document.querySelectorAll(".slide");
 const dots = document.querySelectorAll(".dot");
+
 const prevBtn = document.querySelector(".prev-btn");
 const nextBtn = document.querySelector(".next-btn");
 
 let currentSlide = 0;
+let autoSlide;
+
+/*==============================
+SHOW SLIDE
+==============================*/
 
 function showSlide(index){
 
-    const slidesContainer = document.querySelector(".slides");
-
-    slidesContainer.style.transform = `translateX(-${index * 100}%)`;
+    slidesContainer.style.transform =
+    `translateX(-${index * 100}%)`;
 
     dots.forEach(dot=>{
         dot.classList.remove("active");
@@ -25,65 +31,11 @@ function showSlide(index){
 
 }
 
-nextBtn.addEventListener("click",()=>{
-
-    currentSlide++;
-
-    if(currentSlide>=slides.length){
-        currentSlide=0;
-    }
-
-    showSlide(currentSlide);
-
-});
-
-prevBtn.addEventListener("click",()=>{
-
-    currentSlide--;
-
-    if(currentSlide<0){
-        currentSlide=slides.length-1;
-    }
-
-    showSlide(currentSlide);
-
-});
-
-dots.forEach((dot,index)=>{
-
-    dot.addEventListener("click",()=>{
-
-        currentSlide=index;
-
-        showSlide(currentSlide);
-
-    });
-
-});
-
-
 /*==============================
-AUTO SLIDER
+NEXT
 ==============================*/
 
-setInterval(()=>{
-
-    currentSlide++;
-
-    if(currentSlide>=slides.length){
-        currentSlide=0;
-    }
-
-    showSlide(currentSlide);
-
-},5000);
-
-
-/*==============================
-AUTO SLIDER
-==============================*/
-
-setInterval(()=>{
+function nextSlide(){
 
     currentSlide++;
 
@@ -93,15 +45,51 @@ setInterval(()=>{
 
     showSlide(currentSlide);
 
-},5000);
+}
 
 /*==============================
-PAUSE ON HOVER
+PREVIOUS
 ==============================*/
 
-const heroBanner = document.querySelector(".hero-banner");
+function prevSlide(){
 
-let autoSlide = setInterval(nextSlide,5000);
+    currentSlide--;
+
+    if(currentSlide < 0){
+        currentSlide = slides.length - 1;
+    }
+
+    showSlide(currentSlide);
+
+}
+
+/*==============================
+BUTTON EVENTS
+==============================*/
+
+nextBtn.addEventListener("click",nextSlide);
+
+prevBtn.addEventListener("click",prevSlide);
+
+/*==============================
+DOT EVENTS
+==============================*/
+
+dots.forEach((dot,index)=>{
+
+    dot.addEventListener("click",()=>{
+
+        currentSlide = index;
+
+        showSlide(currentSlide);
+
+    });
+
+});
+
+/*==============================
+AUTO SLIDER
+==============================*/
 
 function startSlider(){
 
@@ -115,6 +103,12 @@ function stopSlider(){
 
 }
 
+const heroBanner = document.querySelector(".hero-banner");
+
 heroBanner.addEventListener("mouseenter",stopSlider);
 
 heroBanner.addEventListener("mouseleave",startSlider);
+
+startSlider();
+
+showSlide(currentSlide);
