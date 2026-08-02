@@ -958,12 +958,17 @@ HERO CSS - PART 14.4
 BANNER CONTENT
 ==================================================*/
 
-.hero-banner{
+/*.hero-banner{
 position:relative;
 width:100%;
 height:420px;
 border-radius:20px;
 overflow:hidden;
+}*/
+
+.hero-banner{
+    overflow:hidden;
+    position:relative;
 }
 
 .hero-banner img{
@@ -1237,20 +1242,23 @@ SLIDING SLIDER
 ==============================*/
 
 .slides{
-display:flex;
-gap:20px;
-transition:transform .6s ease-in-out;
+    display:flex;
+    width:100%;
+    transition:transform .6s ease-in-out;
 }
 
+
 .slide{
-min-width:calc(100% - 20px);
-height:100%;
-flex-shrink:0;
+    min-width:100%;
+    flex:0 0 100%;
+    padding:0 10px;   /* دونوں تصویروں کے درمیان گیپ */
+    box-sizing:border-box;
 }
 
 .slide img{
-width:100%;
-height:100%;
-object-fit:cover;
-display:block;
+    width:100%;
+    height:420px;
+    object-fit:cover;
+    border-radius:20px;
+    display:block;
 }
