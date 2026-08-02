@@ -969,6 +969,7 @@ overflow:hidden;
 .hero-banner{
     overflow:hidden;
     position:relative;
+    border-radius:20px;
 }
 
 .hero-banner img{
@@ -1244,6 +1245,7 @@ SLIDING SLIDER
 .slides{
     display:flex;
     width:100%;
+    border-radius:20px;
     transition:transform .6s ease-in-out;
 }
 
@@ -1251,6 +1253,7 @@ SLIDING SLIDER
 .slide{
     min-width:100%;
     flex:0 0 100%;
+    border-radius:20px;
     padding:0 10px;   /* دونوں تصویروں کے درمیان گیپ */
     box-sizing:border-box;
 }
