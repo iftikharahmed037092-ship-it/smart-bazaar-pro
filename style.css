@@ -779,3 +779,95 @@ display:none;
 }
 
 }
+
+/*==================================================
+SMARTBAZAAR PRO
+HERO CSS - PART 14.2
+LAYOUT
+==================================================*/
+
+/*==============================
+HERO SECTION
+==============================*/
+
+.hero{
+width:100%;
+padding:20px 0;
+background:var(--background);
+}
+
+.hero .container{
+display:flex;
+gap:20px;
+align-items:stretch;
+}
+
+/*==============================
+LEFT SIDEBAR
+==============================*/
+
+.hero-left{
+width:260px;
+min-height:420px;
+background:var(--white);
+border-radius:var(--radius-md);
+box-shadow:var(--shadow-sm);
+}
+
+/*==============================
+CENTER BANNER
+==============================*/
+
+.hero-center{
+flex:1;
+min-height:420px;
+background:var(--white);
+border-radius:var(--radius-md);
+box-shadow:var(--shadow-sm);
+}
+
+/*==============================
+RIGHT SIDEBAR
+==============================*/
+
+.hero-right{
+width:260px;
+min-height:420px;
+background:var(--white);
+border-radius:var(--radius-md);
+box-shadow:var(--shadow-sm);
+}
+
+/*==============================
+TABLET
+==============================*/
+
+@media(max-width:992px){
+
+.hero .container{
+flex-direction:column;
+}
+
+.hero-left,
+.hero-center,
+.hero-right{
+width:100%;
+}
+
+}
+
+/*==============================
+MOBILE
+==============================*/
+
+@media(max-width:768px){
+
+.hero{
+padding:15px 0;
+}
+
+.hero .container{
+gap:15px;
+}
+
+}
