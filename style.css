@@ -1275,38 +1275,32 @@ MOBILE CATEGORY SCROLL
 @media (max-width:768px){
 
 .hero-left{
-
     width:100%;
     overflow-x:auto;
-
-    scrollbar-width:none;
-
-    -ms-overflow-style:none;
-
+    overflow-y:hidden;
 }
 
 .hero-left::-webkit-scrollbar{
-
     display:none;
-
 }
 
 .category-list{
-
     display:flex;
-
-    gap:12px;
-
+    flex-direction:row;
     flex-wrap:nowrap;
+    gap:12px;
 
     width:max-content;
 
-    padding:8px 0;
+    padding:12px;
+}
 
+.category-list li{
+    flex:none;
+    list-style:none;
 }
 
 }
-
 /*==================================================
 SMARTBAZAAR PRO
 PART 15.2
