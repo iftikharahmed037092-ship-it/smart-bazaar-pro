@@ -77,3 +77,44 @@ setInterval(()=>{
     showSlide(currentSlide);
 
 },5000);
+
+
+/*==============================
+AUTO SLIDER
+==============================*/
+
+setInterval(()=>{
+
+    currentSlide++;
+
+    if(currentSlide >= slides.length){
+        currentSlide = 0;
+    }
+
+    showSlide(currentSlide);
+
+},5000);
+
+/*==============================
+PAUSE ON HOVER
+==============================*/
+
+const heroBanner = document.querySelector(".hero-banner");
+
+let autoSlide = setInterval(nextSlide,5000);
+
+function startSlider(){
+
+    autoSlide = setInterval(nextSlide,5000);
+
+}
+
+function stopSlider(){
+
+    clearInterval(autoSlide);
+
+}
+
+heroBanner.addEventListener("mouseenter",stopSlider);
+
+heroBanner.addEventListener("mouseleave",startSlider);
