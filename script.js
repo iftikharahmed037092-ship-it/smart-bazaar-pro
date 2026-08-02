@@ -69,3 +69,33 @@ setInterval(()=>{
 },5000);
 
 updateSlider();
+
+
+/*==================================================
+SMARTBAZAAR PRO
+PART 15.3
+MOBILE CATEGORY AUTO SCROLL
+==================================================*/
+
+const heroLeft = document.querySelector(".hero-left");
+
+if(heroLeft && window.innerWidth <= 768){
+
+    let scrollSpeed = 1;
+
+    setInterval(()=>{
+
+        heroLeft.scrollLeft += scrollSpeed;
+
+        if(
+            heroLeft.scrollLeft >=
+            heroLeft.scrollWidth - heroLeft.clientWidth
+        ){
+
+            heroLeft.scrollLeft = 0;
+
+        }
+
+    },30);
+
+}
