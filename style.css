@@ -1271,7 +1271,7 @@ SMARTBAZAAR PRO
 PART 15.1
 MOBILE CATEGORY SCROLL
 ==================================================*/
-
+/*
 @media (max-width:768px){
 
 .hero-left{
@@ -1301,6 +1301,28 @@ MOBILE CATEGORY SCROLL
 }
 
 }
+*/
+.category-list{
+    display:flex;
+    flex-wrap:nowrap;
+    overflow-x:auto;
+    overflow-y:hidden;
+    gap:12px;
+    padding:12px;
+    white-space:nowrap;
+    scrollbar-width:none;
+    -webkit-overflow-scrolling:touch;
+}
+
+.category-list::-webkit-scrollbar{
+    display:none;
+}
+
+.category-list li{
+    flex:0 0 auto;
+    list-style:none;
+}
+
 /*==================================================
 SMARTBAZAAR PRO
 PART 15.2
