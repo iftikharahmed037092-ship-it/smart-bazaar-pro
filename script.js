@@ -171,3 +171,70 @@ if(promoTrack){
 
 }
     
+/*==================================================
+SMARTBAZAAR PRO
+PART 17.3
+PROMOTION STACK SLIDER
+==================================================*/
+
+const promoCards = document.querySelectorAll(".promo-card");
+
+if (promoCards.length === 3) {
+
+    let current = 1;
+
+    function updatePromoCards() {
+
+        promoCards.forEach(card => {
+
+            card.style.left = "";
+            card.style.right = "";
+            card.style.transform = "";
+            card.style.zIndex = "";
+            card.style.opacity = "";
+
+        });
+
+        const left = (current + 2) % 3;
+        const center = current;
+        const right = (current + 1) % 3;
+
+        /* LEFT */
+
+        promoCards[left].style.left = "2%";
+        promoCards[left].style.transform = "scale(.88)";
+        promoCards[left].style.zIndex = "1";
+        promoCards[left].style.opacity = ".85";
+
+        /* CENTER */
+
+        promoCards[center].style.left = "50%";
+        promoCards[center].style.transform =
+        "translateX(-50%) scale(1)";
+        promoCards[center].style.zIndex = "3";
+        promoCards[center].style.opacity = "1";
+
+        /* RIGHT */
+
+        promoCards[right].style.right = "2%";
+        promoCards[right].style.transform = "scale(.88)";
+        promoCards[right].style.zIndex = "2";
+        promoCards[right].style.opacity = ".85";
+
+    }
+
+    updatePromoCards();
+
+    setInterval(() => {
+
+        current++;
+
+        if(current > 2){
+            current = 0;
+        }
+
+        updatePromoCards();
+
+    }, 4000);
+
+}
