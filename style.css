@@ -1508,3 +1508,35 @@ DESKTOP
 }
 
 }
+
+/*==================================================
+SMARTBAZAAR PRO
+PART 16.2
+MOBILE PROMOTION SLIDER
+==================================================*/
+
+@media (max-width:768px){
+
+.hero-right{
+    overflow:hidden;
+}
+
+.promo-slider{
+    width:100%;
+    overflow:hidden;
+}
+
+.promo-track{
+    display:flex;
+    flex-direction:column;
+    gap:15px;
+    transition:transform .6s ease;
+}
+
+.offer-card{
+    width:100%;
+    flex:0 0 auto;
+}
+
+}
+
