@@ -1401,4 +1401,110 @@ box-shadow:var(--shadow-md);
 }
 
 
+/*==================================================
+SMARTBAZAAR PRO
+PART 16
+PROMOTION CARDS
+==================================================*/
 
+/*==============================
+PROMO CONTAINER
+==============================*/
+
+.promo-slider{
+    width:100%;
+    height:100%;
+}
+
+.promo-track{
+    display:flex;
+    flex-direction:column;
+    gap:15px;
+    height:100%;
+}
+
+/*==============================
+PROMOTION CARD
+==============================*/
+
+.offer-card{
+
+    overflow:hidden;
+
+    border-radius:20px;
+
+    background:#fff;
+
+    box-shadow:var(--shadow-sm);
+
+    transition:var(--transition);
+
+}
+
+.offer-card:hover{
+
+    transform:translateY(-5px);
+
+    box-shadow:var(--shadow-md);
+
+}
+
+/*==============================
+CARD IMAGE
+==============================*/
+
+.offer-card img{
+
+    width:100%;
+
+    height:150px;
+
+    object-fit:cover;
+
+}
+
+/*==============================
+CARD CONTENT
+==============================*/
+
+.offer-card h3{
+
+    margin:15px 20px 10px;
+
+}
+
+.offer-card p{
+
+    margin:0 20px 15px;
+
+}
+
+.offer-card .offer-badge{
+
+    margin:15px 20px 0;
+
+}
+
+.offer-card .banner-btn{
+
+    margin:0 20px 20px;
+
+}
+
+/*==============================
+DESKTOP
+==============================*/
+
+@media(min-width:992px){
+
+.promo-track{
+
+    display:grid;
+
+    grid-template-columns:1fr;
+
+    gap:15px;
+
+}
+
+}
