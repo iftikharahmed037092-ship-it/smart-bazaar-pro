@@ -1720,3 +1720,42 @@ MOBILE STACK
 }
 
 }
+
+
+/*==================================================
+SMARTBAZAAR PRO
+PART 17.4
+PROMO CARDS VERTICAL ADJUSTMENT
+==================================================*/
+
+.promo-section{
+    padding-bottom: 60px;
+    overflow: visible;
+}
+
+.promo-slider,
+.promo-container{
+    margin-top: -40px;
+    padding-bottom: 40px;
+}
+
+.promo-card{
+    bottom: auto;
+}
+
+
+/* MOBILE FIX */
+
+@media(max-width:768px){
+
+    .promo-slider,
+    .promo-container{
+        margin-top: -30px;
+        padding-bottom: 50px;
+    }
+
+    .promo-section{
+        padding-bottom: 80px;
+    }
+
+}
