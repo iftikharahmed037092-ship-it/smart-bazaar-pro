@@ -1621,3 +1621,123 @@ MOBILE STACK PROMO CARDS
 }
 
 }
+
+/*==================================================
+SMARTBAZAAR PRO
+PART 17.2
+PROMOTION FEATURES CSS
+==================================================*/
+
+/*==============================
+SECTION
+==============================*/
+
+.promo-features{
+    width:100%;
+    padding:20px 0 40px;
+}
+
+/*==============================
+DESKTOP
+==============================*/
+
+.promo-wrapper{
+    display:flex;
+    gap:20px;
+}
+
+.promo-card{
+    flex:1;
+    background:#fff;
+    border-radius:24px;
+    overflow:hidden;
+    box-shadow:0 10px 25px rgba(0,0,0,.08);
+    transition:.35s;
+    position:relative;
+}
+
+.promo-card:hover{
+    transform:translateY(-6px);
+}
+
+.promo-card img{
+    width:100%;
+    height:220px;
+    object-fit:cover;
+    display:block;
+}
+
+.promo-content{
+    padding:18px;
+}
+
+.promo-content span{
+    display:inline-block;
+    padding:6px 14px;
+    border-radius:999px;
+    background:#2e7d32;
+    color:#fff;
+    font-size:12px;
+    font-weight:600;
+}
+
+.promo-content h3{
+    margin:12px 0 8px;
+    font-size:22px;
+}
+
+.promo-content p{
+    color:#666;
+}
+
+/*==============================
+MOBILE STACK
+==============================*/
+
+@media(max-width:768px){
+
+.promo-wrapper{
+
+    position:relative;
+    height:470px;
+
+}
+
+.promo-card{
+
+    position:absolute;
+    width:88%;
+    left:50%;
+    transform:translateX(-50%);
+    transition:.6s ease;
+
+}
+
+.promo-card:nth-child(1){
+
+    top:0;
+    z-index:3;
+
+}
+
+.promo-card:nth-child(2){
+
+    top:250px;
+    right:-18px;
+    left:auto;
+    width:80%;
+    z-index:2;
+
+}
+
+.promo-card:nth-child(3){
+
+    top:315px;
+    left:-18px;
+    width:80%;
+    z-index:1;
+
+}
+
+}
+
