@@ -799,7 +799,7 @@ background:var(--background);
 .hero .container{
 display:flex;
 gap:20px;
-align-items:stretch;
+align-items:flex-start;
 }
 
 /*==============================
@@ -808,10 +808,11 @@ LEFT SIDEBAR
 
 .hero-left{
 width:260px;
-min-height:420px;
+height:auto;
 background:var(--white);
 border-radius:var(--radius-md);
 box-shadow:var(--shadow-sm);
+align-self:flex-start;
 }
 
 /*==============================
