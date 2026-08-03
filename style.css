@@ -1307,6 +1307,7 @@ MOBILE CATEGORY SCROLL
     display:flex;
     flex-wrap:nowrap;
     overflow-x:auto;
+    scroll-behavior:auto;
     overflow-y:hidden;
     gap:12px;
     padding:12px;
