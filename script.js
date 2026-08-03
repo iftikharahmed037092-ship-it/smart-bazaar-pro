@@ -131,3 +131,43 @@ if(categoryList){
 
 }
 
+/*==================================================
+SMARTBAZAAR PRO
+PART 16.3
+PROMOTION CARD AUTO SLIDER
+==================================================*/
+
+const promoTrack = document.querySelector(".promo-track");
+
+if(promoTrack){
+
+    const promoCards = document.querySelectorAll(".promo-track .offer-card");
+
+    let promoIndex = 0;
+
+    function promoSlider(){
+
+        if(window.innerWidth > 768){
+
+            promoTrack.style.transform = "translateY(0)";
+            return;
+
+        }
+
+        promoIndex++;
+
+        if(promoIndex >= promoCards.length){
+
+            promoIndex = 0;
+
+        }
+
+        promoTrack.style.transform =
+        `translateY(-${promoIndex * 100}%)`;
+
+    }
+
+    setInterval(promoSlider,5000);
+
+}
+    
