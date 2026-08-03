@@ -1672,7 +1672,9 @@ MOBILE STACK
 
     position:relative;
 
-    height:260px;
+    height:240px;
+    padding:0 12px;
+    overflow:hidden;
 
 }
 
@@ -1680,14 +1682,9 @@ MOBILE STACK
 
     position:absolute;
 
-    top:0;
+    top:10px;
 
-    width:78%;
-
-    transition:.5s;
-
-}
-
+    width:72%;
 /* درمیان والا */
 
 .promo-card:nth-child(2){
@@ -1704,7 +1701,7 @@ MOBILE STACK
 
 .promo-card:nth-child(1){
 
-    left:-18%;
+    left:-8%;
 
     transform:scale(.88);
 
@@ -1718,7 +1715,7 @@ MOBILE STACK
 
 .promo-card:nth-child(3){
 
-    right:-18%;
+    right:-8%;
 
     transform:scale(.88);
 
