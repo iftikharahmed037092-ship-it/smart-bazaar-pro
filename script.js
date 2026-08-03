@@ -99,3 +99,35 @@ if(heroLeft && window.innerWidth <= 768){
     },30);
 
 }
+/*==================================================
+SMARTBAZAAR PRO
+PART 15.3
+CATEGORY AUTO INFINITE SCROLL
+==================================================*/
+
+const categoryList = document.querySelector(".category-list");
+
+if(categoryList){
+
+    categoryList.innerHTML += categoryList.innerHTML;
+
+    let speed = 0.5;
+
+    function autoScroll(){
+
+        categoryList.scrollLeft += speed;
+
+        if(categoryList.scrollLeft >= categoryList.scrollWidth / 2){
+
+            categoryList.scrollLeft = 0;
+
+        }
+
+        requestAnimationFrame(autoScroll);
+
+    }
+
+    autoScroll();
+
+}
+
