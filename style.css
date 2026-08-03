@@ -1622,29 +1622,31 @@ MOBILE STACK PROMO CARDS
 
 }
 
+
+
+
+
+
+
 /*==================================================
 SMARTBAZAAR PRO
 PART 17.2
-PROMOTION FEATURES CSS
+PROMOTION STACK DESIGN
 ==================================================*/
-
-/*==============================
-SECTION
-==============================*/
 
 .promo-features{
     width:100%;
-    padding:20px 0 40px;
+    padding:20px 0;
 }
-
-/*==============================
-DESKTOP
-==============================*/
 
 .promo-wrapper{
     display:flex;
     gap:20px;
 }
+
+/*==============================
+DESKTOP
+==============================*/
 
 .promo-card{
     flex:1;
@@ -1652,42 +1654,12 @@ DESKTOP
     border-radius:24px;
     overflow:hidden;
     box-shadow:0 10px 25px rgba(0,0,0,.08);
-    transition:.35s;
-    position:relative;
-}
-
-.promo-card:hover{
-    transform:translateY(-6px);
 }
 
 .promo-card img{
     width:100%;
     height:220px;
     object-fit:cover;
-    display:block;
-}
-
-.promo-content{
-    padding:18px;
-}
-
-.promo-content span{
-    display:inline-block;
-    padding:6px 14px;
-    border-radius:999px;
-    background:#2e7d32;
-    color:#fff;
-    font-size:12px;
-    font-weight:600;
-}
-
-.promo-content h3{
-    margin:12px 0 8px;
-    font-size:22px;
-}
-
-.promo-content p{
-    color:#666;
 }
 
 /*==============================
@@ -1699,45 +1671,61 @@ MOBILE STACK
 .promo-wrapper{
 
     position:relative;
-    height:470px;
+
+    height:260px;
 
 }
 
 .promo-card{
 
     position:absolute;
-    width:88%;
-    left:50%;
-    transform:translateX(-50%);
-    transition:.6s ease;
+
+    top:0;
+
+    width:78%;
+
+    transition:.5s;
 
 }
 
-.promo-card:nth-child(1){
+/* درمیان والا */
 
-    top:0;
+.promo-card:nth-child(2){
+
+    left:50%;
+
+    transform:translateX(-50%) scale(1);
+
     z-index:3;
 
 }
 
-.promo-card:nth-child(2){
+/* بائیں */
 
-    top:250px;
-    right:-18px;
-    left:auto;
-    width:80%;
+.promo-card:nth-child(1){
+
+    left:-18%;
+
+    transform:scale(.88);
+
+    opacity:.85;
+
     z-index:2;
 
 }
 
+/* دائیں */
+
 .promo-card:nth-child(3){
 
-    top:315px;
-    left:-18px;
-    width:80%;
-    z-index:1;
+    right:-18%;
+
+    transform:scale(.88);
+
+    opacity:.85;
+
+    z-index:2;
 
 }
 
 }
-
