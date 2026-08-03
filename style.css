@@ -1540,3 +1540,84 @@ MOBILE PROMOTION SLIDER
 
 }
 
+
+/*==================================================
+SMARTBAZAAR PRO
+PART 16.4
+MOBILE STACK PROMO CARDS
+==================================================*/
+
+@media (max-width:768px){
+
+.hero-right{
+
+    position:relative;
+    height:430px;
+    overflow:hidden;
+    background:transparent;
+    box-shadow:none;
+
+}
+
+.promo-slider{
+
+    position:relative;
+    width:100%;
+    height:100%;
+
+}
+
+.promo-track{
+
+    position:relative;
+    width:100%;
+    height:100%;
+
+}
+
+.offer-card{
+
+    position:absolute;
+    width:92%;
+    left:50%;
+    transform:translateX(-50%);
+    transition:all .6s ease;
+
+}
+
+/* پہلا کارڈ */
+
+.offer-card:nth-child(1){
+
+    top:0;
+    z-index:3;
+
+}
+
+/* دوسرا کارڈ */
+
+.offer-card:nth-child(2){
+
+    top:230px;
+    right:-18px;
+
+    width:82%;
+
+    z-index:2;
+
+}
+
+/* تیسرا کارڈ */
+
+.offer-card:nth-child(3){
+
+    top:285px;
+    left:-18px;
+
+    width:82%;
+
+    z-index:1;
+
+}
+
+}
