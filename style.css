@@ -1763,3 +1763,41 @@ PROMO CARDS VERTICAL ADJUSTMENT
     }
 
 }
+
+/* ========== MOBILE FIX ========== */
+@media(max-width:768px){
+
+    .promo-section{
+        padding-bottom: 40px;
+        overflow: visible;
+    }
+
+    .promo-wrapper{
+        position: static; /* absolute ہٹا دیا */
+        width: 100%;
+        height: auto; /* 300px ہٹا دیا */
+        display: flex;
+        flex-direction: column; /* کارڈز ایک کے نیچے ایک */
+        gap: 20px;
+        margin-top: 0; /* -40px ہٹا دیا */
+        padding: 0 15px;
+    }
+
+    .promo-card{
+        position: static; /* absolute ہٹا دیا */
+        width: 100%; /* 74% ہٹا دیا */
+        top: auto;
+        left: auto;
+        right: auto;
+        transform: none !important; /* scale اور translate ہٹا دیا */
+        opacity: 1;
+        z-index: auto;
+        margin: 0 auto;
+    }
+
+    .promo-slider,
+    .promo-container{
+        margin-top: 0; /* -30px ہٹا دیا */
+        padding-bottom: 20px;
+    }
+}
