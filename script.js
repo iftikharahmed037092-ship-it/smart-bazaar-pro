@@ -225,6 +225,10 @@ if (promoCards.length === 3) {
 
     updatePromoCards();
 
+/* صرف موبائل پر آٹو اینیمیشن */
+
+if(window.innerWidth <= 768){
+
     setInterval(() => {
 
         current++;
