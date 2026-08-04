@@ -1681,6 +1681,7 @@ MOBILE STACK
 @media(max-width:768px){
 
 .promo-wrapper{
+    margin-top:-40px;
     position:relative;
     width:100%;
     height:300px;
