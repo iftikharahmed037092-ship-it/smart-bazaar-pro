@@ -1633,14 +1633,21 @@ PART 17.2
 PROMOTION STACK DESIGN
 ==================================================*/
 
-.promo-features{
+/*==================================================
+SMARTBAZAAR PRO
+PART 17.2
+PROMOTION SECTION
+==================================================*/
+
+.promo-section{
     width:100%;
-    padding:20px 0;
+    padding:20px 0 30px;
 }
 
 .promo-wrapper{
     display:flex;
     gap:20px;
+    align-items:flex-start;
 }
 
 /*==============================
@@ -1653,7 +1660,11 @@ DESKTOP
     border-radius:24px;
     overflow:hidden;
     box-shadow:0 10px 25px rgba(0,0,0,.08);
-    transition:.5s;
+    transition:.35s ease;
+}
+
+.promo-card:hover{
+    transform:translateY(-8px);
 }
 
 .promo-card img{
@@ -1670,57 +1681,49 @@ MOBILE STACK
 @media(max-width:768px){
 
 .promo-wrapper{
-
     position:relative;
     width:100%;
-    height:290px;
+    height:300px;
     overflow:visible;
-
 }
 
 .promo-card{
-
     position:absolute;
-    top:0;
-    width:76%;
-    transition:.5s ease;
-
+    width:74%;
+    top:25px;
+    transition:.45s ease;
 }
 
-/* بائیں کارڈ */
+/* Left */
 
 .promo-card:nth-child(1){
-
-    left:2%;
+    left:0;
+    top:45px;
     transform:scale(.88);
     z-index:1;
     opacity:.85;
-
 }
 
-/* درمیان والا */
+/* Center */
 
 .promo-card:nth-child(2){
-
     left:50%;
+    top:0;
     transform:translateX(-50%) scale(1);
     z-index:3;
-
 }
 
-/* دائیں کارڈ */
+/* Right */
 
 .promo-card:nth-child(3){
-
-    right:2%;
+    right:0;
+    top:45px;
     transform:scale(.88);
     z-index:2;
     opacity:.85;
-
 }
 
 }
-
 
 /*==================================================
 SMARTBAZAAR PRO
