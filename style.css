@@ -1637,7 +1637,7 @@ PROMOTION STACK DESIGN
 SMARTBAZAAR PRO
 PART 17.2
 PROMOTION SECTION
-==================================================*/
+==================================================*
 
 .promo-section{
     width:100%;
@@ -1653,7 +1653,7 @@ PROMOTION SECTION
 
 /*==============================
 DESKTOP
-==============================*/
+==============================*
 
 .promo-card{
     flex:1;
@@ -1677,7 +1677,7 @@ DESKTOP
 
 /*==============================
 MOBILE STACK
-==============================*/
+==============================*
 
 @media(max-width:768px){
 
@@ -1695,7 +1695,7 @@ MOBILE STACK
     transition:.45s ease;
 }
 
-/* Left */
+/* Left *
 
 .promo-card:nth-child(1){
     left:0;
@@ -1705,7 +1705,7 @@ MOBILE STACK
     opacity:.85;
 }
 
-/* Center */
+/* Center *
 
 .promo-card:nth-child(2){
     left:50%;
@@ -1714,7 +1714,7 @@ MOBILE STACK
     z-index:3;
 }
 
-/* Right */
+/* Right *
 
 .promo-card:nth-child(3){
     right:0;
@@ -1730,7 +1730,7 @@ MOBILE STACK
 SMARTBAZAAR PRO
 PART 17.4
 PROMO CARDS VERTICAL ADJUSTMENT
-==================================================*/
+==================================================
 
 .promo-section{
     padding-bottom: 60px;
@@ -1748,7 +1748,7 @@ PROMO CARDS VERTICAL ADJUSTMENT
 }
 
 
-/* MOBILE FIX */
+/* MOBILE FIX *
 
 @media(max-width:768px){
 
@@ -1764,40 +1764,94 @@ PROMO CARDS VERTICAL ADJUSTMENT
 
 }
 
-/* ========== MOBILE FIX ========== */
-@media(max-width:768px){
+/*==================================================
+SMARTBAZAAR PRO
+PROMO SECTION - JAZZWORLD STYLE
+==================================================*/
 
-    .promo-section{
-        padding-bottom: 40px;
-        overflow: visible;
-    }
+.promo-section{
+    width:100%;
+    padding: 50px 0 70px; /* اوپر نیچے سپیس تاکہ نہ چڑھے */
+    background: #fff;
+    position: relative;
+    z-index: 1; /* اوپر والے سے نیچے رہے */
+}
 
+.promo-wrapper{
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    position: relative;
+}
+
+/*==============================
+DESKTOP - 3 CARDS IN ROW
+==============================*/
+@media(min-width:769px){
     .promo-wrapper{
-        position: static; /* absolute ہٹا دیا */
-        width: 100%;
-        height: auto; /* 300px ہٹا دیا */
         display: flex;
-        flex-direction: column; /* کارڈز ایک کے نیچے ایک */
         gap: 20px;
-        margin-top: 0; /* -40px ہٹا دیا */
-        padding: 0 15px;
+        height: auto;
+    }
+    .promo-card{
+        position: relative; /* absolute ختم */
+        flex: 1;
+        width: 100%;
+        transform: none !important;
+        opacity: 1 !important;
+        z-index: auto !important;
+    }
+}
+
+/*==============================
+MOBILE - JAZZ WORLD STACK STYLE
+==============================*/
+@media(max-width:768px){
+    
+    .promo-wrapper{
+        height: 320px; /* سٹیک کے لیے فکس ہائٹ ضروری ہے */
+        overflow: visible;
+        padding: 0 20px;
     }
 
     .promo-card{
-        position: static; /* absolute ہٹا دیا */
-        width: 100%; /* 74% ہٹا دیا */
-        top: auto;
-        left: auto;
-        right: auto;
-        transform: none !important; /* scale اور translate ہٹا دیا */
-        opacity: 1;
-        z-index: auto;
-        margin: 0 auto;
+        position: absolute;
+        width: 88%; /* کارڈ کی چوڑائی */
+        left: 50%;
+        border-radius: 20px;
+        box-shadow: 0 15px 30px rgba(0,0,0,.15);
+        transition: all .4s ease;
     }
 
-    .promo-slider,
-    .promo-container{
-        margin-top: 0; /* -30px ہٹا دیا */
-        padding-bottom: 20px;
+    /* Back Left Card */
+    .promo-card:nth-child(1){
+        transform: translateX(-50%) scale(.92);
+        top: 30px;
+        z-index: 1;
+        opacity: .7;
     }
+
+    /* Center Front Card */
+    .promo-card:nth-child(2){
+        transform: translateX(-50%) scale(1);
+        top: 0;
+        z-index: 3;
+        opacity: 1;
+    }
+
+    /* Back Right Card */
+    .promo-card:nth-child(3){
+        transform: translateX(-50%) scale(.92);
+        top: 30px;
+        z-index: 2;
+        opacity: .7;
+    }
+}
+
+.promo-card img{
+    width:100%;
+    height:240px;
+    object-fit:cover;
+    display:block;
+    border-radius:20px;
 }
