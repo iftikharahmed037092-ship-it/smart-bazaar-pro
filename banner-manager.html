@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>SmartBazaar Pro - Banner Manager</title>
+
+<link rel="stylesheet" href="banner-manager.css">
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
+</head>
+
+<body>
+
+<!--====================================
+BANNER MANAGER
+=====================================-->
+
+<section class="banner-manager">
+
+<div class="manager-header">
+
+<h1>Banner Manager</h1>
+
+<button id="addBannerBtn">
+
+<i class="fa-solid fa-plus"></i>
+
+Add Banner
+
+</button>
+
+</div>
+
+<!--==============================
+ADD / EDIT FORM
+==============================-->
+
+<div class="banner-form">
+
+<div class="form-group">
+
+<label>Banner Image</label>
+
+<input
+type="file"
+id="bannerImage"
+accept="image/*">
+
+</div>
+
+<div class="form-group">
+
+<label>Heading</label>
+
+<input
+type="text"
+id="bannerHeading"
+placeholder="Enter Heading">
+
+</div>
+
+<div class="form-group">
+
+<label>Description</label>
+
+<textarea
+id="bannerDescription"
+placeholder="Enter Description"></textarea>
+
+</div>
+
+<div class="form-group">
+
+<label>Button Text</label>
+
+<input
+type="text"
+id="bannerButtonText"
+placeholder="Shop Now">
+
+</div>
+
+<div class="form-group">
+
+<label>Button Link</label>
+
+<input
+type="text"
+id="bannerButtonLink"
+placeholder="products.html">
+
+</div>
+
+<div class="form-group">
+
+<label>Display Order</label>
+
+<input
+type="number"
+id="bannerOrder"
+value="1">
+
+</div>
+
+<div class="form-group">
+
+<label>Status</label>
+
+<select id="bannerStatus">
+
+<option value="true">
+
+Active
+
+</option>
+
+<option value="false">
+
+Inactive
+
+</option>
+
+</select>
+
+</div>
+
+<button
+id="saveBannerBtn">
+
+Save Banner
+
+</button>
+
+</div>
+
+<!--==============================
+BANNER LIST
+==============================-->
+
+<div class="banner-list">
+
+<h2>
+
+All Banners
+
+</h2>
+
+<div id="bannerContainer">
+
+<!-- JavaScript سے تمام Banner یہاں آئیں گے -->
+
+</div>
+
+</div>
+
+</section>
+
+<script src="banner-manager.js"></script>
+
+</body>
+
+</html>
