@@ -1632,31 +1632,30 @@ SMARTBAZAAR PRO
 PART 17.2
 PROMOTION STACK DESIGN
 ==================================================*/
-
 /*==================================================
 SMARTBAZAAR PRO
 PART 17.2
-PROMOTION SECTION
-==================================================*
+PROMOTION FEATURES
+==================================================*/
 
-.promo-section{
+.promo-features{
     width:100%;
     padding:20px 0 30px;
+    overflow:hidden;
 }
 
 .promo-wrapper{
-     margin-top:-40px;
+    width:100%;
     display:flex;
+    justify-content:center;
+    align-items:stretch;
     gap:20px;
-    align-items:flex-start;
+    margin-top:-20px;
 }
-
-/*==============================
-DESKTOP
-==============================*
 
 .promo-card{
     flex:1;
+    max-width:calc((100% - 40px) / 3);
     background:#fff;
     border-radius:24px;
     overflow:hidden;
@@ -1666,6 +1665,7 @@ DESKTOP
 
 .promo-card:hover{
     transform:translateY(-8px);
+    box-shadow:0 15px 35px rgba(0,0,0,.12);
 }
 
 .promo-card img{
@@ -1675,106 +1675,122 @@ DESKTOP
     display:block;
 }
 
-/*==============================
-MOBILE STACK
-==============================*
+.promo-content{
+    padding:20px;
+}
 
-@media(max-width:768px){
+.promo-content span{
+    display:inline-block;
+    padding:6px 12px;
+    background:var(--secondary);
+    color:#fff;
+    font-size:12px;
+    font-weight:600;
+    border-radius:20px;
+    margin-bottom:12px;
+}
+
+.promo-content h3{
+    font-size:22px;
+    color:var(--text);
+    margin-bottom:8px;
+}
+
+.promo-content p{
+    font-size:15px;
+    color:var(--text-light);
+}
+
+/*==============================
+TABLET
+==============================*/
+
+@media (max-width:992px){
 
 .promo-wrapper{
-    position:relative;
-    width:100%;
-    height:300px;
-    overflow:visible;
+    gap:15px;
+}
+
+.promo-card img{
+    height:180px;
+}
+
+}
+
+/*==============================
+MOBILE
+==============================*/
+
+@media (max-width:768px){
+
+.promo-features{
+    padding:15px 0 25px;
+}
+
+.promo-wrapper{
+    display:flex;
+    justify-content:center;
+    align-items:stretch;
+    gap:12px;
+    overflow-x:auto;
+    overflow-y:hidden;
+    scroll-snap-type:x mandatory;
+    -webkit-overflow-scrolling:touch;
+    padding-bottom:10px;
+}
+
+.promo-wrapper::-webkit-scrollbar{
+    display:none;
 }
 
 .promo-card{
-    position:absolute;
-    width:74%;
-    top:25px;
-    transition:.45s ease;
+    flex:0 0 85%;
+    max-width:85%;
+    scroll-snap-align:center;
 }
 
-/* Left *
-
-.promo-card:nth-child(1){
-    left:0;
-    top:45px;
-    transform:scale(.88);
-    z-index:1;
-    opacity:.85;
-}
-
-/* Center *
-
-.promo-card:nth-child(2){
-    left:50%;
-    top:0;
-    transform:translateX(-50%) scale(1);
-    z-index:3;
-}
-
-/* Right *
-
-.promo-card:nth-child(3){
-    right:0;
-    top:45px;
-    transform:scale(.88);
-    z-index:2;
-    opacity:.85;
+.promo-card img{
+    height:190px;
 }
 
 }
 
-/*==================================================
-SMARTBAZAAR PRO
-PART 17.4
-PROMO CARDS VERTICAL ADJUSTMENT
-==================================================
+/*==============================
+SMALL MOBILE
+==============================*/
 
-.promo-section{
-    padding-bottom: 60px;
-    overflow: visible;
-}
-
-.promo-slider,
-.promo-container{
-    margin-top: -40px;
-    padding-bottom: 40px;
-}
+@media (max-width:480px){
 
 .promo-card{
-    bottom: auto;
+    flex:0 0 92%;
+    max-width:92%;
 }
 
+.promo-content{
+    padding:16px;
+}
 
-/* MOBILE FIX *
+.promo-content h3{
+    font-size:18px;
+}
 
-@media(max-width:768px){
-
-    .promo-slider,
-    .promo-container{
-        margin-top: -30px;
-        padding-bottom: 50px;
-    }
-
-    .promo-section{
-        padding-bottom: 80px;
-    }
+.promo-content p{
+    font-size:14px;
+}
 
 }
 
 /*==================================================
 SMARTBAZAAR PRO
 PROMO SECTION - JAZZWORLD STYLE
-==================================================*/
+==================================================*
 
 .promo-section{
     width:100%;
-    padding: 50px 0 70px; /* اوپر نیچے سپیس تاکہ نہ چڑھے */
+    padding: 50px 0 70px; /* اوپر نیچے سپیس تاکہ نہ چڑھے *
     background: #fff;
     position: relative;
-    z-index: 1; /* اوپر والے سے نیچے رہے */
+    z-index: 1; /* اوپر والے سے نیچے رہے *
 }
 
 .promo-wrapper{
@@ -1786,7 +1802,7 @@ PROMO SECTION - JAZZWORLD STYLE
 
 /*==============================
 DESKTOP - 3 CARDS IN ROW
-==============================*/
+==============================*
 @media(min-width:769px){
     .promo-wrapper{
         display: flex;
@@ -1794,7 +1810,7 @@ DESKTOP - 3 CARDS IN ROW
         height: auto;
     }
     .promo-card{
-        position: relative; /* absolute ختم */
+        position: relative; /* absolute ختم *
         margin-top:60px 20px 20px 40px;
         flex: 1;
         width: 100%;
@@ -1805,26 +1821,26 @@ DESKTOP - 3 CARDS IN ROW
 }
 
 /*==============================
-MOBILE - JAZZ WORLD STACK STYLE
-==============================*/
-@media(max-width:768px){
+MOBILE - JAZZ WORLD STACK STYL
+==============================*
+@media(max-width:768px)
     
     .promo-wrapper{
-        height: 320px; /* سٹیک کے لیے فکس ہائٹ ضروری ہے */
+        height: 320px; /* سٹیک کے لیے فکس ہائٹ ضروری ہے *
         overflow: visible;
         padding: 0 20px;
     }
 
     .promo-card{
         position: absolute;
-        width: 88%; /* کارڈ کی چوڑائی */
+        width: 88%; /* کارڈ کی چوڑائی *
         left: 50%;
         border-radius: 20px;
         box-shadow: 0 15px 30px rgba(0,0,0,.15);
         transition: all .4s ease;
     }
 
-    /* Back Left Card */
+    /* Back Left Card *
     .promo-card:nth-child(1){
         transform: translateX(-50%) scale(.92);
         top: 30px;
@@ -1832,7 +1848,7 @@ MOBILE - JAZZ WORLD STACK STYLE
         opacity: .7;
     }
 
-    /* Center Front Card */
+    /* Center Front Card *
     .promo-card:nth-child(2){
         transform: translateX(-50%) scale(1);
         top: 0;
@@ -1840,7 +1856,7 @@ MOBILE - JAZZ WORLD STACK STYLE
         opacity: 1;
     }
 
-    /* Back Right Card */
+    /* Back Right Card *
     .promo-card:nth-child(3){
         transform: translateX(-50%) scale(.92);
         top: 30px;
@@ -1856,3 +1872,4 @@ MOBILE - JAZZ WORLD STACK STYLE
     display:block;
     border-radius:20px;
 }
+-+*/
