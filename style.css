@@ -1795,6 +1795,7 @@ DESKTOP - 3 CARDS IN ROW
     }
     .promo-card{
         position: relative; /* absolute ختم */
+        margin-top:60px 20px 20px 40px;
         flex: 1;
         width: 100%;
         transform: none !important;
