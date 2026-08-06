@@ -43,6 +43,8 @@ ADD / EDIT FORM
 
 <div class="banner-form">
 
+<input type="hidden" id="bannerId">
+
 <div class="form-group">
 
 <label>Banner Image</label>
@@ -135,6 +137,26 @@ id="saveBannerBtn">
 
 Save Banner
 
+<!--==============================
+LIVE PREVIEW
+==============================-->
+
+<div class="banner-preview">
+
+<h2>
+
+Live Preview
+
+</h2>
+
+<div id="bannerPreview">
+
+No Banner Selected
+
+</div>
+
+</div>
+
 </button>
 
 </div>
@@ -161,8 +183,12 @@ All Banners
 
 </section>
 
-<script src="banner-manager.js"></script>
+<script type="module" src="firebase-config.js"></script>
 
+<script type="module" src="firebase-banner.js"></script>
+
+<script type="module" src="banner-manager.js"></script>
+  
 </body>
 
 </html>
