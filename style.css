@@ -1400,3 +1400,56 @@ box-shadow:var(--shadow-md);
 
 }
 
+
+@media(max-width:768px){
+
+.mobile-nav{
+
+    position:absolute;
+
+    top:100%;
+
+    left:0;
+
+    width:100%;
+
+    background:white;
+
+    display:none;
+
+}
+
+
+.mobile-nav.active{
+
+    display:block;
+
+}
+
+
+.nav-menu{
+
+    flex-direction:column;
+
+    padding:20px;
+
+}
+
+
+.nav-menu li{
+
+    width:100%;
+
+}
+
+
+.nav-menu a{
+
+    display:block;
+
+    padding:12px;
+
+}
+
+
+}
