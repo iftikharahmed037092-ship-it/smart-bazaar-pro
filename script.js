@@ -106,3 +106,27 @@ if(categoryList){
     autoScroll();
 
 }
+
+
+/*================================
+MOBILE MENU TOGGLE
+================================*/
+
+const menuBtn = document.querySelector(".menu-btn");
+
+const navbar = document.querySelector(".mobile-nav");
+
+
+if(menuBtn && navbar){
+
+
+menuBtn.addEventListener("click",()=>{
+
+
+    navbar.classList.toggle("active");
+
+
+});
+
+
+}
