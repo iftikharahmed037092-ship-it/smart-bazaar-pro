@@ -4,191 +4,344 @@
 <head>
 
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
 
 <title>SmartBazaar Pro - Banner Manager</title>
-
-<link rel="stylesheet" href="banner-manager.css">
 
 <link rel="stylesheet"
 href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
 
+<link rel="stylesheet"
+href="banner-manager.css">
+
 </head>
+
 
 <body>
 
-<!--====================================
+
+<!--==================================================
+SMARTBAZAAR PRO
 BANNER MANAGER
-=====================================-->
+==================================================-->
 
-<section class="banner-manager">
+<div class="banner-manager">
 
-<div class="manager-header">
-
-<h1>Banner Manager</h1>
-
-<button id="addBannerBtn">
-
-<i class="fa-solid fa-plus"></i>
-
-Add Banner
-
-</button>
-
-</div>
 
 <!--==============================
-ADD / EDIT FORM
+HEADER
 ==============================-->
 
-<div class="banner-form">
+<header class="banner-manager-header">
 
-<input type="hidden" id="bannerId">
+    <div>
 
-<div class="form-group">
+        <h1>
+            Banner Manager
+        </h1>
 
-<label>Banner Image</label>
+        <p>
+            Add and manage website banners
+        </p>
 
-<input
-type="file"
-id="bannerImage"
-accept="image/*">
+    </div>
 
-</div>
 
-<div class="form-group">
+    <a href="admin-dashboard.html">
 
-<label>Heading</label>
+        <i class="fa-solid fa-arrow-left"></i>
 
-<input
-type="text"
-id="bannerHeading"
-placeholder="Enter Heading">
+        Dashboard
 
-</div>
+    </a>
 
-<div class="form-group">
+</header>
 
-<label>Description</label>
 
-<textarea
-id="bannerDescription"
-placeholder="Enter Description"></textarea>
-
-</div>
-
-<div class="form-group">
-
-<label>Button Text</label>
-
-<input
-type="text"
-id="bannerButtonText"
-placeholder="Shop Now">
-
-</div>
-
-<div class="form-group">
-
-<label>Button Link</label>
-
-<input
-type="text"
-id="bannerButtonLink"
-placeholder="products.html">
-
-</div>
-
-<div class="form-group">
-
-<label>Display Order</label>
-
-<input
-type="number"
-id="bannerOrder"
-value="1">
-
-</div>
-
-<div class="form-group">
-
-<label>Status</label>
-
-<select id="bannerStatus">
-
-<option value="true">
-
-Active
-
-</option>
-
-<option value="false">
-
-Inactive
-
-</option>
-
-</select>
-
-</div>
-
-<button
-id="saveBannerBtn">
-
-Save Banner
 
 <!--==============================
-LIVE PREVIEW
+MAIN
 ==============================-->
 
-<div class="banner-preview">
+<main class="banner-manager-content">
 
-<h2>
 
-Live Preview
+<!--==============================
+ADD BANNER
+==============================-->
 
-</h2>
+<section class="banner-form-card">
 
-<div id="bannerPreview">
+    <h2>
 
-No Banner Selected
+        <i class="fa-solid fa-image"></i>
 
-</div>
+        Add New Banner
 
-</div>
+    </h2>
 
-</button>
 
-</div>
+    <form id="bannerForm">
+
+
+        <!-- IMAGE -->
+
+        <div class="form-group">
+
+            <label>
+
+                Banner Image
+
+            </label>
+
+
+            <label
+            for="bannerImage"
+            class="image-upload-box">
+
+                <i class="fa-solid fa-cloud-arrow-up"></i>
+
+                <strong>
+                    Choose Image
+                </strong>
+
+                <span>
+                    Select image from Gallery
+                </span>
+
+            </label>
+
+
+            <input
+            type="file"
+            id="bannerImage"
+            accept="image/*"
+            hidden>
+
+
+            <div
+            id="imagePreview"
+            class="image-preview">
+
+            </div>
+
+        </div>
+
+
+
+        <!-- TITLE -->
+
+        <div class="form-group">
+
+            <label for="bannerTitle">
+
+                Banner Title
+
+            </label>
+
+
+            <input
+            type="text"
+            id="bannerTitle"
+            placeholder="Example: Mega Summer Sale"
+            required>
+
+        </div>
+
+
+
+        <!-- DESCRIPTION -->
+
+        <div class="form-group">
+
+            <label for="bannerDescription">
+
+                Description
+
+            </label>
+
+
+            <textarea
+            id="bannerDescription"
+            rows="4"
+            placeholder="Write banner description">
+
+            </textarea>
+
+        </div>
+
+
+
+        <!-- BADGE -->
+
+        <div class="form-group">
+
+            <label for="bannerBadge">
+
+                Badge / Tag
+
+            </label>
+
+
+            <input
+            type="text"
+            id="bannerBadge"
+            placeholder="Example: HOT DEAL">
+
+        </div>
+
+
+
+        <!-- BUTTON -->
+
+        <div class="form-group">
+
+            <label for="bannerButtonText">
+
+                Button Text
+
+            </label>
+
+
+            <input
+            type="text"
+            id="bannerButtonText"
+            value="Shop Now">
+
+        </div>
+
+
+
+        <!-- BUTTON LINK -->
+
+        <div class="form-group">
+
+            <label for="bannerButtonLink">
+
+                Button Link
+
+            </label>
+
+
+            <input
+            type="text"
+            id="bannerButtonLink"
+            placeholder="Example: products.html">
+
+        </div>
+
+
+
+        <!-- STATUS -->
+
+        <div class="form-group">
+
+            <label for="bannerStatus">
+
+                Banner Status
+
+            </label>
+
+
+            <select id="bannerStatus">
+
+                <option value="active">
+
+                    Active
+
+                </option>
+
+
+                <option value="inactive">
+
+                    Inactive
+
+                </option>
+
+            </select>
+
+        </div>
+
+
+
+        <!-- SAVE -->
+
+        <button
+        type="submit"
+        id="saveBannerBtn"
+        class="save-banner-btn">
+
+            <i class="fa-solid fa-cloud-arrow-up"></i>
+
+            Upload & Save Banner
+
+        </button>
+
+
+        <!-- MESSAGE -->
+
+        <div
+        id="bannerMessage"
+        class="banner-message">
+
+        </div>
+
+
+    </form>
+
+</section>
+
+
 
 <!--==============================
 BANNER LIST
 ==============================-->
 
-<div class="banner-list">
+<section class="banner-list-card">
 
-<h2>
+    <h2>
 
-All Banners
+        <i class="fa-solid fa-images"></i>
 
-</h2>
+        Saved Banners
 
-<div id="bannerContainer">
+    </h2>
 
-<!-- JavaScript سے تمام Banner یہاں آئیں گے -->
 
-</div>
+    <div
+    id="bannerList"
+    class="banner-list">
 
-</div>
+        <p class="empty-message">
+
+            No banners added yet.
+
+        </p>
+
+    </div>
 
 </section>
 
-<script type="module" src="firebase-config.js"></script>
 
-<script type="module" src="firebase-banner.js"></script>
+</main>
 
-<script type="module" src="banner-manager.js"></script>
-  
+
+</div>
+
+
+
+<!--==============================
+JAVASCRIPT
+==============================-->
+
+<script
+type="module"
+src="banner-manager.js">
+</script>
+
+
 </body>
 
 </html>
