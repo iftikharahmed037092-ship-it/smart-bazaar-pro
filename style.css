@@ -1453,3 +1453,248 @@ box-shadow:var(--shadow-md);
 
 
 }
+/*==================================================
+SMARTBAZAAR PRO
+MOBILE SIDE MENU
+==================================================*/
+
+.mobile-side-menu{
+
+    position:fixed;
+
+    top:0;
+
+    left:0;
+
+    width:300px;
+
+    max-width:85%;
+
+    height:100vh;
+
+    background:#ffffff;
+
+    z-index:10001;
+
+    transform:translateX(-100%);
+
+    transition:transform .35s ease;
+
+    box-shadow:8px 0 30px rgba(0,0,0,.18);
+
+    overflow-y:auto;
+
+}
+
+
+.mobile-side-menu.active{
+
+    transform:translateX(0);
+
+}
+
+
+.mobile-menu-overlay{
+
+    position:fixed;
+
+    inset:0;
+
+    background:rgba(0,0,0,.45);
+
+    z-index:10000;
+
+    opacity:0;
+
+    visibility:hidden;
+
+    transition:.3s ease;
+
+}
+
+
+.mobile-menu-overlay.active{
+
+    opacity:1;
+
+    visibility:visible;
+
+}
+
+
+/* HEADER */
+
+.mobile-menu-header{
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:space-between;
+
+    padding:20px 16px;
+
+    background:#2e7d32;
+
+    color:#ffffff;
+
+}
+
+
+.mobile-menu-user{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:12px;
+
+}
+
+
+.mobile-user-icon{
+
+    width:44px;
+
+    height:44px;
+
+    border-radius:50%;
+
+    background:#ffffff;
+
+    color:#2e7d32;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    font-size:20px;
+
+}
+
+
+.mobile-menu-user strong{
+
+    display:block;
+
+    font-size:15px;
+
+}
+
+
+.mobile-menu-user small{
+
+    display:block;
+
+    margin-top:3px;
+
+    opacity:.85;
+
+    font-size:11px;
+
+}
+
+
+.mobile-menu-close{
+
+    width:38px;
+
+    height:38px;
+
+    border:0;
+
+    border-radius:50%;
+
+    background:rgba(255,255,255,.18);
+
+    color:#ffffff;
+
+    font-size:20px;
+
+    cursor:pointer;
+
+}
+
+
+/* MENU ITEMS */
+
+.mobile-menu-list{
+
+    padding:12px;
+
+}
+
+
+.mobile-menu-list a,
+.mobile-menu-footer a{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:14px;
+
+    padding:14px 13px;
+
+    margin-bottom:4px;
+
+    border-radius:10px;
+
+    color:#333333;
+
+    text-decoration:none;
+
+    font-size:14px;
+
+    transition:.2s ease;
+
+}
+
+
+.mobile-menu-list a:hover,
+.mobile-menu-footer a:hover{
+
+    background:#f0f7f0;
+
+    color:#2e7d32;
+
+}
+
+
+.mobile-menu-list i,
+.mobile-menu-footer i{
+
+    width:22px;
+
+    text-align:center;
+
+    color:#2e7d32;
+
+    font-size:17px;
+
+}
+
+
+.mobile-menu-footer{
+
+    border-top:1px solid #eeeeee;
+
+    padding:12px;
+
+}
+
+
+@media(min-width:769px){
+
+    .mobile-side-menu,
+    .mobile-menu-overlay{
+
+        display:none;
+
+    }
+
+}
+
+
