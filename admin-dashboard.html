@@ -5,11 +5,13 @@
 
 <meta charset="UTF-8">
 
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
 
 <title>SmartBazaar Pro - Admin Dashboard</title>
 
-<link rel="stylesheet" href="admin-dashboard.css">
+<link rel="stylesheet"
+href="admin-dashboard.css">
 
 <link rel="stylesheet"
 href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
@@ -55,7 +57,6 @@ Dashboard
 </a>
 
 
-
 <a href="banner-manager.html">
 
 <i class="fa-solid fa-image"></i>
@@ -63,7 +64,6 @@ Dashboard
 Banner Manager
 
 </a>
-
 
 
 <a href="#">
@@ -75,7 +75,6 @@ Products
 </a>
 
 
-
 <a href="#">
 
 <i class="fa-solid fa-cart-shopping"></i>
@@ -85,7 +84,6 @@ Orders
 </a>
 
 
-
 <a href="#">
 
 <i class="fa-solid fa-users"></i>
@@ -93,7 +91,6 @@ Orders
 Users
 
 </a>
-
 
 
 <a href="#">
@@ -129,7 +126,7 @@ Admin Dashboard
 </h1>
 
 
-<button>
+<button type="button">
 
 <i class="fa-solid fa-right-from-bracket"></i>
 
@@ -142,10 +139,19 @@ Logout
 
 
 
+<!--==============================
+DASHBOARD CARDS
+==============================-->
+
 <section class="dashboard-cards">
 
 
-<div class="dashboard-card">
+<!--==============================
+BANNER CARD
+==============================-->
+
+<a href="banner-manager.html"
+class="dashboard-card">
 
 <i class="fa-solid fa-image"></i>
 
@@ -161,11 +167,16 @@ Manage Website Banners
 
 </p>
 
-</div>
+</a>
 
 
 
-<div class="dashboard-card">
+<!--==============================
+PRODUCT CARD
+==============================-->
+
+<a href="#"
+class="dashboard-card">
 
 <i class="fa-solid fa-box"></i>
 
@@ -181,11 +192,16 @@ Manage Products
 
 </p>
 
-</div>
+</a>
 
 
 
-<div class="dashboard-card">
+<!--==============================
+ORDERS CARD
+==============================-->
+
+<a href="#"
+class="dashboard-card">
 
 <i class="fa-solid fa-cart-shopping"></i>
 
@@ -201,8 +217,7 @@ Manage Orders
 
 </p>
 
-</div>
-
+</a>
 
 
 </section>
@@ -214,8 +229,12 @@ Manage Orders
 </div>
 
 
-<script type="module" src="admin-dashboard.js"></script>
+<!--==============================
+ADMIN DASHBOARD JAVASCRIPT
+==============================-->
 
+<script type="module"
+src="admin-dashboard.js"></script>
 
 
 </body>
