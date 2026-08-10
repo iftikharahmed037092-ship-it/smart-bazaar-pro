@@ -107,26 +107,87 @@ if(categoryList){
 
 }
 
+/*==================================================
+SMARTBAZAAR PRO
+MOBILE SIDE MENU
+==================================================*/
 
-/*================================
-MOBILE MENU TOGGLE
-================================*/
+document.addEventListener("DOMContentLoaded", () => {
 
-const menuBtn = document.querySelector(".menu-btn");
+    const menuBtn =
+        document.querySelector(".menu-btn");
 
-const navbar = document.querySelector(".mobile-nav");
+    const sideMenu =
+        document.querySelector(".mobile-side-menu");
+
+    const overlay =
+        document.querySelector(".mobile-menu-overlay");
+
+    const closeBtn =
+        document.querySelector(".mobile-menu-close");
 
 
-if(menuBtn && navbar){
+    if(
+        !menuBtn ||
+        !sideMenu ||
+        !overlay ||
+        !closeBtn
+    ){
+
+        return;
+
+    }
 
 
-menuBtn.addEventListener("click",()=>{
+    function openMenu(){
+
+        sideMenu.classList.add("active");
+
+        overlay.classList.add("active");
+
+        document.body.style.overflow = "hidden";
+
+    }
 
 
-    navbar.classList.toggle("active");
+    function closeMenu(){
 
+        sideMenu.classList.remove("active");
+
+        overlay.classList.remove("active");
+
+        document.body.style.overflow = "";
+
+    }
+
+
+    menuBtn.addEventListener(
+        "click",
+        openMenu
+    );
+
+
+    closeBtn.addEventListener(
+        "click",
+        closeMenu
+    );
+
+
+    overlay.addEventListener(
+        "click",
+        closeMenu
+    );
+
+
+    sideMenu
+        .querySelectorAll("a")
+        .forEach(link => {
+
+            link.addEventListener(
+                "click",
+                closeMenu
+            );
+
+        });
 
 });
-
-
-}
