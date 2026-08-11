@@ -4,14 +4,46 @@ PART 19.1
 FIREBASE CONFIG
 ==================================================*/
 
-import { initializeApp }
+
+/*==============================
+FIREBASE APP
+==============================*/
+
+import {
+    initializeApp
+}
 from "https://www.gstatic.com/firebasejs/12.17.1/firebase-app.js";
 
-import { getFirestore }
+
+/*==============================
+FIRESTORE
+==============================*/
+
+import {
+    getFirestore
+}
 from "https://www.gstatic.com/firebasejs/12.17.1/firebase-firestore.js";
 
-import { getAuth }
+
+/*==============================
+AUTH
+==============================*/
+
+import {
+    getAuth
+}
 from "https://www.gstatic.com/firebasejs/12.17.1/firebase-auth.js";
+
+
+/*==============================
+REALTIME DATABASE
+==============================*/
+
+import {
+    getDatabase
+}
+from "https://www.gstatic.com/firebasejs/12.17.1/firebase-database.js";
+
 
 /*==============================
 FIREBASE CONFIG
@@ -19,32 +51,64 @@ FIREBASE CONFIG
 
 const firebaseConfig = {
 
-    apiKey: "AIzaSyB1FirCmHEPqXHy3UP4m27bNsxDU7XyfYg",
+    apiKey:
+        "AIzaSyB1FirCmHEPqXHy3UP4m27bNsxDU7XyfYg",
 
-    authDomain: "smart-bazaar-pro.firebaseapp.com",
+    authDomain:
+        "smart-bazaar-pro.firebaseapp.com",
 
-    projectId: "smart-bazaar-pro",
+    databaseURL:
+        "https://smart-bazaar-pro-default-rtdb.asia-southeast1.firebasedatabase.app/",
 
-    storageBucket: "smart-bazaar-pro.firebasestorage.app",
+    projectId:
+        "smart-bazaar-pro",
 
-    messagingSenderId: "842790302336",
+    storageBucket:
+        "smart-bazaar-pro.firebasestorage.app",
 
-    appId: "1:842790302336:web:c05a3477a2e018be2dec65"
+    messagingSenderId:
+        "842790302336",
+
+    appId:
+        "1:842790302336:web:c05a3477a2e018be2dec65"
 
 };
+
 
 /*==============================
 INITIALIZE FIREBASE
 ==============================*/
 
-const app = initializeApp(firebaseConfig);
+const app =
+    initializeApp(firebaseConfig);
 
-const db = getFirestore(app);
 
-const auth = getAuth(app);
+/*==============================
+INITIALIZE SERVICES
+==============================*/
+
+const db =
+    getFirestore(app);
+
+const auth =
+    getAuth(app);
+
+const database =
+    getDatabase(app);
+
 
 /*==============================
 EXPORT
 ==============================*/
 
-export { app, db, auth };
+export {
+
+    app,
+
+    db,
+
+    auth,
+
+    database
+
+};
