@@ -49,6 +49,64 @@ const bannerList =
 
 
 /*==================================================
+CHECK REQUIRED ELEMENTS
+==================================================*/
+
+if (!bannerForm) {
+
+    console.error(
+        "ERROR: #bannerForm not found."
+    );
+
+}
+
+
+if (!bannerImage) {
+
+    console.error(
+        "ERROR: #bannerImage not found."
+    );
+
+}
+
+
+if (!imagePreview) {
+
+    console.error(
+        "ERROR: #imagePreview not found."
+    );
+
+}
+
+
+if (!saveBannerBtn) {
+
+    console.error(
+        "ERROR: #saveBannerBtn not found."
+    );
+
+}
+
+
+if (!bannerMessage) {
+
+    console.error(
+        "ERROR: #bannerMessage not found."
+    );
+
+}
+
+
+if (!bannerList) {
+
+    console.error(
+        "ERROR: #bannerList not found."
+    );
+
+}
+
+
+/*==================================================
 SELECTED IMAGE
 ==================================================*/
 
@@ -56,15 +114,88 @@ let selectedFile = null;
 
 
 /*==================================================
-MESSAGE
+SHOW MESSAGE
 ==================================================*/
 
-function showMessage(message, type = "") {
+function showMessage(
+    message,
+    type = ""
+) {
 
-    bannerMessage.textContent = message;
+    if (!bannerMessage) {
+
+        return;
+
+    }
+
+
+    bannerMessage.textContent =
+        message;
+
 
     bannerMessage.className =
-        "banner-message " + type;
+        "banner-message";
+
+
+    if (type) {
+
+        bannerMessage.classList.add(
+            type
+        );
+
+    }
+
+}
+
+
+/*==================================================
+IMAGE PREVIEW
+==================================================*/
+
+function showImagePreview(file) {
+
+    if (!imagePreview) {
+
+        return;
+
+    }
+
+
+    const reader =
+        new FileReader();
+
+
+    reader.onload =
+        function(event) {
+
+            imagePreview.innerHTML = `
+
+                <img
+                    src="${event.target.result}"
+                    alt="Banner Preview">
+
+            `;
+
+
+            imagePreview.classList.add(
+                "active"
+            );
+
+        };
+
+
+    reader.onerror =
+        function() {
+
+            showMessage(
+                "Could not preview image.",
+                "error"
+            );
+
+        };
+
+
+    reader.readAsDataURL(file);
 
 }
 
@@ -73,89 +204,156 @@ function showMessage(message, type = "") {
 IMAGE SELECT
 ==================================================*/
 
-bannerImage.addEventListener("change", function () {
+if (bannerImage) {
 
-    const file = this.files[0];
+    bannerImage.addEventListener(
+        "change",
+        function() {
 
-    if (!file) {
-
-        selectedFile = null;
-
-        imagePreview.innerHTML = "";
-
-        imagePreview.classList.remove("active");
-
-        return;
-
-    }
+            const file =
+                this.files &&
+                this.files[0];
 
 
-    /* CHECK IMAGE */
+            if (!file) {
 
-    if (!file.type.startsWith("image/")) {
+                selectedFile = null;
 
-        showMessage(
-            "Please select an image file.",
-            "error"
-        );
+                if (imagePreview) {
 
-        this.value = "";
+                    imagePreview.innerHTML =
+                        "";
 
-        return;
+                    imagePreview.classList.remove(
+                        "active"
+                    );
 
-    }
+                }
 
+                return;
 
-    /* CHECK SIZE */
-
-    if (file.size > 10 * 1024 * 1024) {
-
-        showMessage(
-            "Image must be smaller than 10MB.",
-            "error"
-        );
-
-        this.value = "";
-
-        return;
-
-    }
+            }
 
 
-    selectedFile = file;
+            /*==============================
+            CHECK IMAGE TYPE
+            ==============================*/
+
+            if (
+                !file.type ||
+                !file.type.startsWith(
+                    "image/"
+                )
+            ) {
+
+                showMessage(
+                    "Please select an image file.",
+                    "error"
+                );
+
+                this.value = "";
+
+                selectedFile = null;
+
+                return;
+
+            }
 
 
-    /* PREVIEW */
+            /*==============================
+            CHECK IMAGE SIZE
+            ==============================*/
 
-    const reader = new FileReader();
-
-
-    reader.onload = function (event) {
-
-        imagePreview.innerHTML = `
-            <img
-                src="${event.target.result}"
-                alt="Banner Preview">
-        `;
-
-        imagePreview.classList.add("active");
-
-    };
+            const maxSize =
+                10 * 1024 * 1024;
 
 
-    reader.readAsDataURL(file);
+            if (
+                file.size > maxSize
+            ) {
+
+                showMessage(
+                    "Image must be smaller than 10MB.",
+                    "error"
+                );
+
+                this.value = "";
+
+                selectedFile = null;
+
+                return;
+
+            }
 
 
-    showMessage("");
+            /*==============================
+            SAVE FILE
+            ==============================*/
 
-});
+            selectedFile =
+                file;
+
+
+            /*==============================
+            SHOW PREVIEW
+            ==============================*/
+
+            showImagePreview(
+                file
+            );
+
+
+            showMessage(
+                "Image selected successfully.",
+                "success"
+            );
+
+        }
+    );
+
+}
 
 
 /*==================================================
 CLOUDINARY UPLOAD
 ==================================================*/
 
-async function uploadToCloudinary(file) {
+async function uploadToCloudinary(
+    file
+) {
+
+    if (!file) {
+
+        throw new Error(
+            "No image selected."
+        );
+
+    }
+
+
+    if (
+        !cloudName ||
+        cloudName === "YOUR_CLOUD_NAME"
+    ) {
+
+        throw new Error(
+            "Cloudinary Cloud Name is missing."
+        );
+
+    }
+
+
+    if (
+        !uploadPreset ||
+        uploadPreset === "YOUR_UPLOAD_PRESET"
+    ) {
+
+        throw new Error(
+            "Cloudinary Upload Preset is missing."
+        );
+
+    }
+
 
     const formData =
         new FormData();
@@ -177,33 +375,50 @@ async function uploadToCloudinary(file) {
         `https://api.cloudinary.com/v1_1/${cloudName}/image/upload`;
 
 
+    console.log(
+        "Cloudinary upload started..."
+    );
+
+
     const response =
         await fetch(
             uploadURL,
             {
-                method: "POST",
-                body: formData
+
+                method:
+                    "POST",
+
+                body:
+                    formData
+
             }
         );
-
-
-    if (!response.ok) {
-
-        throw new Error(
-            "Cloudinary upload failed."
-        );
-
-    }
 
 
     const data =
         await response.json();
 
 
+    console.log(
+        "Cloudinary response:",
+        data
+    );
+
+
+    if (!response.ok) {
+
+        throw new Error(
+            data.error?.message ||
+            "Cloudinary upload failed."
+        );
+
+    }
+
+
     if (!data.secure_url) {
 
         throw new Error(
-            "Cloudinary did not return image URL."
+            "Cloudinary did not return an image URL."
         );
 
     }
@@ -215,204 +430,301 @@ async function uploadToCloudinary(file) {
 
 
 /*==================================================
+GET FORM VALUE
+==================================================*/
+
+function getValue(id) {
+
+    const element =
+        document.getElementById(id);
+
+
+    if (!element) {
+
+        return "";
+
+    }
+
+
+    return element.value.trim();
+
+}
+
+
+/*==================================================
 SAVE BANNER
 ==================================================*/
 
-bannerForm.addEventListener(
-    "submit",
-    async function (event) {
+if (bannerForm) {
 
-        event.preventDefault();
+    bannerForm.addEventListener(
+        "submit",
+        async function(event) {
 
-
-        /* CHECK IMAGE */
-
-        if (!selectedFile) {
-
-            showMessage(
-                "Please select a banner image first.",
-                "error"
-            );
-
-            return;
-
-        }
+            event.preventDefault();
 
 
-        /* GET FORM DATA */
+            /*==============================
+            CHECK IMAGE
+            ==============================*/
 
-        const title =
-            document
-            .getElementById("bannerTitle")
-            .value
-            .trim();
+            if (!selectedFile) {
 
+                showMessage(
+                    "Please select a banner image first.",
+                    "error"
+                );
 
-        const description =
-            document
-            .getElementById("bannerDescription")
-            .value
-            .trim();
+                return;
 
-
-        const badge =
-            document
-            .getElementById("bannerBadge")
-            .value
-            .trim();
+            }
 
 
-        const buttonText =
-            document
-            .getElementById("bannerButtonText")
-            .value
-            .trim();
+            /*==============================
+            GET FORM DATA
+            ==============================*/
 
-
-        const buttonLink =
-            document
-            .getElementById("bannerButtonLink")
-            .value
-            .trim();
-
-
-        const status =
-            document
-            .getElementById("bannerStatus")
-            .value;
-
-
-        if (!title) {
-
-            showMessage(
-                "Please enter banner title.",
-                "error"
-            );
-
-            return;
-
-        }
-
-
-        try {
-
-            /* DISABLE BUTTON */
-
-            saveBannerBtn.disabled = true;
-
-            saveBannerBtn.innerHTML = `
-                <i class="fa-solid fa-spinner fa-spin"></i>
-                Uploading...
-            `;
-
-
-            showMessage(
-                "Uploading image..."
-            );
-
-
-            /* CLOUDINARY */
-
-            const imageURL =
-                await uploadToCloudinary(
-                    selectedFile
+            const title =
+                getValue(
+                    "bannerTitle"
                 );
 
 
-            showMessage(
-                "Image uploaded. Saving banner..."
-            );
+            const description =
+                getValue(
+                    "bannerDescription"
+                );
 
 
-            /* FIREBASE DATA */
-
-            const bannerData = {
-
-                image: imageURL,
-
-                title: title,
-
-                description: description,
-
-                badge: badge,
-
-                buttonText:
-                    buttonText || "Shop Now",
-
-                buttonLink:
-                    buttonLink || "#",
-
-                status: status,
-
-                createdAt:
-                    Date.now()
-
-            };
+            const badge =
+                getValue(
+                    "bannerBadge"
+                );
 
 
-            /* SAVE FIREBASE */
-
-            await addBanner(
-                bannerData
-            );
-
-
-            /* SUCCESS */
-
-            showMessage(
-                "Banner added successfully!",
-                "success"
-            );
+            const buttonText =
+                getValue(
+                    "bannerButtonText"
+                );
 
 
-            /* RESET */
-
-            bannerForm.reset();
-
-            selectedFile = null;
-
-            imagePreview.innerHTML = "";
-
-            imagePreview.classList.remove(
-                "active"
-            );
+            const buttonLink =
+                getValue(
+                    "bannerButtonLink"
+                );
 
 
-            /* LOAD BANNERS */
+            const statusElement =
+                document.getElementById(
+                    "bannerStatus"
+                );
 
-            await loadBanners();
 
+            const status =
+                statusElement
+                    ? statusElement.value
+                    : "active";
+
+
+            /*==============================
+            TITLE REQUIRED
+            ==============================*/
+
+            if (!title) {
+
+                showMessage(
+                    "Please enter banner title.",
+                    "error"
+                );
+
+                return;
+
+            }
+
+
+            try {
+
+                /*==========================
+                DISABLE BUTTON
+                ==========================*/
+
+                if (saveBannerBtn) {
+
+                    saveBannerBtn.disabled =
+                        true;
+
+
+                    saveBannerBtn.innerHTML = `
+
+                        <i class="fa-solid fa-spinner fa-spin"></i>
+
+                        Uploading...
+
+                    `;
+
+                }
+
+
+                showMessage(
+                    "Uploading image..."
+                );
+
+
+                /*==========================
+                CLOUDINARY
+                ==========================*/
+
+                const imageURL =
+                    await uploadToCloudinary(
+                        selectedFile
+                    );
+
+
+                console.log(
+                    "Image URL received:",
+                    imageURL
+                );
+
+
+                showMessage(
+                    "Image uploaded. Saving banner..."
+                );
+
+
+                /*==========================
+                FIREBASE DATA
+                ==========================*/
+
+                const bannerData = {
+
+                    image:
+                        imageURL,
+
+                    title:
+                        title,
+
+                    description:
+                        description,
+
+                    badge:
+                        badge,
+
+                    buttonText:
+                        buttonText ||
+                        "Shop Now",
+
+                    buttonLink:
+                        buttonLink ||
+                        "#",
+
+                    status:
+                        status,
+
+                    createdAt:
+                        Date.now()
+
+                };
+
+
+                /*==========================
+                SAVE FIREBASE
+                ==========================*/
+
+                const bannerId =
+                    await addBanner(
+                        bannerData
+                    );
+
+
+                console.log(
+                    "Banner saved:",
+                    bannerId
+                );
+
+
+                /*==========================
+                SUCCESS
+                ==========================*/
+
+                showMessage(
+                    "Banner added successfully!",
+                    "success"
+                );
+
+
+                /*==========================
+                RESET FORM
+                ==========================*/
+
+                bannerForm.reset();
+
+
+                selectedFile =
+                    null;
+
+
+                if (imagePreview) {
+
+                    imagePreview.innerHTML =
+                        "";
+
+                    imagePreview.classList.remove(
+                        "active"
+                    );
+
+                }
+
+
+                /*==========================
+                LOAD BANNERS
+                ==========================*/
+
+                await loadBanners();
+
+            }
+
+
+            catch(error) {
+
+                console.error(
+                    "BANNER ERROR:",
+                    error
+                );
+
+
+                showMessage(
+                    error.message ||
+                    "Banner upload failed.",
+                    "error"
+                );
+
+            }
+
+
+            finally {
+
+                if (saveBannerBtn) {
+
+                    saveBannerBtn.disabled =
+                        false;
+
+
+                    saveBannerBtn.innerHTML = `
+
+                        <i class="fa-solid fa-cloud-arrow-up"></i>
+
+                        Upload & Save Banner
+
+                    `;
+
+                }
+
+            }
 
         }
+    );
 
-        catch (error) {
-
-            console.error(
-                "Banner Error:",
-                error
-            );
-
-
-            showMessage(
-                "Banner upload failed. Please check Cloudinary settings.",
-                "error"
-            );
-
-        }
-
-        finally {
-
-            saveBannerBtn.disabled = false;
-
-            saveBannerBtn.innerHTML = `
-                <i class="fa-solid fa-cloud-arrow-up"></i>
-                Upload & Save Banner
-            `;
-
-        }
-
-    }
-);
+}
 
 
 /*==================================================
@@ -421,14 +733,35 @@ LOAD BANNERS
 
 async function loadBanners() {
 
+    if (!bannerList) {
+
+        return;
+
+    }
+
+
     try {
+
+        bannerList.innerHTML = `
+
+            <p class="empty-message">
+                Loading banners...
+            </p>
+
+        `;
+
 
         const banners =
             await getBanners();
 
 
-        bannerList.innerHTML = "";
+        bannerList.innerHTML =
+            "";
 
+
+        /*==============================
+        NO BANNERS
+        ==============================*/
 
         if (
             !banners ||
@@ -436,9 +769,13 @@ async function loadBanners() {
         ) {
 
             bannerList.innerHTML = `
+
                 <p class="empty-message">
+
                     No banners added yet.
+
                 </p>
+
             `;
 
             return;
@@ -446,9 +783,18 @@ async function loadBanners() {
         }
 
 
-        Object.entries(banners)
+        /*==============================
+        CREATE BANNERS
+        ==============================*/
+
+        Object.entries(
+            banners
+        )
         .forEach(
-            ([id, banner]) => {
+            function([
+                id,
+                banner
+            ]) {
 
                 const item =
                     document.createElement(
@@ -465,9 +811,12 @@ async function loadBanners() {
                     <div class="banner-item-image">
 
                         <img
-                            src="${banner.image || ""}"
-                            alt="${escapeHTML(
-                                banner.title || "Banner"
+                            src="${escapeAttribute(
+                                banner.image || ""
+                            )}"
+                            alt="${escapeAttribute(
+                                banner.title ||
+                                "Banner"
                             )}">
 
                     </div>
@@ -477,14 +826,16 @@ async function loadBanners() {
 
                         <h3>
                             ${escapeHTML(
-                                banner.title || "Untitled Banner"
+                                banner.title ||
+                                "Untitled Banner"
                             )}
                         </h3>
 
 
                         <p>
                             ${escapeHTML(
-                                banner.description || ""
+                                banner.description ||
+                                ""
                             )}
                         </p>
 
@@ -494,7 +845,7 @@ async function loadBanners() {
                             <button
                                 type="button"
                                 class="banner-delete-btn"
-                                data-id="${id}">
+                                data-id="${escapeAttribute(id)}">
 
                                 <i class="fa-solid fa-trash"></i>
 
@@ -517,26 +868,35 @@ async function loadBanners() {
         );
 
 
-        /* DELETE BUTTONS */
+        /*==============================
+        DELETE BUTTONS
+        ==============================*/
 
-        document
+        bannerList
         .querySelectorAll(
             ".banner-delete-btn"
         )
         .forEach(
-            button => {
+            function(button) {
 
                 button.addEventListener(
                     "click",
-                    async function () {
+                    async function() {
 
                         const id =
                             this.dataset.id;
 
 
+                        if (!id) {
+
+                            return;
+
+                        }
+
+
                         const confirmed =
                             confirm(
-                                "Delete this banner?"
+                                "Are you sure you want to delete this banner?"
                             );
 
 
@@ -549,7 +909,17 @@ async function loadBanners() {
 
                         try {
 
-                            this.disabled = true;
+                            this.disabled =
+                                true;
+
+
+                            this.innerHTML = `
+
+                                <i class="fa-solid fa-spinner fa-spin"></i>
+
+                                Deleting...
+
+                            `;
 
 
                             await deleteBanner(
@@ -567,20 +937,24 @@ async function loadBanners() {
 
                         }
 
-                        catch (error) {
+
+                        catch(error) {
 
                             console.error(
+                                "DELETE ERROR:",
                                 error
                             );
 
 
                             showMessage(
+                                error.message ||
                                 "Could not delete banner.",
                                 "error"
                             );
 
 
-                            this.disabled = false;
+                            this.disabled =
+                                false;
 
                         }
 
@@ -592,18 +966,23 @@ async function loadBanners() {
 
     }
 
-    catch (error) {
+
+    catch(error) {
 
         console.error(
-            "Loading banners failed:",
+            "LOAD BANNERS ERROR:",
             error
         );
 
 
         bannerList.innerHTML = `
+
             <p class="empty-message">
+
                 Unable to load banners.
+
             </p>
+
         `;
 
     }
@@ -615,19 +994,51 @@ async function loadBanners() {
 ESCAPE HTML
 ==================================================*/
 
-function escapeHTML(value) {
+function escapeHTML(
+    value
+) {
 
     return String(value)
 
-        .replaceAll("&", "&amp;")
+        .replaceAll(
+            "&",
+            "&amp;"
+        )
 
-        .replaceAll("<", "&lt;")
+        .replaceAll(
+            "<",
+            "&lt;"
+        )
 
-        .replaceAll(">", "&gt;")
+        .replaceAll(
+            ">",
+            "&gt;"
+        )
 
-        .replaceAll('"', "&quot;")
+        .replaceAll(
+            '"',
+            "&quot;"
+        )
 
-        .replaceAll("'", "&#039;");
+        .replaceAll(
+            "'",
+            "&#039;"
+        );
+
+}
+
+
+/*==================================================
+ESCAPE ATTRIBUTE
+==================================================*/
+
+function escapeAttribute(
+    value
+) {
+
+    return escapeHTML(
+        value
+    );
 
 }
 
