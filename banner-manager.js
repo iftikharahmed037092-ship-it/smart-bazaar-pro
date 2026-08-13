@@ -9,9 +9,9 @@ BANNER MANAGER JAVASCRIPT
 CLOUDINARY CONFIG
 ==================================================*/
 
-const cloudName = "tmdzy5c0";
+const cloudName = "jlrjn7lu";
 
-const uploadPreset = "ml_default";
+const uploadPreset = "smartbazaar_uploads";
 
 
 /*==================================================
