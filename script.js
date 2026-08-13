@@ -946,7 +946,7 @@ loadHeroBanners();
 SMARTBAZAAR PRO
 PART 15
 CATEGORY AUTO INFINITE SCROLL
-==================================================*/
+==================================================
 
 const categoryList = document.querySelector(".category-list");
 
@@ -972,7 +972,7 @@ if(categoryList){
 
     autoScroll();
 
-}
+}*/
 
 /*==================================================
 SMARTBAZAAR PRO
