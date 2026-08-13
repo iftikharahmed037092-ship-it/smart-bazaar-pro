@@ -1,0 +1,2095 @@
+/*==================================================
+SMARTBAZAAR PRO
+PART 21.1
+CATEGORY MANAGER CSS
+BASE + LAYOUT
+==================================================*/
+
+
+/*==================================================
+CSS RESET
+==================================================*/
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+
+/*==================================================
+ROOT VARIABLES
+==================================================*/
+
+:root{
+
+    --primary:#2e7d32;
+    --primary-dark:#1b5e20;
+    --primary-light:#43a047;
+
+    --secondary:#1565c0;
+
+    --accent:#ff9800;
+
+    --danger:#e53935;
+    --danger-dark:#c62828;
+
+    --success:#2e7d32;
+
+    --dark:#1f2937;
+    --text:#374151;
+    --muted:#6b7280;
+
+    --white:#ffffff;
+
+    --bg:#f4f7f6;
+    --card:#ffffff;
+
+    --border:#e5e7eb;
+
+    --shadow:
+        0 10px 30px rgba(0,0,0,.08);
+
+    --shadow-hover:
+        0 16px 40px rgba(0,0,0,.12);
+
+    --radius:18px;
+
+    --transition:
+        all .25s ease;
+
+}
+
+
+/*==================================================
+BODY
+==================================================*/
+
+body{
+
+    font-family:
+        "Poppins",
+        Arial,
+        sans-serif;
+
+    background:
+        linear-gradient(
+            135deg,
+            #f4f7f6,
+            #eef5f0
+        );
+
+    color:
+        var(--text);
+
+    min-height:
+        100vh;
+
+}
+
+
+/*==================================================
+PAGE WRAPPER
+==================================================*/
+
+.category-manager{
+
+    width:
+        100%;
+
+    min-height:
+        100vh;
+
+    padding:
+        35px 20px 60px;
+
+}
+
+
+/*==================================================
+MAIN CONTAINER
+==================================================*/
+
+.category-manager-container{
+
+    width:
+        100%;
+
+    max-width:
+        1200px;
+
+    margin:
+        0 auto;
+
+}
+
+
+/*==================================================
+PAGE HEADER
+==================================================*/
+
+.category-manager-header{
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        space-between;
+
+    gap:
+        20px;
+
+    margin-bottom:
+        30px;
+
+    padding:
+        25px 28px;
+
+    background:
+        rgba(255,255,255,.92);
+
+    border:
+        1px solid
+        rgba(255,255,255,.8);
+
+    border-radius:
+        var(--radius);
+
+    box-shadow:
+        var(--shadow);
+
+    backdrop-filter:
+        blur(12px);
+
+}
+
+
+/*==================================================
+HEADER TITLE AREA
+==================================================*/
+
+.category-manager-title{
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    gap:
+        15px;
+
+}
+
+
+/*==================================================
+TITLE ICON
+==================================================*/
+
+.category-manager-title-icon{
+
+    width:
+        52px;
+
+    height:
+        52px;
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    border-radius:
+        15px;
+
+    background:
+        linear-gradient(
+            135deg,
+            var(--primary),
+            var(--primary-light)
+        );
+
+    color:
+        var(--white);
+
+    font-size:
+        22px;
+
+    box-shadow:
+        0 8px 20px
+        rgba(46,125,50,.25);
+
+}
+
+
+/*==================================================
+TITLE
+==================================================*/
+
+.category-manager-title h1{
+
+    font-size:
+        25px;
+
+    font-weight:
+        700;
+
+    color:
+        var(--dark);
+
+    line-height:
+        1.2;
+
+}
+
+
+/*==================================================
+TITLE DESCRIPTION
+==================================================*/
+
+.category-manager-title p{
+
+    margin-top:
+        4px;
+
+    font-size:
+        13px;
+
+    color:
+        var(--muted);
+
+}
+
+
+/*==================================================
+CONTENT GRID
+==================================================*/
+
+.category-manager-content{
+
+    display:
+        grid;
+
+    grid-template-columns:
+        360px
+        1fr;
+
+    gap:
+        25px;
+
+    align-items:
+        start;
+
+}
+
+
+/*==================================================
+COMMON CARD
+==================================================*/
+
+.category-manager-card{
+
+    background:
+        var(--card);
+
+    border:
+        1px solid
+        var(--border);
+
+    border-radius:
+        var(--radius);
+
+    box-shadow:
+        var(--shadow);
+
+    padding:
+        25px;
+
+    transition:
+        var(--transition);
+
+}
+
+
+/*==================================================
+CARD HOVER
+==================================================*/
+
+.category-manager-card:hover{
+
+    box-shadow:
+        var(--shadow-hover);
+
+    transform:
+        translateY(-2px);
+
+}
+
+
+/*==================================================
+CARD HEADER
+==================================================*/
+
+.category-card-header{
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    gap:
+        12px;
+
+    margin-bottom:
+        22px;
+
+    padding-bottom:
+        16px;
+
+    border-bottom:
+        1px solid
+        var(--border);
+
+}
+
+
+/*==================================================
+CARD HEADER ICON
+==================================================*/
+
+.category-card-header i{
+
+    width:
+        40px;
+
+    height:
+        40px;
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    border-radius:
+        12px;
+
+    background:
+        #e8f5e9;
+
+    color:
+        var(--primary);
+
+    font-size:
+        17px;
+
+}
+
+
+/*==================================================
+CARD HEADER TITLE
+==================================================*/
+
+.category-card-header h2{
+
+    font-size:
+        18px;
+
+    font-weight:
+        700;
+
+    color:
+        var(--dark);
+
+}
+
+
+/*==================================================
+EMPTY / LOADING MESSAGE
+==================================================*/
+
+.empty-message{
+
+    text-align:
+        center;
+
+    padding:
+        40px 20px;
+
+    color:
+        var(--muted);
+
+    font-size:
+        14px;
+
+}
+
+
+/*==================================================
+TABLET
+==================================================*/
+
+@media(
+    max-width:900px
+){
+
+    .category-manager-content{
+
+        grid-template-columns:
+            1fr;
+
+    }
+
+}
+
+
+/*==================================================
+MOBILE
+==================================================*/
+
+@media(
+    max-width:600px
+){
+
+    .category-manager{
+
+        padding:
+            20px 12px 45px;
+
+    }
+
+
+    .category-manager-header{
+
+        padding:
+            20px;
+
+        margin-bottom:
+            20px;
+
+    }
+
+
+    .category-manager-title-icon{
+
+        width:
+            45px;
+
+        height:
+            45px;
+
+        font-size:
+            18px;
+
+    }
+
+
+    .category-manager-title h1{
+
+        font-size:
+            20px;
+
+    }
+
+
+    .category-manager-title p{
+
+        font-size:
+            12px;
+
+    }
+
+
+    .category-manager-card{
+
+        padding:
+            18px;
+
+        border-radius:
+            15px;
+
+    }
+
+}
+
+
+
+/*==================================================
+SMARTBAZAAR PRO
+CATEGORY MANAGER CSS
+PART 2
+FORM CONTROLS + ACTIONS
+==================================================*/
+
+
+/*==================================================
+CATEGORY FORM
+==================================================*/
+
+.category-form{
+
+    display:grid;
+
+    grid-template-columns:
+        repeat(2, minmax(0, 1fr));
+
+    gap:22px;
+
+}
+
+
+/*==================================================
+FORM GROUP
+==================================================*/
+
+.category-form-group{
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:8px;
+
+}
+
+
+/*==================================================
+FULL WIDTH GROUP
+==================================================*/
+
+.category-form-group.full-width{
+
+    grid-column:1 / -1;
+
+}
+
+
+/*==================================================
+FORM LABEL
+==================================================*/
+
+.category-form-group label{
+
+    font-size:14px;
+
+    font-weight:600;
+
+    color:#263238;
+
+}
+
+
+/*==================================================
+FORM INPUT
+==================================================*/
+
+.category-form-group input,
+.category-form-group select{
+
+    width:100%;
+
+    min-height:48px;
+
+    padding:0 15px;
+
+    border:1px solid #dfe5e8;
+
+    border-radius:12px;
+
+    background:#ffffff;
+
+    color:#263238;
+
+    font-family:inherit;
+
+    font-size:14px;
+
+    outline:none;
+
+    transition:
+        border-color .25s ease,
+        box-shadow .25s ease,
+        background .25s ease;
+
+}
+
+
+/*==================================================
+INPUT FOCUS
+==================================================*/
+
+.category-form-group input:focus,
+.category-form-group select:focus{
+
+    border-color:#2e7d32;
+
+    background:#ffffff;
+
+    box-shadow:
+        0 0 0 4px rgba(46,125,50,.10);
+
+}
+
+
+/*==================================================
+PLACEHOLDER
+==================================================*/
+
+.category-form-group input::placeholder{
+
+    color:#9aa5aa;
+
+}
+
+
+/*==================================================
+ICON INPUT
+==================================================*/
+
+.category-icon-input{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:10px;
+
+    width:100%;
+
+}
+
+
+/*==================================================
+ICON PREVIEW
+==================================================*/
+
+.category-icon-preview{
+
+    width:48px;
+
+    height:48px;
+
+    flex:0 0 48px;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    border-radius:12px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #e8f5e9,
+            #f1f8e9
+        );
+
+    color:#2e7d32;
+
+    border:1px solid #d8ead9;
+
+    font-size:19px;
+
+}
+
+
+/*==================================================
+ICON INPUT FIELD
+==================================================*/
+
+.category-icon-input input{
+
+    flex:1;
+
+}
+
+
+/*==================================================
+COLOR CONTROL
+==================================================*/
+
+.category-color-control{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:12px;
+
+}
+
+
+/*==================================================
+COLOR PICKER
+==================================================*/
+
+.category-color-control input[type="color"]{
+
+    width:58px;
+
+    height:48px;
+
+    padding:4px;
+
+    border:1px solid #dfe5e8;
+
+    border-radius:12px;
+
+    background:#ffffff;
+
+    cursor:pointer;
+
+}
+
+
+/*==================================================
+COLOR VALUE
+==================================================*/
+
+.category-color-value{
+
+    min-width:95px;
+
+    height:42px;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    padding:0 12px;
+
+    border-radius:10px;
+
+    background:#f5f7f8;
+
+    color:#455a64;
+
+    font-size:13px;
+
+    font-weight:600;
+
+    font-family:monospace;
+
+}
+
+
+/*==================================================
+STATUS SELECT
+==================================================*/
+
+.category-status-select{
+
+    position:relative;
+
+}
+
+
+/*==================================================
+STATUS BADGE
+==================================================*/
+
+.category-status-preview{
+
+    display:inline-flex;
+
+    align-items:center;
+
+    gap:7px;
+
+    width:max-content;
+
+    padding:7px 12px;
+
+    border-radius:30px;
+
+    background:#e8f5e9;
+
+    color:#2e7d32;
+
+    font-size:12px;
+
+    font-weight:700;
+
+}
+
+
+/*==================================================
+STATUS DOT
+==================================================*/
+
+.category-status-preview::before{
+
+    content:"";
+
+    width:7px;
+
+    height:7px;
+
+    border-radius:50%;
+
+    background:#43a047;
+
+}
+
+
+/*==================================================
+FORM HELP TEXT
+==================================================*/
+
+.category-help-text{
+
+    margin-top:2px;
+
+    color:#8a969b;
+
+    font-size:12px;
+
+    line-height:1.5;
+
+}
+
+
+/*==================================================
+FORM ACTIONS
+==================================================*/
+
+.category-form-actions{
+
+    grid-column:1 / -1;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:flex-end;
+
+    gap:12px;
+
+    padding-top:8px;
+
+    border-top:1px solid #edf0f1;
+
+}
+
+
+/*==================================================
+BASE BUTTON
+==================================================*/
+
+.category-form-actions button{
+
+    min-height:46px;
+
+    padding:0 20px;
+
+    border:0;
+
+    border-radius:12px;
+
+    font-family:inherit;
+
+    font-size:14px;
+
+    font-weight:700;
+
+    cursor:pointer;
+
+    display:inline-flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    gap:8px;
+
+    transition:
+        transform .2s ease,
+        box-shadow .2s ease,
+        background .2s ease;
+
+}
+
+
+/*==================================================
+SAVE BUTTON
+==================================================*/
+
+.category-save-btn{
+
+    color:#ffffff;
+
+    background:
+        linear-gradient(
+            135deg,
+            #2e7d32,
+            #43a047
+        );
+
+    box-shadow:
+        0 7px 18px rgba(46,125,50,.20);
+
+}
+
+
+/*==================================================
+SAVE HOVER
+==================================================*/
+
+.category-save-btn:hover{
+
+    transform:translateY(-2px);
+
+    box-shadow:
+        0 10px 24px rgba(46,125,50,.28);
+
+}
+
+
+/*==================================================
+CANCEL BUTTON
+==================================================*/
+
+.category-cancel-btn{
+
+    color:#455a64;
+
+    background:#f1f3f4;
+
+}
+
+
+/*==================================================
+CANCEL HOVER
+==================================================*/
+
+.category-cancel-btn:hover{
+
+    background:#e7eaec;
+
+    transform:translateY(-1px);
+
+}
+
+
+/*==================================================
+DISABLED BUTTON
+==================================================*/
+
+.category-form-actions button:disabled{
+
+    opacity:.6;
+
+    cursor:not-allowed;
+
+    transform:none;
+
+    box-shadow:none;
+
+}
+
+
+/*==================================================
+UPLOAD / ICON BUTTON
+==================================================*/
+
+.category-icon-button{
+
+    width:48px;
+
+    height:48px;
+
+    border:1px solid #dfe5e8;
+
+    border-radius:12px;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    background:#ffffff;
+
+    color:#546e7a;
+
+    cursor:pointer;
+
+    transition:
+        color .2s ease,
+        border-color .2s ease,
+        background .2s ease;
+
+}
+
+
+.category-icon-button:hover{
+
+    color:#2e7d32;
+
+    border-color:#2e7d32;
+
+    background:#f1f8f2;
+
+}
+
+
+/*==================================================
+FORM MESSAGE
+==================================================*/
+
+.category-message{
+
+    grid-column:1 / -1;
+
+    min-height:0;
+
+    padding:0;
+
+    border-radius:12px;
+
+    font-size:13px;
+
+    font-weight:600;
+
+    transition:
+        opacity .25s ease,
+        padding .25s ease;
+
+}
+
+
+/*==================================================
+MESSAGE ACTIVE
+==================================================*/
+
+.category-message:not(:empty){
+
+    padding:12px 15px;
+
+}
+
+
+/*==================================================
+SUCCESS MESSAGE
+==================================================*/
+
+.category-message.success{
+
+    color:#1b5e20;
+
+    background:#e8f5e9;
+
+    border:1px solid #c8e6c9;
+
+}
+
+
+/*==================================================
+ERROR MESSAGE
+==================================================*/
+
+.category-message.error{
+
+    color:#b71c1c;
+
+    background:#ffebee;
+
+    border:1px solid #ffcdd2;
+
+}
+
+
+/*==================================================
+WARNING MESSAGE
+==================================================*/
+
+.category-message.warning{
+
+    color:#e65100;
+
+    background:#fff3e0;
+
+    border:1px solid #ffe0b2;
+
+}
+
+
+/*==================================================
+RESPONSIVE TABLET
+==================================================*/
+
+@media (max-width:900px){
+
+    .category-form{
+
+        grid-template-columns:1fr;
+
+        gap:18px;
+
+    }
+
+
+    .category-form-group.full-width{
+
+        grid-column:auto;
+
+    }
+
+
+    .category-form-actions{
+
+        grid-column:auto;
+
+    }
+
+
+    .category-message{
+
+        grid-column:auto;
+
+    }
+
+}
+
+
+/*==================================================
+RESPONSIVE MOBILE
+==================================================*/
+
+@media (max-width:600px){
+
+    .category-form{
+
+        gap:15px;
+
+    }
+
+
+    .category-form-group input,
+    .category-form-group select{
+
+        min-height:46px;
+
+        font-size:13px;
+
+    }
+
+
+    .category-icon-preview{
+
+        width:46px;
+
+        height:46px;
+
+        flex-basis:46px;
+
+    }
+
+
+    .category-form-actions{
+
+        flex-direction:column-reverse;
+
+        align-items:stretch;
+
+    }
+
+
+    .category-form-actions button{
+
+        width:100%;
+
+    }
+
+
+    .category-color-control{
+
+        align-items:stretch;
+
+    }
+
+
+    .category-color-value{
+
+        flex:1;
+
+    }
+
+}
+
+
+
+/*==================================================
+SMARTBAZAAR PRO
+CATEGORY MANAGER CSS
+PART 21.3
+CATEGORY LIST + CARDS + RESPONSIVE
+==================================================*/
+
+
+/*==================================================
+CATEGORY LIST
+==================================================*/
+
+.category-list-container{
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:15px;
+
+}
+
+
+/*==================================================
+CATEGORY LIST HEADER
+==================================================*/
+
+.category-list-top{
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:space-between;
+
+    gap:15px;
+
+    margin-bottom:18px;
+
+}
+
+
+/*==================================================
+CATEGORY COUNT
+==================================================*/
+
+.category-count{
+
+    display:inline-flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    min-width:34px;
+
+    height:30px;
+
+    padding:0 10px;
+
+    border-radius:30px;
+
+    background:#e8f5e9;
+
+    color:#2e7d32;
+
+    font-size:12px;
+
+    font-weight:700;
+
+}
+
+
+/*==================================================
+CATEGORY ITEM
+==================================================*/
+
+.category-item{
+
+    display:grid;
+
+    grid-template-columns:
+        auto
+        1fr
+        auto;
+
+    align-items:center;
+
+    gap:15px;
+
+    padding:15px;
+
+    background:#ffffff;
+
+    border:1px solid #e5e7eb;
+
+    border-radius:15px;
+
+    transition:
+        transform .22s ease,
+        box-shadow .22s ease,
+        border-color .22s ease;
+
+}
+
+
+/*==================================================
+CATEGORY ITEM HOVER
+==================================================*/
+
+.category-item:hover{
+
+    transform:translateY(-2px);
+
+    border-color:#c8dfca;
+
+    box-shadow:
+        0 10px 25px rgba(0,0,0,.08);
+
+}
+
+
+/*==================================================
+CATEGORY ICON
+==================================================*/
+
+.category-item-icon{
+
+    width:54px;
+
+    height:54px;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    border-radius:15px;
+
+    font-size:20px;
+
+    background:#e8f5e9;
+
+    color:#2e7d32;
+
+    border:1px solid #d8ead9;
+
+    flex-shrink:0;
+
+}
+
+
+/*==================================================
+CATEGORY INFORMATION
+==================================================*/
+
+.category-item-info{
+
+    min-width:0;
+
+}
+
+
+/*==================================================
+CATEGORY NAME
+==================================================*/
+
+.category-item-info h3{
+
+    margin:0;
+
+    color:#263238;
+
+    font-size:15px;
+
+    font-weight:700;
+
+    line-height:1.3;
+
+}
+
+
+/*==================================================
+CATEGORY DESCRIPTION
+==================================================*/
+
+.category-item-info p{
+
+    margin-top:4px;
+
+    color:#7b878c;
+
+    font-size:12px;
+
+    line-height:1.5;
+
+    overflow:hidden;
+
+    text-overflow:ellipsis;
+
+    white-space:nowrap;
+
+}
+
+
+/*==================================================
+CATEGORY META
+==================================================*/
+
+.category-item-meta{
+
+    display:flex;
+
+    align-items:center;
+
+    flex-wrap:wrap;
+
+    gap:7px;
+
+    margin-top:7px;
+
+}
+
+
+/*==================================================
+STATUS BADGE
+==================================================*/
+
+.category-status{
+
+    display:inline-flex;
+
+    align-items:center;
+
+    gap:6px;
+
+    padding:5px 10px;
+
+    border-radius:30px;
+
+    font-size:11px;
+
+    font-weight:700;
+
+}
+
+
+/*==================================================
+ACTIVE STATUS
+==================================================*/
+
+.category-status.active{
+
+    color:#1b5e20;
+
+    background:#e8f5e9;
+
+}
+
+
+/*==================================================
+ACTIVE DOT
+==================================================*/
+
+.category-status.active::before{
+
+    content:"";
+
+    width:6px;
+
+    height:6px;
+
+    border-radius:50%;
+
+    background:#43a047;
+
+}
+
+
+/*==================================================
+INACTIVE STATUS
+==================================================*/
+
+.category-status.inactive{
+
+    color:#616161;
+
+    background:#eeeeee;
+
+}
+
+
+/*==================================================
+INACTIVE DOT
+==================================================*/
+
+.category-status.inactive::before{
+
+    content:"";
+
+    width:6px;
+
+    height:6px;
+
+    border-radius:50%;
+
+    background:#9e9e9e;
+
+}
+
+
+/*==================================================
+COLOR TAG
+==================================================*/
+
+.category-color-tag{
+
+    display:inline-flex;
+
+    align-items:center;
+
+    gap:6px;
+
+    padding:5px 9px;
+
+    border-radius:30px;
+
+    background:#f5f7f8;
+
+    color:#607d8b;
+
+    font-size:10px;
+
+    font-weight:600;
+
+}
+
+
+/*==================================================
+COLOR DOT
+==================================================*/
+
+.category-color-tag span{
+
+    width:10px;
+
+    height:10px;
+
+    border-radius:50%;
+
+    border:1px solid rgba(0,0,0,.12);
+
+}
+
+
+/*==================================================
+CATEGORY ACTIONS
+==================================================*/
+
+.category-item-actions{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:7px;
+
+}
+
+
+/*==================================================
+ACTION BUTTON
+==================================================*/
+
+.category-action-btn{
+
+    width:40px;
+
+    height:40px;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    border:1px solid #e1e6e8;
+
+    border-radius:11px;
+
+    background:#ffffff;
+
+    cursor:pointer;
+
+    font-size:14px;
+
+    transition:
+        transform .2s ease,
+        color .2s ease,
+        background .2s ease,
+        border-color .2s ease;
+
+}
+
+
+/*==================================================
+EDIT BUTTON
+==================================================*/
+
+.category-edit-btn{
+
+    color:#1565c0;
+
+}
+
+
+/*==================================================
+EDIT HOVER
+==================================================*/
+
+.category-edit-btn:hover{
+
+    color:#ffffff;
+
+    background:#1565c0;
+
+    border-color:#1565c0;
+
+    transform:translateY(-2px);
+
+}
+
+
+/*==================================================
+DELETE BUTTON
+==================================================*/
+
+.category-delete-btn{
+
+    color:#e53935;
+
+}
+
+
+/*==================================================
+DELETE HOVER
+==================================================*/
+
+.category-delete-btn:hover{
+
+    color:#ffffff;
+
+    background:#e53935;
+
+    border-color:#e53935;
+
+    transform:translateY(-2px);
+
+}
+
+
+/*==================================================
+DISABLED ACTION
+==================================================*/
+
+.category-action-btn:disabled{
+
+    opacity:.5;
+
+    cursor:not-allowed;
+
+    transform:none;
+
+}
+
+
+/*==================================================
+LOADING STATE
+==================================================*/
+
+.category-loading{
+
+    display:flex;
+
+    flex-direction:column;
+
+    align-items:center;
+
+    justify-content:center;
+
+    gap:12px;
+
+    min-height:180px;
+
+    color:#78909c;
+
+    font-size:13px;
+
+}
+
+
+/*==================================================
+LOADING SPINNER
+==================================================*/
+
+.category-loading i{
+
+    font-size:24px;
+
+    color:#2e7d32;
+
+}
+
+
+/*==================================================
+EMPTY STATE
+==================================================*/
+
+.category-empty{
+
+    display:flex;
+
+    flex-direction:column;
+
+    align-items:center;
+
+    justify-content:center;
+
+    text-align:center;
+
+    min-height:220px;
+
+    padding:30px;
+
+    color:#78909c;
+
+}
+
+
+/*==================================================
+EMPTY ICON
+==================================================*/
+
+.category-empty i{
+
+    width:65px;
+
+    height:65px;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    margin-bottom:15px;
+
+    border-radius:50%;
+
+    background:#e8f5e9;
+
+    color:#66bb6a;
+
+    font-size:25px;
+
+}
+
+
+/*==================================================
+EMPTY TITLE
+==================================================*/
+
+.category-empty h3{
+
+    margin-bottom:5px;
+
+    color:#37474f;
+
+    font-size:16px;
+
+}
+
+
+/*==================================================
+EMPTY TEXT
+==================================================*/
+
+.category-empty p{
+
+    max-width:350px;
+
+    color:#90a4ae;
+
+    font-size:12px;
+
+    line-height:1.6;
+
+}
+
+
+/*==================================================
+CATEGORY DIVIDER
+==================================================*/
+
+.category-divider{
+
+    height:1px;
+
+    margin:4px 0;
+
+    background:#edf0f1;
+
+}
+
+
+/*==================================================
+CATEGORY SEARCH
+==================================================*/
+
+.category-search{
+
+    position:relative;
+
+    width:100%;
+
+    margin-bottom:18px;
+
+}
+
+
+/*==================================================
+SEARCH ICON
+==================================================*/
+
+.category-search i{
+
+    position:absolute;
+
+    left:15px;
+
+    top:50%;
+
+    transform:translateY(-50%);
+
+    color:#90a4ae;
+
+    pointer-events:none;
+
+}
+
+
+/*==================================================
+SEARCH INPUT
+==================================================*/
+
+.category-search input{
+
+    width:100%;
+
+    height:45px;
+
+    padding:
+        0 15px 0 43px;
+
+    border:1px solid #e1e6e8;
+
+    border-radius:12px;
+
+    background:#ffffff;
+
+    color:#263238;
+
+    font-family:inherit;
+
+    font-size:13px;
+
+    outline:none;
+
+    transition:
+        border-color .2s ease,
+        box-shadow .2s ease;
+
+}
+
+
+/*==================================================
+SEARCH FOCUS
+==================================================*/
+
+.category-search input:focus{
+
+    border-color:#2e7d32;
+
+    box-shadow:
+        0 0 0 4px rgba(46,125,50,.08);
+
+}
+
+
+/*==================================================
+NO RESULT
+==================================================*/
+
+.category-no-result{
+
+    padding:30px 15px;
+
+    text-align:center;
+
+    color:#90a4ae;
+
+    font-size:13px;
+
+}
+
+
+/*==================================================
+MOBILE
+==================================================*/
+
+@media(max-width:600px){
+
+    .category-list-top{
+
+        margin-bottom:14px;
+
+    }
+
+
+    .category-item{
+
+        grid-template-columns:
+            auto
+            1fr;
+
+        gap:12px;
+
+        padding:13px;
+
+    }
+
+
+    .category-item-icon{
+
+        width:47px;
+
+        height:47px;
+
+        border-radius:13px;
+
+        font-size:17px;
+
+    }
+
+
+    .category-item-info h3{
+
+        font-size:14px;
+
+    }
+
+
+    .category-item-info p{
+
+        font-size:11px;
+
+    }
+
+
+    .category-item-meta{
+
+        margin-top:5px;
+
+    }
+
+
+    .category-item-actions{
+
+        grid-column:
+            1 / -1;
+
+        width:100%;
+
+        padding-top:10px;
+
+        border-top:
+            1px solid #edf0f1;
+
+    }
+
+
+    .category-action-btn{
+
+        flex:1;
+
+        width:auto;
+
+    }
+
+}
+
+
+/*==================================================
+SMALL MOBILE
+==================================================*/
+
+@media(max-width:400px){
+
+    .category-item{
+
+        padding:11px;
+
+    }
+
+
+    .category-item-icon{
+
+        width:43px;
+
+        height:43px;
+
+        font-size:16px;
+
+    }
+
+
+    .category-status,
+    .category-color-tag{
+
+        font-size:9px;
+
+        padding:4px 8px;
+
+    }
+
+}
+
+
+/*==================================================
+REDUCED MOTION
+==================================================*/
+
+@media(
+    prefers-reduced-motion:reduce
+){
+
+    .category-item,
+    .category-action-btn,
+    .category-save-btn,
+    .category-cancel-btn{
+
+        transition:none;
+
+    }
+
+}
+
+
