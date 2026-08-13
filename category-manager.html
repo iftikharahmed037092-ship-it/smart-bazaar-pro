@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0">
+
+<meta
+    name="description"
+    content="SmartBazaar Pro Category Manager">
+
+<title>
+    SmartBazaar Pro - Category Manager
+</title>
+
+
+<!-- GOOGLE FONT -->
+
+<link
+    rel="preconnect"
+    href="https://fonts.googleapis.com">
+
+<link
+    rel="preconnect"
+    href="https://fonts.gstatic.com"
+    crossorigin>
+
+<link
+    href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
+    rel="stylesheet">
+
+
+<!-- FONT AWESOME -->
+
+<link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
+
+<!-- CATEGORY MANAGER CSS -->
+
+<link
+    rel="stylesheet"
+    href="category-manager.css">
+
+</head>
+
+
+<body>
+
+
+<!--==================================================
+SMARTBAZAAR PRO
+CATEGORY MANAGER
+==================================================-->
+
+
+<div class="category-manager">
+
+
+    <!--==================================================
+    HEADER
+    ==================================================-->
+
+    <header class="category-manager-header">
+
+
+        <div class="category-manager-header-left">
+
+
+            <a
+                href="index.html"
+                class="back-btn">
+
+                <i class="fa-solid fa-arrow-left"></i>
+
+                <span>
+                    Back to Home
+                </span>
+
+            </a>
+
+
+        </div>
+
+
+        <div class="category-manager-title">
+
+
+            <div class="category-manager-icon">
+
+                <i class="fa-solid fa-layer-group"></i>
+
+            </div>
+
+
+            <div>
+
+                <h1>
+                    Category Manager
+                </h1>
+
+                <p>
+                    Manage SmartBazaar Pro categories
+                </p>
+
+            </div>
+
+
+        </div>
+
+
+    </header>
+
+
+
+    <!--==================================================
+    MAIN
+    ==================================================-->
+
+    <main class="category-manager-main">
+
+
+        <!--==================================================
+        ADD CATEGORY
+        ==================================================-->
+
+        <section class="category-form-section">
+
+
+            <div class="section-heading">
+
+
+                <div>
+
+                    <h2>
+                        Add New Category
+                    </h2>
+
+                    <p>
+                        Create a category for the SmartBazaar homepage.
+                    </p>
+
+                </div>
+
+
+            </div>
+
+
+
+            <form
+                id="categoryForm"
+                class="category-form">
+
+
+                <!-- CATEGORY NAME -->
+
+                <div class="form-group">
+
+
+                    <label for="categoryName">
+
+                        Category Name
+
+                    </label>
+
+
+                    <input
+                        type="text"
+                        id="categoryName"
+                        name="categoryName"
+                        placeholder="Example: Mobiles"
+                        autocomplete="off"
+                        required>
+
+
+                </div>
+
+
+
+                <!-- CATEGORY ICON -->
+
+                <div class="form-group">
+
+
+                    <label for="categoryIcon">
+
+                        Icon
+
+                    </label>
+
+
+                    <input
+                        type="text"
+                        id="categoryIcon"
+                        name="categoryIcon"
+                        placeholder="Example: fa-mobile-screen"
+                        autocomplete="off">
+
+
+                    <small>
+
+                        Font Awesome icon name
+
+                    </small>
+
+
+                </div>
+
+
+
+                <!-- CATEGORY COLOR -->
+
+                <div class="form-group">
+
+
+                    <label for="categoryColor">
+
+                        Category Color
+
+                    </label>
+
+
+                    <div class="color-input-wrapper">
+
+
+                        <input
+                            type="color"
+                            id="categoryColor"
+                            name="categoryColor"
+                            value="#e8f5e9">
+
+
+                        <input
+                            type="text"
+                            id="categoryColorText"
+                            value="#e8f5e9"
+                            maxlength="7"
+                            placeholder="#e8f5e9">
+
+
+                    </div>
+
+
+                </div>
+
+
+
+                <!-- STATUS -->
+
+                <div class="form-group">
+
+
+                    <label for="categoryStatus">
+
+                        Status
+
+                    </label>
+
+
+                    <select
+                        id="categoryStatus"
+                        name="categoryStatus">
+
+
+                        <option value="active">
+                            Active
+                        </option>
+
+
+                        <option value="inactive">
+                            Inactive
+                        </option>
+
+
+                    </select>
+
+
+                </div>
+
+
+
+                <!-- SAVE BUTTON -->
+
+                <div class="form-action">
+
+
+                    <button
+                        type="submit"
+                        id="saveCategoryBtn"
+                        class="save-category-btn">
+
+
+                        <i class="fa-solid fa-plus"></i>
+
+
+                        Add Category
+
+
+                    </button>
+
+
+                </div>
+
+
+            </form>
+
+
+
+            <!-- MESSAGE -->
+
+            <div
+                id="categoryMessage"
+                class="category-message">
+
+            </div>
+
+
+        </section>
+
+
+
+        <!--==================================================
+        CATEGORY LIST
+        ==================================================-->
+
+        <section class="category-list-section">
+
+
+            <div class="section-heading">
+
+
+                <div>
+
+                    <h2>
+                        Existing Categories
+                    </h2>
+
+                    <p>
+                        Categories currently saved in Firebase.
+                    </p>
+
+                </div>
+
+
+            </div>
+
+
+
+            <div
+                id="categoryList"
+                class="category-manager-list">
+
+
+                <p class="empty-message">
+
+                    Loading categories...
+
+                </p>
+
+
+            </div>
+
+
+        </section>
+
+
+    </main>
+
+
+</div>
+
+
+
+<!--==================================================
+CATEGORY MANAGER JAVASCRIPT
+==================================================-->
+
+<script
+    type="module"
+    src="category-manager.js">
+</script>
+
+
+</body>
+
+</html>
