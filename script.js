@@ -2,77 +2,457 @@
 SMARTBAZAAR PRO
 PART 14
 HERO BANNER SLIDER
+FIREBASE DYNAMIC BANNERS
 ==================================================*/
 
-const slides = document.querySelector(".slides");
-const slide = document.querySelectorAll(".slide");
-const prev = document.querySelector(".prev-btn");
-const next = document.querySelector(".next-btn");
-const dots = document.querySelectorAll(".dot");
+import {
+    getBanners
+} from "./firebase-banner.js";
 
-let index = 0;
 
-function updateSlider(){
+/*==================================================
+BANNER SLIDER
+==================================================*/
 
-    slides.style.transform = `translateX(-${index * 100}%)`;
+document.addEventListener("DOMContentLoaded", async () => {
 
-    dots.forEach(dot => dot.classList.remove("active"));
+    const slides =
+        document.querySelector(".slides");
 
-    if(dots[index]){
-        dots[index].classList.add("active");
+    const prev =
+        document.querySelector(".prev-btn");
+
+    const next =
+        document.querySelector(".next-btn");
+
+    const dotsContainer =
+        document.querySelector(".dots") ||
+        document.querySelector(".slider-dots");
+
+
+    /*==============================
+    CHECK SLIDER
+    ==============================*/
+
+    if (!slides) {
+
+        console.log(
+            "Hero slider not found."
+        );
+
+        return;
+
     }
+
+
+    /*==============================
+    LOAD BANNERS FROM FIREBASE
+    ==============================*/
+
+    let banners = {};
+
+    try {
+
+        banners =
+            await getBanners();
+
+    }
+
+    catch(error) {
+
+        console.error(
+            "Could not load banners:",
+            error
+        );
+
+        return;
+
+    }
+
+
+    /*==============================
+    GET ACTIVE BANNERS ONLY
+    ==============================*/
+
+    const activeBanners =
+        Object.values(
+            banners || {}
+        ).filter(
+            banner =>
+                banner &&
+                banner.status === "active" &&
+                banner.image
+        );
+
+
+    /*==============================
+    NO ACTIVE BANNERS
+    ==============================*/
+
+    if (
+        activeBanners.length === 0
+    ) {
+
+        console.log(
+            "No active banners found."
+        );
+
+        return;
+
+    }
+
+
+    /*==============================
+    CREATE SLIDES
+    ==============================*/
+
+    slides.innerHTML = "";
+
+
+    activeBanners.forEach(
+        (banner, i) => {
+
+            const slide =
+                document.createElement(
+                    "div"
+                );
+
+
+            slide.className =
+                "slide";
+
+
+            slide.innerHTML = `
+
+                <img
+                    src="${escapeBannerHTML(
+                        banner.image
+                    )}"
+                    alt="${escapeBannerHTML(
+                        banner.title ||
+                        "SmartBazaar Banner"
+                    )}"
+                >
+
+                <div class="slide-content">
+
+                    ${
+                        banner.badge
+                            ? `
+                                <span class="slide-badge">
+                                    ${escapeBannerHTML(
+                                        banner.badge
+                                    )}
+                                </span>
+                              `
+                            : ""
+                    }
+
+                    <h2>
+                        ${escapeBannerHTML(
+                            banner.title ||
+                            ""
+                        )}
+                    </h2>
+
+                    ${
+                        banner.description
+                            ? `
+                                <p>
+                                    ${escapeBannerHTML(
+                                        banner.description
+                                    )}
+                                </p>
+                              `
+                            : ""
+                    }
+
+                    ${
+                        banner.buttonText
+                            ? `
+                                <a
+                                    href="${escapeBannerHTML(
+                                        banner.buttonLink ||
+                                        "#"
+                                    )}"
+                                    class="slide-btn"
+                                >
+                                    ${escapeBannerHTML(
+                                        banner.buttonText
+                                    )}
+                                </a>
+                              `
+                            : ""
+                    }
+
+                </div>
+
+            `;
+
+
+            slides.appendChild(
+                slide
+            );
+
+        }
+    );
+
+
+    /*==================================================
+    CREATE DOTS
+    ==================================================*/
+
+    if (dotsContainer) {
+
+        dotsContainer.innerHTML = "";
+
+
+        activeBanners.forEach(
+            (banner, i) => {
+
+                const dot =
+                    document.createElement(
+                        "button"
+                    );
+
+
+                dot.type =
+                    "button";
+
+
+                dot.className =
+                    "dot";
+
+
+                dot.setAttribute(
+                    "aria-label",
+                    `Go to banner ${i + 1}`
+                );
+
+
+                dotsContainer.appendChild(
+                    dot
+                );
+
+            }
+        );
+
+    }
+
+
+    /*==================================================
+    SLIDER ELEMENTS
+    ==================================================*/
+
+    const slideItems =
+        slides.querySelectorAll(
+            ".slide"
+        );
+
+
+    const dots =
+        dotsContainer
+            ? dotsContainer.querySelectorAll(
+                ".dot"
+            )
+            : [];
+
+
+    let index = 0;
+
+
+    /*==================================================
+    UPDATE SLIDER
+    ==================================================*/
+
+    function updateSlider(){
+
+        slides.style.transform =
+            `translateX(-${index * 100}%)`;
+
+
+        dots.forEach(
+            dot =>
+                dot.classList.remove(
+                    "active"
+                )
+        );
+
+
+        if(dots[index]){
+
+            dots[index].classList.add(
+                "active"
+            );
+
+        }
+
+    }
+
+
+    /*==================================================
+    NEXT BUTTON
+    ==================================================*/
+
+    if(next){
+
+        next.addEventListener(
+            "click",
+            () => {
+
+                index++;
+
+
+                if(
+                    index >=
+                    slideItems.length
+                ){
+
+                    index = 0;
+
+                }
+
+
+                updateSlider();
+
+            }
+        );
+
+    }
+
+
+    /*==================================================
+    PREVIOUS BUTTON
+    ==================================================*/
+
+    if(prev){
+
+        prev.addEventListener(
+            "click",
+            () => {
+
+                index--;
+
+
+                if(index < 0){
+
+                    index =
+                        slideItems.length - 1;
+
+                }
+
+
+                updateSlider();
+
+            }
+        );
+
+    }
+
+
+    /*==================================================
+    DOT BUTTONS
+    ==================================================*/
+
+    dots.forEach(
+        (dot, i) => {
+
+            dot.addEventListener(
+                "click",
+                () => {
+
+                    index = i;
+
+                    updateSlider();
+
+                }
+            );
+
+        }
+    );
+
+
+    /*==================================================
+    AUTO SLIDE
+    ==================================================*/
+
+    if(
+        slideItems.length > 1
+    ){
+
+        setInterval(
+            () => {
+
+                index++;
+
+
+                if(
+                    index >=
+                    slideItems.length
+                ){
+
+                    index = 0;
+
+                }
+
+
+                updateSlider();
+
+            },
+            5000
+        );
+
+    }
+
+
+    /*==================================================
+    INITIAL SLIDE
+    ==================================================*/
+
+    updateSlider();
+
+
+});
+
+
+/*==================================================
+ESCAPE BANNER HTML
+==================================================*/
+
+function escapeBannerHTML(
+    value
+){
+
+    return String(
+        value || ""
+    )
+
+    .replaceAll(
+        "&",
+        "&amp;"
+    )
+
+    .replaceAll(
+        "<",
+        "&lt;"
+    )
+
+    .replaceAll(
+        ">",
+        "&gt;"
+    )
+
+    .replaceAll(
+        '"',
+        "&quot;"
+    )
+
+    .replaceAll(
+        "'",
+        "&#039;"
+    );
 
 }
-
-next.addEventListener("click",()=>{
-
-    index++;
-
-    if(index >= slide.length){
-        index = 0;
-    }
-
-    updateSlider();
-
-});
-
-prev.addEventListener("click",()=>{
-
-    index--;
-
-    if(index < 0){
-        index = slide.length - 1;
-    }
-
-    updateSlider();
-
-});
-
-dots.forEach((dot,i)=>{
-
-    dot.addEventListener("click",()=>{
-
-        index = i;
-
-        updateSlider();
-
-    });
-
-});
-
-setInterval(()=>{
-
-    index++;
-
-    if(index >= slide.length){
-        index = 0;
-    }
-
-    updateSlider();
-
-},5000);
-
-updateSlider();
 
 
 /*==================================================
