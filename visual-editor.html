@@ -747,6 +747,1953 @@ LEFT SIDEBAR
 </aside>
 
 
+    <!--==================================================
+SMARTBAZAAR PRO
+VISUAL EDITOR
+RIGHT PROPERTIES / INSPECTOR PANEL
+==================================================-->
+
+<aside
+    class="editor-right-panel"
+    id="editorRightPanel">
+
+
+    <!--==================================================
+    PANEL HEADER
+    ==================================================-->
+
+    <div class="panel-header">
+
+
+        <div>
+
+            <h2>
+                Properties
+            </h2>
+
+            <small id="propertyElementType">
+                Nothing Selected
+            </small>
+
+        </div>
+
+
+        <button
+            type="button"
+            class="panel-collapse-btn"
+            id="rightPanelCollapse"
+            title="Collapse Panel">
+
+            <i class="fa-solid fa-chevron-right"></i>
+
+        </button>
+
+
+    </div>
+
+
+
+    <!--==================================================
+    NOTHING SELECTED
+    ==================================================-->
+
+    <div
+        class="properties-empty"
+        id="propertiesEmpty">
+
+
+        <div class="properties-empty-icon">
+
+            <i class="fa-solid fa-arrow-pointer"></i>
+
+        </div>
+
+
+        <h3>
+            Select an Element
+        </h3>
+
+
+        <p>
+            Select any element from the website preview
+            or the structure panel to edit it.
+        </p>
+
+
+    </div>
+
+
+
+    <!--==================================================
+    PROPERTIES CONTENT
+    ==================================================-->
+
+    <div
+        class="properties-content"
+        id="propertiesContent"
+        hidden>
+
+
+        <!--==================================================
+        SELECTED ELEMENT
+        ==================================================-->
+
+        <section class="property-section">
+
+
+            <div class="property-section-header">
+
+                <div>
+
+                    <strong>
+                        Selected Element
+                    </strong>
+
+                    <small
+                        id="selectedPropertyElement">
+
+                        Element
+
+                    </small>
+
+                </div>
+
+
+                <i class="fa-solid fa-crosshairs"></i>
+
+            </div>
+
+
+            <div class="selected-element-info">
+
+
+                <input
+                    type="text"
+                    id="selectedElementId"
+                    class="property-input"
+                    readonly>
+
+
+            </div>
+
+
+        </section>
+
+
+
+        <!--==================================================
+        CONTENT
+        ==================================================-->
+
+        <section class="property-section">
+
+
+            <div class="property-section-title">
+
+                <i class="fa-solid fa-pen"></i>
+
+                Content
+
+            </div>
+
+
+            <div class="property-group">
+
+
+                <label>
+                    Text
+                </label>
+
+
+                <textarea
+                    id="propertyText"
+                    class="property-textarea"
+                    rows="4"
+                    placeholder="Enter text..."></textarea>
+
+
+            </div>
+
+
+            <div class="property-group">
+
+
+                <label>
+                    Link
+                </label>
+
+
+                <input
+                    type="text"
+                    id="propertyLink"
+                    class="property-input"
+                    placeholder="https://example.com">
+
+
+            </div>
+
+
+        </section>
+
+
+
+        <!--==================================================
+        TYPOGRAPHY
+        ==================================================-->
+
+        <section class="property-section">
+
+
+            <div class="property-section-title">
+
+                <i class="fa-solid fa-font"></i>
+
+                Typography
+
+            </div>
+
+
+            <div class="property-group">
+
+
+                <label>
+                    Font Family
+                </label>
+
+
+                <select
+                    id="propertyFontFamily"
+                    class="property-select">
+
+
+                    <option value="">
+                        Default
+                    </option>
+
+                    <option value="Poppins">
+                        Poppins
+                    </option>
+
+                    <option value="Arial">
+                        Arial
+                    </option>
+
+                    <option value="Roboto">
+                        Roboto
+                    </option>
+
+                    <option value="Inter">
+                        Inter
+                    </option>
+
+                    <option value="Georgia">
+                        Georgia
+                    </option>
+
+                    <option value="Times New Roman">
+                        Times New Roman
+                    </option>
+
+                    <option value="Courier New">
+                        Courier New
+                    </option>
+
+
+                </select>
+
+
+            </div>
+
+
+            <div class="property-grid-2">
+
+
+                <div class="property-group">
+
+                    <label>
+                        Font Size
+                    </label>
+
+                    <div class="property-unit-input">
+
+                        <input
+                            type="number"
+                            id="propertyFontSize"
+                            class="property-input"
+                            min="1"
+                            value="16">
+
+                        <select
+                            id="propertyFontSizeUnit"
+                            class="property-unit-select">
+
+                            <option value="px">
+                                px
+                            </option>
+
+                            <option value="%">
+                                %
+                            </option>
+
+                            <option value="rem">
+                                rem
+                            </option>
+
+                            <option value="em">
+                                em
+                            </option>
+
+                        </select>
+
+                    </div>
+
+                </div>
+
+
+                <div class="property-group">
+
+                    <label>
+                        Weight
+                    </label>
+
+                    <select
+                        id="propertyFontWeight"
+                        class="property-select">
+
+                        <option value="300">
+                            300
+                        </option>
+
+                        <option value="400" selected>
+                            400
+                        </option>
+
+                        <option value="500">
+                            500
+                        </option>
+
+                        <option value="600">
+                            600
+                        </option>
+
+                        <option value="700">
+                            700
+                        </option>
+
+                        <option value="800">
+                            800
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+            </div>
+
+
+            <div class="property-group">
+
+                <label>
+                    Text Alignment
+                </label>
+
+
+                <div class="property-button-row">
+
+
+                    <button
+                        type="button"
+                        class="property-option-btn"
+                        data-text-align="left">
+
+                        <i class="fa-solid fa-align-left"></i>
+
+                    </button>
+
+
+                    <button
+                        type="button"
+                        class="property-option-btn"
+                        data-text-align="center">
+
+                        <i class="fa-solid fa-align-center"></i>
+
+                    </button>
+
+
+                    <button
+                        type="button"
+                        class="property-option-btn"
+                        data-text-align="right">
+
+                        <i class="fa-solid fa-align-right"></i>
+
+                    </button>
+
+
+                    <button
+                        type="button"
+                        class="property-option-btn"
+                        data-text-align="justify">
+
+                        <i class="fa-solid fa-align-justify"></i>
+
+                    </button>
+
+
+                </div>
+
+            </div>
+
+
+            <div class="property-group">
+
+                <label>
+                    Text Style
+                </label>
+
+
+                <div class="property-button-row">
+
+
+                    <button
+                        type="button"
+                        class="property-option-btn"
+                        data-text-style="bold">
+
+                        <i class="fa-solid fa-bold"></i>
+
+                    </button>
+
+
+                    <button
+                        type="button"
+                        class="property-option-btn"
+                        data-text-style="italic">
+
+                        <i class="fa-solid fa-italic"></i>
+
+                    </button>
+
+
+                    <button
+                        type="button"
+                        class="property-option-btn"
+                        data-text-style="underline">
+
+                        <i class="fa-solid fa-underline"></i>
+
+                    </button>
+
+
+                    <button
+                        type="button"
+                        class="property-option-btn"
+                        data-text-style="strike">
+
+                        <i class="fa-solid fa-strikethrough"></i>
+
+                    </button>
+
+
+                </div>
+
+            </div>
+
+
+        </section>
+
+
+
+        <!--==================================================
+        COLORS
+        ==================================================-->
+
+        <section class="property-section">
+
+
+            <div class="property-section-title">
+
+                <i class="fa-solid fa-palette"></i>
+
+                Colors
+
+            </div>
+
+
+            <!-- TEXT COLOR -->
+
+            <div class="property-group">
+
+
+                <label>
+                    Text Color
+                </label>
+
+
+                <div class="color-property-row">
+
+
+                    <input
+                        type="color"
+                        id="propertyTextColor"
+                        class="property-color">
+
+
+                    <input
+                        type="text"
+                        id="propertyTextColorValue"
+                        class="property-input"
+                        placeholder="#000000"
+                        maxlength="7">
+
+
+                </div>
+
+
+            </div>
+
+
+            <!-- BACKGROUND -->
+
+            <div class="property-group">
+
+
+                <label>
+                    Background Color
+                </label>
+
+
+                <div class="color-property-row">
+
+
+                    <input
+                        type="color"
+                        id="propertyBackgroundColor"
+                        class="property-color">
+
+
+                    <input
+                        type="text"
+                        id="propertyBackgroundColorValue"
+                        class="property-input"
+                        placeholder="#ffffff"
+                        maxlength="7">
+
+
+                </div>
+
+
+            </div>
+
+
+            <!-- OPACITY -->
+
+            <div class="property-group">
+
+
+                <label>
+                    Opacity
+                </label>
+
+
+                <div class="range-property-row">
+
+
+                    <input
+                        type="range"
+                        id="propertyOpacity"
+                        min="0"
+                        max="100"
+                        value="100">
+
+
+                    <output
+                        id="propertyOpacityValue">
+
+                        100%
+
+                    </output>
+
+
+                </div>
+
+
+            </div>
+
+
+        </section>
+
+
+
+        <!--==================================================
+        GRADIENT
+        ==================================================-->
+
+        <section class="property-section">
+
+
+            <div class="property-section-title">
+
+                <i class="fa-solid fa-fill-drip"></i>
+
+                Gradient
+
+            </div>
+
+
+            <div class="property-group">
+
+
+                <label class="checkbox-label">
+
+
+                    <input
+                        type="checkbox"
+                        id="propertyGradientEnabled">
+
+
+                    <span>
+                        Enable Gradient
+                    </span>
+
+
+                </label>
+
+
+            </div>
+
+
+            <div
+                class="gradient-property-controls"
+                id="gradientPropertyControls">
+
+
+                <div class="property-grid-2">
+
+
+                    <div class="property-group">
+
+                        <label>
+                            Color 1
+                        </label>
+
+                        <input
+                            type="color"
+                            id="propertyGradientColor1"
+                            class="property-color">
+
+                    </div>
+
+
+                    <div class="property-group">
+
+                        <label>
+                            Color 2
+                        </label>
+
+                        <input
+                            type="color"
+                            id="propertyGradientColor2"
+                            class="property-color">
+
+                    </div>
+
+
+                </div>
+
+
+                <div class="property-group">
+
+                    <label>
+                        Direction
+                    </label>
+
+                    <select
+                        id="propertyGradientDirection"
+                        class="property-select">
+
+                        <option value="90deg">
+                            Left → Right
+                        </option>
+
+                        <option value="180deg">
+                            Top → Bottom
+                        </option>
+
+                        <option value="45deg">
+                            Diagonal
+                        </option>
+
+                        <option value="135deg">
+                            Reverse Diagonal
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+            </div>
+
+
+        </section>
+
+
+
+        <!--==================================================
+        SIZE
+        ==================================================-->
+
+        <section class="property-section">
+
+
+            <div class="property-section-title">
+
+                <i class="fa-solid fa-up-right-and-down-left-from-center"></i>
+
+                Size
+
+            </div>
+
+
+            <div class="property-grid-2">
+
+
+                <div class="property-group">
+
+                    <label>
+                        Width
+                    </label>
+
+
+                    <div class="property-unit-input">
+
+                        <input
+                            type="text"
+                            id="propertyWidth"
+                            class="property-input"
+                            placeholder="Auto">
+
+
+                        <select
+                            id="propertyWidthUnit"
+                            class="property-unit-select">
+
+                            <option value="auto">
+                                Auto
+                            </option>
+
+                            <option value="px">
+                                px
+                            </option>
+
+                            <option value="%">
+                                %
+                            </option>
+
+                            <option value="vw">
+                                vw
+                            </option>
+
+                        </select>
+
+                    </div>
+
+                </div>
+
+
+                <div class="property-group">
+
+                    <label>
+                        Height
+                    </label>
+
+
+                    <div class="property-unit-input">
+
+                        <input
+                            type="text"
+                            id="propertyHeight"
+                            class="property-input"
+                            placeholder="Auto">
+
+
+                        <select
+                            id="propertyHeightUnit"
+                            class="property-unit-select">
+
+                            <option value="auto">
+                                Auto
+                            </option>
+
+                            <option value="px">
+                                px
+                            </option>
+
+                            <option value="%">
+                                %
+                            </option>
+
+                            <option value="vh">
+                                vh
+                            </option>
+
+                        </select>
+
+                    </div>
+
+                </div>
+
+
+            </div>
+
+
+            <div class="property-group">
+
+                <label>
+                    Aspect Ratio
+                </label>
+
+
+                <input
+                    type="text"
+                    id="propertyAspectRatio"
+                    class="property-input"
+                    placeholder="16 / 9">
+
+
+            </div>
+
+
+        </section>
+
+
+
+        <!--==================================================
+        SPACING
+        ==================================================-->
+
+        <section class="property-section">
+
+
+            <div class="property-section-title">
+
+                <i class="fa-solid fa-arrows-left-right-to-line"></i>
+
+                Spacing
+
+            </div>
+
+
+            <div class="property-grid-2">
+
+
+                <div class="property-group">
+
+                    <label>
+                        Margin
+                    </label>
+
+                    <input
+                        type="text"
+                        id="propertyMargin"
+                        class="property-input"
+                        placeholder="0px">
+
+
+                </div>
+
+
+                <div class="property-group">
+
+                    <label>
+                        Padding
+                    </label>
+
+                    <input
+                        type="text"
+                        id="propertyPadding"
+                        class="property-input"
+                        placeholder="0px">
+
+
+                </div>
+
+
+            </div>
+
+
+            <div class="property-grid-2">
+
+
+                <div class="property-group">
+
+                    <label>
+                        Gap
+                    </label>
+
+                    <input
+                        type="text"
+                        id="propertyGap"
+                        class="property-input"
+                        placeholder="0px">
+
+
+                </div>
+
+
+                <div class="property-group">
+
+                    <label>
+                        Overflow
+                    </label>
+
+                    <select
+                        id="propertyOverflow"
+                        class="property-select">
+
+                        <option value="visible">
+                            Visible
+                        </option>
+
+                        <option value="hidden">
+                            Hidden
+                        </option>
+
+                        <option value="auto">
+                            Auto
+                        </option>
+
+                        <option value="scroll">
+                            Scroll
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+            </div>
+
+
+        </section>
+
+
+
+        <!--==================================================
+        POSITION
+        ==================================================-->
+
+        <section class="property-section">
+
+
+            <div class="property-section-title">
+
+                <i class="fa-solid fa-arrows-up-down-left-right"></i>
+
+                Position
+
+            </div>
+
+
+            <div class="property-group">
+
+
+                <label>
+                    Position Mode
+                </label>
+
+
+                <select
+                    id="propertyPositionMode"
+                    class="property-select">
+
+                    <option value="static">
+                        Static
+                    </option>
+
+                    <option value="relative">
+                        Relative
+                    </option>
+
+                    <option value="absolute">
+                        Absolute
+                    </option>
+
+                    <option value="fixed">
+                        Fixed
+                    </option>
+
+                    <option value="sticky">
+                        Sticky
+                    </option>
+
+                </select>
+
+
+            </div>
+
+
+            <div class="property-grid-2">
+
+
+                <div class="property-group">
+
+                    <label>
+                        X
+                    </label>
+
+                    <input
+                        type="text"
+                        id="propertyPositionX"
+                        class="property-input"
+                        placeholder="0px">
+
+
+                </div>
+
+
+                <div class="property-group">
+
+                    <label>
+                        Y
+                    </label>
+
+                    <input
+                        type="text"
+                        id="propertyPositionY"
+                        class="property-input"
+                        placeholder="0px">
+
+
+                </div>
+
+
+            </div>
+
+
+        </section>
+
+
+
+        <!--==================================================
+        BORDER
+        ==================================================-->
+
+        <section class="property-section">
+
+
+            <div class="property-section-title">
+
+                <i class="fa-regular fa-square"></i>
+
+                Border
+
+            </div>
+
+
+            <div class="property-grid-2">
+
+
+                <div class="property-group">
+
+                    <label>
+                        Width
+                    </label>
+
+                    <input
+                        type="number"
+                        id="propertyBorderWidth"
+                        class="property-input"
+                        min="0"
+                        value="0">
+
+
+                </div>
+
+
+                <div class="property-group">
+
+                    <label>
+                        Style
+                    </label>
+
+                    <select
+                        id="propertyBorderStyle"
+                        class="property-select">
+
+                        <option value="none">
+                            None
+                        </option>
+
+                        <option value="solid">
+                            Solid
+                        </option>
+
+                        <option value="dashed">
+                            Dashed
+                        </option>
+
+                        <option value="dotted">
+                            Dotted
+                        </option>
+
+                        <option value="double">
+                            Double
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+            </div>
+
+
+            <div class="property-group">
+
+                <label>
+                    Border Color
+                </label>
+
+
+                <div class="color-property-row">
+
+
+                    <input
+                        type="color"
+                        id="propertyBorderColor"
+                        class="property-color">
+
+
+                    <input
+                        type="text"
+                        id="propertyBorderColorValue"
+                        class="property-input"
+                        placeholder="#000000"
+                        maxlength="7">
+
+
+                </div>
+
+
+            </div>
+
+
+            <div class="property-group">
+
+                <label>
+                    Border Radius
+                </label>
+
+
+                <input
+                    type="text"
+                    id="propertyBorderRadius"
+                    class="property-input"
+                    placeholder="20px">
+
+
+            </div>
+
+
+        </section>
+
+
+
+        <!--==================================================
+        SHADOW
+        ==================================================-->
+
+        <section class="property-section">
+
+
+            <div class="property-section-title">
+
+                <i class="fa-solid fa-cloud"></i>
+
+                Shadow
+
+            </div>
+
+
+            <div class="property-group">
+
+
+                <label class="checkbox-label">
+
+
+                    <input
+                        type="checkbox"
+                        id="propertyShadowEnabled">
+
+
+                    <span>
+                        Enable Shadow
+                    </span>
+
+
+                </label>
+
+
+            </div>
+
+
+            <div class="property-grid-2">
+
+
+                <div class="property-group">
+
+                    <label>
+                        X
+                    </label>
+
+                    <input
+                        type="number"
+                        id="propertyShadowX"
+                        class="property-input"
+                        value="0">
+
+
+                </div>
+
+
+                <div class="property-group">
+
+                    <label>
+                        Y
+                    </label>
+
+                    <input
+                        type="number"
+                        id="propertyShadowY"
+                        class="property-input"
+                        value="8">
+
+
+                </div>
+
+
+            </div>
+
+
+            <div class="property-grid-2">
+
+
+                <div class="property-group">
+
+                    <label>
+                        Blur
+                    </label>
+
+                    <input
+                        type="number"
+                        id="propertyShadowBlur"
+                        class="property-input"
+                        value="20">
+
+
+                </div>
+
+
+                <div class="property-group">
+
+                    <label>
+                        Spread
+                    </label>
+
+                    <input
+                        type="number"
+                        id="propertyShadowSpread"
+                        class="property-input"
+                        value="0">
+
+
+                </div>
+
+
+            </div>
+
+
+            <div class="property-group">
+
+                <label>
+                    Shadow Color
+                </label>
+
+
+                <div class="color-property-row">
+
+
+                    <input
+                        type="color"
+                        id="propertyShadowColor"
+                        class="property-color">
+
+
+                    <input
+                        type="text"
+                        id="propertyShadowColorValue"
+                        class="property-input"
+                        placeholder="#000000"
+                        maxlength="7">
+
+
+                </div>
+
+
+            </div>
+
+
+        </section>
+
+
+
+        <!--==================================================
+        IMAGE
+        ==================================================-->
+
+        <section
+            class="property-section"
+            id="imagePropertySection">
+
+
+            <div class="property-section-title">
+
+                <i class="fa-regular fa-image"></i>
+
+                Image
+
+            </div>
+
+
+            <div class="property-group">
+
+
+                <label>
+                    Image URL
+                </label>
+
+
+                <input
+                    type="text"
+                    id="propertyImageUrl"
+                    class="property-input"
+                    placeholder="https://...">
+
+
+            </div>
+
+
+            <div class="property-group">
+
+
+                <label>
+                    Object Fit
+                </label>
+
+
+                <select
+                    id="propertyObjectFit"
+                    class="property-select">
+
+                    <option value="cover">
+                        Cover
+                    </option>
+
+                    <option value="contain">
+                        Contain
+                    </option>
+
+                    <option value="fill">
+                        Fill
+                    </option>
+
+                    <option value="none">
+                        None
+                    </option>
+
+                </select>
+
+
+            </div>
+
+
+            <div class="property-group">
+
+
+                <button
+                    type="button"
+                    class="upload-image-btn"
+                    id="uploadImageBtn">
+
+                    <i class="fa-solid fa-cloud-arrow-up"></i>
+
+                    Upload Image
+
+                </button>
+
+
+                <input
+                    type="file"
+                    id="imageUploadInput"
+                    accept="image/*"
+                    hidden>
+
+            </div>
+
+
+        </section>
+
+
+
+        <!--==================================================
+        FLEX / GRID
+        ==================================================-->
+
+        <section class="property-section">
+
+
+            <div class="property-section-title">
+
+                <i class="fa-solid fa-table-cells"></i>
+
+                Layout
+
+            </div>
+
+
+            <div class="property-group">
+
+
+                <label>
+                    Display
+                </label>
+
+
+                <select
+                    id="propertyDisplay"
+                    class="property-select">
+
+                    <option value="block">
+                        Block
+                    </option>
+
+                    <option value="flex">
+                        Flex
+                    </option>
+
+                    <option value="grid">
+                        Grid
+                    </option>
+
+                    <option value="inline-block">
+                        Inline Block
+                    </option>
+
+                </select>
+
+
+            </div>
+
+
+            <div
+                class="layout-flex-controls"
+                id="flexControls">
+
+
+                <div class="property-group">
+
+                    <label>
+                        Direction
+                    </label>
+
+                    <select
+                        id="propertyFlexDirection"
+                        class="property-select">
+
+                        <option value="row">
+                            Row
+                        </option>
+
+                        <option value="column">
+                            Column
+                        </option>
+
+                        <option value="row-reverse">
+                            Row Reverse
+                        </option>
+
+                        <option value="column-reverse">
+                            Column Reverse
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <div class="property-grid-2">
+
+
+                    <div class="property-group">
+
+                        <label>
+                            Justify
+                        </label>
+
+                        <select
+                            id="propertyJustifyContent"
+                            class="property-select">
+
+                            <option value="flex-start">
+                                Start
+                            </option>
+
+                            <option value="center">
+                                Center
+                            </option>
+
+                            <option value="flex-end">
+                                End
+                            </option>
+
+                            <option value="space-between">
+                                Space Between
+                            </option>
+
+                            <option value="space-around">
+                                Space Around
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <div class="property-group">
+
+                        <label>
+                            Align
+                        </label>
+
+                        <select
+                            id="propertyAlignItems"
+                            class="property-select">
+
+                            <option value="stretch">
+                                Stretch
+                            </option>
+
+                            <option value="flex-start">
+                                Start
+                            </option>
+
+                            <option value="center">
+                                Center
+                            </option>
+
+                            <option value="flex-end">
+                                End
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                </div>
+
+
+            </div>
+
+
+            <div
+                class="layout-grid-controls"
+                id="gridControls">
+
+
+                <div class="property-grid-2">
+
+
+                    <div class="property-group">
+
+                        <label>
+                            Columns
+                        </label>
+
+                        <input
+                            type="number"
+                            id="propertyGridColumns"
+                            class="property-input"
+                            min="1"
+                            value="4">
+
+
+                    </div>
+
+
+                    <div class="property-group">
+
+                        <label>
+                            Rows
+                        </label>
+
+                        <input
+                            type="number"
+                            id="propertyGridRows"
+                            class="property-input"
+                            min="1"
+                            value="1">
+
+
+                    </div>
+
+
+                </div>
+
+
+                <div class="property-group">
+
+                    <label>
+                        Grid Gap
+                    </label>
+
+                    <input
+                        type="text"
+                        id="propertyGridGap"
+                        class="property-input"
+                        placeholder="20px">
+
+
+                </div>
+
+
+            </div>
+
+
+        </section>
+
+
+
+        <!--==================================================
+        TRANSFORM
+        ==================================================-->
+
+        <section class="property-section">
+
+
+            <div class="property-section-title">
+
+                <i class="fa-solid fa-rotate"></i>
+
+                Transform
+
+            </div>
+
+
+            <div class="property-grid-2">
+
+
+                <div class="property-group">
+
+                    <label>
+                        Rotate
+                    </label>
+
+                    <div class="property-unit-input">
+
+                        <input
+                            type="number"
+                            id="propertyRotate"
+                            class="property-input"
+                            value="0">
+
+                        <span class="property-unit-label">
+                            deg
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <div class="property-group">
+
+                    <label>
+                        Scale
+                    </label>
+
+                    <input
+                        type="number"
+                        id="propertyScale"
+                        class="property-input"
+                        value="1"
+                        step="0.1"
+                        min="0.1">
+
+
+                </div>
+
+
+            </div>
+
+
+            <div class="property-grid-2">
+
+
+                <div class="property-group">
+
+                    <label>
+                        Skew X
+                    </label>
+
+                    <input
+                        type="number"
+                        id="propertySkewX"
+                        class="property-input"
+                        value="0">
+
+                </div>
+
+
+                <div class="property-group">
+
+                    <label>
+                        Skew Y
+                    </label>
+
+                    <input
+                        type="number"
+                        id="propertySkewY"
+                        class="property-input"
+                        value="0">
+
+                </div>
+
+
+            </div>
+
+
+        </section>
+
+
+
+        <!--==================================================
+        VISIBILITY
+        ==================================================-->
+
+        <section class="property-section">
+
+
+            <div class="property-section-title">
+
+                <i class="fa-solid fa-eye"></i>
+
+                Visibility
+
+            </div>
+
+
+            <div class="property-group">
+
+
+                <label class="checkbox-label">
+
+                    <input
+                        type="checkbox"
+                        id="propertyVisible"
+                        checked>
+
+                    <span>
+                        Visible
+                    </span>
+
+                </label>
+
+
+            </div>
+
+
+            <div class="property-group">
+
+
+                <label class="checkbox-label">
+
+                    <input
+                        type="checkbox"
+                        id="propertyMobileVisible"
+                        checked>
+
+                    <span>
+                        Show on Mobile
+                    </span>
+
+                </label>
+
+
+            </div>
+
+
+            <div class="property-group">
+
+
+                <label class="checkbox-label">
+
+                    <input
+                        type="checkbox"
+                        id="propertyTabletVisible"
+                        checked>
+
+                    <span>
+                        Show on Tablet
+                    </span>
+
+                </label>
+
+
+            </div>
+
+
+        </section>
+
+
+
+        <!--==================================================
+        LAYER
+        ==================================================-->
+
+        <section class="property-section">
+
+
+            <div class="property-section-title">
+
+                <i class="fa-solid fa-layer-group"></i>
+
+                Layer
+
+            </div>
+
+
+            <div class="property-grid-2">
+
+
+                <button
+                    type="button"
+                    class="layer-action-btn"
+                    id="bringForwardBtn">
+
+                    <i class="fa-solid fa-arrow-up"></i>
+
+                    Forward
+
+                </button>
+
+
+                <button
+                    type="button"
+                    class="layer-action-btn"
+                    id="sendBackwardBtn">
+
+                    <i class="fa-solid fa-arrow-down"></i>
+
+                    Backward
+
+                </button>
+
+
+            </div>
+
+
+            <div class="property-group">
+
+                <label>
+                    Z-Index
+                </label>
+
+                <input
+                    type="number"
+                    id="propertyZIndex"
+                    class="property-input"
+                    value="1">
+
+
+            </div>
+
+
+        </section>
+
+
+
+        <!--==================================================
+        ELEMENT ACTIONS
+        ==================================================-->
+
+        <section class="property-section">
+
+
+            <div class="property-section-title">
+
+                <i class="fa-solid fa-wand-magic-sparkles"></i>
+
+                Element Actions
+
+            </div>
+
+
+            <div class="property-action-grid">
+
+
+                <button
+                    type="button"
+                    class="property-action-btn"
+                    id="duplicateElementBtn">
+
+                    <i class="fa-regular fa-copy"></i>
+
+                    Duplicate
+
+                </button>
+
+
+                <button
+                    type="button"
+                    class="property-action-btn"
+                    id="copyElementBtn">
+
+                    <i class="fa-regular fa-clone"></i>
+
+                    Copy
+
+                </button>
+
+
+                <button
+                    type="button"
+                    class="property-action-btn danger"
+                    id="deleteElementBtn">
+
+                    <i class="fa-solid fa-trash"></i>
+
+                    Delete
+
+                </button>
+
+
+            </div>
+
+
+        </section>
+
+
+    </div>
+
+
+</aside>
+    
+
 
 <!--==================================================
 CENTER PREVIEW
