@@ -916,4 +916,242 @@ MOBILE RESPONSIVE
 
 }
 
+/* ==========================================
+SMARTBAZAAR PRO
+NO CODE WEBSITE BUILDER
+LEFT PANEL
+FEATURE 21 - 28 CSS
+========================================== */
+
+
+/* ELEMENT BUTTONS */
+
+.sb-element-item{
+
+    width:100%;
+    display:flex;
+    align-items:center;
+    gap:12px;
+
+    padding:12px 15px;
+
+    background:rgba(255,255,255,0.05);
+
+    border:1px solid rgba(255,255,255,0.08);
+
+    border-radius:12px;
+
+    color:#ffffff;
+
+    font-size:14px;
+
+    cursor:pointer;
+
+    transition:0.3s ease;
+
+    margin-bottom:10px;
+
+}
+
+
+
+/* ICON STYLE */
+
+.sb-element-item span{
+
+    width:35px;
+    height:35px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    background:linear-gradient(
+        135deg,
+        #00c6ff,
+        #7b2cff
+    );
+
+    border-radius:10px;
+
+    font-size:18px;
+
+}
+
+
+
+
+
+/* HOVER EFFECT */
+
+.sb-element-item:hover{
+
+    transform:translateX(5px);
+
+    background:rgba(255,255,255,0.12);
+
+    border-color:#00c6ff;
+
+}
+
+
+
+
+
+/* PANEL TABS
+Pages
+Templates
+Media Library
+*/
+
+
+.sb-panel-tab{
+
+    width:100%;
+
+    display:flex;
+
+    align-items:center;
+
+    gap:12px;
+
+    padding:14px 15px;
+
+    margin-top:12px;
+
+
+    background:rgba(255,255,255,0.06);
+
+
+    border:1px solid rgba(255,255,255,0.1);
+
+
+    border-radius:14px;
+
+
+    color:white;
+
+
+    font-size:15px;
+
+
+    cursor:pointer;
+
+
+    transition:0.3s ease;
+
+
+}
+
+
+
+
+
+/* TAB ICON */
+
+.sb-panel-tab .tab-icon{
+
+
+    width:36px;
+
+    height:36px;
+
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+
+    background:linear-gradient(
+        135deg,
+        #ff4ecd,
+        #6c5ce7
+    );
+
+
+    border-radius:10px;
+
+
+    font-size:18px;
+
+
+}
+
+
+
+
+/* ACTIVE TAB */
+
+.sb-panel-tab.active{
+
+
+    background:linear-gradient(
+        135deg,
+        rgba(0,198,255,0.25),
+        rgba(123,44,255,0.25)
+    );
+
+
+    border-color:#00c6ff;
+
+
+}
+
+
+
+
+
+/* TAB HOVER */
+
+.sb-panel-tab:hover{
+
+
+    transform:translateX(5px);
+
+
+    background:rgba(255,255,255,0.12);
+
+
+}
+
+
+
+
+
+/* LEFT PANEL SCROLL */
+
+.sb-left-panel{
+
+
+    overflow-y:auto;
+
+    scrollbar-width:thin;
+
+}
+
+
+
+/* SCROLL BAR */
+
+.sb-left-panel::-webkit-scrollbar{
+
+    width:6px;
+
+}
+
+
+.sb-left-panel::-webkit-scrollbar-thumb{
+
+    background:#7b2cff;
+
+    border-radius:10px;
+
+}
+
+
+
+
+
 
