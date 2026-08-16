@@ -1,48 +1,294 @@
 document.addEventListener('DOMContentLoaded', () => {
 
-    // --- 1. Sidebar Tabs & Collapsible Logic ---
-    const setupTabs = (containerSelector) => {
-        const container = document.querySelector(containerSelector);
-        if (!container) return;
-        container.querySelectorAll('.sidebar-tabs .tab-btn').forEach(btn => {
-            btn.addEventListener('click', () => {
-                const targetId = btn.getAttribute('data-target');
-                container.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-                container.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-                btn.classList.add('active');
-                document.getElementById(targetId)?.classList.add('active');
-            });
-        });
-    };
-    setupTabs('#left-sidebar');
-    setupTabs('#right-sidebar');
-
     const leftSidebar = document.getElementById('left-sidebar');
     const rightSidebar = document.getElementById('right-sidebar');
-    document.getElementById('toggle-left')?.addEventListener('click', () => {
-        leftSidebar.classList.toggle('collapsed');
-        document.getElementById('toggle-left').textContent = leftSidebar.classList.contains('collapsed') ? '►' : '◄';
-    });
-    document.getElementById('toggle-right')?.addEventListener('click', () => {
-        rightSidebar.classList.toggle('collapsed');
-        document.getElementById('toggle-right').textContent = rightSidebar.classList.contains('collapsed') ? '◄' : '►';
-    });
-
-    // --- 2. Device View & Preview Mode ---
     const canvas = document.getElementById('live-canvas');
-    const previewBtn = document.getElementById('btn-preview');
-    const floatingBackBtn = document.getElementById('floating-back-btn');
+    const placeholder = canvas.querySelector('.placeholder-text');
+    const layersTreeView = document.getElementById('layers-tree-view');
+    const projectTitleInput = document.getElementById('project-title-input');
+    const addBlockBtn = document.getElementById('btn-add-block');
 
-    function togglePreviewMode() {
-        document.body.classList.toggle('preview-mode');
-        const isPreview = document.body.classList.contains('preview-mode');
-        if (previewBtn) {
-            previewBtn.textContent = isPreview ? '❌ Exit Preview' : '👁 Preview';
-            previewBtn.style.backgroundColor = isPreview ? '#7f1d1d' : '';
+    let selectedElement = null;
+    let elementCounter = 0;
+
+    document.getElementById('close-left-sidebar').addEventListener('click', () => leftSidebar.classList.add('hidden'));
+    document.getElementById('close-right-sidebar').addEventListener('click', () => rightSidebar.classList.add('hidden'));
+    addBlockBtn.addEventListener('click', () => leftSidebar.classList.toggle('hidden'));
+
+    canvas.addEventListener('click', (e) => {
+        const targetEl = e.target.closest('.canvas-element');
+        if (targetEl) {
+            selectElement(targetEl);
+            rightSidebar.classList.remove('hidden');
+        } else if (e.target === canvas || e.target === placeholder) {
+            document.querySelectorAll('.canvas-element').forEach(el => el.classList.remove('selected'));
+            selectedElement = null;
+        }
+    });
+
+    document.querySelectorAll('.sidebar').forEach(sidebar => {
+        const subTabs = sidebar.querySelectorAll('.sub-tab-btn');
+        subTabs.forEach(btn => {
+            btn.addEventListener('click', () => {
+                subTabs.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                const targetPaneId = btn.getAttribute('data-target');
+                sidebar.querySelectorAll('.tab-pane').forEach(pane => pane.classList.remove('active'));
+                sidebar.querySelector(`#${targetPaneId}`).classList.add('active');
+            });
+        });
+    });
+
+    document.querySelectorAll('.accordion-header').forEach(header => {
+        header.addEventListener('click', () => {
+            const item = header.parentElement;
+            item.classList.toggle('open');
+        });
+    });
+
+    projectTitleInput.value = localStorage.getItem('smartbazaar_project_name') || 'My_Awesome_Page';
+    projectTitleInput.addEventListener('input', (e) => localStorage.setItem('smartbazaar_project_name', e.target.value));
+
+    // اکیلے بلاکس ایڈ کرنا (بغیر کسی فکسڈ تصویر کے، خالی امیج باکس)
+    document.querySelectorAll('.draggable-item').forEach(item => {
+        item.addEventListener('click', () => {
+            const type = item.getAttribute('data-type');
+            if (placeholder) placeholder.style.display = 'none';
+            
+            if (type === 'image') {
+                createElement('image', '', '', '#1e1e24', '#ffffff', '16', '12', '6', '100%', 'auto', 'solid', '1', '#3f3f46', '6', 'none');
+            } else if (type === 'container' || type === 'card') {
+                createElement(type, `Sample ${type.toUpperCase()} Box`, '', '#27272a', '#ffffff', '16', '16', '6', '100%', '100px', 'solid', '1', '#38bdf8', '8', '0 4px 6px rgba(0,0,0,0.3)');
+            } else {
+                createElement(type, `Sample ${type.toUpperCase()} Text`, '', '#27272a', '#ffffff', '16', '12', '6', '100%', 'auto', 'none', '1', '#3f3f46', '6', 'none');
+            }
+            rightSidebar.classList.remove('hidden');
+        });
+    });
+
+    // --- ریڈی میڈ پیٹرنز (Ready-made Sections) ---
+    document.querySelectorAll('.pattern-item').forEach(pattern => {
+        pattern.addEventListener('click', () => {
+            if (placeholder) placeholder.style.display = 'none';
+            const patType = pattern.getAttribute('data-pattern');
+            
+            if (patType === 'hero') {
+                createElement('heading', 'Build Your Dream Website Today', '', '#1e1e24', '#38bdf8', '26', '14', '6', '100%', 'auto', 'none', '1', '#3f3f46', '6', 'none');
+                createElement('paragraph', 'The ultimate live website builder with responsive grids and elements.', '', '#1e1e24', '#f1f5f9', '14', '10', '4', '100%', 'auto', 'none', '1', '#3f3f46', '6', 'none');
+                createElement('button', 'Get Started Now', '', '#2563eb', '#ffffff', '14', '12', '6', '100%', 'auto', 'none', '1', '#3f3f46', '6', '0 4px 10px rgba(37,99,235,0.4)');
+            } else if (patType === 'image-box') {
+                createElement('image', '', '', '#181b22', '#ffffff', '16', '10', '6', '100%', '180px', 'solid', '1', '#38bdf8', '8', '0 6px 12px rgba(0,0,0,0.4)');
+                createElement('heading', 'Professional Web Development', '', '#181b22', '#ffffff', '18', '8', '4', '100%', 'auto', 'none', '1', '#3f3f46', '4', 'none');
+            } else if (patType === 'pricing') {
+                createElement('heading', 'Pro Plan - $29/mo', '', '#181b22', '#ffffff', '20', '12', '6', '100%', 'auto', 'solid', '1', '#2563eb', '8', '0 8px 16px rgba(0,0,0,0.4)');
+                createElement('paragraph', 'Includes unlimited blocks, custom CSS dimensions, and instant export.', '', '#181b22', '#94a3b8', '14', '8', '4', '100%', 'auto', 'none', '1', '#2d3748', '6', 'none');
+                createElement('button', 'Choose Plan', '', '#10b981', '#ffffff', '14', '10', '6', '100%', 'auto', 'none', '1', '#3f3f46', '6', 'none');
+            } else if (patType === 'testimonial') {
+                createElement('paragraph', '"This builder completely changed how fast I launch client sites. Absolutely incredible!"', '', '#252833', '#e2e8f0', '14', '14', '6', '100%', 'auto', 'dashed', '1', '#38bdf8', '8', '0 4px 12px rgba(0,0,0,0.3)');
+                createElement('heading', '- Alex Johnson, Developer', '', '#252833', '#38bdf8', '12', '6', '4', '100%', 'auto', 'none', '1', '#3f3f46', '4', 'none');
+            } else if (patType === 'cta') {
+                createElement('heading', 'Ready to Scale Your Business?', '', '#1e293b', '#ffffff', '20', '12', '6', '100%', 'auto', 'solid', '1', '#3b82f6', '8', '0 8px 20px rgba(59,130,246,0.3)');
+                createElement('button', 'Start Free Trial', '', '#3b82f6', '#ffffff', '14', '10', '6', '100%', 'auto', 'none', '1', '#3f3f46', '6', 'none');
+            }
+            
+            rightSidebar.classList.remove('hidden');
+        });
+    });
+
+    function createElement(type, text, imgSrc = '', bgColor = '#27272a', color = '#ffffff', fontSize = '16', padding = '12', margin = '6', width = '100%', height = 'auto', bStyle = 'none', bWidth = '1', bColor = '#3f3f46', radius = '6', shadow = 'none') {
+        elementCounter++;
+        const el = document.createElement('div');
+        el.className = 'canvas-element';
+        el.id = `el-${elementCounter}`;
+        el.setAttribute('data-type', type);
+        
+        if (type === 'image') {
+            if (imgSrc) {
+                const img = document.createElement('img');
+                img.className = 'canvas-img-box';
+                img.src = imgSrc;
+                el.appendChild(img);
+            } else {
+                const placeholderBox = document.createElement('div');
+                placeholderBox.className = 'empty-img-placeholder';
+                placeholderBox.innerHTML = '<span>🖼 No Image Selected</span><small>Paste image URL in right panel</small>';
+                el.appendChild(placeholderBox);
+            }
+        } else {
+            el.textContent = text;
+        }
+        
+        applyStylesToElement(el, { bgColor, color, fontSize, padding, margin, width, height, bStyle, bWidth, bColor, radius, shadow });
+
+        el.addEventListener('click', (e) => {
+            e.stopPropagation();
+            selectElement(el);
+            rightSidebar.classList.remove('hidden');
+        });
+
+        canvas.appendChild(el);
+        updateLayers();
+        selectElement(el);
+    }
+
+    function applyStylesToElement(el, styles) {
+        el.style.backgroundColor = styles.bgColor;
+        el.style.color = styles.color;
+        el.style.fontSize = styles.fontSize + 'px';
+        el.style.padding = styles.padding + 'px';
+        el.style.margin = styles.margin + 'px';
+        el.style.width = styles.width;
+        el.style.height = styles.height;
+        el.style.borderStyle = styles.bStyle;
+        el.style.borderWidth = styles.bWidth + 'px';
+        el.style.borderColor = styles.bColor;
+        el.style.borderRadius = styles.radius + 'px';
+        el.style.boxShadow = styles.shadow;
+    }
+
+    function selectElement(el) {
+        document.querySelectorAll('.canvas-element').forEach(item => item.classList.remove('selected'));
+        selectedElement = el;
+        if (selectedElement) {
+            selectedElement.classList.add('selected');
+            syncPropsToForm();
         }
     }
-    previewBtn?.addEventListener('click', togglePreviewMode);
-    floatingBackBtn?.addEventListener('click', togglePreviewMode);
+
+    function updateLayers() {
+        const elements = canvas.querySelectorAll('.canvas-element');
+        if (elements.length === 0) {
+            layersTreeView.innerHTML = '<p class="no-layers">No layers added yet</p>';
+            if (placeholder) placeholder.style.display = 'block';
+            return;
+        }
+        layersTreeView.innerHTML = '';
+        elements.forEach((el, index) => {
+            const div = document.createElement('div');
+            div.className = 'layer-item';
+            div.textContent = `${index + 1}. ${el.getAttribute('data-type').toUpperCase()}`;
+            div.addEventListener('click', (e) => {
+                e.stopPropagation();
+                selectElement(el);
+                rightSidebar.classList.remove('hidden');
+            });
+            layersTreeView.appendChild(div);
+        });
+    }
+
+    const textInput = document.getElementById('prop-text-input');
+    const imageInput = document.getElementById('prop-image-input');
+    const groupTextContent = document.getElementById('group-text-content');
+    const groupImageContent = document.getElementById('group-image-content');
+
+    const bgColorInput = document.getElementById('prop-bg-color');
+    const textColorInput = document.getElementById('prop-text-color');
+    const fontSizeInput = document.getElementById('prop-font-size');
+    const widthInput = document.getElementById('prop-width');
+    const heightInput = document.getElementById('prop-height');
+    const paddingInput = document.getElementById('prop-padding');
+    const marginInput = document.getElementById('prop-margin');
+    const borderStyleInput = document.getElementById('prop-border-style');
+    const borderWidthInput = document.getElementById('prop-border-width');
+    const borderColorInput = document.getElementById('prop-border-color');
+    const radiusInput = document.getElementById('prop-border-radius');
+    const boxShadowInput = document.getElementById('prop-box-shadow');
+
+    function syncPropsToForm() {
+        if (!selectedElement) return;
+        const comp = window.getComputedStyle(selectedElement);
+        const type = selectedElement.getAttribute('data-type');
+
+        if (type === 'image') {
+            groupTextContent.style.display = 'none';
+            groupImageContent.style.display = 'block';
+            const imgEl = selectedElement.querySelector('img');
+            imageInput.value = imgEl ? imgEl.src : '';
+        } else {
+            groupTextContent.style.display = 'block';
+            groupImageContent.style.display = 'none';
+            textInput.value = selectedElement.textContent;
+        }
+
+        bgColorInput.value = rgbToHex(comp.backgroundColor);
+        textColorInput.value = rgbToHex(comp.color);
+        fontSizeInput.value = parseInt(comp.fontSize) || 16;
+        widthInput.value = comp.width || '100%';
+        heightInput.value = comp.height || 'auto';
+        paddingInput.value = parseInt(comp.paddingTop) || 12;
+        marginInput.value = parseInt(comp.marginTop) || 6;
+        borderStyleInput.value = comp.borderTopStyle || 'none';
+        borderWidthInput.value = parseInt(comp.borderTopWidth) || 1;
+        borderColorInput.value = rgbToHex(comp.borderTopColor);
+        radiusInput.value = parseInt(comp.borderRadius) || 6;
+        boxShadowInput.value = comp.boxShadow !== 'none' ? comp.boxShadow : 'none';
+    }
+
+    textInput?.addEventListener('input', (e) => { if (selectedElement && selectedElement.getAttribute('data-type') !== 'image') { selectedElement.textContent = e.target.value; updateLayers(); } });
+    
+    imageInput?.addEventListener('input', (e) => { 
+        if (selectedElement && selectedElement.getAttribute('data-type') === 'image') { 
+            const url = e.target.value.trim();
+            selectedElement.innerHTML = ''; // صاف کریں
+            if (url) {
+                const img = document.createElement('img');
+                img.className = 'canvas-img-box';
+                img.src = url;
+                selectedElement.appendChild(img);
+            } else {
+                const placeholderBox = document.createElement('div');
+                placeholderBox.className = 'empty-img-placeholder';
+                placeholderBox.innerHTML = '<span>🖼 No Image Selected</span><small>Paste image URL in right panel</small>';
+                selectedElement.appendChild(placeholderBox);
+            }
+        } 
+    });
+
+    bgColorInput?.addEventListener('input', (e) => { if (selectedElement) selectedElement.style.backgroundColor = e.target.value; });
+    textColorInput?.addEventListener('input', (e) => { if (selectedElement) selectedElement.style.color = e.target.value; });
+    fontSizeInput?.addEventListener('input', (e) => { if (selectedElement) selectedElement.style.fontSize = e.target.value + 'px'; });
+    widthInput?.addEventListener('input', (e) => { if (selectedElement) selectedElement.style.width = e.target.value; });
+    heightInput?.addEventListener('input', (e) => { if (selectedElement) selectedElement.style.height = e.target.value; });
+    paddingInput?.addEventListener('input', (e) => { if (selectedElement) selectedElement.style.padding = e.target.value + 'px'; });
+    marginInput?.addEventListener('input', (e) => { if (selectedElement) selectedElement.style.margin = e.target.value + 'px'; });
+    borderStyleInput?.addEventListener('change', (e) => { if (selectedElement) selectedElement.style.borderStyle = e.target.value; });
+    borderWidthInput?.addEventListener('input', (e) => { if (selectedElement) selectedElement.style.borderWidth = e.target.value + 'px'; });
+    borderColorInput?.addEventListener('input', (e) => { if (selectedElement) selectedElement.style.borderColor = e.target.value; });
+    radiusInput?.addEventListener('input', (e) => { if (selectedElement) selectedElement.style.borderRadius = e.target.value + 'px'; });
+    boxShadowInput?.addEventListener('change', (e) => { if (selectedElement) selectedElement.style.boxShadow = e.target.value; });
+
+    document.getElementById('btn-delete-el')?.addEventListener('click', () => {
+        if (!selectedElement) return alert('Please select an element first!');
+        selectedElement.remove();
+        selectedElement = null;
+        updateLayers();
+        rightSidebar.classList.add('hidden');
+    });
+
+    document.getElementById('btn-duplicate-el')?.addEventListener('click', () => {
+        if (!selectedElement) return alert('Please select an element first!');
+        const comp = window.getComputedStyle(selectedElement);
+        const type = selectedElement.getAttribute('data-type');
+        const imgEl = selectedElement.querySelector('img');
+        
+        createElement(
+            type,
+            selectedElement.textContent,
+            imgEl ? imgEl.src : '',
+            rgbToHex(comp.backgroundColor),
+            rgbToHex(comp.color),
+            parseInt(comp.fontSize),
+            parseInt(comp.paddingTop),
+            parseInt(comp.marginTop),
+            comp.width,
+            comp.height,
+            comp.borderTopStyle,
+            parseInt(comp.borderTopWidth),
+            rgbToHex(comp.borderTopColor),
+            parseInt(comp.borderRadius),
+            comp.boxShadow
+        );
+    });
 
     ['desktop', 'tablet', 'mobile'].forEach(mode => {
         document.getElementById(`btn-${mode}`)?.addEventListener('click', (e) => {
@@ -52,263 +298,26 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // --- 3. Element Creation & Canvas Engine ---
-    const placeholder = canvas.querySelector('.placeholder-text');
-    const layersTreeView = document.getElementById('layers-tree-view');
-    let selectedElement = null;
-    let elementCounter = 0;
-
-    document.querySelectorAll('.draggable-item').forEach(item => {
-        item.addEventListener('click', () => {
-            const type = item.getAttribute('data-type');
-            if (type) {
-                if (placeholder) placeholder.style.display = 'none';
-                createElementOnCanvas(type);
-            }
-        });
-    });
-
-    function createElementOnCanvas(type, customText = null, customBg = '', customColor = '', customSize = '', customRadius = '', customLink = '', customMargin = '', customPadding = '') {
-        elementCounter++;
-        const el = document.createElement('div');
-        el.className = 'canvas-element';
-        el.id = `element-${elementCounter}`;
-        el.setAttribute('data-element-type', type);
-        if (customLink) el.setAttribute('data-link', customLink);
-
-        el.textContent = customText || `New ${type.toUpperCase()} Element`;
-        if (customBg) el.style.backgroundColor = customBg;
-        if (customColor) el.style.color = customColor;
-        if (customSize) el.style.fontSize = customSize;
-        if (customRadius) el.style.borderRadius = customRadius;
-        if (customMargin) el.style.margin = customMargin;
-        if (customPadding) el.style.padding = customPadding;
-
-        el.addEventListener('click', (e) => {
-            e.stopPropagation();
-            selectElement(el);
-        });
-
-        canvas.appendChild(el);
-        updateLayersTree();
-        selectElement(el);
-        saveProjectToLocalStorage();
+    const previewBtn = document.getElementById('btn-preview');
+    const floatingBackBtn = document.getElementById('floating-back-btn');
+    function togglePreview() {
+        document.body.classList.toggle('preview-mode');
+        previewBtn.textContent = document.body.classList.contains('preview-mode') ? '❌ Exit Preview' : '👁 Preview';
     }
+    previewBtn?.addEventListener('click', togglePreview);
+    floatingBackBtn?.addEventListener('click', togglePreview);
 
-    function selectElement(el) {
-        document.querySelectorAll('.canvas-element').forEach(item => item.classList.remove('selected'));
-        selectedElement = el;
-        if (selectedElement) {
-            selectedElement.classList.add('selected');
-            syncPropertiesToUI();
-        }
-    }
-
-    canvas.addEventListener('click', (e) => {
-        // If in preview mode, handle link navigation
-        if (document.body.classList.contains('preview-mode')) {
-            const targetEl = e.target.closest('.canvas-element');
-            if (targetEl) {
-                const link = targetEl.getAttribute('data-link');
-                if (link) {
-                    window.location.href = link;
-                }
-            }
-            return;
-        }
-
-        if (e.target === canvas || e.target === placeholder) {
-            document.querySelectorAll('.canvas-element').forEach(item => item.classList.remove('selected'));
-            selectedElement = null;
-        }
+    document.getElementById('btn-back')?.addEventListener('click', () => window.history.back());
+    document.getElementById('btn-save')?.addEventListener('click', () => {
+        localStorage.setItem('smartbazaar_page_content', canvas.innerHTML);
+        alert('Page saved successfully!');
     });
-
-    function updateLayersTree() {
-        const elements = canvas.querySelectorAll('.canvas-element');
-        if (elements.length === 0) {
-            layersTreeView.innerHTML = '<p class="no-layers">No layers yet</p>';
-            if (placeholder) placeholder.style.display = 'block';
-            return;
-        }
-        layersTreeView.innerHTML = '';
-        elements.forEach((el, index) => {
-            const layerDiv = document.createElement('div');
-            layerDiv.className = 'layer-item';
-            layerDiv.textContent = `Layer ${index + 1}: ${el.getAttribute('data-element-type')}`;
-            layerDiv.addEventListener('click', (e) => {
-                e.stopPropagation();
-                selectElement(el);
-            });
-            layersTreeView.appendChild(layerDiv);
-        });
-    }
-
-    // --- 4. LocalStorage Save & Load ---
-    function saveProjectToLocalStorage() {
-        const projectData = [];
-        canvas.querySelectorAll('.canvas-element').forEach(el => {
-            const comp = window.getComputedStyle(el);
-            projectData.push({
-                type: el.getAttribute('data-element-type'),
-                text: el.textContent,
-                bgColor: comp.backgroundColor,
-                color: comp.color,
-                fontSize: comp.fontSize,
-                borderRadius: comp.borderRadius,
-                link: el.getAttribute('data-link') || '',
-                margin: comp.margin,
-                padding: comp.padding
-            });
-        });
-        localStorage.setItem('smartbazaar_saved_project', JSON.stringify(projectData));
-    }
-
-    function loadProjectFromLocalStorage() {
-        const savedData = localStorage.getItem('smartbazaar_saved_project');
-        if (!savedData) return;
-        try {
-            const projectData = JSON.parse(savedData);
-            if (projectData.length > 0 && placeholder) placeholder.style.display = 'none';
-            projectData.forEach(item => {
-                createElementOnCanvas(item.type, item.text, item.bgColor, item.color, item.fontSize, item.borderRadius, item.link, item.margin, item.padding);
-            });
-        } catch (e) {
-            console.error('Load error:', e);
-        }
-    }
-    loadProjectFromLocalStorage();
-
-    // --- 5. Element Actions (Delete & Duplicate) ---
-    document.getElementById('btn-delete-el')?.addEventListener('click', () => {
-        if (!selectedElement) return alert('Select an element first!');
-        selectedElement.remove();
-        selectedElement = null;
-        updateLayersTree();
-        saveProjectToLocalStorage();
-    });
-
-    document.getElementById('btn-duplicate-el')?.addEventListener('click', () => {
-        if (!selectedElement) return alert('Select an element first!');
-        const comp = window.getComputedStyle(selectedElement);
-        createElementOnCanvas(
-            selectedElement.getAttribute('data-element-type'),
-            selectedElement.textContent,
-            comp.backgroundColor,
-            comp.color,
-            comp.fontSize,
-            comp.borderRadius,
-            selectedElement.getAttribute('data-link'),
-            comp.margin,
-            comp.padding
-        );
-    });
-
-    // --- 6. Real-time Property Binding (Inputs) ---
-    const textInput = document.getElementById('prop-text-input');
-    const linkInput = document.getElementById('prop-link-input');
-    const bgColorInput = document.getElementById('prop-bg-color');
-    const textColorInput = document.getElementById('prop-text-color');
-    const fontSizeInput = document.getElementById('prop-font-size');
-    const borderRadiusInput = document.getElementById('prop-border-radius');
-    const marginInput = document.getElementById('prop-margin');
-    const paddingInput = document.getElementById('prop-padding');
-
-    function syncPropertiesToUI() {
-        if (!selectedElement) return;
-        const comp = window.getComputedStyle(selectedElement);
-        if (textInput) textInput.value = selectedElement.textContent;
-        if (linkInput) linkInput.value = selectedElement.getAttribute('data-link') || '';
-        if (bgColorInput) bgColorInput.value = rgbToHex(comp.backgroundColor);
-        if (textColorInput) textColorInput.value = rgbToHex(comp.color);
-        if (fontSizeInput) fontSizeInput.value = parseInt(comp.fontSize) || 14;
-        if (borderRadiusInput) borderRadiusInput.value = parseInt(comp.borderRadius) || 6;
-        if (marginInput) marginInput.value = parseInt(comp.margin) || 0;
-        if (paddingInput) paddingInput.value = parseInt(comp.padding) || 12;
-    }
-
-    textInput?.addEventListener('input', (e) => {
-        if (selectedElement) { selectedElement.textContent = e.target.value; updateLayersTree(); saveProjectToLocalStorage(); }
-    });
-    linkInput?.addEventListener('input', (e) => {
-        if (selectedElement) { selectedElement.setAttribute('data-link', e.target.value); saveProjectToLocalStorage(); }
-    });
-    bgColorInput?.addEventListener('input', (e) => {
-        if (selectedElement) { selectedElement.style.backgroundColor = e.target.value; saveProjectToLocalStorage(); }
-    });
-    textColorInput?.addEventListener('input', (e) => {
-        if (selectedElement) { selectedElement.style.color = e.target.value; saveProjectToLocalStorage(); }
-    });
-    fontSizeInput?.addEventListener('input', (e) => {
-        if (selectedElement) { selectedElement.style.fontSize = e.target.value + 'px'; saveProjectToLocalStorage(); }
-    });
-    borderRadiusInput?.addEventListener('input', (e) => {
-        if (selectedElement) { selectedElement.style.borderRadius = e.target.value + 'px'; saveProjectToLocalStorage(); }
-    });
-    marginInput?.addEventListener('input', (e) => {
-        if (selectedElement) { selectedElement.style.margin = e.target.value + 'px'; saveProjectToLocalStorage(); }
-    });
-    paddingInput?.addEventListener('input', (e) => {
-        if (selectedElement) { selectedElement.style.padding = e.target.value + 'px'; saveProjectToLocalStorage(); }
-    });
-
-    // --- 7. Export Code Generator (Downloads index.html & style.css) ---
-    document.getElementById('btn-export')?.addEventListener('click', () => {
-        const elements = canvas.querySelectorAll('.canvas-element');
-        if (elements.length === 0) {
-            alert('Canvas is empty! Add elements before exporting.');
-            return;
-        }
-
-        let htmlContent = `<!DOCTYPE html>\n<html lang="en">\n<head>\n    <meta charset="UTF-8">\n    <meta name="viewport" content="width=device-width, initial-scale=1.0">\n    <title>SmartBazaar Exported Site</title>\n    <link rel="stylesheet" href="style.css">\n</head>\n<body>\n`;
-        let cssContent = `body { background-color: #0f1117; color: #e2e8f0; font-family: sans-serif; padding: 20px; }\n`;
-
-        elements.forEach((el, index) => {
-            const comp = window.getComputedStyle(el);
-            const link = el.getAttribute('data-link');
-            const text = el.textContent;
-            
-            cssContent += `.builder-el-${index} {\n`;
-            cssContent += `    background-color: ${comp.backgroundColor};\n`;
-            cssContent += `    color: ${comp.color};\n`;
-            cssContent += `    font-size: ${comp.fontSize};\n`;
-            cssContent += `    border-radius: ${comp.borderRadius};\n`;
-            cssContent += `    margin: ${comp.margin};\n`;
-            cssContent += `    padding: ${comp.padding};\n`;
-            cssContent += `}\n`;
-
-            if (link) {
-                htmlContent += `    <a href="${link}" style="text-decoration: none; display: block; margin-bottom: 10px;">\n`;
-                htmlContent += `        <div class="builder-el-${index}">${text}</div>\n`;
-                htmlContent += `    </a>\n`;
-            } else {
-                htmlContent += `    <div class="builder-el-${index}" style="margin-bottom: 10px;">${text}</div>\n`;
-            }
-        });
-
-        htmlContent += `</body>\n</html>`;
-
-        downloadFile(htmlContent, 'index.html', 'text/html');
-        downloadFile(cssContent, 'style.css', 'text/css');
-        alert('📦 Project files (index.html & style.css) generated and downloaded successfully!');
-    });
-
-    function downloadFile(content, filename, contentType) {
-        const blob = new Blob([content], { type: contentType });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = filename;
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        URL.revokeObjectURL(url);
-    }
 
     function rgbToHex(rgb) {
-        if (!rgb || rgb === 'transparent') return '#1e1e24';
+        if (!rgb || rgb === 'transparent' || rgb === 'rgba(0, 0, 0, 0)') return '#27272a';
         if (rgb.startsWith('#')) return rgb;
-        const match = rgb.match(/^rgb\((\d+),\s*(\d+),\s*(\d+)\)$/);
-        if (!match) return '#1e1e24';
+        const match = rgb.match(/^rgb\((\d+),\s*(\d+),\s*(\d+)/);
+        if (!match) return '#27272a';
         return "#" + [match[1], match[2], match[3]].map(x => ("0" + parseInt(x).toString(16)).slice(-2)).join('');
     }
 
