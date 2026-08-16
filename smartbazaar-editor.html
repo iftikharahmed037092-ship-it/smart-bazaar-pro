@@ -1,131 +1,243 @@
 <!DOCTYPE html>
-<html lang="en" dir="ltr">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SmartBazaar Pro - Editor</title>
+    <title>SmartBazaar Pro - Website Builder</title>
     <link rel="stylesheet" href="smartbazaar-editor.css">
 </head>
 <body>
 
-    <!-- Header & Primary Controls -->
+    <!-- Header Container -->
     <header id="editor-header">
-        <div class="logo-area">
-            <h2>⚡ SmartBazaar Pro</h2>
+        <div class="header-top-row">
+            <div class="brand">SmartBazaar Pro</div>
+            <div class="device-switcher">
+                <button id="btn-desktop" class="active" title="Desktop View">💻</button>
+                <button id="btn-tablet" title="Tablet View">📱</button>
+                <button id="btn-mobile" title="Mobile View">📱</button>
+            </div>
+            <div class="header-actions">
+                <button id="btn-preview">👁 Preview</button>
+                <button id="btn-save">Save</button>
+                <button id="btn-export" class="publish-btn">Export</button>
+            </div>
         </div>
-        <div class="device-switcher">
-            <button id="btn-desktop" class="active">💻 Desktop</button>
-            <button id="btn-tablet">📱 Tablet</button>
-            <button id="btn-mobile">📱 Mobile</button>
-        </div>
-        <div class="header-actions">
-            <button id="btn-undo">↩ Undo</button>
-            <button id="btn-redo">↪ Redo</button>
-            <button id="btn-preview">👁 Preview</button>
-            <button id="btn-save" class="primary">💾 Save</button>
-            <button id="btn-export">📦 Export</button>
+
+        <div class="header-bottom-row">
+            <button id="btn-back" class="toolbar-btn" title="Back">⬅</button>
+            <button id="btn-add-block" class="toolbar-btn active-blue" title="Add Blocks">➕</button>
+            
+            <input type="text" id="project-title-input" class="title-search-bar" placeholder="Enter page name...">
+            
+            <button id="btn-undo" class="toolbar-btn" title="Undo">↩</button>
+            <button id="btn-redo" class="toolbar-btn" title="Redo">↪</button>
+            <button id="btn-settings" class="toolbar-btn" title="Settings">⚙️</button>
+            <button id="btn-options" class="toolbar-btn" title="Options">⋮</button>
         </div>
     </header>
 
-    <!-- Main Workspace Container -->
+    <!-- Main Workspace -->
     <div id="editor-workspace">
 
         <!-- Left Sidebar -->
         <aside id="left-sidebar" class="sidebar">
-            <button class="toggle-sidebar-btn" id="toggle-left">◄</button>
+            <div class="sidebar-header-bar">
+                <span class="sidebar-title">Library & Structure</span>
+                <button class="sidebar-close-btn" id="close-left-sidebar" title="Close Panel">×</button>
+            </div>
             <div class="sidebar-content-wrapper">
-                <div class="sidebar-tabs">
-                    <button class="tab-btn active" data-target="elements-tab">📌 Elements</button>
-                    <button class="tab-btn" data-target="layers-tab">📑 Layers</button>
-                </div>
                 
-                <div id="elements-tab" class="tab-content active">
-                    <h3>Add Elements</h3>
-                    <input type="text" id="element-search" placeholder="Search elements...">
-                    <div class="elements-list">
-                        <div class="draggable-item" data-type="heading">📌 Heading Element</div>
-                        <div class="draggable-item" data-type="text">📄 Paragraph Text Element</div>
-                        <div class="draggable-item" data-type="button">🔘 Button Element</div>
-                        <div class="draggable-item" data-type="image">🖼 Image Element</div>
-                        <div class="draggable-item" data-type="container">📦 Container Box</div>
-                        <div class="draggable-item" data-type="product-card">🛍 Product Card</div>
+                <div class="sidebar-sub-tabs">
+                    <button class="sub-tab-btn active" data-target="tab-blocks">Blocks</button>
+                    <button class="sub-tab-btn" data-target="tab-patterns">Patterns</button>
+                    <button class="sub-tab-btn" data-target="tab-media">Media</button>
+                </div>
+
+                <!-- 1. بلاکس سیکشن -->
+                <div class="tab-pane active" id="tab-blocks">
+                    <div class="wp-search-box">
+                        <input type="text" id="element-search" placeholder="Search blocks...">
+                    </div>
+                    <div class="wp-category-title">COMPONENTS</div>
+                    <div class="wp-grid">
+                        <div class="draggable-item" data-type="heading"><span class="wp-icon">H</span>Heading</div>
+                        <div class="draggable-item" data-type="paragraph"><span class="wp-icon">¶</span>Text</div>
+                        <div class="draggable-item" data-type="image"><span class="wp-icon">🖼</span>Image</div>
+                        <div class="draggable-item" data-type="button"><span class="wp-icon">⏹</span>Button</div>
+                        <div class="draggable-item" data-type="container"><span class="wp-icon">📦</span>Box</div>
+                        <div class="draggable-item" data-type="card"><span class="wp-icon">🃏</span>Card</div>
                     </div>
                 </div>
 
-                <div id="layers-tab" class="tab-content">
-                    <h3>Layers Tree</h3>
+                <!-- 2. ریڈی میڈ پیٹرنز (Ready-made Sections) -->
+                <div class="tab-pane" id="tab-patterns">
+                    <div class="wp-category-title">READY SECTIONS</div>
+                    <div class="pattern-item" data-pattern="hero">⭐ <span>Hero Banner</span></div>
+                    <div class="pattern-item" data-pattern="image-box">🖼 <span>Image Card</span></div>
+                    <div class="pattern-item" data-pattern="pricing">💰 <span>Pricing Box</span></div>
+                    <div class="pattern-item" data-pattern="testimonial">💬 <span>Review Box</span></div>
+                    <div class="pattern-item" data-pattern="cta">🚀 <span>Call To Action</span></div>
+                </div>
+
+                <!-- 3. میڈیا سیکشن -->
+                <div class="tab-pane" id="tab-media">
+                    <div class="wp-category-title">UPLOADED MEDIA</div>
+                    <div class="media-upload-box">
+                        <input type="file" id="media-file-input" accept="image/*">
+                        <p>Click or drag images here</p>
+                    </div>
+                    <div id="media-gallery-list"></div>
+                </div>
+
+                <div class="layers-section">
+                    <h3>Page Layers</h3>
                     <div id="layers-tree-view">
-                        <p class="no-layers">No layers yet</p>
+                        <p class="no-layers">No layers added yet</p>
                     </div>
                 </div>
             </div>
         </aside>
 
-        <!-- Center: Live Preview Canvas -->
+        <!-- Center Canvas -->
         <main id="canvas-container">
-            <div id="live-canvas" class="mode-mobile">
-                <div class="placeholder-text">Click elements from sidebar to build your page</div>
+            <div id="live-canvas" class="mode-desktop">
+                <div class="placeholder-text">Drop blocks here or click Add (+) from top toolbar</div>
             </div>
         </main>
 
-        <!-- Right Sidebar -->
+        <!-- Right Sidebar (Inspector / Settings Panel) -->
         <aside id="right-sidebar" class="sidebar">
-            <button class="toggle-sidebar-btn" id="toggle-right">►</button>
+            <div class="sidebar-header-bar">
+                <button class="sidebar-close-btn" id="close-right-sidebar" title="Close Panel">×</button>
+                <span class="sidebar-title">Inspector & Settings</span>
+            </div>
             <div class="sidebar-content-wrapper">
-                <div class="sidebar-tabs">
-                    <button class="tab-btn active" data-target="content-panel">Content</button>
-                    <button class="tab-btn" data-target="style-panel">Style</button>
+                
+                <div class="sidebar-sub-tabs">
+                    <button class="sub-tab-btn active" data-target="tab-writing">Content</button>
+                    <button class="sub-tab-btn" data-target="tab-style">Style</button>
                 </div>
 
-                <div id="content-panel" class="tab-content active">
-                    <h3>Content Properties</h3>
-                    <div class="prop-group">
-                        <label>Text Content</label>
-                        <input type="text" id="prop-text-input" placeholder="Select an element...">
+                <!-- 1. کنٹینٹ پینل -->
+                <div class="tab-pane active" id="tab-writing">
+                    <div class="prop-group" id="group-text-content">
+                        <label>Text Content / Writing</label>
+                        <textarea id="prop-text-input" rows="3" placeholder="Type element content here..."></textarea>
+                    </div>
+                    <div class="prop-group" id="group-image-content" style="display: none;">
+                        <label>Image URL Source (Paste or Type link)</label>
+                        <input type="text" id="prop-image-input" placeholder="https://example.com/image.jpg">
                     </div>
                     <div class="prop-group">
-                        <label>Button Link / URL</label>
-                        <input type="text" id="prop-link-input" placeholder="e.g. https://google.com or page2.html">
-                    </div>
-                    <div class="prop-group action-buttons-group">
-                        <button id="btn-duplicate-el" class="sec-btn">📋 Duplicate</button>
-                        <button id="btn-delete-el" class="danger-btn">🗑 Delete</button>
+                        <label>Link URL</label>
+                        <input type="text" id="prop-link-input" placeholder="https://example.com">
                     </div>
                 </div>
 
-                <div id="style-panel" class="tab-content">
-                    <h3>Style & Design</h3>
-                    <div class="prop-group">
-                        <label>Background Color</label>
-                        <input type="color" id="prop-bg-color" value="#1e1e24">
+                <!-- 2. اسٹائل اور سیٹنگز پینل -->
+                <div class="tab-pane" id="tab-style">
+                    
+                    <div class="accordion-item open">
+                        <div class="accordion-header"><span>🔤 Colors & Typography</span> <span class="arrow">▼</span></div>
+                        <div class="accordion-body">
+                            <div class="prop-group">
+                                <label>Background Color</label>
+                                <input type="color" id="prop-bg-color" value="#27272a">
+                            </div>
+                            <div class="prop-group">
+                                <label>Text Color</label>
+                                <input type="color" id="prop-text-color" value="#ffffff">
+                            </div>
+                            <div class="prop-group">
+                                <label>Font Size (px)</label>
+                                <input type="number" id="prop-font-size" value="16">
+                            </div>
+                        </div>
                     </div>
-                    <div class="prop-group">
-                        <label>Text Color</label>
-                        <input type="color" id="prop-text-color" value="#ffffff">
+
+                    <div class="accordion-item">
+                        <div class="accordion-header"><span>📐 Dimensions (Width & Height)</span> <span class="arrow">▼</span></div>
+                        <div class="accordion-body">
+                            <div class="prop-group">
+                                <label>Width (%) or (px)</label>
+                                <input type="text" id="prop-width" value="100%">
+                            </div>
+                            <div class="prop-group">
+                                <label>Height (px)</label>
+                                <input type="text" id="prop-height" value="auto">
+                            </div>
+                        </div>
                     </div>
-                    <div class="prop-group">
-                        <label>Font Size (px)</label>
-                        <input type="number" id="prop-font-size" value="14">
+
+                    <div class="accordion-item">
+                        <div class="accordion-header"><span>📦 Spacing (Padding & Margin)</span> <span class="arrow">▼</span></div>
+                        <div class="accordion-body">
+                            <div class="prop-group">
+                                <label>Padding (px)</label>
+                                <input type="number" id="prop-padding" value="12">
+                            </div>
+                            <div class="prop-group">
+                                <label>Margin (px)</label>
+                                <input type="number" id="prop-margin" value="6">
+                            </div>
+                        </div>
                     </div>
-                    <div class="prop-group">
-                        <label>Border Radius (px)</label>
-                        <input type="number" id="prop-border-radius" value="6">
+
+                    <div class="accordion-item">
+                        <div class="accordion-header"><span>⏹ Borders & Radius</span> <span class="arrow">▼</span></div>
+                        <div class="accordion-body">
+                            <div class="prop-group">
+                                <label>Border Style</label>
+                                <select id="prop-border-style">
+                                    <option value="none">None</option>
+                                    <option value="solid">Solid</option>
+                                    <option value="dashed">Dashed</option>
+                                    <option value="dotted">Dotted</option>
+                                </select>
+                            </div>
+                            <div class="prop-group">
+                                <label>Border Width (px)</label>
+                                <input type="number" id="prop-border-width" value="1">
+                            </div>
+                            <div class="prop-group">
+                                <label>Border Color</label>
+                                <input type="color" id="prop-border-color" value="#3f3f46">
+                            </div>
+                            <div class="prop-group">
+                                <label>Corner Radius (px)</label>
+                                <input type="number" id="prop-border-radius" value="6">
+                            </div>
+                        </div>
                     </div>
-                    <div class="prop-group">
-                        <label>Margin (Outer Spacing)</label>
-                        <input type="number" id="prop-margin" placeholder="0">
+
+                    <div class="accordion-item">
+                        <div class="accordion-header"><span>✨ Box Shadow & Effects</span> <span class="arrow">▼</span></div>
+                        <div class="accordion-body">
+                            <div class="prop-group">
+                                <label>Box Shadow</label>
+                                <select id="prop-box-shadow">
+                                    <option value="none">None</option>
+                                    <option value="0 4px 6px rgba(0,0,0,0.3)">Soft Shadow</option>
+                                    <option value="0 10px 15px rgba(0,0,0,0.5)">Deep Shadow</option>
+                                    <option value="0 0 10px #38bdf8">Glow Shadow</option>
+                                </select>
+                            </div>
+                        </div>
                     </div>
-                    <div class="prop-group">
-                        <label>Padding (Inner Spacing)</label>
-                        <input type="number" id="prop-padding" placeholder="12">
-                    </div>
+
                 </div>
+
+                <div class="prop-group action-buttons-group" style="margin-top: 20px;">
+                    <button id="btn-duplicate-el" class="sec-btn">📋 Duplicate</button>
+                    <button id="btn-delete-el" class="danger-btn">🗑 Delete</button>
+                </div>
+
             </div>
         </aside>
 
     </div>
 
-    <!-- Floating Back Button for Preview Mode -->
     <button id="floating-back-btn">⬅ Back to Editor</button>
 
     <script src="smartbazaar-editor.js"></script>
