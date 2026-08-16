@@ -16,589 +16,1095 @@
 
 <body>
 
-
-    <!-- یہاں ہمارا پورا No-Code Editor بنے گا -->
-
-
-  <!-- ==========================================
+<!-- ==========================================================
 SMARTBAZAAR PRO
-NO CODE WEBSITE BUILDER
-HEADER BAR
-FEATURE 1 - 10
-========================================== -->
+NO-CODE WEBSITE BUILDER
+EDITOR HEADER
+FEATURES 1 - 10
+========================================================== -->
 
+<header class="sb-editor-header" id="sbEditorHeader">
 
-<header class="sb-editor-header">
+    <!-- ======================================================
+    FEATURE 1 - LOGO
+    ====================================================== -->
 
+    <a href="index.html"
+       class="sb-editor-logo"
+       id="sbEditorLogo">
 
-    <!-- ==========================
-    FEATURE 1
-    LOGO + NAME
-    ========================== -->
+        <span class="sb-logo-mark">
+            SB
+        </span>
 
-    <a href="#" class="sb-editor-logo">
-
-        <img 
-        src="assets/images/logo.png" 
-        alt="SmartBazaar Pro Logo">
-
-        <span>
-            SmartBazaar Pro
+        <span class="sb-logo-text">
+            SmartBazaar <strong>Pro</strong>
         </span>
 
     </a>
 
 
+    <!-- ======================================================
+    FEATURES 2 - 4
+    CANVAS DEVICE PREVIEW
+    ====================================================== -->
 
-    <!-- ==========================
-    FEATURE 2,3,4
-    DEVICE PREVIEW
-    ========================== -->
+    <div class="sb-device-preview"
+         id="sbDevicePreview">
 
-    <div class="sb-device-preview">
+        <!-- FEATURE 2 - DESKTOP -->
+
+        <button
+            type="button"
+            class="sb-device-btn active"
+            id="desktopMode"
+            data-device="desktop">
+
+            <span class="sb-device-icon">▣</span>
+            <span>Desktop</span>
+
+        </button>
 
 
-        <!-- Desktop Preview -->
+        <!-- FEATURE 3 - TABLET -->
 
-        <button 
-        class="sb-device-btn active"
-        id="desktopMode"
-        data-device="desktop">
+        <button
+            type="button"
+            class="sb-device-btn"
+            id="tabletMode"
+            data-device="tablet">
+
+            <span class="sb-device-icon">▯</span>
+            <span>Tablet</span>
+
+        </button>
+
+
+        <!-- FEATURE 4 - MOBILE -->
+
+        <button
+            type="button"
+            class="sb-device-btn"
+            id="mobileMode"
+            data-device="mobile">
+
+            <span class="sb-device-icon">▯</span>
+            <span>Mobile</span>
+
+        </button>
+
+    </div>
+
+
+    <!-- ======================================================
+    FEATURES 5 - 10
+    ACTIONS
+    ====================================================== -->
+
+    <div class="sb-editor-actions"
+         id="sbEditorActions">
+
+
+        <!-- FEATURE 5 - UNDO -->
+
+        <button
+            type="button"
+            class="sb-action-btn"
+            id="undoButton"
+            data-action="undo">
+
+            <span>↶</span>
+            <span>Undo</span>
+
+        </button>
+
+
+        <!-- FEATURE 6 - REDO -->
+
+        <button
+            type="button"
+            class="sb-action-btn"
+            id="redoButton"
+            data-action="redo">
+
+            <span>↷</span>
+            <span>Redo</span>
+
+        </button>
+
+
+        <!-- FEATURE 7 - PREVIEW -->
+
+        <button
+            type="button"
+            class="sb-action-btn"
+            id="previewButton"
+            data-action="preview">
+
+            <span>◉</span>
+            <span>Preview</span>
+
+        </button>
+
+
+        <!-- FEATURE 8 - SAVE -->
+
+        <button
+            type="button"
+            class="sb-action-btn sb-save-btn"
+            id="saveButton"
+            data-action="save">
+
+            <span>✓</span>
+            <span>Save</span>
+
+        </button>
+
+
+        <!-- FEATURE 9 - EXPORT -->
+
+        <button
+            type="button"
+            class="sb-action-btn sb-export-btn"
+            id="exportButton"
+            data-action="export">
+
+            <span>↓</span>
+            <span>Export</span>
+
+        </button>
+
+
+        <!-- FEATURE 10 - SETTINGS -->
+
+        <button
+            type="button"
+            class="sb-action-btn"
+            id="settingsButton"
+            data-action="settings">
+
+            <span>⚙</span>
+            <span>Settings</span>
+
+        </button>
+
+    </div>
+
+
+    <!-- ======================================================
+    EDITOR STATUS
+    بنیادی status — آگے کے features بھی اسے استعمال کریں گے
+    ====================================================== -->
+
+    <div class="sb-editor-status"
+         id="sbEditorStatus">
+
+        <span class="sb-status-dot"></span>
+
+        <span id="sbStatusText">
+            Ready
+        </span>
+
+    </div>
+
+</header>
+
+
+<!-- ==========================================================
+FEATURE 7 - PREVIEW OVERLAY
+========================================================== -->
+
+<div class="sb-preview-overlay"
+     id="sbPreviewOverlay"
+     hidden>
+
+    <div class="sb-preview-window">
+
+        <div class="sb-preview-topbar">
+
+            <strong>
+                SmartBazaar Pro Preview
+            </strong>
+
+            <button
+                type="button"
+                id="closePreviewButton"
+                class="sb-preview-close">
+
+                ×
+
+            </button>
+
+        </div>
+
+        <div class="sb-preview-content"
+             id="sbPreviewContent">
+
+            Website Preview
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- ==========================================================
+FEATURE 10 - SETTINGS OVERLAY
+========================================================== -->
+
+<div class="sb-settings-overlay"
+     id="sbSettingsOverlay"
+     hidden>
+
+    <div class="sb-settings-window">
+
+        <div class="sb-settings-header">
+
+            <strong>
+                SmartBazaar Pro Settings
+            </strong>
+
+            <button
+                type="button"
+                id="closeSettingsButton"
+                class="sb-settings-close">
+
+                ×
+
+            </button>
+
+        </div>
+
+
+        <div class="sb-settings-body">
+
+            <label class="sb-setting-row">
+
+                <span>
+                    Auto Save
+                </span>
+
+                <input
+                    type="checkbox"
+                    id="sbAutoSave"
+                    checked>
+
+            </label>
+
+
+            <label class="sb-setting-row">
+
+                <span>
+                    Show Grid
+                </span>
+
+                <input
+                    type="checkbox"
+                    id="sbShowGrid">
+
+            </label>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- ==========================================================
+SMARTBAZAAR PRO
+NO-CODE WEBSITE BUILDER
+CENTER CANVAS
+FEATURES 29 - 33
+========================================================== -->
+
+
+<!-- ==========================================================
+FEATURE 29
+LIVE PREVIEW CANVAS
+========================================================== -->
+
+<main class="sb-canvas-area"
+      id="sbCanvasArea">
+
+
+    <!-- CANVAS TOOLBAR -->
+
+    <div class="sb-canvas-toolbar">
+
+
+        <div class="sb-canvas-title">
+
+            <span class="sb-canvas-live-dot"></span>
 
             <span>
-                🖥
+                Live Preview
             </span>
+
+        </div>
+
+
+        <div class="sb-canvas-size"
+             id="sbCanvasSize">
 
             Desktop
 
-        </button>
-
-
-
-        <!-- Tablet Preview -->
-
-        <button 
-        class="sb-device-btn"
-        id="tabletMode"
-        data-device="tablet">
-
-            <span>
-                📱
-            </span>
-
-            Tablet
-
-        </button>
-
-
-
-        <!-- Mobile Preview -->
-
-        <button 
-        class="sb-device-btn"
-        id="mobileMode"
-        data-device="mobile">
-
-            <span>
-                📲
-            </span>
-
-            Mobile
-
-        </button>
-
+        </div>
 
     </div>
 
 
 
+    <!-- ======================================================
+    FEATURE 29
+    ACTUAL WEBSITE CANVAS
+    ====================================================== -->
+
+    <div class="sb-canvas-workspace"
+         id="sbCanvasWorkspace">
 
 
-    <!-- ==========================
-    FEATURE 5 - 10
-    ACTION BUTTONS
-    ========================== -->
+        <div class="sb-website-canvas sb-canvas-desktop"
+             id="sbWebsiteCanvas"
+             data-device="desktop">
 
 
-    <div class="sb-editor-actions">
+            <!-- WEBSITE CONTENT WILL BE CREATED HERE -->
+
+            <div class="sb-canvas-empty">
+
+                <div class="sb-canvas-empty-icon">
+                    +
+                </div>
+
+                <h3>
+                    Start Building
+                </h3>
+
+                <p>
+                    Drag an element from the left panel
+                    and drop it here.
+                </p>
+
+            </div>
 
 
-
-        <!-- Feature 5
-        Undo Button -->
-
-        <button 
-        class="sb-action-btn"
-        id="undoButton"
-        data-action="undo">
-
-            Undo
-
-        </button>
-
-
-
-
-
-        <!-- Feature 6
-        Redo Button -->
-
-        <button 
-        class="sb-action-btn"
-        id="redoButton"
-        data-action="redo">
-
-            Redo
-
-        </button>
-
-
-
-
-
-        <!-- Feature 7
-        Preview Button -->
-
-        <button 
-        class="sb-action-btn"
-        id="previewButton"
-        data-action="preview">
-
-            Preview
-
-        </button>
-
-
-
-
-
-        <!-- Feature 8
-        Save Button -->
-
-        <button 
-        class="sb-action-btn"
-        id="saveButton"
-        data-action="save">
-
-            Save
-
-        </button>
-
-
-
-
-
-        <!-- Feature 9
-        Export Button -->
-
-        <button 
-        class="sb-action-btn"
-        id="exportButton"
-        data-action="export">
-
-            Export
-
-        </button>
-
-
-
-
-
-        <!-- Feature 10
-        Settings Button -->
-
-        <button 
-        class="sb-action-btn"
-        id="settingsButton"
-        data-action="settings">
-
-            Settings
-
-        </button>
-
+        </div>
 
 
     </div>
 
 
+</main>
 
-</header>
-<!-- ==========================================
+
+
+<!-- ==========================================================
+FEATURE 30
+DRAG & DROP
+DROP INDICATOR
+========================================================== -->
+
+<div class="sb-drop-indicator"
+     id="sbDropIndicator">
+
+</div>
+
+
+
+<!-- ==========================================================
+FEATURE 31
+RESIZE HANDLES
+========================================================== -->
+
+<div class="sb-resize-box"
+     id="sbResizeBox"
+     hidden>
+
+
+    <span class="sb-resize-handle sb-resize-nw"
+          data-resize="nw"></span>
+
+    <span class="sb-resize-handle sb-resize-ne"
+          data-resize="ne"></span>
+
+    <span class="sb-resize-handle sb-resize-sw"
+          data-resize="sw"></span>
+
+    <span class="sb-resize-handle sb-resize-se"
+          data-resize="se"></span>
+
+
+</div>
+
+
+
+<!-- ==========================================================
+FEATURE 32
+MULTI SELECT
+SELECTION BOX
+========================================================== -->
+
+<div class="sb-multi-selection-box"
+     id="sbMultiSelectionBox"
+     hidden>
+
+</div>
+
+
+
+<!-- ==========================================================
+FEATURE 33
+ALIGNMENT GUIDES
+========================================================== -->
+
+<div class="sb-alignment-guide sb-guide-horizontal"
+     id="sbHorizontalGuide"
+     hidden>
+
+</div>
+
+
+<div class="sb-alignment-guide sb-guide-vertical"
+     id="sbVerticalGuide"
+     hidden>
+
+</div>
+
+
+
+
+    <!-- ==========================================================
 SMARTBAZAAR PRO
-NO CODE WEBSITE BUILDER
-LEFT PANEL
-FEATURE 11 - 20
-========================================== -->
+NO-CODE WEBSITE BUILDER
+PART 1 — BASIC EDITOR SHELL
+FEATURES: 29, 11, 34, 35, 50, 48, 92, 90, 91, 93, 100, 99
+========================================================== -->
 
 
-<aside class="sb-left-panel">
+<!-- ==========================================================
+FEATURE 11
+ADD ELEMENTS TAB
+========================================================== -->
+
+<aside class="sb-left-panel" id="sbLeftPanel">
+
+    <div class="sb-shell-tabs">
+
+        <button
+            class="sb-shell-tab active"
+            id="sbAddElementsTab"
+            data-shell-tab="elements">
+
+            <span>＋</span>
+            <strong>Add Elements</strong>
+
+        </button>
 
 
-
-    <!-- ==========================
-    FEATURE 11
-    ADD ELEMENTS TAB
-    ========================== -->
-
-
-    <div class="sb-panel-tab active">
-
-        <span class="tab-icon">
-            +
-        </span>
-
-        <span>
-            Add Elements
-        </span>
+        <!-- FEATURE 26 / 27 / 28 WILL CONNECT LATER -->
 
     </div>
 
 
-
-
-    <!-- ELEMENTS LIST -->
-
-    <div class="sb-elements-list">
-
-
-
-        <!-- ==========================
-        FEATURE 12
-        TEXT ELEMENT
-        ========================== -->
-
-
-        <button 
-        class="sb-element-item"
-        data-element="text">
-
-            <span>
-                T
-            </span>
-
-            Text
-
-        </button>
-
-
-
-
-
-        <!-- ==========================
-        FEATURE 13
-        HEADING ELEMENT
-        ========================== -->
-
-
-        <button 
-        class="sb-element-item"
-        data-element="heading">
-
-            <span>
-                H
-            </span>
-
-            Heading
-
-        </button>
-
-
-
-
-
-        <!-- ==========================
-        FEATURE 14
-        IMAGE ELEMENT
-        ========================== -->
-
-
-        <button 
-        class="sb-element-item"
-        data-element="image">
-
-            <span>
-                🖼
-            </span>
-
-            Image
-
-        </button>
-
-
-
-
-
-        <!-- ==========================
-        FEATURE 15
-        BUTTON ELEMENT
-        ========================== -->
-
-
-        <button 
-        class="sb-element-item"
-        data-element="button">
-
-            <span>
-                🔘
-            </span>
-
-            Button
-
-        </button>
-
-
-
-
-
-        <!-- ==========================
-        FEATURE 16
-        ICON ELEMENT
-        ========================== -->
-
-
-        <button 
-        class="sb-element-item"
-        data-element="icon">
-
-            <span>
-                ⭐
-            </span>
-
-            Icon
-
-        </button>
-
-
-
-
-
-        <!-- ==========================
-        FEATURE 17
-        VIDEO ELEMENT
-        ========================== -->
-
-
-        <button 
-        class="sb-element-item"
-        data-element="video">
-
-            <span>
-                ▶
-            </span>
-
-            Video
-
-        </button>
-
-
-
-
-
-        <!-- ==========================
-        FEATURE 18
-        CONTAINER ELEMENT
-        ========================== -->
-
-
-        <button 
-        class="sb-element-item"
-        data-element="container">
-
-            <span>
-                □
-            </span>
-
-            Container
-
-        </button>
-
-
-
-
-
-        <!-- ==========================
-        FEATURE 19
-        FLEX CONTAINER
-        ========================== -->
-
-
-        <button 
-        class="sb-element-item"
-        data-element="flex-container">
-
-            <span>
-                ↔
-            </span>
-
-            Flex Container
-
-        </button>
-
-
-
-
-
-        <!-- ==========================
-        FEATURE 20
-        GRID CONTAINER
-        ========================== -->
-
-
-        <button 
-        class="sb-element-item"
-        data-element="grid-container">
-
-            <span>
-                ▦
-            </span>
-
-            Grid Container
-
-        </button>
-
-
-
+    <!-- EXISTING FEATURES 12–25
+         SHOULD REMAIN INSIDE THIS AREA -->
+
+    <div class="sb-elements-list"
+         id="sbElementsList">
 
     </div>
-
-
 
 </aside>
 
 
-    <!-- ==========================================
+
+<!-- ==========================================================
+FEATURE 34 + 35
+RIGHT PANEL
+CONTENT / STYLE TABS
+========================================================== -->
+
+<aside class="sb-right-panel"
+       id="sbRightPanel">
+
+
+    <div class="sb-right-tabs">
+
+        <!-- FEATURE 34 -->
+
+        <button
+            class="sb-right-tab active"
+            id="sbContentTab"
+            data-right-tab="content">
+
+            Content
+
+        </button>
+
+
+        <!-- FEATURE 35 -->
+
+        <button
+            class="sb-right-tab"
+            id="sbStyleTab"
+            data-right-tab="style">
+
+            Style
+
+        </button>
+
+    </div>
+
+
+    <!-- CONTENT PANEL -->
+
+    <section
+        class="sb-right-section active"
+        id="sbContentPanel">
+
+        <div class="sb-panel-empty">
+
+            <span>✦</span>
+
+            <h3>Content</h3>
+
+            <p>
+                Select an element to edit its content.
+            </p>
+
+        </div>
+
+    </section>
+
+
+    <!-- STYLE PANEL -->
+
+    <section
+        class="sb-right-section"
+        id="sbStylePanel">
+
+        <div class="sb-panel-empty">
+
+            <span>◈</span>
+
+            <h3>Style</h3>
+
+            <p>
+                Select an element to edit its style.
+            </p>
+
+        </div>
+
+    </section>
+
+</aside>
+
+
+
+<!-- ==========================================================
+FEATURE 50
+LAYERS PANEL
+========================================================== -->
+
+<section
+    class="sb-layers-panel"
+    id="sbLayersPanel">
+
+
+    <div class="sb-layers-header">
+
+        <div>
+
+            <strong>Layers</strong>
+
+            <small id="sbLayerCount">
+                0 elements
+            </small>
+
+        </div>
+
+
+        <button
+            type="button"
+            id="sbRefreshLayers"
+            title="Refresh Layers">
+
+            ↻
+
+        </button>
+
+    </div>
+
+
+    <div
+        class="sb-layers-list"
+        id="sbLayersList">
+
+        <div class="sb-no-layers">
+
+            <span>◇</span>
+
+            <p>No elements yet</p>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- ==========================================================
+FEATURE 48
+ELEMENT ID / CLASS
+========================================================== -->
+
+<section
+    class="sb-element-identity"
+    id="sbElementIdentity">
+
+
+    <div class="sb-identity-title">
+
+        <span>⌘</span>
+
+        <strong>Element Identity</strong>
+
+    </div>
+
+
+    <label>
+
+        Element ID
+
+        <input
+            type="text"
+            id="sbElementId"
+            placeholder="my-element">
+
+    </label>
+
+
+    <label>
+
+        CSS Class
+
+        <input
+            type="text"
+            id="sbElementClass"
+            placeholder="my-class">
+
+    </label>
+
+
+    <button
+        type="button"
+        id="sbApplyIdentity">
+
+        Apply
+
+    </button>
+
+</section>
+
+
+
+<!-- ==========================================================
+FEATURE 92
+ELEMENT RENAME
+========================================================== -->
+
+<section
+    class="sb-element-rename"
+    id="sbElementRename">
+
+
+    <label>
+
+        Layer Name
+
+        <div class="sb-rename-row">
+
+            <input
+                type="text"
+                id="sbElementName"
+                placeholder="Element name">
+
+            <button
+                type="button"
+                id="sbRenameElement">
+
+                ✓
+
+            </button>
+
+        </div>
+
+    </label>
+
+</section>
+
+
+
+<!-- ==========================================================
+FEATURE 90 + 91
+ELEMENT LOCK / HIDE
+========================================================== -->
+
+<section
+    class="sb-element-controls"
+    id="sbElementControls">
+
+
+    <button
+        type="button"
+        id="sbLockElement"
+        data-state="unlocked">
+
+        <span>🔓</span>
+
+        Lock
+
+    </button>
+
+
+    <button
+        type="button"
+        id="sbHideElement"
+        data-state="visible">
+
+        <span>👁</span>
+
+        Hide
+
+    </button>
+
+</section>
+
+
+
+<!-- ==========================================================
+FEATURE 93
+ELEMENT SEARCH
+========================================================== -->
+
+<section
+    class="sb-element-search"
+    id="sbElementSearch">
+
+
+    <div class="sb-search-box">
+
+        <span>⌕</span>
+
+        <input
+            type="search"
+            id="sbSearchElements"
+            placeholder="Search elements...">
+
+    </div>
+
+</section>
+
+
+
+<!-- ==========================================================
+FEATURE 100
+GRID / GUIDES
+========================================================== -->
+
+<section
+    class="sb-grid-controls"
+    id="sbGridControls">
+
+
+    <div class="sb-grid-title">
+
+        <span>▦</span>
+
+        <strong>Grid / Guides</strong>
+
+    </div>
+
+
+    <label class="sb-toggle-row">
+
+        <span>Show Grid</span>
+
+        <input
+            type="checkbox"
+            id="sbShowGrid">
+
+        <span class="sb-toggle"></span>
+
+    </label>
+
+
+    <label class="sb-toggle-row">
+
+        <span>Show Guides</span>
+
+        <input
+            type="checkbox"
+            id="sbShowGuides">
+
+        <span class="sb-toggle"></span>
+
+    </label>
+
+</section>
+
+
+
+<!-- ==========================================================
+FEATURE 99
+RULERS
+========================================================== -->
+
+<div
+    class="sb-ruler-horizontal"
+    id="sbRulerHorizontal">
+
+</div>
+
+
+<div
+    class="sb-ruler-vertical"
+    id="sbRulerVertical">
+
+</div>
+
+
+
+    <!-- ==========================================================
 SMARTBAZAAR PRO
-NO CODE WEBSITE BUILDER
-LEFT PANEL
-FEATURE 21 - 28
-========================================== -->
+ELEMENTS SYSTEM
+FEATURE 12–25 + 141–144
+HTML
+========================================================== -->
 
 
-<!-- Divider Element -->
+<!-- ==========================================================
+FEATURE 12 — TEXT ELEMENT
+========================================================== -->
 
-<button 
-class="sb-element-item"
-data-element="divider">
+<button
+    class="sb-element-item"
+    data-element="text">
+    <span> T </span>
+    <strong>Text</strong>
+</button>
 
-    <span>
-        ━
-    </span>
 
-    Divider
+<!-- ==========================================================
+FEATURE 13 — HEADING ELEMENT
+========================================================== -->
 
+<button
+    class="sb-element-item"
+    data-element="heading">
+    <span> H </span>
+    <strong>Heading</strong>
+</button>
+
+
+<!-- ==========================================================
+FEATURE 14 — IMAGE ELEMENT
+========================================================== -->
+
+<button
+    class="sb-element-item"
+    data-element="image">
+    <span> 🖼 </span>
+    <strong>Image</strong>
+</button>
+
+
+<!-- ==========================================================
+FEATURE 15 — BUTTON ELEMENT
+========================================================== -->
+
+<button
+    class="sb-element-item"
+    data-element="button">
+    <span> 🔘 </span>
+    <strong>Button</strong>
+</button>
+
+
+<!-- ==========================================================
+FEATURE 16 — ICON ELEMENT
+========================================================== -->
+
+<button
+    class="sb-element-item"
+    data-element="icon">
+    <span> ★ </span>
+    <strong>Icon</strong>
+</button>
+
+
+<!-- ==========================================================
+FEATURE 17 — VIDEO ELEMENT
+========================================================== -->
+
+<button
+    class="sb-element-item"
+    data-element="video">
+    <span> ▶ </span>
+    <strong>Video</strong>
+</button>
+
+
+<!-- ==========================================================
+FEATURE 18 — CONTAINER ELEMENT
+========================================================== -->
+
+<button
+    class="sb-element-item"
+    data-element="container">
+    <span> □ </span>
+    <strong>Container</strong>
+</button>
+
+
+<!-- ==========================================================
+FEATURE 19 — FLEX CONTAINER
+========================================================== -->
+
+<button
+    class="sb-element-item"
+    data-element="flex">
+    <span> ⇄ </span>
+    <strong>Flex</strong>
+</button>
+
+
+<!-- ==========================================================
+FEATURE 20 — GRID CONTAINER
+========================================================== -->
+
+<button
+    class="sb-element-item"
+    data-element="grid">
+    <span> ▦ </span>
+    <strong>Grid</strong>
+</button>
+
+
+<!-- ==========================================================
+FEATURE 21 — DIVIDER ELEMENT
+========================================================== -->
+
+<button
+    class="sb-element-item"
+    data-element="divider">
+    <span> ━ </span>
+    <strong>Divider</strong>
+</button>
+
+
+<!-- ==========================================================
+FEATURE 22 — SPACER ELEMENT
+========================================================== -->
+
+<button
+    class="sb-element-item"
+    data-element="spacer">
+    <span> ↕ </span>
+    <strong>Spacer</strong>
+</button>
+
+
+<!-- ==========================================================
+FEATURE 23 — FORM ELEMENT
+========================================================== -->
+
+<button
+    class="sb-element-item"
+    data-element="form">
+    <span> 📝 </span>
+    <strong>Form</strong>
+</button>
+
+
+<!-- ==========================================================
+FEATURE 24 — PRODUCT CARD ELEMENT
+========================================================== -->
+
+<button
+    class="sb-element-item"
+    data-element="product-card">
+    <span> 🛒 </span>
+    <strong>Product Card</strong>
+</button>
+
+
+<!-- ==========================================================
+FEATURE 25 — NEWS GRID SECTION
+========================================================== -->
+
+<button
+    class="sb-element-item"
+    data-element="news-grid">
+    <span> 📰 </span>
+    <strong>News Grid</strong>
+</button>
+
+
+<!-- ==========================================================
+FEATURE 141 — TABLE WIDGET
+========================================================== -->
+
+<button
+    class="sb-element-item"
+    data-element="table">
+    <span> ▤ </span>
+    <strong>Table</strong>
+</button>
+
+
+<!-- ==========================================================
+FEATURE 142 — TABS WIDGET
+========================================================== -->
+
+<button
+    class="sb-element-item"
+    data-element="tabs">
+    <span> ▥ </span>
+    <strong>Tabs</strong>
+</button>
+
+
+<!-- ==========================================================
+FEATURE 143 — ACCORDION WIDGET
+========================================================== -->
+
+<button
+    class="sb-element-item"
+    data-element="accordion">
+    <span> ☰ </span>
+    <strong>Accordion</strong>
+</button>
+
+
+<!-- ==========================================================
+FEATURE 144 — SLIDER / CAROUSEL
+========================================================== -->
+
+<button
+    class="sb-element-item"
+    data-element="slider">
+    <span> ◀▶ </span>
+    <strong>Slider</strong>
 </button>
 
 
 
-<!-- Spacer Element -->
-
-<button 
-class="sb-element-item"
-data-element="spacer">
-
-    <span>
-        ↕
-    </span>
-
-    Spacer
-
-</button>
-
-
-
-<!-- Form Element -->
-
-<button 
-class="sb-element-item"
-data-element="form">
-
-    <span>
-        📝
-    </span>
-
-    Form
-
-</button>
-
-
-
-<!-- Product Card Element -->
-
-<button 
-class="sb-element-item"
-data-element="product-card">
-
-    <span>
-        🛒
-    </span>
-
-    Product Card
-
-</button>
-
-
-
-<!-- News Grid Section -->
-
-<button 
-class="sb-element-item"
-data-element="news-grid">
-
-    <span>
-        📰
-    </span>
-
-    News Grid
-
-</button>
-
-
-
-<!-- Pages Tab -->
-
-<div class="sb-panel-tab">
-
-    <span class="tab-icon">
-        📄
-    </span>
-
-    <span>
-        Pages
-    </span>
-
-</div>
-
-
-
-<!-- Templates Tab -->
-
-<div class="sb-panel-tab">
-
-    <span class="tab-icon">
-        🎨
-    </span>
-
-    <span>
-        Templates
-    </span>
-
-</div>
-
-
-
-<!-- Media Library Tab -->
-
-<div class="sb-panel-tab">
-
-    <span class="tab-icon">
-        🖼
-    </span>
-
-    <span>
-        Media Library
-    </span>
-
-</div>
+    
+    
     
   
   <script src="smartbazaar-editor.js"></script>
