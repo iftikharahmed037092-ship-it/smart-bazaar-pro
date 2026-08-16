@@ -8,7 +8,7 @@
 </head>
 <body>
 
-    <!-- 1. Header & Primary Controls (Module 2) -->
+    <!-- Header & Primary Controls -->
     <header id="editor-header">
         <div class="logo-area">
             <h2>⚡ SmartBazaar Pro</h2>
@@ -30,79 +30,103 @@
     <!-- Main Workspace Container -->
     <div id="editor-workspace">
 
-        <!-- 2. Left Sidebar: Add Elements & Layers (Module 1, 3, 5) -->
-        <aside id="left-sidebar">
-            <div class="sidebar-tabs">
-                <button class="tab-btn active" data-target="elements-tab">Elements</button>
-                <button class="tab-btn" data-target="layers-tab">Layers</button>
-            </div>
-            
-            <!-- Elements Tab Content -->
-            <div id="elements-tab" class="tab-content active">
-                <h3>Add Elements</h3>
-                <input type="text" id="element-search" placeholder="Search elements...">
-                <div class="elements-list">
-                    <div class="draggable-item" draggable="true" data-type="heading">📌 Heading Element</div>
-                    <div class="draggable-item" draggable="true" data-type="text">paragraph Text Element</div>
-                    <div class="draggable-item" draggable="true" data-type="button">🔘 Button Element</div>
-                    <div class="draggable-item" draggable="true" data-type="image">🖼 Image Element</div>
-                    <div class="draggable-item" draggable="true" data-type="container">📦 Container Box</div>
-                    <div class="draggable-item" draggable="true" data-type="product-card">🛍 Product Card</div>
+        <!-- Left Sidebar -->
+        <aside id="left-sidebar" class="sidebar">
+            <button class="toggle-sidebar-btn" id="toggle-left">◄</button>
+            <div class="sidebar-content-wrapper">
+                <div class="sidebar-tabs">
+                    <button class="tab-btn active" data-target="elements-tab">📌 Elements</button>
+                    <button class="tab-btn" data-target="layers-tab">📑 Layers</button>
                 </div>
-            </div>
+                
+                <div id="elements-tab" class="tab-content active">
+                    <h3>Add Elements</h3>
+                    <input type="text" id="element-search" placeholder="Search elements...">
+                    <div class="elements-list">
+                        <div class="draggable-item" data-type="heading">📌 Heading Element</div>
+                        <div class="draggable-item" data-type="text">📄 Paragraph Text Element</div>
+                        <div class="draggable-item" data-type="button">🔘 Button Element</div>
+                        <div class="draggable-item" data-type="image">🖼 Image Element</div>
+                        <div class="draggable-item" data-type="container">📦 Container Box</div>
+                        <div class="draggable-item" data-type="product-card">🛍 Product Card</div>
+                    </div>
+                </div>
 
-            <!-- Layers Tab Content -->
-            <div id="layers-tab class="tab-content">
-                <h3>Layers Tree</h3>
-                <div id="layers-tree-view">
-                    <!-- Dynamic Layers will be appended here via JS -->
+                <div id="layers-tab" class="tab-content">
+                    <h3>Layers Tree</h3>
+                    <div id="layers-tree-view">
+                        <p class="no-layers">No layers yet</p>
+                    </div>
                 </div>
             </div>
         </aside>
 
-        <!-- 3. Center: Live Preview Canvas (Module 1, 4) -->
+        <!-- Center: Live Preview Canvas -->
         <main id="canvas-container">
-            <div id="live-canvas">
-                <!-- Drop elements here -->
-                <div class="placeholder-text">Drag & Drop Elements Here to Build Your Page</div>
+            <div id="live-canvas" class="mode-mobile">
+                <div class="placeholder-text">Click elements from sidebar to build your page</div>
             </div>
         </main>
 
-        <!-- 4. Right Sidebar: Properties & Style Panel (Module 6, 7, 8, 9) -->
-        <aside id="right-sidebar">
-            <div class="sidebar-tabs">
-                <button class="tab-btn active" data-target="content-panel">Content</button>
-                <button class="tab-btn" data-target="style-panel">Style</button>
-            </div>
+        <!-- Right Sidebar -->
+        <aside id="right-sidebar" class="sidebar">
+            <button class="toggle-sidebar-btn" id="toggle-right">►</button>
+            <div class="sidebar-content-wrapper">
+                <div class="sidebar-tabs">
+                    <button class="tab-btn active" data-target="content-panel">Content</button>
+                    <button class="tab-btn" data-target="style-panel">Style</button>
+                </div>
 
-            <!-- Content Panel -->
-            <div id="content-panel" class="tab-content active">
-                <h3>Content Properties</h3>
-                <div class="prop-group">
-                    <label>Text Content</label>
-                    <input type="text" id="prop-text-input" placeholder="Enter text...">
+                <div id="content-panel" class="tab-content active">
+                    <h3>Content Properties</h3>
+                    <div class="prop-group">
+                        <label>Text Content</label>
+                        <input type="text" id="prop-text-input" placeholder="Select an element...">
+                    </div>
+                    <div class="prop-group">
+                        <label>Button Link / URL</label>
+                        <input type="text" id="prop-link-input" placeholder="e.g. https://google.com or page2.html">
+                    </div>
+                    <div class="prop-group action-buttons-group">
+                        <button id="btn-duplicate-el" class="sec-btn">📋 Duplicate</button>
+                        <button id="btn-delete-el" class="danger-btn">🗑 Delete</button>
+                    </div>
                 </div>
-            </div>
 
-            <!-- Style Panel -->
-            <div id="style-panel" class="tab-content">
-                <h3>Style & Design</h3>
-                <div class="prop-group">
-                    <label>Background Color</label>
-                    <input type="color" id="prop-bg-color">
-                </div>
-                <div class="prop-group">
-                    <label>Font Size (px)</label>
-                    <input type="number" id="prop-font-size">
-                </div>
-                <div class="prop-group">
-                    <label>Border Radius (px)</label>
-                    <input type="number" id="prop-border-radius">
+                <div id="style-panel" class="tab-content">
+                    <h3>Style & Design</h3>
+                    <div class="prop-group">
+                        <label>Background Color</label>
+                        <input type="color" id="prop-bg-color" value="#1e1e24">
+                    </div>
+                    <div class="prop-group">
+                        <label>Text Color</label>
+                        <input type="color" id="prop-text-color" value="#ffffff">
+                    </div>
+                    <div class="prop-group">
+                        <label>Font Size (px)</label>
+                        <input type="number" id="prop-font-size" value="14">
+                    </div>
+                    <div class="prop-group">
+                        <label>Border Radius (px)</label>
+                        <input type="number" id="prop-border-radius" value="6">
+                    </div>
+                    <div class="prop-group">
+                        <label>Margin (Outer Spacing)</label>
+                        <input type="number" id="prop-margin" placeholder="0">
+                    </div>
+                    <div class="prop-group">
+                        <label>Padding (Inner Spacing)</label>
+                        <input type="number" id="prop-padding" placeholder="12">
+                    </div>
                 </div>
             </div>
         </aside>
 
     </div>
+
+    <!-- Floating Back Button for Preview Mode -->
+    <button id="floating-back-btn">⬅ Back to Editor</button>
 
     <script src="smartbazaar-editor.js"></script>
 </body>
