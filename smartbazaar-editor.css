@@ -1,140 +1,87 @@
-/* ==========================================
+/* ==========================================================
 SMARTBAZAAR PRO
-NO CODE WEBSITE BUILDER
-HEADER BAR CSS
-FEATURE 1 - 10
-========================================== */
+EDITOR HEADER
+FEATURES 1 - 10
+========================================================== */
 
 
-/* ==========================
-HEADER MAIN
-========================== */
+/* ==========================================================
+ROOT
+========================================================== */
+
+:root{
+
+    --sb-primary:#6366f1;
+    --sb-primary-dark:#4f46e5;
+
+    --sb-bg:#0f172a;
+    --sb-bg-2:#111827;
+
+    --sb-white:#ffffff;
+    --sb-text:#e5e7eb;
+    --sb-muted:#94a3b8;
+
+    --sb-border:rgba(255,255,255,.09);
+
+    --sb-green:#22c55e;
+    --sb-orange:#f97316;
+
+}
+
+
+/* ==========================================================
+FEATURES 1 - 10
+MAIN EDITOR HEADER
+========================================================== */
 
 .sb-editor-header{
 
-    width:100%;
-
-    height:70px;
-
-    display:flex;
-
-    align-items:center;
-
-    justify-content:space-between;
-
-    gap:20px;
-
-    padding:0 25px;
-
-    background:
-    rgba(255,255,255,0.75);
-
-    backdrop-filter:blur(18px);
-
-    -webkit-backdrop-filter:blur(18px);
-
-    border-bottom:
-    1px solid rgba(0,0,0,0.08);
-
-    position:fixed;
+    position:sticky;
 
     top:0;
 
-    left:0;
+    z-index:10000;
 
-    z-index:9999;
+    width:100%;
 
-    box-shadow:
-    0 8px 25px rgba(0,0,0,0.08);
+    min-height:68px;
 
-    font-family:
-    "Poppins",
-    sans-serif;
+    box-sizing:border-box;
 
-}
+    display:grid;
 
-
-
-
-
-/* ==========================
-FEATURE 1
-LOGO
-========================== */
-
-
-.sb-editor-logo{
-
-    display:flex;
+    grid-template-columns:auto 1fr auto auto;
 
     align-items:center;
 
-    gap:12px;
+    gap:18px;
 
-    text-decoration:none;
-
-    color:#1b1b1b;
-
-    font-size:20px;
-
-    font-weight:700;
-
-    white-space:nowrap;
-
-}
-
-
-
-.sb-editor-logo img{
-
-    width:42px;
-
-    height:42px;
-
-    object-fit:contain;
-
-    border-radius:12px;
-
-    background:white;
-
-    padding:5px;
-
-    box-shadow:
-    0 5px 15px rgba(0,0,0,0.15);
-
-}
-
-
-
-
-
-.sb-editor-logo span{
+    padding:10px 16px;
 
     background:
-    linear-gradient(
-    135deg,
-    #ff7a00,
-    #ff005d,
-    #6a00ff
-    );
+        linear-gradient(
+            135deg,
+            #0f172a,
+            #111827 55%,
+            #172554
+        );
 
-    -webkit-background-clip:text;
+    border-bottom:1px solid var(--sb-border);
 
-    -webkit-text-fill-color:transparent;
+    box-shadow:
+        0 8px 30px rgba(0,0,0,.20);
 
 }
 
 
+/* ==========================================================
+FEATURE 1
+LOGO
+========================================================== */
 
+.sb-editor-logo{
 
-
-/* ==========================
-FEATURE 2,3,4
-DEVICE PREVIEW
-========================== */
-
-
-.sb-device-preview{
+    min-width:0;
 
     display:flex;
 
@@ -142,42 +89,287 @@ DEVICE PREVIEW
 
     gap:10px;
 
-    background:
-    rgba(255,255,255,0.6);
+    color:var(--sb-white);
 
-    padding:6px;
+    text-decoration:none;
 
-    border-radius:15px;
-
-    box-shadow:
-    inset 0 0 10px rgba(0,0,0,0.05);
+    white-space:nowrap;
 
 }
 
 
+/* LOGO MARK */
 
+.sb-logo-mark{
 
+    width:40px;
 
-.sb-device-btn{
+    height:40px;
 
-    border:none;
+    flex:0 0 40px;
 
-    outline:none;
+    display:flex;
 
-    cursor:pointer;
+    align-items:center;
 
-    padding:9px 15px;
+    justify-content:center;
 
     border-radius:12px;
 
+    color:#fff;
+
+    font-size:12px;
+
+    font-weight:800;
+
     background:
-    transparent;
+        linear-gradient(
+            135deg,
+            #2563eb,
+            #7c3aed,
+            #ec4899
+        );
 
-    color:#555;
+    box-shadow:
+        0 6px 18px rgba(99,102,241,.35);
 
-    font-size:14px;
+}
 
-    font-weight:600;
+
+/* LOGO TEXT */
+
+.sb-logo-text{
+
+    font-size:16px;
+
+    font-weight:700;
+
+    letter-spacing:.1px;
+
+}
+
+.sb-logo-text strong{
+
+    color:#818cf8;
+
+}
+
+
+/* ==========================================================
+FEATURES 2 - 4
+DEVICE PREVIEW
+========================================================== */
+
+.sb-device-preview{
+
+    justify-self:center;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    gap:5px;
+
+    padding:4px;
+
+    border:1px solid var(--sb-border);
+
+    border-radius:13px;
+
+    background:rgba(255,255,255,.045);
+
+}
+
+
+/* DEVICE BUTTON */
+
+.sb-device-btn{
+
+    height:38px;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    gap:7px;
+
+    padding:0 13px;
+
+    border:0;
+
+    border-radius:9px;
+
+    background:transparent;
+
+    color:var(--sb-muted);
+
+    font-size:12px;
+
+    font-weight:700;
+
+    cursor:pointer;
+
+    transition:
+        background .2s ease,
+        color .2s ease,
+        transform .2s ease;
+
+}
+
+.sb-device-btn:hover{
+
+    color:#fff;
+
+    background:rgba(255,255,255,.07);
+
+}
+
+.sb-device-btn.active{
+
+    color:#fff;
+
+    background:
+        linear-gradient(
+            135deg,
+            var(--sb-primary),
+            #7c3aed
+        );
+
+    box-shadow:
+        0 5px 15px rgba(99,102,241,.30);
+
+}
+
+.sb-device-icon{
+
+    font-size:13px;
+
+    line-height:1;
+
+}
+
+
+/* ==========================================================
+FEATURES 5 - 10
+ACTION BUTTONS
+========================================================== */
+
+.sb-editor-actions{
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:flex-end;
+
+    gap:6px;
+
+    min-width:0;
+
+}
+
+
+/* ACTION BUTTON */
+
+.sb-action-btn{
+
+    height:38px;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    gap:6px;
+
+    padding:0 11px;
+
+    border:1px solid var(--sb-border);
+
+    border-radius:10px;
+
+    background:rgba(255,255,255,.055);
+
+    color:var(--sb-text);
+
+    font-size:12px;
+
+    font-weight:700;
+
+    white-space:nowrap;
+
+    cursor:pointer;
+
+    transition:
+        transform .2s ease,
+        background .2s ease,
+        border-color .2s ease;
+
+}
+
+.sb-action-btn:hover{
+
+    transform:translateY(-1px);
+
+    background:rgba(255,255,255,.11);
+
+    border-color:rgba(255,255,255,.16);
+
+}
+
+.sb-action-btn:active{
+
+    transform:scale(.96);
+
+}
+
+
+/* SAVE */
+
+.sb-save-btn{
+
+    color:#fff;
+
+    border-color:rgba(34,197,94,.25);
+
+    background:
+        linear-gradient(
+            135deg,
+            #16a34a,
+            #22c55e
+        );
+
+}
+
+
+/* EXPORT */
+
+.sb-export-btn{
+
+    color:#fff;
+
+    border-color:rgba(249,115,22,.25);
+
+    background:
+        linear-gradient(
+            135deg,
+            #ea580c,
+            #f97316
+        );
+
+}
+
+
+/* ==========================================================
+STATUS
+========================================================== */
+
+.sb-editor-status{
 
     display:flex;
 
@@ -185,59 +377,500 @@ DEVICE PREVIEW
 
     gap:6px;
 
-    transition:
-    .3s ease;
+    color:var(--sb-muted);
+
+    font-size:11px;
+
+    font-weight:700;
+
+    white-space:nowrap;
 
 }
 
+.sb-status-dot{
 
+    width:7px;
 
+    height:7px;
 
+    border-radius:50%;
 
-.sb-device-btn:hover{
-
-
-    background:
-    rgba(0,0,0,0.06);
-
-    color:#111;
-
-}
-
-
-
-
-
-.sb-device-btn.active{
-
-
-    background:
-    linear-gradient(
-    135deg,
-    #2563eb,
-    #7c3aed
-    );
-
-    color:white;
+    background:var(--sb-green);
 
     box-shadow:
+        0 0 10px rgba(34,197,94,.8);
 
-    0 6px 15px
-    rgba(37,99,235,0.35);
+}
+
+
+/* ==========================================================
+PREVIEW OVERLAY
+FEATURE 7
+========================================================== */
+
+.sb-preview-overlay{
+
+    position:fixed;
+
+    inset:0;
+
+    z-index:20000;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    padding:20px;
+
+    background:rgba(2,6,23,.75);
+
+    backdrop-filter:blur(10px);
+
+}
+
+.sb-preview-overlay[hidden]{
+
+    display:none;
+
+}
+
+.sb-preview-window{
+
+    width:min(1100px,100%);
+
+    height:min(750px,90vh);
+
+    overflow:hidden;
+
+    border-radius:18px;
+
+    background:#fff;
+
+    box-shadow:
+        0 30px 80px rgba(0,0,0,.4);
+
+}
+
+.sb-preview-topbar{
+
+    height:54px;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:space-between;
+
+    padding:0 16px;
+
+    color:#fff;
+
+    background:#0f172a;
+
+}
+
+.sb-preview-close,
+.sb-settings-close{
+
+    width:34px;
+
+    height:34px;
+
+    border:0;
+
+    border-radius:9px;
+
+    color:#fff;
+
+    background:rgba(255,255,255,.1);
+
+    cursor:pointer;
+
+    font-size:20px;
+
+}
+
+.sb-preview-content{
+
+    height:calc(100% - 54px);
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    color:#64748b;
+
+}
+
+
+/* ==========================================================
+SETTINGS
+FEATURE 10
+========================================================== */
+
+.sb-settings-overlay{
+
+    position:fixed;
+
+    inset:0;
+
+    z-index:21000;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    padding:20px;
+
+    background:rgba(2,6,23,.72);
+
+    backdrop-filter:blur(10px);
+
+}
+
+.sb-settings-overlay[hidden]{
+
+    display:none;
+
+}
+
+.sb-settings-window{
+
+    width:min(430px,100%);
+
+    overflow:hidden;
+
+    border-radius:18px;
+
+    background:#fff;
+
+    box-shadow:
+        0 30px 80px rgba(0,0,0,.4);
+
+}
+
+.sb-settings-header{
+
+    min-height:56px;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:space-between;
+
+    padding:0 16px;
+
+    color:#fff;
+
+    background:#0f172a;
+
+}
+
+.sb-settings-body{
+
+    padding:18px;
+
+}
+
+.sb-setting-row{
+
+    min-height:48px;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:space-between;
+
+    border-bottom:1px solid #e5e7eb;
+
+    color:#1e293b;
+
+    font-size:14px;
+
+}
+
+
+/* ==========================================================
+TABLET
+EDITOR LAYOUT
+صرف EDITOR HEADER responsive ہوگا
+CANVAS DEVICE MODE اس سے متاثر نہیں ہوگا
+========================================================== */
+
+@media (max-width:1000px){
+
+    .sb-editor-header{
+
+        grid-template-columns:auto 1fr auto;
+
+        gap:10px;
+
+        padding:9px 12px;
+
+    }
+
+    .sb-device-preview{
+
+        justify-self:end;
+
+    }
+
+    .sb-editor-actions{
+
+        grid-column:1 / -1;
+
+        grid-row:2;
+
+        justify-content:flex-end;
+
+        overflow-x:auto;
+
+        padding-top:2px;
+
+    }
+
+    .sb-editor-status{
+
+        display:none;
+
+    }
+
+}
+
+
+/* ==========================================================
+MOBILE
+========================================================== */
+
+@media (max-width:600px){
+
+    .sb-editor-header{
+
+        position:sticky;
+
+        top:0;
+
+        min-height:auto;
+
+        display:flex;
+
+        flex-direction:column;
+
+        align-items:stretch;
+
+        gap:8px;
+
+        padding:8px;
+
+    }
+
+
+    /* LOGO */
+
+    .sb-editor-logo{
+
+        width:100%;
+
+        justify-content:flex-start;
+
+    }
+
+    .sb-logo-mark{
+
+        width:34px;
+
+        height:34px;
+
+        flex-basis:34px;
+
+        border-radius:10px;
+
+    }
+
+    .sb-logo-text{
+
+        font-size:14px;
+
+    }
+
+
+    /* DEVICES */
+
+    .sb-device-preview{
+
+        width:100%;
+
+        justify-self:stretch;
+
+        box-sizing:border-box;
+
+        display:grid;
+
+        grid-template-columns:repeat(3,1fr);
+
+        gap:4px;
+
+    }
+
+    .sb-device-btn{
+
+        width:100%;
+
+        padding:0 5px;
+
+        height:36px;
+
+        font-size:11px;
+
+    }
+
+
+    /* ACTIONS */
+
+    .sb-editor-actions{
+
+        width:100%;
+
+        display:grid;
+
+        grid-template-columns:
+            repeat(6,minmax(70px,1fr));
+
+        overflow-x:auto;
+
+        justify-content:flex-start;
+
+        gap:5px;
+
+        padding:0;
+
+    }
+
+    .sb-action-btn{
+
+        width:100%;
+
+        min-width:70px;
+
+        height:36px;
+
+        padding:0 7px;
+
+        font-size:10px;
+
+    }
+
+    .sb-editor-status{
+
+        display:flex;
+
+        justify-content:center;
+
+    }
+
+}
+
+
+/* ==========================================================
+VERY SMALL MOBILE
+========================================================== */
+
+@media (max-width:380px){
+
+    .sb-editor-actions{
+
+        grid-template-columns:
+            repeat(6,minmax(64px,1fr));
+
+    }
+
+    .sb-action-btn{
+
+        min-width:64px;
+
+        font-size:9px;
+
+    }
+
+    .sb-device-btn{
+
+        font-size:10px;
+
+    }
 
 }
 
 
 
+/* ==========================================================
+SMARTBAZAAR PRO
+CENTER CANVAS CSS
+FEATURES 29 - 33
+========================================================== */
 
 
-/* ==========================
-FEATURE 5 - 10
-ACTION BUTTONS
-========================== */
+/* ==========================================================
+FEATURE 29
+CANVAS AREA
+========================================================== */
+
+.sb-canvas-area{
+
+    position:relative;
+
+    flex:1;
+
+    min-width:0;
+
+    min-height:0;
+
+    display:flex;
+
+    flex-direction:column;
+
+    overflow:hidden;
+
+    background:#e9edf5;
+
+}
 
 
-.sb-editor-actions{
+/* ==========================================================
+CANVAS TOOLBAR
+========================================================== */
+
+.sb-canvas-toolbar{
+
+    height:46px;
+
+    flex:0 0 46px;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:space-between;
+
+    padding:0 16px;
+
+    box-sizing:border-box;
+
+    background:#ffffff;
+
+    border-bottom:1px solid #dce2ec;
+
+}
+
+
+.sb-canvas-title{
 
     display:flex;
 
@@ -245,255 +878,503 @@ ACTION BUTTONS
 
     gap:8px;
 
+    color:#1e293b;
+
+    font-size:13px;
+
+    font-weight:700;
+
 }
 
 
+.sb-canvas-live-dot{
 
+    width:8px;
 
+    height:8px;
 
-.sb-action-btn{
+    border-radius:50%;
 
-    border:none;
-
-    cursor:pointer;
-
-    padding:
-
-    10px 16px;
-
-    border-radius:12px;
-
-    background:white;
-
-    color:#333;
-
-    font-size:14px;
-
-    font-weight:600;
-
-    transition:.3s ease;
+    background:#22c55e;
 
     box-shadow:
-
-    0 4px 12px rgba(0,0,0,0.08);
-
-}
-
-
-
-
-
-.sb-action-btn:hover{
-
-
-    transform:
-    translateY(-2px);
-
-    background:
-
-    linear-gradient(
-    135deg,
-    #2563eb,
-    #7c3aed
-    );
-
-    color:white;
+        0 0 8px rgba(34,197,94,.65);
 
 }
 
 
+.sb-canvas-size{
 
+    padding:5px 10px;
 
+    border-radius:7px;
 
-/* SAVE BUTTON SPECIAL */
+    color:#64748b;
 
+    background:#f1f5f9;
 
-#saveButton{
+    font-size:11px;
 
-    background:
-
-    linear-gradient(
-    135deg,
-    #16a34a,
-    #22c55e
-    );
-
-    color:white;
+    font-weight:700;
 
 }
 
 
+/* ==========================================================
+CANVAS WORKSPACE
+========================================================== */
 
+.sb-canvas-workspace{
 
+    position:relative;
 
-/* EXPORT BUTTON */
+    flex:1;
 
+    min-height:0;
 
-#exportButton{
+    overflow:auto;
 
-    background:
+    display:flex;
 
-    linear-gradient(
-    135deg,
-    #f97316,
-    #ea580c
-    );
-
-    color:white;
-
-}
-
-
-
-
-
-/* SETTINGS BUTTON */
-
-
-#settingsButton{
-
-    background:
-
-    #111827;
-
-    color:white;
-
-}
-
-
-
-
-
-/* ==========================
-MOBILE RESPONSIVE
-========================== */
-
-
-@media(max-width:900px){
-
-
-.sb-editor-header{
-
-
-    height:auto;
-
-    flex-wrap:wrap;
-
-    padding:15px;
-
-
-}
-
-
-
-.sb-device-preview{
-
-
-    order:3;
-
-    width:100%;
+    align-items:flex-start;
 
     justify-content:center;
 
+    padding:35px;
+
+    box-sizing:border-box;
 
 }
 
 
+/* ==========================================================
+FEATURE 29
+WEBSITE CANVAS
+========================================================== */
 
-.sb-editor-actions{
+.sb-website-canvas{
 
+    position:relative;
 
-    overflow-x:auto;
+    flex:0 0 auto;
 
-    max-width:100%;
+    min-height:700px;
 
+    background:#ffffff;
+
+    box-shadow:
+        0 12px 35px rgba(15,23,42,.16);
+
+    transition:
+        width .25s ease,
+        min-height .25s ease;
 
 }
 
 
+/* ==========================================================
+DESKTOP CANVAS
+========================================================== */
+
+.sb-website-canvas.sb-canvas-desktop{
+
+    width:1200px;
+
+    max-width:none;
+
 }
 
 
+/* ==========================================================
+TABLET CANVAS
+========================================================== */
+
+.sb-website-canvas.sb-canvas-tablet{
+
+    width:768px;
+
+    max-width:none;
+
+}
 
 
+/* ==========================================================
+MOBILE CANVAS
+========================================================== */
 
-@media(max-width:500px){
+.sb-website-canvas.sb-canvas-mobile{
+
+    width:390px;
+
+    max-width:none;
+
+}
 
 
-.sb-editor-logo span{
+/* ==========================================================
+EMPTY CANVAS
+========================================================== */
+
+.sb-canvas-empty{
+
+    position:absolute;
+
+    top:50%;
+
+    left:50%;
+
+    width:280px;
+
+    transform:translate(-50%,-50%);
+
+    text-align:center;
+
+    pointer-events:none;
+
+}
+
+
+.sb-canvas-empty-icon{
+
+    width:54px;
+
+    height:54px;
+
+    margin:0 auto 14px;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    border-radius:16px;
+
+    color:#ffffff;
+
+    background:
+        linear-gradient(
+            135deg,
+            #6366f1,
+            #8b5cf6
+        );
+
+    font-size:28px;
+
+    box-shadow:
+        0 10px 25px rgba(99,102,241,.25);
+
+}
+
+
+.sb-canvas-empty h3{
+
+    margin:0 0 7px;
+
+    color:#1e293b;
+
+    font-size:18px;
+
+}
+
+
+.sb-canvas-empty p{
+
+    margin:0;
+
+    color:#94a3b8;
+
+    font-size:12px;
+
+    line-height:1.6;
+
+}
+
+
+/* ==========================================================
+FEATURE 30
+DROP INDICATOR
+========================================================== */
+
+.sb-drop-indicator{
+
+    position:absolute;
+
+    z-index:5000;
+
+    height:3px;
+
+    display:none;
+
+    border-radius:10px;
+
+    background:
+        linear-gradient(
+            90deg,
+            #6366f1,
+            #a855f7
+        );
+
+    box-shadow:
+        0 0 10px rgba(99,102,241,.65);
+
+    pointer-events:none;
+
+}
+
+
+/* ==========================================================
+FEATURE 31
+RESIZE BOX
+========================================================== */
+
+.sb-resize-box{
+
+    position:absolute;
+
+    z-index:6000;
+
+    border:1px solid #6366f1;
+
+    pointer-events:none;
+
+}
+
+
+.sb-resize-box[hidden]{
 
     display:none;
 
 }
 
 
+/* ==========================================================
+RESIZE HANDLES
+========================================================== */
 
-.sb-device-btn{
+.sb-resize-handle{
 
-    padding:8px;
+    position:absolute;
 
-    font-size:12px;
+    width:9px;
+
+    height:9px;
+
+    border:2px solid #ffffff;
+
+    border-radius:3px;
+
+    background:#6366f1;
+
+    box-sizing:border-box;
 
 }
 
 
+.sb-resize-nw{
 
-.sb-action-btn{
+    top:-6px;
 
-    padding:8px 12px;
+    left:-6px;
 
-    font-size:12px;
+    cursor:nwse-resize;
+
+}
+
+
+.sb-resize-ne{
+
+    top:-6px;
+
+    right:-6px;
+
+    cursor:nesw-resize;
 
 }
 
 
+.sb-resize-sw{
+
+    bottom:-6px;
+
+    left:-6px;
+
+    cursor:nesw-resize;
+
 }
 
-/* ==========================================
-SMARTBAZAAR PRO
-NO CODE WEBSITE BUILDER
-LEFT PANEL CSS
-FEATURE 11 - 20
-========================================== */
+
+.sb-resize-se{
+
+    right:-6px;
+
+    bottom:-6px;
+
+    cursor:nwse-resize;
+
+}
 
 
-/* ==========================
-LEFT PANEL MAIN
-========================== */
+/* ==========================================================
+FEATURE 32
+MULTI SELECT BOX
+========================================================== */
 
-.sb-left-panel{
+.sb-multi-selection-box{
 
-    width:260px;
+    position:absolute;
 
-    height:calc(100vh - 70px);
+    z-index:5500;
 
-    position:fixed;
+    border:1px dashed #6366f1;
 
-    top:70px;
+    background:rgba(99,102,241,.08);
+
+    pointer-events:none;
+
+}
+
+
+.sb-multi-selection-box[hidden]{
+
+    display:none;
+
+}
+
+
+/* ==========================================================
+FEATURE 33
+ALIGNMENT GUIDES
+========================================================== */
+
+.sb-alignment-guide{
+
+    position:absolute;
+
+    z-index:7000;
+
+    display:none;
+
+    pointer-events:none;
+
+}
+
+
+.sb-alignment-guide[hidden]{
+
+    display:none;
+
+}
+
+
+.sb-guide-horizontal{
 
     left:0;
 
-    background:
+    width:100%;
 
-    rgba(255,255,255,0.85);
+    height:1px;
 
-    backdrop-filter:blur(18px);
+    background:#ef4444;
 
-    -webkit-backdrop-filter:blur(18px);
+}
 
-    border-right:
 
-    1px solid rgba(0,0,0,0.08);
+.sb-guide-vertical{
 
-    padding:20px 15px;
+    top:0;
 
-    overflow-y:auto;
+    width:1px;
 
-    z-index:9000;
+    height:100%;
 
-    box-shadow:
+    background:#ef4444;
 
-    5px 0 25px rgba(0,0,0,0.08);
+}
+
+
+/* ==========================================================
+CANVAS GRID
+========================================================== */
+
+.sb-canvas-workspace{
+
+    background-color:#eef2f7;
+
+    background-image:
+        linear-gradient(
+            rgba(100,116,139,.08) 1px,
+            transparent 1px
+        ),
+        linear-gradient(
+            90deg,
+            rgba(100,116,139,.08) 1px,
+            transparent 1px
+        );
+
+    background-size:
+        20px 20px;
+
+}
+
+
+/* ==========================================================
+TABLET
+========================================================== */
+
+@media(max-width:1000px){
+
+    .sb-canvas-workspace{
+
+        padding:25px;
+
+    }
+
+}
+
+
+/* ==========================================================
+MOBILE
+========================================================== */
+
+@media(max-width:600px){
+
+    .sb-canvas-toolbar{
+
+        padding:0 10px;
+
+    }
+
+
+    .sb-canvas-workspace{
+
+        padding:20px;
+
+        justify-content:center;
+
+    }
+
+
+    .sb-website-canvas.sb-canvas-mobile{
+
+        width:390px;
+
+    }
+
+}
+
+
+/* ==========================================================
+VERY SMALL MOBILE
+========================================================== */
+
+@media(max-width:420px){
+
+    .sb-website-canvas.sb-canvas-mobile{
+
+        width:360px;
+
+    }
 
 }
 
@@ -501,17 +1382,1104 @@ LEFT PANEL MAIN
 
 
 
-/* ==========================
+
+
+
+
+/* ==========================================================
+SMARTBAZAAR PRO
+EDITOR SHELL CSS
+PART 1
+FEATURES 29, 11, 34, 35, 50, 48, 92, 90, 91, 93, 100, 99
+========================================================== */
+
+
+/* ==========================================================
+EDITOR SHELL BASE
+========================================================== */
+
+.sb-left-panel,
+.sb-right-panel,
+.sb-layers-panel,
+.sb-element-identity,
+.sb-element-rename,
+.sb-element-controls,
+.sb-element-search,
+.sb-grid-controls{
+
+    box-sizing:border-box;
+
+    font-family:
+        Inter,
+        system-ui,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        sans-serif;
+
+}
+
+
+/* ==========================================================
 FEATURE 11
-ADD ELEMENTS TAB
-========================== */
+ADD ELEMENTS
+========================================================== */
+
+.sb-left-panel{
+
+    width:250px;
+
+    min-width:250px;
+
+    height:100%;
+
+    background:#ffffff;
+
+    border-right:1px solid #e2e8f0;
+
+    display:flex;
+
+    flex-direction:column;
+
+    overflow:hidden;
+
+}
 
 
-.sb-panel-tab{
+.sb-shell-tabs{
+
+    padding:10px;
+
+    border-bottom:1px solid #e2e8f0;
+
+}
+
+
+.sb-shell-tab{
 
     width:100%;
 
+    height:42px;
+
+    border:0;
+
+    border-radius:10px;
+
+    background:#f1f5f9;
+
+    color:#64748b;
+
+    display:flex;
+
+    align-items:center;
+
+    gap:9px;
+
+    padding:0 13px;
+
+    cursor:pointer;
+
+    transition:.2s ease;
+
+}
+
+
+.sb-shell-tab span{
+
+    font-size:20px;
+
+}
+
+
+.sb-shell-tab.active{
+
+    color:#ffffff;
+
+    background:
+        linear-gradient(
+            135deg,
+            #4f46e5,
+            #7c3aed
+        );
+
+    box-shadow:
+        0 7px 18px
+        rgba(79,70,229,.25);
+
+}
+
+
+/* ==========================================================
+FEATURE 34 + 35
+RIGHT PANEL
+========================================================== */
+
+.sb-right-panel{
+
+    width:300px;
+
+    min-width:300px;
+
+    height:100%;
+
+    background:#ffffff;
+
+    border-left:1px solid #e2e8f0;
+
+    display:flex;
+
+    flex-direction:column;
+
+    overflow:hidden;
+
+}
+
+
+.sb-right-tabs{
+
+    height:50px;
+
+    display:flex;
+
+    align-items:stretch;
+
+    border-bottom:1px solid #e2e8f0;
+
+}
+
+
+.sb-right-tab{
+
+    position:relative;
+
+    flex:1;
+
+    border:0;
+
+    background:transparent;
+
+    color:#64748b;
+
+    font-size:13px;
+
+    font-weight:700;
+
+    cursor:pointer;
+
+}
+
+
+.sb-right-tab.active{
+
+    color:#4f46e5;
+
+}
+
+
+.sb-right-tab.active::after{
+
+    content:"";
+
+    position:absolute;
+
+    left:18px;
+
+    right:18px;
+
+    bottom:-1px;
+
+    height:3px;
+
+    border-radius:5px 5px 0 0;
+
+    background:#6366f1;
+
+}
+
+
+.sb-right-section{
+
+    display:none;
+
+    flex:1;
+
+    overflow:auto;
+
+}
+
+
+.sb-right-section.active{
+
+    display:block;
+
+}
+
+
+.sb-panel-empty{
+
+    padding:45px 25px;
+
+    text-align:center;
+
+    color:#94a3b8;
+
+}
+
+
+.sb-panel-empty > span{
+
+    display:flex;
+
+    width:48px;
+
     height:48px;
+
+    margin:0 auto 14px;
+
+    align-items:center;
+
+    justify-content:center;
+
+    border-radius:14px;
+
+    color:#6366f1;
+
+    background:#eef2ff;
+
+    font-size:22px;
+
+}
+
+
+.sb-panel-empty h3{
+
+    margin:0 0 7px;
+
+    color:#334155;
+
+    font-size:15px;
+
+}
+
+
+.sb-panel-empty p{
+
+    margin:0;
+
+    font-size:12px;
+
+    line-height:1.6;
+
+}
+
+
+/* ==========================================================
+FEATURE 50
+LAYERS PANEL
+========================================================== */
+
+.sb-layers-panel{
+
+    width:250px;
+
+    background:#ffffff;
+
+    border:1px solid #e2e8f0;
+
+    border-radius:14px;
+
+    overflow:hidden;
+
+}
+
+
+.sb-layers-header{
+
+    height:52px;
+
+    padding:0 13px;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:space-between;
+
+    border-bottom:1px solid #e2e8f0;
+
+}
+
+
+.sb-layers-header strong{
+
+    display:block;
+
+    color:#1e293b;
+
+    font-size:13px;
+
+}
+
+
+.sb-layers-header small{
+
+    display:block;
+
+    margin-top:2px;
+
+    color:#94a3b8;
+
+    font-size:10px;
+
+}
+
+
+.sb-layers-header button{
+
+    width:30px;
+
+    height:30px;
+
+    border:0;
+
+    border-radius:8px;
+
+    background:#f1f5f9;
+
+    color:#64748b;
+
+    cursor:pointer;
+
+}
+
+
+.sb-layers-list{
+
+    max-height:300px;
+
+    overflow:auto;
+
+    padding:7px;
+
+}
+
+
+.sb-no-layers{
+
+    padding:25px 10px;
+
+    text-align:center;
+
+    color:#94a3b8;
+
+}
+
+
+.sb-no-layers span{
+
+    font-size:25px;
+
+}
+
+
+.sb-no-layers p{
+
+    margin:7px 0 0;
+
+    font-size:11px;
+
+}
+
+
+.sb-layer-item{
+
+    min-height:38px;
+
+    padding:0 8px;
+
+    margin-bottom:3px;
+
+    display:flex;
+
+    align-items:center;
+
+    gap:8px;
+
+    border-radius:8px;
+
+    color:#475569;
+
+    font-size:11px;
+
+    cursor:pointer;
+
+}
+
+
+.sb-layer-item:hover{
+
+    background:#f8fafc;
+
+}
+
+
+.sb-layer-item.active{
+
+    color:#4f46e5;
+
+    background:#eef2ff;
+
+}
+
+
+.sb-layer-icon{
+
+    width:25px;
+
+    text-align:center;
+
+}
+
+
+.sb-layer-name{
+
+    flex:1;
+
+    overflow:hidden;
+
+    white-space:nowrap;
+
+    text-overflow:ellipsis;
+
+}
+
+
+/* ==========================================================
+FEATURE 48
+ELEMENT ID / CLASS
+========================================================== */
+
+.sb-element-identity{
+
+    padding:14px;
+
+    background:#ffffff;
+
+    border:1px solid #e2e8f0;
+
+    border-radius:14px;
+
+}
+
+
+.sb-identity-title{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:8px;
+
+    margin-bottom:13px;
+
+    color:#334155;
+
+    font-size:12px;
+
+}
+
+
+.sb-identity-title span{
+
+    color:#6366f1;
+
+}
+
+
+.sb-element-identity label,
+.sb-element-rename label{
+
+    display:block;
+
+    margin-bottom:10px;
+
+    color:#64748b;
+
+    font-size:10px;
+
+    font-weight:700;
+
+}
+
+
+.sb-element-identity input,
+.sb-element-rename input{
+
+    width:100%;
+
+    height:34px;
+
+    margin-top:5px;
+
+    padding:0 10px;
+
+    box-sizing:border-box;
+
+    border:1px solid #dbe2ea;
+
+    border-radius:8px;
+
+    outline:none;
+
+    background:#f8fafc;
+
+    color:#334155;
+
+    font-size:11px;
+
+}
+
+
+.sb-element-identity input:focus,
+.sb-element-rename input:focus{
+
+    border-color:#818cf8;
+
+    background:#ffffff;
+
+    box-shadow:
+        0 0 0 3px
+        rgba(99,102,241,.08);
+
+}
+
+
+.sb-element-identity > button{
+
+    width:100%;
+
+    height:34px;
+
+    border:0;
+
+    border-radius:8px;
+
+    color:#ffffff;
+
+    background:#6366f1;
+
+    font-size:11px;
+
+    font-weight:700;
+
+    cursor:pointer;
+
+}
+
+
+/* ==========================================================
+FEATURE 92
+ELEMENT RENAME
+========================================================== */
+
+.sb-element-rename{
+
+    padding:14px;
+
+    background:#ffffff;
+
+    border:1px solid #e2e8f0;
+
+    border-radius:14px;
+
+}
+
+
+.sb-rename-row{
+
+    display:flex;
+
+    gap:6px;
+
+}
+
+
+.sb-rename-row input{
+
+    flex:1;
+
+}
+
+
+.sb-rename-row button{
+
+    width:36px;
+
+    height:34px;
+
+    margin-top:5px;
+
+    border:0;
+
+    border-radius:8px;
+
+    color:#ffffff;
+
+    background:#22c55e;
+
+    cursor:pointer;
+
+}
+
+
+/* ==========================================================
+FEATURE 90 + 91
+LOCK / HIDE
+========================================================== */
+
+.sb-element-controls{
+
+    display:flex;
+
+    gap:7px;
+
+    padding:10px;
+
+    background:#ffffff;
+
+    border:1px solid #e2e8f0;
+
+    border-radius:14px;
+
+}
+
+
+.sb-element-controls button{
+
+    flex:1;
+
+    height:36px;
+
+    border:1px solid #e2e8f0;
+
+    border-radius:9px;
+
+    background:#f8fafc;
+
+    color:#64748b;
+
+    font-size:10px;
+
+    font-weight:700;
+
+    cursor:pointer;
+
+}
+
+
+.sb-element-controls button.active{
+
+    color:#4f46e5;
+
+    border-color:#c7d2fe;
+
+    background:#eef2ff;
+
+}
+
+
+/* ==========================================================
+FEATURE 93
+ELEMENT SEARCH
+========================================================== */
+
+.sb-element-search{
+
+    padding:10px;
+
+    background:#ffffff;
+
+    border:1px solid #e2e8f0;
+
+    border-radius:14px;
+
+}
+
+
+.sb-search-box{
+
+    height:36px;
+
+    display:flex;
+
+    align-items:center;
+
+    gap:8px;
+
+    padding:0 10px;
+
+    box-sizing:border-box;
+
+    border:1px solid #e2e8f0;
+
+    border-radius:9px;
+
+    background:#f8fafc;
+
+}
+
+
+.sb-search-box span{
+
+    color:#94a3b8;
+
+    font-size:18px;
+
+}
+
+
+.sb-search-box input{
+
+    width:100%;
+
+    border:0;
+
+    outline:0;
+
+    background:transparent;
+
+    color:#334155;
+
+    font-size:11px;
+
+}
+
+
+/* ==========================================================
+FEATURE 100
+GRID / GUIDES
+========================================================== */
+
+.sb-grid-controls{
+
+    padding:13px;
+
+    background:#ffffff;
+
+    border:1px solid #e2e8f0;
+
+    border-radius:14px;
+
+}
+
+
+.sb-grid-title{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:8px;
+
+    margin-bottom:10px;
+
+    color:#334155;
+
+    font-size:12px;
+
+}
+
+
+.sb-grid-title span{
+
+    color:#6366f1;
+
+}
+
+
+.sb-toggle-row{
+
+    position:relative;
+
+    height:34px;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:space-between;
+
+    color:#64748b;
+
+    font-size:11px;
+
+}
+
+
+.sb-toggle-row input{
+
+    display:none;
+
+}
+
+
+.sb-toggle{
+
+    width:35px;
+
+    height:19px;
+
+    border-radius:20px;
+
+    background:#cbd5e1;
+
+    cursor:pointer;
+
+    transition:.2s ease;
+
+}
+
+
+.sb-toggle::after{
+
+    content:"";
+
+    display:block;
+
+    width:15px;
+
+    height:15px;
+
+    margin:2px;
+
+    border-radius:50%;
+
+    background:#ffffff;
+
+    transition:.2s ease;
+
+}
+
+
+.sb-toggle-row input:checked + .sb-toggle{
+
+    background:#6366f1;
+
+}
+
+
+.sb-toggle-row input:checked + .sb-toggle::after{
+
+    transform:translateX(16px);
+
+}
+
+
+/* ==========================================================
+FEATURE 99
+RULERS
+========================================================== */
+
+.sb-ruler-horizontal{
+
+    position:absolute;
+
+    z-index:4000;
+
+    top:0;
+
+    left:0;
+
+    right:0;
+
+    height:20px;
+
+    display:none;
+
+    pointer-events:none;
+
+    border-bottom:1px solid #cbd5e1;
+
+    background-color:#f8fafc;
+
+    background-image:
+        repeating-linear-gradient(
+            90deg,
+            transparent 0,
+            transparent 9px,
+            #94a3b8 10px
+        );
+
+}
+
+
+.sb-ruler-vertical{
+
+    position:absolute;
+
+    z-index:4000;
+
+    top:0;
+
+    left:0;
+
+    width:20px;
+
+    bottom:0;
+
+    display:none;
+
+    pointer-events:none;
+
+    border-right:1px solid #cbd5e1;
+
+    background-color:#f8fafc;
+
+    background-image:
+        repeating-linear-gradient(
+            0deg,
+            transparent 0,
+            transparent 9px,
+            #94a3b8 10px
+        );
+
+}
+
+
+.sb-rulers-active .sb-ruler-horizontal,
+.sb-rulers-active .sb-ruler-vertical{
+
+    display:block;
+
+}
+
+
+/* ==========================================================
+FEATURE 100
+CANVAS GRID MODE
+========================================================== */
+
+.sb-grid-visible{
+
+    background-image:
+        linear-gradient(
+            rgba(99,102,241,.10) 1px,
+            transparent 1px
+        ),
+        linear-gradient(
+            90deg,
+            rgba(99,102,241,.10) 1px,
+            transparent 1px
+        ) !important;
+
+    background-size:
+        20px 20px !important;
+
+}
+
+
+/* ==========================================================
+HIDDEN ELEMENT
+FEATURE 91
+========================================================== */
+
+.sb-element-hidden{
+
+    opacity:.25;
+
+    outline:
+        1px dashed #ef4444;
+
+}
+
+
+/* ==========================================================
+LOCKED ELEMENT
+FEATURE 90
+========================================================== */
+
+.sb-element-locked{
+
+    cursor:not-allowed !important;
+
+    outline:
+        1px dashed #f59e0b;
+
+}
+
+
+/* ==========================================================
+MOBILE
+========================================================== */
+
+@media(max-width:900px){
+
+    .sb-left-panel{
+
+        width:220px;
+
+        min-width:220px;
+
+    }
+
+
+    .sb-right-panel{
+
+        width:260px;
+
+        min-width:260px;
+
+    }
+
+}
+
+
+@media(max-width:650px){
+
+    .sb-left-panel{
+
+        width:190px;
+
+        min-width:190px;
+
+    }
+
+
+    .sb-right-panel{
+
+        width:230px;
+
+        min-width:230px;
+
+    }
+
+}
+
+
+
+
+
+
+
+
+
+/* ==========================================================
+SMARTBAZAAR PRO
+ELEMENTS SYSTEM
+FEATURE 12–25 + 141–144
+CSS
+========================================================== */
+
+
+/* ==========================================================
+ELEMENT LIST
+========================================================== */
+
+.sb-element-item{
+
+    width:100%;
+
+    min-height:52px;
 
     display:flex;
 
@@ -519,73 +2487,58 @@ ADD ELEMENTS TAB
 
     gap:12px;
 
-    padding:0 18px;
+    padding:10px 14px;
+
+    margin-bottom:8px;
+
+    border:1px solid rgba(100,110,150,.12);
 
     border-radius:14px;
 
+    background:rgba(255,255,255,.75);
+
+    color:#172033;
+
     cursor:pointer;
 
-    font-size:15px;
+    transition:
+        transform .18s ease,
+        background .18s ease,
+        box-shadow .18s ease,
+        border-color .18s ease;
 
-    font-weight:700;
+    text-align:left;
 
-    color:#555;
-
-    background:#f3f4f6;
-
-    transition:.3s ease;
-
-    margin-bottom:18px;
-
+    font-family:inherit;
 }
 
 
+.sb-element-item:hover{
 
+    transform:translateY(-2px);
 
+    background:#ffffff;
 
-.sb-panel-tab:hover{
-
-    background:#e5e7eb;
-
-}
-
-
-
-
-
-.sb-panel-tab.active{
-
-
-    color:white;
-
-
-    background:
-
-    linear-gradient(
-    135deg,
-    #2563eb,
-    #7c3aed
-    );
-
+    border-color:rgba(99,75,235,.30);
 
     box-shadow:
-
-    0 8px 20px
-    rgba(37,99,235,.35);
-
-
+        0 8px 20px rgba(40,30,100,.10);
 }
 
 
+.sb-element-item:active{
+
+    transform:scale(.97);
+}
 
 
+.sb-element-item span{
 
-.tab-icon{
+    width:34px;
 
+    height:34px;
 
-    width:28px;
-
-    height:28px;
+    min-width:34px;
 
     display:flex;
 
@@ -593,29 +2546,334 @@ ADD ELEMENTS TAB
 
     justify-content:center;
 
-    border-radius:50%;
+    border-radius:10px;
 
-    background:white;
+    background:linear-gradient(
+        135deg,
+        #6366f1,
+        #8b5cf6
+    );
 
-    color:#2563eb;
+    color:#ffffff;
 
-    font-size:20px;
+    font-size:16px;
 
-    font-weight:bold;
+    font-weight:800;
 
-
+    box-shadow:
+        0 5px 14px rgba(99,102,241,.22);
 }
 
 
+.sb-element-item strong{
+
+    font-size:13px;
+
+    font-weight:700;
+
+    color:#25304a;
+}
 
 
+/* ==========================================================
+EDITOR CANVAS ELEMENTS
+========================================================== */
 
-/* ==========================
-ELEMENTS LIST
-========================== */
+.sb-canvas-element{
+
+    position:relative;
+
+    box-sizing:border-box;
+
+    cursor:pointer;
+
+    transition:
+        outline .15s ease,
+        box-shadow .15s ease;
+}
 
 
-.sb-elements-list{
+.sb-canvas-element:hover{
+
+    outline:
+        1px dashed
+        rgba(99,102,241,.55);
+}
+
+
+.sb-canvas-element.sb-selected{
+
+    outline:
+        2px solid
+        #6366f1;
+
+    outline-offset:2px;
+
+    box-shadow:
+        0 0 0 4px
+        rgba(99,102,241,.10);
+}
+
+
+/* ==========================================================
+FEATURE 12 — TEXT
+========================================================== */
+
+.sb-el-text{
+
+    padding:10px;
+
+    font-size:16px;
+
+    line-height:1.6;
+
+    color:#273248;
+}
+
+
+/* ==========================================================
+FEATURE 13 — HEADING
+========================================================== */
+
+.sb-el-heading{
+
+    padding:10px;
+
+    margin:0;
+
+    color:#111827;
+
+    line-height:1.25;
+}
+
+
+/* ==========================================================
+FEATURE 14 — IMAGE
+========================================================== */
+
+.sb-el-image{
+
+    display:block;
+
+    width:100%;
+
+    max-width:100%;
+
+    height:auto;
+
+    border-radius:12px;
+
+    object-fit:cover;
+}
+
+
+/* ==========================================================
+FEATURE 15 — BUTTON
+========================================================== */
+
+.sb-el-button{
+
+    display:inline-flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    padding:12px 22px;
+
+    border:0;
+
+    border-radius:10px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #6366f1,
+            #8b5cf6
+        );
+
+    color:#ffffff;
+
+    font-weight:700;
+
+    cursor:pointer;
+}
+
+
+/* ==========================================================
+FEATURE 16 — ICON
+========================================================== */
+
+.sb-el-icon{
+
+    width:46px;
+
+    height:46px;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    border-radius:12px;
+
+    background:#f1f3ff;
+
+    color:#6366f1;
+
+    font-size:24px;
+}
+
+
+/* ==========================================================
+FEATURE 17 — VIDEO
+========================================================== */
+
+.sb-el-video{
+
+    display:block;
+
+    width:100%;
+
+    max-width:100%;
+
+    border-radius:14px;
+
+    background:#111827;
+}
+
+
+/* ==========================================================
+FEATURE 18 — CONTAINER
+========================================================== */
+
+.sb-el-container{
+
+    min-height:100px;
+
+    width:100%;
+
+    padding:20px;
+
+    border:
+        1px dashed
+        #cbd5e1;
+
+    border-radius:14px;
+
+    background:
+        rgba(248,250,252,.7);
+}
+
+
+/* ==========================================================
+FEATURE 19 — FLEX
+========================================================== */
+
+.sb-el-flex{
+
+    display:flex;
+
+    flex-direction:row;
+
+    align-items:center;
+
+    gap:15px;
+
+    width:100%;
+
+    min-height:80px;
+
+    padding:15px;
+
+    border:
+        1px dashed
+        #cbd5e1;
+
+    border-radius:14px;
+}
+
+
+/* ==========================================================
+FEATURE 20 — GRID
+========================================================== */
+
+.sb-el-grid{
+
+    display:grid;
+
+    grid-template-columns:
+        repeat(2,minmax(0,1fr));
+
+    gap:15px;
+
+    width:100%;
+
+    min-height:100px;
+
+    padding:15px;
+
+    border:
+        1px dashed
+        #cbd5e1;
+
+    border-radius:14px;
+}
+
+
+/* ==========================================================
+FEATURE 21 — DIVIDER
+========================================================== */
+
+.sb-el-divider{
+
+    width:100%;
+
+    height:1px;
+
+    margin:15px 0;
+
+    background:
+        linear-gradient(
+            90deg,
+            transparent,
+            #cbd5e1,
+            transparent
+        );
+}
+
+
+/* ==========================================================
+FEATURE 22 — SPACER
+========================================================== */
+
+.sb-el-spacer{
+
+    width:100%;
+
+    height:60px;
+
+    border:
+        1px dashed
+        #cbd5e1;
+
+    background:
+        repeating-linear-gradient(
+            45deg,
+            rgba(99,102,241,.03),
+            rgba(99,102,241,.03) 5px,
+            transparent 5px,
+            transparent 10px
+        );
+}
+
+
+/* ==========================================================
+FEATURE 23 — FORM
+========================================================== */
+
+.sb-el-form{
 
     display:flex;
 
@@ -623,532 +2881,419 @@ ELEMENTS LIST
 
     gap:12px;
 
-}
-
-
-
-
-
-/* ==========================
-FEATURE 12 - 20
-ELEMENT BUTTONS
-========================== */
-
-
-.sb-element-item{
-
-
-    width:100%;
-
-
-    height:52px;
-
-
-    display:flex;
-
-
-    align-items:center;
-
-
-    gap:15px;
-
-
-    border:none;
-
-
-    outline:none;
-
-
-    cursor:pointer;
-
-
-    padding:0 16px;
-
+    padding:20px;
 
     border-radius:14px;
 
+    background:#ffffff;
 
-    background:white;
-
-
-    color:#333;
-
-
-    font-size:14px;
-
-
-    font-weight:600;
-
-
-    text-align:left;
-
-
-    transition:.3s ease;
-
-
-    box-shadow:
-
-
-    0 4px 12px rgba(0,0,0,.06);
-
-
-
+    border:1px solid #e5e7eb;
 }
 
 
-
-
-
-.sb-element-item span{
-
-
-    width:30px;
-
-
-    height:30px;
-
-
-    display:flex;
-
-
-    align-items:center;
-
-
-    justify-content:center;
-
-
-    border-radius:10px;
-
-
-    background:
-
-
-    linear-gradient(
-    135deg,
-    #eef2ff,
-    #ddd6fe
-    );
-
-
-    color:#4f46e5;
-
-
-    font-size:16px;
-
-
-    font-weight:700;
-
-
-}
-
-
-
-
-
-.sb-element-item:hover{
-
-
-    transform:
-
-    translateX(5px);
-
-
-    background:
-
-
-    linear-gradient(
-    135deg,
-    #2563eb,
-    #7c3aed
-    );
-
-
-    color:white;
-
-
-}
-
-
-
-
-
-.sb-element-item:hover span{
-
-
-    background:white;
-
-
-    color:#2563eb;
-
-
-}
-
-
-
-
-
-/* ==========================
-SCROLLBAR
-========================== */
-
-
-.sb-left-panel::-webkit-scrollbar{
-
-
-    width:6px;
-
-
-}
-
-
-
-.sb-left-panel::-webkit-scrollbar-thumb{
-
-
-    background:
-
-    linear-gradient(
-    #2563eb,
-    #7c3aed
-    );
-
-
-    border-radius:20px;
-
-
-}
-
-
-
-
-
-/* ==========================
-MOBILE RESPONSIVE
-========================== */
-
-
-@media(max-width:900px){
-
-
-.sb-left-panel{
-
-
-    width:220px;
-
-
-}
-
-
-
-.sb-element-item{
-
-
-    font-size:13px;
-
-
-}
-
-
-
-}
-
-
-
-
-
-@media(max-width:600px){
-
-
-.sb-left-panel{
-
-
-    width:75px;
-
-
-    padding:15px 8px;
-
-
-}
-
-
-
-.sb-panel-tab span:last-child{
-
-
-    display:none;
-
-
-}
-
-
-
-.sb-element-item{
-
-
-    justify-content:center;
-
-
-    padding:0;
-
-
-}
-
-
-
-.sb-element-item span{
-
-
-    margin:0;
-
-
-}
-
-
-
-.sb-element-item{
-
-
-    font-size:0;
-
-
-}
-
-
-}
-
-/* ==========================================
-SMARTBAZAAR PRO
-NO CODE WEBSITE BUILDER
-LEFT PANEL
-FEATURE 21 - 28 CSS
-========================================== */
-
-
-/* ELEMENT BUTTONS */
-
-.sb-element-item{
+.sb-el-form input,
+.sb-el-form textarea{
 
     width:100%;
-    display:flex;
-    align-items:center;
-    gap:12px;
 
-    padding:12px 15px;
+    box-sizing:border-box;
 
-    background:rgba(255,255,255,0.05);
+    padding:12px;
 
-    border:1px solid rgba(255,255,255,0.08);
+    border:1px solid #dbe1ea;
 
-    border-radius:12px;
+    border-radius:9px;
+
+    outline:none;
+}
+
+
+.sb-el-form button{
+
+    padding:12px;
+
+    border:0;
+
+    border-radius:9px;
+
+    background:#6366f1;
 
     color:#ffffff;
 
-    font-size:14px;
-
-    cursor:pointer;
-
-    transition:0.3s ease;
-
-    margin-bottom:10px;
-
+    font-weight:700;
 }
 
 
+/* ==========================================================
+FEATURE 24 — PRODUCT CARD
+========================================================== */
 
-/* ICON STYLE */
+.sb-el-product-card{
 
-.sb-element-item span{
+    overflow:hidden;
 
-    width:35px;
-    height:35px;
+    border-radius:16px;
 
-    display:flex;
-    align-items:center;
-    justify-content:center;
+    background:#ffffff;
 
-    background:linear-gradient(
-        135deg,
-        #00c6ff,
-        #7b2cff
-    );
+    border:1px solid #e5e7eb;
 
-    border-radius:10px;
-
-    font-size:18px;
-
+    box-shadow:
+        0 8px 25px rgba(15,23,42,.08);
 }
 
 
+.sb-el-product-card img{
 
-
-
-/* HOVER EFFECT */
-
-.sb-element-item:hover{
-
-    transform:translateX(5px);
-
-    background:rgba(255,255,255,0.12);
-
-    border-color:#00c6ff;
-
-}
-
-
-
-
-
-/* PANEL TABS
-Pages
-Templates
-Media Library
-*/
-
-
-.sb-panel-tab{
+    display:block;
 
     width:100%;
 
-    display:flex;
+    height:180px;
 
-    align-items:center;
-
-    gap:12px;
-
-    padding:14px 15px;
-
-    margin-top:12px;
-
-
-    background:rgba(255,255,255,0.06);
-
-
-    border:1px solid rgba(255,255,255,0.1);
-
-
-    border-radius:14px;
-
-
-    color:white;
-
-
-    font-size:15px;
-
-
-    cursor:pointer;
-
-
-    transition:0.3s ease;
-
-
+    object-fit:cover;
 }
 
 
+.sb-product-info{
+
+    padding:15px;
+}
 
 
+.sb-product-title{
 
-/* TAB ICON */
+    margin:0 0 6px;
 
-.sb-panel-tab .tab-icon{
+    font-size:16px;
 
-
-    width:36px;
-
-    height:36px;
-
-
-    display:flex;
-
-    align-items:center;
-
-    justify-content:center;
+    font-weight:800;
+}
 
 
-    background:linear-gradient(
-        135deg,
-        #ff4ecd,
-        #6c5ce7
-    );
+.sb-product-price{
 
-
-    border-radius:10px;
-
+    color:#6366f1;
 
     font-size:18px;
 
-
+    font-weight:800;
 }
 
 
+/* ==========================================================
+FEATURE 25 — NEWS GRID
+========================================================== */
 
+.sb-el-news-grid{
 
-/* ACTIVE TAB */
+    display:grid;
 
-.sb-panel-tab.active{
+    grid-template-columns:
+        repeat(3,minmax(0,1fr));
 
+    gap:15px;
 
-    background:linear-gradient(
-        135deg,
-        rgba(0,198,255,0.25),
-        rgba(123,44,255,0.25)
-    );
-
-
-    border-color:#00c6ff;
-
-
+    width:100%;
 }
 
 
+.sb-news-card{
 
+    overflow:hidden;
 
+    border-radius:14px;
 
-/* TAB HOVER */
+    background:#ffffff;
 
-.sb-panel-tab:hover{
-
-
-    transform:translateX(5px);
-
-
-    background:rgba(255,255,255,0.12);
-
-
+    border:1px solid #e5e7eb;
 }
 
 
+.sb-news-card img{
 
+    width:100%;
 
+    height:140px;
 
-/* LEFT PANEL SCROLL */
+    object-fit:cover;
 
-.sb-left-panel{
-
-
-    overflow-y:auto;
-
-    scrollbar-width:thin;
-
+    display:block;
 }
 
 
+.sb-news-content{
 
-/* SCROLL BAR */
-
-.sb-left-panel::-webkit-scrollbar{
-
-    width:6px;
-
+    padding:12px;
 }
 
 
-.sb-left-panel::-webkit-scrollbar-thumb{
+.sb-news-content h4{
 
-    background:#7b2cff;
+    margin:0 0 6px;
+
+    font-size:14px;
+}
+
+
+/* ==========================================================
+FEATURE 141 — TABLE
+========================================================== */
+
+.sb-el-table{
+
+    width:100%;
+
+    overflow:auto;
+}
+
+
+.sb-el-table table{
+
+    width:100%;
+
+    border-collapse:collapse;
+
+    background:#ffffff;
+}
+
+
+.sb-el-table th,
+.sb-el-table td{
+
+    padding:11px;
+
+    border:1px solid #e5e7eb;
+
+    text-align:left;
+
+    font-size:13px;
+}
+
+
+.sb-el-table th{
+
+    background:#f4f5ff;
+
+    font-weight:800;
+}
+
+
+/* ==========================================================
+FEATURE 142 — TABS
+========================================================== */
+
+.sb-el-tabs{
+
+    width:100%;
+}
+
+
+.sb-tabs-nav{
+
+    display:flex;
+
+    gap:6px;
+
+    flex-wrap:wrap;
+
+    margin-bottom:12px;
+}
+
+
+.sb-tab-button{
+
+    padding:9px 14px;
+
+    border:0;
+
+    border-radius:8px;
+
+    background:#eef0f7;
+
+    cursor:pointer;
+
+    font-weight:700;
+}
+
+
+.sb-tab-button.active{
+
+    background:#6366f1;
+
+    color:#ffffff;
+}
+
+
+.sb-tab-content{
+
+    padding:18px;
+
+    border:1px solid #e5e7eb;
+
+    border-radius:12px;
+
+    background:#ffffff;
+}
+
+
+/* ==========================================================
+FEATURE 143 — ACCORDION
+========================================================== */
+
+.sb-el-accordion{
+
+    width:100%;
+}
+
+
+.sb-accordion-item{
+
+    border:1px solid #e5e7eb;
 
     border-radius:10px;
 
+    margin-bottom:8px;
+
+    overflow:hidden;
 }
+
+
+.sb-accordion-title{
+
+    width:100%;
+
+    padding:13px;
+
+    border:0;
+
+    background:#f8fafc;
+
+    text-align:left;
+
+    font-weight:800;
+
+    cursor:pointer;
+}
+
+
+.sb-accordion-answer{
+
+    display:none;
+
+    padding:13px;
+
+    background:#ffffff;
+}
+
+
+.sb-accordion-item.open
+.sb-accordion-answer{
+
+    display:block;
+}
+
+
+/* ==========================================================
+FEATURE 144 — SLIDER
+========================================================== */
+
+.sb-el-slider{
+
+    position:relative;
+
+    overflow:hidden;
+
+    border-radius:16px;
+
+    background:#f1f5f9;
+}
+
+
+.sb-slider-track{
+
+    display:flex;
+
+    transition:
+        transform .35s ease;
+}
+
+
+.sb-slide{
+
+    min-width:100%;
+
+    box-sizing:border-box;
+
+    padding:35px;
+
+    text-align:center;
+}
+
+
+.sb-slider-controls{
+
+    display:flex;
+
+    justify-content:center;
+
+    gap:8px;
+
+    padding:10px;
+}
+
+
+.sb-slider-controls button{
+
+    width:34px;
+
+    height:34px;
+
+    border:0;
+
+    border-radius:50%;
+
+    background:#6366f1;
+
+    color:#ffffff;
+
+    cursor:pointer;
+}
+
+
+/* ==========================================================
+RESPONSIVE
+========================================================== */
+
+@media(max-width:700px){
+
+    .sb-el-grid{
+
+        grid-template-columns:1fr;
+    }
+
+    .sb-el-news-grid{
+
+        grid-template-columns:1fr;
+    }
+
+    .sb-el-flex{
+
+        flex-wrap:wrap;
+    }
+
+    .sb-element-item{
+
+        min-height:48px;
+
+        padding:8px 10px;
+    }
+
+}
+
+
+
+
 
 
 
