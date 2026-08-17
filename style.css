@@ -2288,3 +2288,313 @@ SMALL MOBILE
 
 }
 
+/*==================================================
+SMARTBAZAAR PRO
+MOBILE HERO BANNER FINAL FIX
+16:9 YOUTUBE LONG VIDEO RATIO
+REMOVE EXTRA WHITE SPACE
+==================================================*/
+
+@media (max-width:768px){
+
+    /*==============================================
+    HERO CONTAINER
+    ==============================================*/
+
+    .hero{
+        padding-top:12px;
+        padding-bottom:12px;
+    }
+
+
+    /*==============================================
+    HERO MAIN CONTAINER
+    ==============================================*/
+
+    .hero .container{
+
+        display:flex;
+
+        flex-direction:column;
+
+        gap:12px;
+
+        padding:0 12px;
+
+    }
+
+
+    /*==============================================
+    HIDE DESKTOP SIDEBARS
+    ==============================================*/
+
+    .hero-left{
+        display:none;
+    }
+
+
+    .hero-right{
+        display:none;
+    }
+
+
+    /*==============================================
+    HERO CENTER
+    REMOVE EXTRA HEIGHT
+    ==============================================*/
+
+    .hero-center{
+
+        width:100%;
+
+        min-height:0;
+
+        height:auto;
+
+        margin:0;
+
+        padding:0;
+
+    }
+
+
+    /*==============================================
+    HERO BANNER
+    YOUTUBE LONG VIDEO SIZE = 16:9
+    ==============================================*/
+
+    .hero-banner{
+
+        width:100%;
+
+        height:auto;
+
+        aspect-ratio:16 / 9;
+
+        min-height:0;
+
+        max-height:none;
+
+        margin:0;
+
+        padding:0;
+
+        overflow:hidden;
+
+        border-radius:18px;
+
+    }
+
+
+    /*==============================================
+    SLIDES
+    ==============================================*/
+
+    .slides{
+
+        width:100%;
+
+        height:100%;
+
+        display:flex;
+
+    }
+
+
+    /*==============================================
+    INDIVIDUAL SLIDE
+    ==============================================*/
+
+    .slide{
+
+        min-width:100%;
+
+        width:100%;
+
+        height:100%;
+
+        flex:0 0 100%;
+
+        position:relative;
+
+    }
+
+
+    /*==============================================
+    BANNER IMAGE
+    ==============================================*/
+
+    .slide img{
+
+        width:100%;
+
+        height:100%;
+
+        display:block;
+
+        object-fit:cover;
+
+    }
+
+
+    /*==============================================
+    BANNER CONTENT
+    ==============================================*/
+
+    .banner-content{
+
+        left:7%;
+
+        right:7%;
+
+        top:50%;
+
+        transform:translateY(-50%);
+
+    }
+
+
+    .banner-content h1{
+
+        font-size:clamp(22px,6vw,34px);
+
+        line-height:1.15;
+
+        margin-bottom:10px;
+
+    }
+
+
+    .banner-content p{
+
+        font-size:clamp(13px,3.8vw,18px);
+
+        line-height:1.45;
+
+        margin-bottom:14px;
+
+    }
+
+
+    .banner-tag{
+
+        font-size:12px;
+
+        padding:8px 14px;
+
+        margin-bottom:8px;
+
+    }
+
+
+    .banner-btn{
+
+        padding:11px 22px;
+
+        font-size:14px;
+
+    }
+
+
+    /*==============================================
+    SLIDER DOTS
+    ==============================================*/
+
+    .slider-dots{
+
+        bottom:12px;
+
+    }
+
+}
+
+
+/*==================================================
+SMALL MOBILE
+==================================================*/
+
+@media (max-width:480px){
+
+    .hero{
+
+        padding-top:10px;
+
+        padding-bottom:10px;
+
+    }
+
+
+    .hero .container{
+
+        padding:0 10px;
+
+        gap:10px;
+
+    }
+
+
+    .hero-banner{
+
+        aspect-ratio:16 / 9;
+
+        border-radius:16px;
+
+    }
+
+
+    .banner-content{
+
+        left:6%;
+
+        right:6%;
+
+    }
+
+
+    .banner-content h1{
+
+        font-size:22px;
+
+    }
+
+
+    .banner-content p{
+
+        font-size:13px;
+
+        line-height:1.35;
+
+        margin-bottom:10px;
+
+    }
+
+
+    .banner-tag{
+
+        font-size:11px;
+
+        padding:7px 12px;
+
+    }
+
+
+    .banner-btn{
+
+        padding:9px 18px;
+
+        font-size:13px;
+
+    }
+
+
+    .slider-dots{
+
+        bottom:9px;
+
+    }
+
+}
+
+
+
+
