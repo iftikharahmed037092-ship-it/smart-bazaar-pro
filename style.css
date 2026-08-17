@@ -2191,3 +2191,100 @@ MOBILE HEADER - HIDE WISHLIST & ALERTS
 }
 
 
+
+/*==================================================
+SMARTBAZAAR PRO
+MOBILE HERO BANNER SIZE FIX
+==================================================*/
+
+@media (max-width:768px){
+
+    .hero-banner{
+        width:100%;
+        height:300px;
+        border-radius:18px;
+    }
+
+    .hero-banner img,
+    .slide,
+    .slide img{
+        width:100%;
+        height:100%;
+        object-fit:cover;
+    }
+
+    .banner-content{
+        top:50%;
+        left:22px;
+        right:22px;
+        transform:translateY(-50%);
+        max-width:none;
+    }
+
+    .banner-tag{
+        padding:7px 14px;
+        font-size:12px;
+        margin-bottom:10px;
+    }
+
+    .banner-content h1{
+        font-size:25px;
+        line-height:1.2;
+        margin-bottom:10px;
+    }
+
+    .banner-content p{
+        font-size:14px;
+        line-height:1.5;
+        margin-bottom:16px;
+    }
+
+    .banner-btn{
+        padding:11px 24px;
+        font-size:14px;
+    }
+
+    .slider-dots{
+        bottom:12px;
+        gap:7px;
+    }
+
+    .dot{
+        width:10px;
+        height:10px;
+    }
+
+}
+
+
+/*==================================================
+SMALL MOBILE
+==================================================*/
+
+@media (max-width:480px){
+
+    .hero-banner{
+        height:280px;
+        border-radius:17px;
+    }
+
+    .banner-content{
+        left:20px;
+        right:20px;
+    }
+
+    .banner-content h1{
+        font-size:22px;
+    }
+
+    .banner-content p{
+        font-size:13px;
+    }
+
+    .banner-btn{
+        padding:10px 20px;
+        font-size:13px;
+    }
+
+}
+
