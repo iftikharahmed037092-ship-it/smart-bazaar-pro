@@ -2597,4 +2597,110 @@ SMALL MOBILE
 
 
 
+/*==================================================
+SMARTBAZAAR PRO
+MOBILE HERO + CATEGORY FIX
+==================================================*/
+
+@media (max-width: 768px){
+
+    /* HERO کی اضافی خالی height ختم */
+    .hero{
+        height:auto !important;
+        min-height:0 !important;
+        padding:16px 0 90px !important;
+    }
+
+    .hero .container{
+        height:auto !important;
+        min-height:0 !important;
+        display:flex !important;
+        flex-direction:column !important;
+    }
+
+    /* پہلے Banner */
+    .hero-center{
+        order:1 !important;
+        width:100% !important;
+        height:auto !important;
+        min-height:0 !important;
+    }
+
+    /* پھر Categories */
+    .hero-left{
+        order:2 !important;
+        display:block !important;
+        width:100% !important;
+        height:auto !important;
+        min-height:0 !important;
+        margin-top:16px !important;
+    }
+
+    /* YouTube Long Video جیسا 16:9 Banner */
+    .hero-banner{
+        width:100% !important;
+        aspect-ratio:16 / 9 !important;
+        height:auto !important;
+        min-height:0 !important;
+        max-height:none !important;
+        overflow:hidden !important;
+        border-radius:20px !important;
+        background:transparent !important;
+    }
+
+    .slides,
+    .slide{
+        width:100% !important;
+        height:100% !important;
+    }
+
+    .slide img{
+        width:100% !important;
+        height:100% !important;
+        display:block !important;
+        object-fit:cover !important;
+        border-radius:0 !important;
+    }
+
+    /* Categories container دوبارہ نظر آئے */
+    .category-title{
+        display:block !important;
+    }
+
+    .category-list{
+        display:flex !important;
+        width:100% !important;
+        overflow-x:auto !important;
+        white-space:nowrap !important;
+    }
+
+}
+
+
+/*==================================================
+SMALL MOBILE
+==================================================*/
+
+@media (max-width:480px){
+
+    .hero{
+        padding-top:14px !important;
+        padding-bottom:90px !important;
+    }
+
+    .hero-left{
+        margin-top:14px !important;
+    }
+
+    .hero-banner{
+        aspect-ratio:16 / 9 !important;
+        border-radius:18px !important;
+    }
+
+}
+
+
+
+
+
 
