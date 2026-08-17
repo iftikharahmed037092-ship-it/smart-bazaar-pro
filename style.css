@@ -2168,3 +2168,12 @@ SMALL MOBILE
 
 }
 
+
+
+@media (max-width:768px){
+
+    .header-action.mobile-hide-action{
+        display:none;
+    }
+
+}
