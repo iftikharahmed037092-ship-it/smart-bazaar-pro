@@ -2177,3 +2177,17 @@ SMALL MOBILE
     }
 
 }
+
+/*==================================================
+MOBILE HEADER - HIDE WISHLIST & ALERTS
+==================================================*/
+
+@media (max-width:768px){
+
+    .header-action.mobile-hide-action{
+        display:none !important;
+    }
+
+}
+
+
