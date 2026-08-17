@@ -1877,3 +1877,294 @@ SMALL MOBILE
     }
 
 }
+
+
+/*==================================================
+SMARTBAZAAR PRO
+MOBILE BOTTOM NAVIGATION
+5 BUTTON SYSTEM
+==================================================*/
+
+.mobile-bottom-nav{
+    display:none;
+}
+
+
+/*==================================================
+MOBILE BOTTOM NAV
+==================================================*/
+
+@media (max-width:768px){
+
+    .mobile-bottom-nav{
+
+        position:fixed;
+
+        left:0;
+        bottom:0;
+
+        width:100%;
+        height:68px;
+
+        display:flex;
+        align-items:center;
+        justify-content:space-around;
+
+        background:rgba(255,255,255,.96);
+
+        border-top:1px solid var(--border);
+
+        box-shadow:0 -6px 20px rgba(0,0,0,.12);
+
+        z-index:9999;
+
+        padding:6px 8px;
+
+        backdrop-filter:blur(12px);
+        -webkit-backdrop-filter:blur(12px);
+
+    }
+
+
+    /*================================================
+    BOTTOM NAV ITEM
+    =================================================*/
+
+    .mobile-bottom-item{
+
+        flex:1;
+
+        height:100%;
+
+        display:flex;
+
+        flex-direction:column;
+
+        align-items:center;
+        justify-content:center;
+
+        gap:3px;
+
+        color:#666;
+
+        font-size:11px;
+
+        font-weight:500;
+
+        border-radius:10px;
+
+        transition:.25s ease;
+
+        position:relative;
+
+    }
+
+
+    .mobile-bottom-item i{
+
+        font-size:19px;
+
+        line-height:1;
+
+        color:#555;
+
+        transition:.25s ease;
+
+    }
+
+
+    .mobile-bottom-item span{
+
+        white-space:nowrap;
+
+    }
+
+
+    /*================================================
+    ACTIVE BUTTON
+    =================================================*/
+
+    .mobile-bottom-item.active{
+
+        color:var(--primary);
+
+    }
+
+
+    .mobile-bottom-item.active i{
+
+        color:var(--primary);
+
+    }
+
+
+    /*================================================
+    HOVER / TOUCH
+    =================================================*/
+
+    .mobile-bottom-item:active{
+
+        transform:scale(.94);
+
+    }
+
+
+    /*================================================
+    BADGE
+    =================================================*/
+
+    .mobile-bottom-badge{
+
+        position:absolute;
+
+        top:5px;
+
+        right:calc(50% - 20px);
+
+        min-width:17px;
+        height:17px;
+
+        padding:0 4px;
+
+        display:flex;
+
+        align-items:center;
+        justify-content:center;
+
+        background:#e53935;
+
+        color:#fff;
+
+        border-radius:50px;
+
+        border:2px solid #fff;
+
+        font-size:9px;
+
+        font-weight:700;
+
+        line-height:1;
+
+    }
+
+
+    /*================================================
+    CENTER EDITOR BUTTON
+    =================================================*/
+
+    .mobile-editor-btn{
+
+        flex:1;
+
+        height:100%;
+
+        display:flex;
+
+        flex-direction:column;
+
+        align-items:center;
+
+        justify-content:center;
+
+        gap:2px;
+
+        color:var(--primary);
+
+        font-size:10px;
+
+        font-weight:600;
+
+        position:relative;
+
+    }
+
+
+    /*================================================
+    PLUS CIRCLE
+    =================================================*/
+
+    .mobile-plus-icon{
+
+        width:44px;
+
+        height:44px;
+
+        margin-top:-22px;
+
+        display:flex;
+
+        align-items:center;
+
+        justify-content:center;
+
+        border-radius:50%;
+
+        background:var(--primary);
+
+        color:#fff;
+
+        border:4px solid #fff;
+
+        box-shadow:0 5px 15px rgba(46,125,50,.35);
+
+        font-size:20px;
+
+        transition:.25s ease;
+
+    }
+
+
+    .mobile-editor-btn:active
+    .mobile-plus-icon{
+
+        transform:scale(.92);
+
+    }
+
+
+}
+
+
+/*==================================================
+SMALL MOBILE
+==================================================*/
+
+@media (max-width:480px){
+
+    .mobile-bottom-nav{
+
+        height:64px;
+
+        padding:5px 4px;
+
+    }
+
+
+    .mobile-bottom-item{
+
+        font-size:10px;
+
+    }
+
+
+    .mobile-bottom-item i{
+
+        font-size:18px;
+
+    }
+
+
+    .mobile-plus-icon{
+
+        width:42px;
+
+        height:42px;
+
+        margin-top:-21px;
+
+        font-size:19px;
+
+    }
+
+}
+
