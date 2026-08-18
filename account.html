@@ -1,0 +1,940 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>SmartBazaar Pro — Account</title>
+
+  <link rel="stylesheet" href="account.css">
+
+</head>
+
+<body>
+
+    <!-- ==========================================================
+         SMARTBAZAAR PRO
+         ACCOUNT / PROFILE PAGE
+         HTML ONLY
+    =========================================================== -->
+
+
+    <!-- ==========================================================
+         MOBILE ACCOUNT HEADER
+    =========================================================== -->
+
+    <header id="account-header">
+
+        <button
+            id="account-back-button"
+            type="button"
+            aria-label="Go Back"
+        >
+            ←
+        </button>
+
+        <h1>
+            My Account
+        </h1>
+
+        <button
+            id="account-settings-button"
+            type="button"
+            aria-label="Settings"
+        >
+            ⚙
+        </button>
+
+    </header>
+
+
+    <!-- ==========================================================
+         MAIN ACCOUNT PAGE
+    =========================================================== -->
+
+    <main id="account-page">
+
+
+        <!-- ======================================================
+             PROFILE CARD
+        ======================================================= -->
+
+        <section
+            id="profile-section"
+            class="account-section"
+        >
+
+            <div
+                id="profile-card"
+                class="profile-card"
+            >
+
+                <!-- PROFILE IMAGE -->
+
+                <div class="profile-image-wrapper">
+
+                    <img
+                        id="profile-image"
+                        src="https://via.placeholder.com/120"
+                        alt="Profile Picture"
+                    >
+
+                    <button
+                        id="change-profile-image"
+                        type="button"
+                    >
+                        +
+                    </button>
+
+                </div>
+
+
+                <!-- PROFILE INFORMATION -->
+
+                <div class="profile-information">
+
+                    <h2 id="profile-name">
+                        Iftikhar Ahmed
+                    </h2>
+
+                    <p id="profile-username">
+                        @iftikhar
+                    </p>
+
+                    <p id="profile-email">
+                        iftikhar@example.com
+                    </p>
+
+                    <span
+                        id="account-status"
+                        class="verified-status"
+                    >
+                        ✓ Verified Account
+                    </span>
+
+                </div>
+
+
+                <!-- EDIT PROFILE -->
+
+                <button
+                    id="edit-profile-button"
+                    type="button"
+                >
+                    Edit
+                </button>
+
+            </div>
+
+        </section>
+
+
+        <!-- ======================================================
+             ACCOUNT STATISTICS
+        ======================================================= -->
+
+        <section
+            id="account-statistics"
+            class="account-section"
+        >
+
+            <div class="statistics-grid">
+
+                <div class="stat-card">
+
+                    <strong id="orders-count">
+                        0
+                    </strong>
+
+                    <span>
+                        Orders
+                    </span>
+
+                </div>
+
+
+                <div class="stat-card">
+
+                    <strong id="products-count">
+                        0
+                    </strong>
+
+                    <span>
+                        Products
+                    </span>
+
+                </div>
+
+
+                <div class="stat-card">
+
+                    <strong id="projects-count">
+                        0
+                    </strong>
+
+                    <span>
+                        Projects
+                    </span>
+
+                </div>
+
+
+                <div class="stat-card">
+
+                    <strong id="downloads-count">
+                        0
+                    </strong>
+
+                    <span>
+                        Downloads
+                    </span>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ======================================================
+             QUICK ACTIONS
+        ======================================================= -->
+
+        <section
+            id="quick-actions"
+            class="account-section"
+        >
+
+            <h2>
+                Quick Actions
+            </h2>
+
+
+            <div class="quick-actions-grid">
+
+                <button
+                    class="quick-action"
+                    id="action-orders"
+                    type="button"
+                >
+                    <span class="action-icon">
+                        📦
+                    </span>
+
+                    <span>
+                        My Orders
+                    </span>
+                </button>
+
+
+                <button
+                    class="quick-action"
+                    id="action-products"
+                    type="button"
+                >
+                    <span class="action-icon">
+                        🛍
+                    </span>
+
+                    <span>
+                        My Products
+                    </span>
+                </button>
+
+
+                <button
+                    class="quick-action"
+                    id="action-editor"
+                    type="button"
+                >
+                    <span class="action-icon">
+                        ✚
+                    </span>
+
+                    <span>
+                        Open Editor
+                    </span>
+                </button>
+
+
+                <button
+                    class="quick-action"
+                    id="action-downloads"
+                    type="button"
+                >
+                    <span class="action-icon">
+                        ↓
+                    </span>
+
+                    <span>
+                        Downloads
+                    </span>
+                </button>
+
+            </div>
+
+        </section>
+
+
+        <!-- ======================================================
+             WALLET
+        ======================================================= -->
+
+        <section
+            id="wallet-section"
+            class="account-section"
+        >
+
+            <div class="wallet-card">
+
+                <div class="wallet-header">
+
+                    <span>
+                        SmartBazaar Wallet
+                    </span>
+
+                    <span>
+                        💳
+                    </span>
+
+                </div>
+
+
+                <div class="wallet-balance">
+
+                    <small>
+                        Available Balance
+                    </small>
+
+                    <strong>
+                        Rs. 0
+                    </strong>
+
+                </div>
+
+
+                <div class="wallet-actions">
+
+                    <button
+                        id="add-money-button"
+                        type="button"
+                    >
+                        Add Money
+                    </button>
+
+                    <button
+                        id="withdraw-button"
+                        type="button"
+                    >
+                        Withdraw
+                    </button>
+
+                    <button
+                        id="wallet-history-button"
+                        type="button"
+                    >
+                        History
+                    </button>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ======================================================
+             MY WEBSITES / PROJECTS
+        ======================================================= -->
+
+        <section
+            id="projects-section"
+            class="account-section"
+        >
+
+            <div class="section-heading">
+
+                <h2>
+                    My Websites
+                </h2>
+
+                <button
+                    id="view-all-projects"
+                    type="button"
+                >
+                    View All
+                </button>
+
+            </div>
+
+
+            <div id="projects-list">
+
+                <div class="empty-project-card">
+
+                    <div class="empty-project-icon">
+                        ✚
+                    </div>
+
+                    <h3>
+                        Create Your First Website
+                    </h3>
+
+                    <p>
+                        Build a website using Drag & Drop
+                        or Coding.
+                    </p>
+
+                    <button
+                        id="create-website-button"
+                        type="button"
+                    >
+                        Open Builder
+                    </button>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ======================================================
+             PURCHASED PRODUCTS
+        ======================================================= -->
+
+        <section
+            id="purchased-products"
+            class="account-section"
+        >
+
+            <div class="section-heading">
+
+                <h2>
+                    Purchased Products
+                </h2>
+
+                <button
+                    id="view-all-purchases"
+                    type="button"
+                >
+                    View All
+                </button>
+
+            </div>
+
+
+            <div
+                id="purchased-products-list"
+                class="product-list"
+            >
+
+                <div class="empty-product-card">
+
+                    <span>
+                        🛒
+                    </span>
+
+                    <p>
+                        No purchased products yet.
+                    </p>
+
+                    <button
+                        id="browse-products-button"
+                        type="button"
+                    >
+                        Browse Products
+                    </button>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ======================================================
+             FAVORITES / WISHLIST
+        ======================================================= -->
+
+        <section
+            id="wishlist-section"
+            class="account-section"
+        >
+
+            <div class="section-heading">
+
+                <h2>
+                    Wishlist
+                </h2>
+
+                <button
+                    id="view-wishlist"
+                    type="button"
+                >
+                    View All
+                </button>
+
+            </div>
+
+
+            <div id="wishlist-list">
+
+                <div class="empty-wishlist">
+
+                    <span>
+                        ♡
+                    </span>
+
+                    <p>
+                        Your wishlist is empty.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ======================================================
+             SECURITY
+        ======================================================= -->
+
+        <section
+            id="security-section"
+            class="account-section"
+        >
+
+            <h2>
+                Security
+            </h2>
+
+
+            <div class="account-menu-list">
+
+                <button
+                    id="change-password-button"
+                    type="button"
+                    class="account-menu-item"
+                >
+
+                    <span>
+                        🔐
+                    </span>
+
+                    <span>
+                        Change Password
+                    </span>
+
+                    <span>
+                        →
+                    </span>
+
+                </button>
+
+
+                <button
+                    id="two-factor-button"
+                    type="button"
+                    class="account-menu-item"
+                >
+
+                    <span>
+                        🛡
+                    </span>
+
+                    <span>
+                        Two-Factor Authentication
+                    </span>
+
+                    <span>
+                        →
+                    </span>
+
+                </button>
+
+
+                <button
+                    id="login-activity-button"
+                    type="button"
+                    class="account-menu-item"
+                >
+
+                    <span>
+                        📱
+                    </span>
+
+                    <span>
+                        Login Activity
+                    </span>
+
+                    <span>
+                        →
+                    </span>
+
+                </button>
+
+            </div>
+
+        </section>
+
+
+        <!-- ======================================================
+             ACCOUNT SETTINGS
+        ======================================================= -->
+
+        <section
+            id="settings-section"
+            class="account-section"
+        >
+
+            <h2>
+                Account Settings
+            </h2>
+
+
+            <div class="account-menu-list">
+
+                <button
+                    id="personal-information-button"
+                    type="button"
+                    class="account-menu-item"
+                >
+
+                    <span>
+                        👤
+                    </span>
+
+                    <span>
+                        Personal Information
+                    </span>
+
+                    <span>
+                        →
+                    </span>
+
+                </button>
+
+
+                <button
+                    id="addresses-button"
+                    type="button"
+                    class="account-menu-item"
+                >
+
+                    <span>
+                        📍
+                    </span>
+
+                    <span>
+                        Addresses
+                    </span>
+
+                    <span>
+                        →
+                    </span>
+
+                </button>
+
+
+                <button
+                    id="payment-methods-button"
+                    type="button"
+                    class="account-menu-item"
+                >
+
+                    <span>
+                        💳
+                    </span>
+
+                    <span>
+                        Payment Methods
+                    </span>
+
+                    <span>
+                        →
+                    </span>
+
+                </button>
+
+
+                <button
+                    id="notifications-button"
+                    type="button"
+                    class="account-menu-item"
+                >
+
+                    <span>
+                        🔔
+                    </span>
+
+                    <span>
+                        Notifications
+                    </span>
+
+                    <span>
+                        →
+                    </span>
+
+                </button>
+
+
+                <button
+                    id="language-button"
+                    type="button"
+                    class="account-menu-item"
+                >
+
+                    <span>
+                        🌐
+                    </span>
+
+                    <span>
+                        Language
+                    </span>
+
+                    <span>
+                        →
+                    </span>
+
+                </button>
+
+
+                <button
+                    id="dark-mode-button"
+                    type="button"
+                    class="account-menu-item"
+                >
+
+                    <span>
+                        🌙
+                    </span>
+
+                    <span>
+                        Dark Mode
+                    </span>
+
+                    <span>
+                        →
+                    </span>
+
+                </button>
+
+            </div>
+
+        </section>
+
+
+        <!-- ======================================================
+             HELP & SUPPORT
+        ======================================================= -->
+
+        <section
+            id="support-section"
+            class="account-section"
+        >
+
+            <h2>
+                Help & Support
+            </h2>
+
+
+            <div class="account-menu-list">
+
+                <button
+                    id="help-center-button"
+                    type="button"
+                    class="account-menu-item"
+                >
+
+                    <span>
+                        ❓
+                    </span>
+
+                    <span>
+                        Help Center
+                    </span>
+
+                    <span>
+                        →
+                    </span>
+
+                </button>
+
+
+                <button
+                    id="contact-support-button"
+                    type="button"
+                    class="account-menu-item"
+                >
+
+                    <span>
+                        💬
+                    </span>
+
+                    <span>
+                        Contact Support
+                    </span>
+
+                    <span>
+                        →
+                    </span>
+
+                </button>
+
+
+                <button
+                    id="report-problem-button"
+                    type="button"
+                    class="account-menu-item"
+                >
+
+                    <span>
+                        ⚠
+                    </span>
+
+                    <span>
+                        Report a Problem
+                    </span>
+
+                    <span>
+                        →
+                    </span>
+
+                </button>
+
+            </div>
+
+        </section>
+
+
+        <!-- ======================================================
+             LOGOUT
+        ======================================================= -->
+
+        <section
+            id="logout-section"
+            class="account-section"
+        >
+
+            <button
+                id="logout-button"
+                type="button"
+            >
+                🚪 Logout
+            </button>
+
+        </section>
+
+
+    </main>
+
+
+    <!-- ==========================================================
+         MOBILE BOTTOM NAVIGATION
+    =========================================================== -->
+
+    <nav
+        id="mobile-bottom-navigation"
+        aria-label="Mobile Navigation"
+    >
+
+        <button
+            id="bottom-home"
+            type="button"
+        >
+
+            <span>
+                ⌂
+            </span>
+
+            <small>
+                Home
+            </small>
+
+        </button>
+
+
+        <button
+            id="bottom-products"
+            type="button"
+        >
+
+            <span>
+                🛍
+            </span>
+
+            <small>
+                Products
+            </small>
+
+        </button>
+
+
+        <button
+            id="bottom-create"
+            type="button"
+        >
+
+            <span>
+                +
+            </span>
+
+            <small>
+                Create
+            </small>
+
+        </button>
+
+
+        <button
+            id="bottom-orders"
+            type="button"
+        >
+
+            <span>
+                📦
+            </span>
+
+            <small>
+                Orders
+            </small>
+
+        </button>
+
+
+        <button
+            id="bottom-account"
+            type="button"
+            class="active"
+        >
+
+            <span>
+                👤
+            </span>
+
+            <small>
+                Account
+            </small>
+
+        </button>
+
+    </nav>
+
+
+    <!-- ==========================================================
+         END OF HTML
+         
+         CSS will be added separately.
+         JavaScript will be added separately.
+         Firebase will be connected separately.
+    =========================================================== -->
+
+</body>
+</html>
