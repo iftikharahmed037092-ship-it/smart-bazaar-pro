@@ -599,7 +599,11 @@ body{
 
     width:100%;
 
-    min-height:310px;
+    height:310px;
+
+    min-height:0;
+
+    max-height:310px;
 
     display:flex;
 
@@ -630,6 +634,35 @@ body{
 }
 
 
+/*==================================================
+ MAIN PREVIEW IMAGE
+==================================================*/
+
+.image-preview img{
+
+    display:block;
+
+    width:100%;
+
+    height:100%;
+
+    max-width:100%;
+
+    max-height:100%;
+
+    object-fit:contain;
+
+    object-position:center;
+
+    border-radius:18px;
+
+}
+
+
+/*==================================================
+ PREVIEW ICON
+==================================================*/
+
 .image-preview i{
 
     font-size:55px;
@@ -638,6 +671,10 @@ body{
 
 }
 
+
+/*==================================================
+ PREVIEW TEXT
+==================================================*/
 
 .image-preview span{
 
@@ -648,6 +685,17 @@ body{
 }
 
 
+/*==================================================
+ ACTIVE IMAGE PREVIEW
+==================================================*/
+
+.image-preview.active{
+
+    padding:0;
+
+    background:#f8fafc;
+
+}
 /*==================================================
  UPLOAD BUTTON
 ==================================================*/
@@ -1236,9 +1284,13 @@ body{
 
     .image-preview{
 
-        min-height:240px;
+    height:240px;
 
-    }
+    min-height:240px;
+
+    max-height:240px;
+
+}
 
 
     .gallery-preview{
