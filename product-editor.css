@@ -1,0 +1,1298 @@
+/*==================================================
+ SMARTBAZAAR PRO
+ PRODUCT EDITOR PREMIUM CSS
+ GREEN + WHITE THEME
+==================================================*/
+
+
+/*==================================================
+ RESET
+==================================================*/
+
+*{
+
+    margin:0;
+
+    padding:0;
+
+    box-sizing:border-box;
+
+}
+
+
+/*==================================================
+ ROOT
+==================================================*/
+
+:root{
+
+    --primary:#15803d;
+
+    --primary-light:#22c55e;
+
+    --primary-dark:#166534;
+
+    --secondary:#16a34a;
+
+    --green-soft:#dcfce7;
+
+    --green-pale:#f0fdf4;
+
+    --white:#ffffff;
+
+    --dark:#0f172a;
+
+    --text:#334155;
+
+    --muted:#64748b;
+
+    --border:#dbeafe;
+
+    --danger:#ef4444;
+
+    --warning:#f59e0b;
+
+    --shadow:
+        0 20px 55px rgba(15,23,42,.10);
+
+    --shadow-hover:
+        0 28px 70px rgba(15,23,42,.15);
+
+}
+
+
+/*==================================================
+ BODY / PAGE BACKGROUND
+==================================================*/
+
+body{
+
+    min-height:100vh;
+
+    font-family:
+
+        "Segoe UI",
+        Arial,
+        sans-serif;
+
+    color:var(--text);
+
+    background:
+
+        radial-gradient(
+            circle at top left,
+            rgba(34,197,94,.14),
+            transparent 32%
+        ),
+
+        radial-gradient(
+            circle at bottom right,
+            rgba(21,128,61,.10),
+            transparent 35%
+        ),
+
+        linear-gradient(
+            135deg,
+            #ffffff,
+            #f0fdf4
+        );
+
+}
+
+
+/*==================================================
+ MAIN EDITOR
+==================================================*/
+
+.product-editor{
+
+    width:100%;
+
+    max-width:1450px;
+
+    margin:auto;
+
+    padding:35px 40px 60px;
+
+}
+
+
+/*==================================================
+ HEADER
+==================================================*/
+
+.editor-header{
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:space-between;
+
+    gap:25px;
+
+    margin-bottom:35px;
+
+    padding:22px 25px;
+
+    border:1px solid rgba(255,255,255,.85);
+
+    border-radius:24px;
+
+    background:
+
+        rgba(255,255,255,.82);
+
+    backdrop-filter:blur(20px);
+
+    box-shadow:var(--shadow);
+
+}
+
+
+/*==================================================
+ EDITOR TITLE
+==================================================*/
+
+.editor-title{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:16px;
+
+}
+
+
+.editor-icon{
+
+    width:58px;
+
+    height:58px;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    border-radius:18px;
+
+    color:#ffffff;
+
+    font-size:24px;
+
+    background:
+
+        linear-gradient(
+            135deg,
+            var(--primary),
+            var(--primary-light)
+        );
+
+    box-shadow:
+
+        0 12px 28px
+        rgba(21,128,61,.28);
+
+}
+
+
+.editor-title h1{
+
+    margin-bottom:5px;
+
+    color:var(--dark);
+
+    font-size:30px;
+
+    font-weight:850;
+
+}
+
+
+.editor-title p{
+
+    color:var(--muted);
+
+    font-size:14px;
+
+}
+
+
+/*==================================================
+ HEADER ACTIONS
+==================================================*/
+
+.editor-actions{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:12px;
+
+}
+
+
+.editor-actions button{
+
+    min-height:46px;
+
+    padding:0 20px;
+
+    border:none;
+
+    border-radius:14px;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    gap:8px;
+
+    font-size:13px;
+
+    font-weight:800;
+
+    cursor:pointer;
+
+    transition:
+
+        transform .3s ease,
+        box-shadow .3s ease;
+
+}
+
+
+.editor-actions button:hover{
+
+    transform:translateY(-3px);
+
+}
+
+
+/*==================================================
+ PREVIEW BUTTON
+==================================================*/
+
+.preview-btn{
+
+    color:var(--primary-dark);
+
+    background:var(--green-soft);
+
+}
+
+
+.preview-btn:hover{
+
+    box-shadow:
+
+        0 12px 25px
+        rgba(21,128,61,.15);
+
+}
+
+
+/*==================================================
+ SAVE BUTTON
+==================================================*/
+
+.save-btn{
+
+    color:#ffffff;
+
+    background:
+
+        linear-gradient(
+            135deg,
+            var(--primary-dark),
+            var(--primary-light)
+        );
+
+    box-shadow:
+
+        0 12px 28px
+        rgba(21,128,61,.25);
+
+}
+
+
+/*==================================================
+ MAIN GRID
+==================================================*/
+
+.editor-main{
+
+    display:grid;
+
+    grid-template-columns:
+
+        repeat(2,minmax(0,1fr));
+
+    gap:24px;
+
+}
+
+
+/*==================================================
+ COMMON EDITOR CARD
+==================================================*/
+
+.editor-card{
+
+    padding:27px;
+
+    border:
+
+        1px solid
+        rgba(255,255,255,.9);
+
+    border-radius:25px;
+
+    background:
+
+        rgba(255,255,255,.90);
+
+    backdrop-filter:
+
+        blur(20px);
+
+    box-shadow:var(--shadow);
+
+    transition:
+
+        transform .3s ease,
+        box-shadow .3s ease;
+
+}
+
+
+.editor-card:hover{
+
+    box-shadow:var(--shadow-hover);
+
+}
+
+
+/*==================================================
+ SECTION HEADER
+==================================================*/
+
+.section-header{
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:space-between;
+
+    margin-bottom:25px;
+
+}
+
+
+.section-header h2{
+
+    margin-bottom:5px;
+
+    color:var(--dark);
+
+    font-size:20px;
+
+    font-weight:850;
+
+}
+
+
+.section-header p{
+
+    color:var(--muted);
+
+    font-size:13px;
+
+}
+
+
+/*==================================================
+ FORM GROUP
+==================================================*/
+
+.form-group{
+
+    margin-bottom:19px;
+
+}
+
+
+.form-group label{
+
+    display:block;
+
+    margin-bottom:8px;
+
+    color:#334155;
+
+    font-size:13px;
+
+    font-weight:800;
+
+}
+
+
+/*==================================================
+ INPUTS
+==================================================*/
+
+.form-group input,
+.form-group select,
+.form-group textarea{
+
+    width:100%;
+
+    min-height:48px;
+
+    padding:13px 15px;
+
+    border:
+
+        1.5px solid
+        #dbe4e0;
+
+    border-radius:14px;
+
+    outline:none;
+
+    color:var(--dark);
+
+    background:#ffffff;
+
+    font-family:inherit;
+
+    font-size:14px;
+
+    transition:
+
+        border-color .3s ease,
+        box-shadow .3s ease,
+        background .3s ease;
+
+}
+
+
+.form-group input:hover,
+.form-group select:hover,
+.form-group textarea:hover{
+
+    border-color:#86efac;
+
+}
+
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus{
+
+    border-color:var(--primary);
+
+    background:#ffffff;
+
+    box-shadow:
+
+        0 0 0 4px
+        rgba(34,197,94,.12);
+
+}
+
+
+.form-group textarea{
+
+    min-height:130px;
+
+    resize:vertical;
+
+}
+
+
+/*==================================================
+ PLACEHOLDER
+==================================================*/
+
+.form-group input::placeholder,
+.form-group textarea::placeholder{
+
+    color:#94a3b8;
+
+}
+
+
+/*==================================================
+ FORM ROW
+==================================================*/
+
+.form-row{
+
+    display:grid;
+
+    grid-template-columns:
+        repeat(2,minmax(0,1fr));
+
+    gap:16px;
+
+}
+
+
+.form-row:has(.form-group:nth-child(3)){
+
+    grid-template-columns:
+        repeat(4,minmax(0,1fr));
+
+}
+
+
+/*==================================================
+ MEDIA SECTION
+==================================================*/
+
+.media-section{
+
+    min-height:100%;
+
+}
+
+
+/*==================================================
+ MAIN IMAGE UPLOAD
+==================================================*/
+
+.main-image-upload{
+
+    padding:18px;
+
+    border:
+
+        1px dashed
+        #86efac;
+
+    border-radius:20px;
+
+    background:
+
+        linear-gradient(
+            135deg,
+            #f0fdf4,
+            #ffffff
+        );
+
+}
+
+
+/*==================================================
+ IMAGE PREVIEW
+==================================================*/
+
+.image-preview{
+
+    width:100%;
+
+    min-height:310px;
+
+    display:flex;
+
+    flex-direction:column;
+
+    align-items:center;
+
+    justify-content:center;
+
+    gap:10px;
+
+    overflow:hidden;
+
+    border-radius:18px;
+
+    color:#86a58f;
+
+    background:
+
+        repeating-linear-gradient(
+            45deg,
+            #f8fafc,
+            #f8fafc 10px,
+            #f1f5f3 10px,
+            #f1f5f3 20px
+        );
+
+}
+
+
+.image-preview i{
+
+    font-size:55px;
+
+    color:#86a58f;
+
+}
+
+
+.image-preview span{
+
+    font-size:13px;
+
+    font-weight:700;
+
+}
+
+
+/*==================================================
+ UPLOAD BUTTON
+==================================================*/
+
+.upload-image-btn{
+
+    width:100%;
+
+    min-height:48px;
+
+    margin-top:15px;
+
+    border:none;
+
+    border-radius:14px;
+
+    color:#ffffff;
+
+    background:
+
+        linear-gradient(
+            135deg,
+            var(--primary),
+            var(--primary-light)
+        );
+
+    font-size:14px;
+
+    font-weight:800;
+
+    cursor:pointer;
+
+    box-shadow:
+
+        0 10px 25px
+        rgba(21,128,61,.20);
+
+    transition:
+
+        transform .3s ease,
+        box-shadow .3s ease;
+
+}
+
+
+.upload-image-btn:hover{
+
+    transform:translateY(-3px);
+
+    box-shadow:
+
+        0 15px 30px
+        rgba(21,128,61,.28);
+
+}
+
+
+/*==================================================
+ SMALL HELP TEXT
+==================================================*/
+
+.form-group small{
+
+    display:block;
+
+    margin-top:7px;
+
+    color:#94a3b8;
+
+    font-size:11px;
+
+}
+
+
+/*==================================================
+ GALLERY PREVIEW
+==================================================*/
+
+.gallery-preview{
+
+    display:grid;
+
+    grid-template-columns:
+        repeat(4,1fr);
+
+    gap:10px;
+
+    margin-top:14px;
+
+}
+
+
+.gallery-preview img{
+
+    width:100%;
+
+    aspect-ratio:1/1;
+
+    object-fit:cover;
+
+    border-radius:12px;
+
+    border:2px solid #ffffff;
+
+    box-shadow:
+
+        0 5px 15px
+        rgba(15,23,42,.10);
+
+}
+
+
+/*==================================================
+ BADGE OPTIONS
+==================================================*/
+
+.badge-options{
+
+    display:flex;
+
+    flex-wrap:wrap;
+
+    gap:10px;
+
+}
+
+
+.badge-option{
+
+    position:relative;
+
+    cursor:pointer;
+
+}
+
+
+.badge-option input{
+
+    position:absolute;
+
+    opacity:0;
+
+}
+
+
+.badge-option span{
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    min-height:40px;
+
+    padding:0 15px;
+
+    border:
+
+        1px solid
+        #dbe4e0;
+
+    border-radius:50px;
+
+    color:#475569;
+
+    background:#ffffff;
+
+    font-size:12px;
+
+    font-weight:800;
+
+    transition:
+
+        background .25s ease,
+        color .25s ease,
+        border-color .25s ease,
+        transform .25s ease;
+
+}
+
+
+.badge-option:hover span{
+
+    transform:translateY(-2px);
+
+    border-color:#86efac;
+
+}
+
+
+.badge-option input:checked + span{
+
+    color:#ffffff;
+
+    border-color:var(--primary);
+
+    background:
+
+        linear-gradient(
+            135deg,
+            var(--primary-dark),
+            var(--primary-light)
+        );
+
+    box-shadow:
+
+        0 8px 20px
+        rgba(21,128,61,.20);
+
+}
+
+
+/*==================================================
+ STATUS
+==================================================*/
+
+.status-section{
+
+    background:
+
+        linear-gradient(
+            135deg,
+            #ffffff,
+            #f0fdf4
+        );
+
+}
+
+
+/*==================================================
+ RATING
+==================================================*/
+
+.rating-section{
+
+    background:
+
+        linear-gradient(
+            135deg,
+            #ffffff,
+            #fffbeb
+        );
+
+}
+
+
+/*==================================================
+ OPTIONS
+==================================================*/
+
+.options-section{
+
+    background:
+
+        linear-gradient(
+            135deg,
+            #ffffff,
+            #f0fdf4
+        );
+
+}
+
+
+/*==================================================
+ DELIVERY
+==================================================*/
+
+.delivery-section{
+
+    background:
+
+        linear-gradient(
+            135deg,
+            #ffffff,
+            #ecfdf5
+        );
+
+}
+
+
+/*==================================================
+ EDITOR FOOTER
+==================================================*/
+
+.editor-footer{
+
+    grid-column:1/-1;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:flex-end;
+
+    gap:12px;
+
+    padding:22px;
+
+    border-radius:22px;
+
+    background:#ffffff;
+
+    box-shadow:var(--shadow);
+
+}
+
+
+/*==================================================
+ FOOTER BUTTONS
+==================================================*/
+
+.editor-footer button{
+
+    min-height:48px;
+
+    padding:0 22px;
+
+    border:none;
+
+    border-radius:14px;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    gap:8px;
+
+    font-size:13px;
+
+    font-weight:800;
+
+    cursor:pointer;
+
+    transition:
+
+        transform .3s ease,
+        box-shadow .3s ease;
+
+}
+
+
+.editor-footer button:hover{
+
+    transform:translateY(-3px);
+
+}
+
+
+/*==================================================
+ CANCEL
+==================================================*/
+
+.cancel-btn{
+
+    color:#64748b;
+
+    background:#f1f5f9;
+
+}
+
+
+/*==================================================
+ DRAFT
+==================================================*/
+
+.draft-btn{
+
+    color:#334155;
+
+    background:#e2e8f0;
+
+}
+
+
+/*==================================================
+ PUBLISH
+==================================================*/
+
+.final-save-btn{
+
+    color:#ffffff;
+
+    background:
+
+        linear-gradient(
+            135deg,
+            #15803d,
+            #22c55e
+        );
+
+    box-shadow:
+
+        0 12px 28px
+        rgba(21,128,61,.25);
+
+}
+
+
+/*==================================================
+ RESPONSIVE
+==================================================*/
+
+@media(max-width:1100px){
+
+    .product-editor{
+
+        padding:
+            25px;
+
+    }
+
+    .editor-main{
+
+        grid-template-columns:
+            1fr;
+
+    }
+
+    .editor-footer{
+
+        grid-column:auto;
+
+    }
+
+}
+
+
+/*==================================================
+ TABLET
+==================================================*/
+
+@media(max-width:750px){
+
+    .product-editor{
+
+        padding:
+            18px 15px 40px;
+
+    }
+
+
+    .editor-header{
+
+        flex-direction:column;
+
+        align-items:stretch;
+
+    }
+
+
+    .editor-actions{
+
+        width:100%;
+
+    }
+
+
+    .editor-actions button{
+
+        flex:1;
+
+    }
+
+
+    .form-row{
+
+        grid-template-columns:1fr;
+
+    }
+
+
+    .form-row:has(.form-group:nth-child(3)){
+
+        grid-template-columns:1fr;
+
+    }
+
+
+    .editor-footer{
+
+        flex-direction:column;
+
+        align-items:stretch;
+
+    }
+
+
+    .editor-footer button{
+
+        width:100%;
+
+    }
+
+}
+
+
+/*==================================================
+ MOBILE
+==================================================*/
+
+@media(max-width:500px){
+
+    .product-editor{
+
+        padding:
+            12px 10px 30px;
+
+    }
+
+
+    .editor-header{
+
+        padding:18px;
+
+        border-radius:20px;
+
+    }
+
+
+    .editor-title{
+
+        gap:12px;
+
+    }
+
+
+    .editor-icon{
+
+        width:48px;
+
+        height:48px;
+
+        border-radius:14px;
+
+        font-size:19px;
+
+    }
+
+
+    .editor-title h1{
+
+        font-size:22px;
+
+    }
+
+
+    .editor-title p{
+
+        font-size:12px;
+
+    }
+
+
+    .editor-actions{
+
+        flex-direction:column;
+
+    }
+
+
+    .editor-actions button{
+
+        width:100%;
+
+    }
+
+
+    .editor-card{
+
+        padding:19px;
+
+        border-radius:20px;
+
+    }
+
+
+    .section-header h2{
+
+        font-size:18px;
+
+    }
+
+
+    .image-preview{
+
+        min-height:240px;
+
+    }
+
+
+    .gallery-preview{
+
+        grid-template-columns:
+            repeat(3,1fr);
+
+    }
+
+
+    .badge-options{
+
+        gap:7px;
+
+    }
+
+
+    .badge-option span{
+
+        padding:
+            0 11px;
+
+        font-size:11px;
+
+    }
+
+}
+
+
+/*==================================================
+ SMALL MOBILE
+==================================================*/
+
+@media(max-width:360px){
+
+    .editor-card{
+
+        padding:16px;
+
+    }
+
+
+    .editor-footer{
+
+        padding:16px;
+
+    }
+
+
+    .gallery-preview{
+
+        grid-template-columns:
+            repeat(2,1fr);
+
+    }
+
+}
