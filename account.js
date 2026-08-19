@@ -1533,3 +1533,69 @@ onAuthStateChanged(
 
     }
 );
+
+
+
+
+/*==================================================
+ SMARTBAZAAR PRO
+ ADD PRODUCT BUTTON
+==================================================*/
+
+const addProductButton =
+document.getElementById("add-product-button");
+
+
+const addProductCard =
+document.getElementById("add-product-card");
+
+
+/*==============================
+ OPEN PRODUCT EDITOR
+==============================*/
+
+function openProductEditor(){
+
+    window.location.href =
+    "product-editor.html";
+
+}
+
+
+/*==============================
+ BUTTON CLICK
+==============================*/
+
+if(addProductButton){
+
+    addProductButton.addEventListener(
+        "click",
+        function(event){
+
+            event.stopPropagation();
+
+            openProductEditor();
+
+        }
+    );
+
+}
+
+
+/*==============================
+ WHOLE CARD CLICK
+==============================*/
+
+if(addProductCard){
+
+    addProductCard.addEventListener(
+        "click",
+        function(){
+
+            openProductEditor();
+
+        }
+    );
+
+}
+
