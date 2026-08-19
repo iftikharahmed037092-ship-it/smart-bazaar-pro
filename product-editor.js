@@ -1,358 +1,128 @@
 /*==================================================
- SMARTBAZAAR PRO
- PRODUCT EDITOR JAVASCRIPT
-==================================================
-
- FEATURES USED:
-
- (24) Product Card Element
- (28) Media Library Tab
- (29) Live Preview Canvas
- (8) Save Button
- (14) Image Element
- (167) Product Grid Builder
- (173) Product Gallery
- (174) Product Reviews
- (175) Sale Badge
- (176) Stock Counter
- (279) Wishlist Button
-
- STORAGE:
-
- Cloudinary  → Product Images
- Firebase    → Product Data
-
- IMAGE METHODS:
-
- 1. File Upload
- 2. Image URL
- 3. Drag & Drop
-
+SMARTBAZAAR PRO
+PRODUCT EDITOR
+COMPLETE JAVASCRIPT
 ==================================================*/
 
 
 /*==================================================
- FIREBASE
+IMPORT FIREBASE
 ==================================================*/
 
 import {
-
     database
-
 } from "./firebase.js";
 
 
 import {
-
     ref,
     push,
     set
-
-} from
-"https://www.gstatic.com/firebasejs/12.17.1/firebase-database.js";
-
+} from "https://www.gstatic.com/firebasejs/12.17.1/firebase-database.js";
 
 
 /*==================================================
- CLOUDINARY
+CLOUDINARY CONFIG
 ==================================================*/
 
-import {
+const cloudName =
+    "jlrjn7lu";
 
-    uploadImage
 
-} from "./cloudinary.js";
-
+const uploadPreset =
+    "smartbazaar_uploads";
 
 
 /*==================================================
- DOM ELEMENTS
+DOM ELEMENTS
 ==================================================*/
 
-const productName =
-document.getElementById("productName");
-
-
-const productSKU =
-document.getElementById("productSKU");
-
-
-const productCategory =
-document.getElementById("productCategory");
-
-
-const productBrand =
-document.getElementById("productBrand");
-
-
-const productDescription =
-document.getElementById("productDescription");
-
-
-const productPrice =
-document.getElementById("productPrice");
-
-
-const productOldPrice =
-document.getElementById("productOldPrice");
-
-
-const productDiscount =
-document.getElementById("productDiscount");
-
-
-const productCurrency =
-document.getElementById("productCurrency");
-
-
-const stockStatus =
-document.getElementById("stockStatus");
-
-
-const stockQuantity =
-document.getElementById("stockQuantity");
-
-
-const productStatus =
-document.getElementById("productStatus");
-
-
-const productRating =
-document.getElementById("productRating");
-
-
-const reviewCount =
-document.getElementById("reviewCount");
-
-
-const productColors =
-document.getElementById("productColors");
-
-
-const productSizes =
-document.getElementById("productSizes");
-
-
-const deliveryStatus =
-document.getElementById("deliveryStatus");
-
-
-const deliveryText =
-document.getElementById("deliveryText");
-
-
-const productImageUrl =
-document.getElementById("productImageUrl");
-
-
-const mainImagePreview =
-document.getElementById("mainImagePreview");
+const uploadImageBtn =
+    document.getElementById(
+        "uploadImageBtn"
+    );
 
 
 const mainProductImage =
-document.getElementById("mainProductImage");
+    document.getElementById(
+        "mainProductImage"
+    );
 
 
-const uploadImageBtn =
-document.getElementById("uploadImageBtn");
+const mainImagePreview =
+    document.getElementById(
+        "mainImagePreview"
+    );
+
+
+const productImageUrl =
+    document.getElementById(
+        "productImageUrl"
+    );
 
 
 const productGallery =
-document.getElementById("productGallery");
+    document.getElementById(
+        "productGallery"
+    );
 
 
 const galleryPreview =
-document.getElementById("galleryPreview");
+    document.getElementById(
+        "galleryPreview"
+    );
 
 
 const previewProductBtn =
-document.getElementById("previewProductBtn");
+    document.getElementById(
+        "previewProductBtn"
+    );
 
 
 const saveProductBtn =
-document.getElementById("saveProductBtn");
+    document.getElementById(
+        "saveProductBtn"
+    );
 
 
 const saveDraftBtn =
-document.getElementById("saveDraftBtn");
+    document.getElementById(
+        "saveDraftBtn"
+    );
 
 
 const finalSaveProductBtn =
-document.getElementById("finalSaveProductBtn");
+    document.getElementById(
+        "finalSaveProductBtn"
+    );
 
 
 const cancelProductBtn =
-document.getElementById("cancelProductBtn");
-
-
-
-/*==================================================
- IMAGE STATE
-==================================================*/
-
-let mainImageFile = null;
-
-let mainImageFinalURL = "";
-
-let galleryFiles = [];
-
-let galleryURLs = [];
-
-
-
-/*==================================================
- HELPERS
-==================================================*/
-
-
-function showMessage(message){
-
-    alert(message);
-
-}
-
-
-
-function setButtonLoading(button, loading){
-
-    if(!button) return;
-
-
-    if(loading){
-
-        button.dataset.originalText =
-        button.innerHTML;
-
-        button.disabled = true;
-
-        button.innerHTML = `
-            <i class="fa-solid fa-spinner fa-spin"></i>
-            Saving...
-        `;
-
-    }else{
-
-        button.disabled = false;
-
-        if(button.dataset.originalText){
-
-            button.innerHTML =
-            button.dataset.originalText;
-
-        }
-
-    }
-
-}
-
-
-
-/*==================================================
- IMAGE PREVIEW
-==================================================*/
-
-function showMainImage(url){
-
-    if(!mainImagePreview) return;
-
-
-    mainImagePreview.innerHTML = `
-        
-        <img
-            src="${url}"
-            alt="Product Image"
-            style="
-                width:100%;
-                height:100%;
-                min-height:310px;
-                object-fit:cover;
-                border-radius:18px;
-                display:block;
-            "
-        >
-
-    `;
-
-}
-
-
-
-/*==================================================
- FILE PREVIEW
-==================================================*/
-
-function previewMainFile(file){
-
-    if(!file) return;
-
-
-    if(!file.type.startsWith("image/")){
-
-        showMessage(
-            "Please select a valid image file."
-        );
-
-        return;
-
-    }
-
-
-    mainImageFile = file;
-
-
-    const reader =
-    new FileReader();
-
-
-    reader.onload = function(event){
-
-        showMainImage(
-            event.target.result
-        );
-
-    };
-
-
-    reader.readAsDataURL(file);
-
-}
-
-
-
-/*==================================================
- FILE INPUT
-==================================================*/
-
-if(mainProductImage){
-
-    mainProductImage.addEventListener(
-        "change",
-        function(){
-
-            const file =
-            this.files[0];
-
-
-            previewMainFile(file);
-
-        }
+    document.getElementById(
+        "cancelProductBtn"
     );
 
-}
 
+/*==================================================
+IMAGE DATA
+==================================================*/
+
+let mainImageUrl = "";
+
+let galleryImages = [];
 
 
 /*==================================================
- UPLOAD BUTTON
+UPLOAD BUTTON
 ==================================================*/
 
-if(uploadImageBtn){
+if (uploadImageBtn) {
 
     uploadImageBtn.addEventListener(
         "click",
-        function(){
+        function () {
 
-            if(mainProductImage){
+            if (mainProductImage) {
 
                 mainProductImage.click();
 
@@ -364,30 +134,30 @@ if(uploadImageBtn){
 }
 
 
-
 /*==================================================
- IMAGE URL
+MAIN IMAGE FILE SELECT
 ==================================================*/
 
-if(productImageUrl){
+if (mainProductImage) {
 
-    productImageUrl.addEventListener(
-        "input",
-        function(){
+    mainProductImage.addEventListener(
+        "change",
+        async function () {
 
-            const url =
-            this.value.trim();
-
-
-            if(!url) return;
+            const file =
+                this.files[0];
 
 
-            mainImageFile = null;
+            if (!file) {
 
-            mainImageFinalURL = url;
+                return;
+
+            }
 
 
-            showMainImage(url);
+            await handleMainImage(
+                file
+            );
 
         }
     );
@@ -395,26 +165,219 @@ if(productImageUrl){
 }
 
 
-
 /*==================================================
- DRAG & DROP
+MAIN IMAGE URL
 ==================================================*/
 
-if(mainImagePreview){
+if (productImageUrl) {
+
+    productImageUrl.addEventListener(
+        "input",
+        function () {
+
+            const url =
+                this.value.trim();
+
+
+            if (!url) {
+
+                return;
+
+            }
+
+
+            mainImageUrl =
+                url;
+
+
+            showMainImage(
+                url
+            );
+
+        }
+    );
+
+}
+
+
+/*==================================================
+SHOW MAIN IMAGE
+==================================================*/
+
+function showMainImage(url) {
+
+    if (!mainImagePreview) {
+
+        return;
+
+    }
+
+
+    mainImagePreview.innerHTML = `
+
+        <img
+            src="${escapeHtml(url)}"
+            alt="Product Image"
+            style="
+                width:100%;
+                height:100%;
+                object-fit:cover;
+                border-radius:inherit;
+            "
+        >
+
+    `;
+
+}
+
+
+/*==================================================
+HANDLE MAIN IMAGE
+==================================================*/
+
+async function handleMainImage(file) {
+
+    if (!file.type.startsWith("image/")) {
+
+        alert(
+            "Please select an image file."
+        );
+
+        return;
+
+    }
+
+
+    try {
+
+        setUploadStatus(
+            "Uploading image..."
+        );
+
+
+        const url =
+            await uploadToCloudinary(
+                file
+            );
+
+
+        mainImageUrl =
+            url;
+
+
+        if (productImageUrl) {
+
+            productImageUrl.value =
+                url;
+
+        }
+
+
+        showMainImage(
+            url
+        );
+
+
+        setUploadStatus(
+            "Image uploaded successfully ✓"
+        );
+
+    }
+
+    catch (error) {
+
+        console.error(
+            "MAIN IMAGE ERROR:",
+            error
+        );
+
+
+        alert(
+            "Image upload failed."
+        );
+
+
+        setUploadStatus("");
+
+    }
+
+}
+
+
+/*==================================================
+CLOUDINARY UPLOAD
+==================================================*/
+
+async function uploadToCloudinary(file) {
+
+    const formData =
+        new FormData();
+
+
+    formData.append(
+        "file",
+        file
+    );
+
+
+    formData.append(
+        "upload_preset",
+        uploadPreset
+    );
+
+
+    const response =
+        await fetch(
+            `https://api.cloudinary.com/v1_1/${cloudName}/image/upload`,
+            {
+                method: "POST",
+                body: formData
+            }
+        );
+
+
+    if (!response.ok) {
+
+        throw new Error(
+            "Cloudinary upload failed"
+        );
+
+    }
+
+
+    const data =
+        await response.json();
+
+
+    if (!data.secure_url) {
+
+        throw new Error(
+            "Cloudinary did not return image URL"
+        );
+
+    }
+
+
+    return data.secure_url;
+
+}
+
+
+/*==================================================
+DRAG & DROP
+==================================================*/
+
+if (mainImagePreview) {
 
     mainImagePreview.addEventListener(
         "dragover",
-        function(event){
+        function (event) {
 
             event.preventDefault();
 
-            event.stopPropagation();
-
-            this.style.outline =
-            "3px dashed #15803d";
-
-            this.style.outlineOffset =
-            "-6px";
+            this.classList.add(
+                "drag-over"
+            );
 
         }
     );
@@ -422,13 +385,11 @@ if(mainImagePreview){
 
     mainImagePreview.addEventListener(
         "dragleave",
-        function(event){
+        function () {
 
-            event.preventDefault();
-
-            event.stopPropagation();
-
-            this.style.outline = "none";
+            this.classList.remove(
+                "drag-over"
+            );
 
         }
     );
@@ -436,31 +397,30 @@ if(mainImagePreview){
 
     mainImagePreview.addEventListener(
         "drop",
-        function(event){
+        async function (event) {
 
             event.preventDefault();
 
-            event.stopPropagation();
 
-            this.style.outline = "none";
-
-
-            const files =
-            event.dataTransfer.files;
+            this.classList.remove(
+                "drag-over"
+            );
 
 
-            if(!files || !files.length){
+            const file =
+                event.dataTransfer.files[0];
+
+
+            if (!file) {
 
                 return;
 
             }
 
 
-            const file =
-            files[0];
-
-
-            previewMainFile(file);
+            await handleMainImage(
+                file
+            );
 
         }
     );
@@ -468,22 +428,91 @@ if(mainImagePreview){
 }
 
 
-
 /*==================================================
- GALLERY FILES
+GALLERY FILES
 ==================================================*/
 
-if(productGallery){
+if (productGallery) {
 
     productGallery.addEventListener(
         "change",
-        function(){
+        async function () {
 
-            galleryFiles =
-            Array.from(this.files || []);
+            const files =
+                Array.from(
+                    this.files
+                );
 
 
-            previewGallery();
+            if (
+                files.length === 0
+            ) {
+
+                return;
+
+            }
+
+
+            galleryImages = [];
+
+
+            renderGalleryLoading(
+                files.length
+            );
+
+
+            try {
+
+                for (
+                    const file
+                    of files
+                ) {
+
+                    if (
+                        !file.type.startsWith(
+                            "image/"
+                        )
+                    ) {
+
+                        continue;
+
+                    }
+
+
+                    const url =
+                        await uploadToCloudinary(
+                            file
+                        );
+
+
+                    galleryImages.push(
+                        url
+                    );
+
+                }
+
+
+                renderGallery();
+
+
+            }
+
+            catch (error) {
+
+                console.error(
+                    "GALLERY ERROR:",
+                    error
+                );
+
+
+                alert(
+                    "One or more gallery images failed to upload."
+                );
+
+
+                renderGallery();
+
+            }
 
         }
     );
@@ -491,173 +520,158 @@ if(productGallery){
 }
 
 
-
 /*==================================================
- GALLERY PREVIEW
+GALLERY PREVIEW
 ==================================================*/
 
-function previewGallery(){
+function renderGallery() {
 
-    if(!galleryPreview) return;
+    if (!galleryPreview) {
+
+        return;
+
+    }
 
 
     galleryPreview.innerHTML = "";
 
 
-    galleryFiles.forEach(
-        function(file){
+    galleryImages.forEach(
+        function (url, index) {
 
-            if(!file.type.startsWith("image/")){
-
-                return;
-
-            }
-
-
-            const reader =
-            new FileReader();
-
-
-            reader.onload =
-            function(event){
-
-                const image =
-                document.createElement("img");
-
-
-                image.src =
-                event.target.result;
-
-
-                image.alt =
-                "Product Gallery";
-
-
-                galleryPreview.appendChild(
-                    image
+            const item =
+                document.createElement(
+                    "div"
                 );
 
-            };
+
+            item.className =
+                "gallery-item";
 
 
-            reader.readAsDataURL(file);
+            item.innerHTML = `
+
+                <img
+                    src="${escapeHtml(url)}"
+                    alt="Gallery Image ${index + 1}"
+                >
+
+                <button
+                    type="button"
+                    class="remove-gallery-image"
+                    data-index="${index}"
+                >
+                    ×
+                </button>
+
+            `;
+
+
+            galleryPreview.appendChild(
+                item
+            );
 
         }
     );
 
+
+    galleryPreview
+        .querySelectorAll(
+            ".remove-gallery-image"
+        )
+        .forEach(
+            button => {
+
+                button.addEventListener(
+                    "click",
+                    function () {
+
+                        const index =
+                            Number(
+                                this.dataset.index
+                            );
+
+
+                        galleryImages.splice(
+                            index,
+                            1
+                        );
+
+
+                        renderGallery();
+
+                    }
+                );
+
+            }
+        );
+
 }
 
 
-
 /*==================================================
- UPLOAD MAIN IMAGE TO CLOUDINARY
+GALLERY LOADING
 ==================================================*/
 
-async function uploadMainImage(){
+function renderGalleryLoading(count) {
 
-    /*
-    URL already provided
-    */
+    if (!galleryPreview) {
 
-    if(
-        !mainImageFile &&
-        productImageUrl &&
-        productImageUrl.value.trim()
-    ){
-
-        return productImageUrl.value.trim();
+        return;
 
     }
 
 
-    /*
-    No image
-    */
+    galleryPreview.innerHTML = `
 
-    if(!mainImageFile){
+        <div style="
+            padding:20px;
+            text-align:center;
+        ">
+
+            Uploading
+            ${count}
+            image(s)...
+
+        </div>
+
+    `;
+
+}
+
+
+/*==================================================
+GET PRODUCT VALUE
+==================================================*/
+
+function getValue(id) {
+
+    const element =
+        document.getElementById(id);
+
+
+    if (!element) {
 
         return "";
 
     }
 
 
-    /*
-    Upload to Cloudinary
-    */
-
-    const url =
-    await uploadImage(
-        mainImageFile
-    );
-
-
-    return url;
+    return element.value.trim();
 
 }
 
 
-
 /*==================================================
- UPLOAD GALLERY TO CLOUDINARY
+GET SELECTED BADGE
 ==================================================*/
 
-async function uploadGalleryImages(){
-
-    if(!galleryFiles.length){
-
-        return [];
-
-    }
-
-
-    const uploadedURLs = [];
-
-
-    for(
-        const file
-        of galleryFiles
-    ){
-
-        try{
-
-            const url =
-            await uploadImage(file);
-
-
-            if(url){
-
-                uploadedURLs.push(url);
-
-            }
-
-        }catch(error){
-
-            console.error(
-                "Gallery upload error:",
-                error
-            );
-
-        }
-
-    }
-
-
-    return uploadedURLs;
-
-}
-
-
-
-/*==================================================
- GET SELECTED BADGE
-==================================================*/
-
-function getSelectedBadge(){
+function getBadge() {
 
     const badge =
-    document.querySelector(
-        'input[name="productBadge"]:checked'
-    );
+        document.querySelector(
+            'input[name="productBadge"]:checked'
+        );
 
 
     return badge
@@ -667,381 +681,361 @@ function getSelectedBadge(){
 }
 
 
-
 /*==================================================
- CONVERT COMMA TEXT TO ARRAY
+GET PRODUCT DATA
 ==================================================*/
 
-function convertToArray(value){
+function getProductData(status) {
 
-    if(!value){
+    const productName =
+        getValue(
+            "productName"
+        );
 
-        return [];
 
-    }
+    const price =
+        getValue(
+            "productPrice"
+        );
 
 
-    return value
-        .split(",")
-        .map(item => item.trim())
-        .filter(item => item !== "");
+    if (!productName) {
 
-}
-
-
-
-/*==================================================
- COLLECT PRODUCT DATA
-==================================================*/
-
-function collectProductData(){
-
-    return {
-
-        title:
-        productName?.value.trim() || "",
-
-
-        sku:
-        productSKU?.value.trim() || "",
-
-
-        category:
-        productCategory?.value || "",
-
-
-        brand:
-        productBrand?.value.trim() || "",
-
-
-        description:
-        productDescription?.value.trim() || "",
-
-
-        price:
-        Number(productPrice?.value || 0),
-
-
-        oldPrice:
-        Number(productOldPrice?.value || 0),
-
-
-        discount:
-        productDiscount?.value.trim() || "",
-
-
-        currency:
-        productCurrency?.value || "PKR",
-
-
-        image:
-        mainImageFinalURL || "",
-
-
-        gallery:
-        galleryURLs || [],
-
-
-        badge:
-        getSelectedBadge(),
-
-
-        stockStatus:
-        stockStatus?.value || "in-stock",
-
-
-        stockQuantity:
-        Number(stockQuantity?.value || 0),
-
-
-        status:
-        productStatus?.value || "draft",
-
-
-        rating:
-        Number(productRating?.value || 0),
-
-
-        reviewCount:
-        Number(reviewCount?.value || 0),
-
-
-        colors:
-        convertToArray(
-            productColors?.value
-        ),
-
-
-        sizes:
-        convertToArray(
-            productSizes?.value
-        ),
-
-
-        delivery:{
-
-            status:
-            deliveryStatus?.value || "free",
-
-            text:
-            deliveryText?.value.trim() || ""
-
-        },
-
-
-        wishlistEnabled:
-        true,
-
-
-        createdAt:
-        Date.now(),
-
-
-        updatedAt:
-        Date.now()
-
-    };
-
-}
-
-
-
-/*==================================================
- VALIDATION
-==================================================*/
-
-function validateProduct(product){
-
-    if(!product.title){
-
-        showMessage(
+        alert(
             "Please enter Product Name."
         );
 
-        productName?.focus();
-
-        return false;
+        return null;
 
     }
 
 
-    if(!product.category){
+    if (!mainImageUrl) {
 
-        showMessage(
-            "Please select Product Category."
+        alert(
+            "Please upload a product image or add an Image URL."
         );
 
-        productCategory?.focus();
-
-        return false;
+        return null;
 
     }
 
 
-    if(product.price <= 0){
+    const product = {
 
-        showMessage(
-            "Please enter a valid Product Price."
-        );
-
-        productPrice?.focus();
-
-        return false;
-
-    }
+        title:
+            productName,
 
 
-    return true;
+        sku:
+            getValue(
+                "productSKU"
+            ),
+
+
+        category:
+            getValue(
+                "productCategory"
+            ),
+
+
+        brand:
+            getValue(
+                "productBrand"
+            ),
+
+
+        description:
+            getValue(
+                "productDescription"
+            ),
+
+
+        price:
+            price,
+
+
+        oldPrice:
+            getValue(
+                "productOldPrice"
+            ),
+
+
+        discount:
+            getValue(
+                "productDiscount"
+            ),
+
+
+        currency:
+            getValue(
+                "productCurrency"
+            ) || "PKR",
+
+
+        image:
+            mainImageUrl,
+
+
+        gallery:
+            galleryImages,
+
+
+        stockStatus:
+            getValue(
+                "stockStatus"
+            ),
+
+
+        stockQuantity:
+            getValue(
+                "stockQuantity"
+            ),
+
+
+        status:
+            status,
+
+
+        badge:
+            getBadge(),
+
+
+        rating:
+            getValue(
+                "productRating"
+            ) || "5",
+
+
+        reviewCount:
+            getValue(
+                "reviewCount"
+            ) || "0",
+
+
+        colors:
+            getValue(
+                "productColors"
+            ),
+
+
+        sizes:
+            getValue(
+                "productSizes"
+            ),
+
+
+        deliveryStatus:
+            getValue(
+                "deliveryStatus"
+            ),
+
+
+        deliveryText:
+            getValue(
+                "deliveryText"
+            ),
+
+
+        createdAt:
+            Date.now(),
+
+
+        updatedAt:
+            Date.now()
+
+    };
+
+
+    return product;
 
 }
 
 
-
 /*==================================================
- SAVE PRODUCT TO FIREBASE
+PUBLISH PRODUCT
 ==================================================*/
 
-async function saveProduct(mode){
+if (finalSaveProductBtn) {
 
-    try{
+    finalSaveProductBtn.addEventListener(
+        "click",
+        async function () {
 
-        /*
-        Loading
-        */
-
-        setButtonLoading(
-            finalSaveProductBtn,
-            true
-        );
-
-
-        setButtonLoading(
-            saveDraftBtn,
-            true
-        );
-
-
-        /*
-        Upload Main Image
-        */
-
-        mainImageFinalURL =
-        await uploadMainImage();
-
-
-        /*
-        Upload Gallery
-        */
-
-        galleryURLs =
-        await uploadGalleryImages();
-
-
-        /*
-        Collect data
-        */
-
-        const product =
-        collectProductData();
-
-
-        /*
-        Set status
-        */
-
-        if(mode === "draft"){
-
-            product.status =
-            "draft";
-
-        }else{
-
-            product.status =
-            "active";
+            await saveProduct(
+                "active"
+            );
 
         }
+    );
+
+}
+
+
+/*==================================================
+SAVE DRAFT
+==================================================*/
+
+if (saveDraftBtn) {
+
+    saveDraftBtn.addEventListener(
+        "click",
+        async function () {
+
+            await saveProduct(
+                "draft"
+            );
+
+        }
+    );
+
+}
+
+
+/*==================================================
+TOP SAVE BUTTON
+==================================================*/
+
+if (saveProductBtn) {
+
+    saveProductBtn.addEventListener(
+        "click",
+        async function () {
+
+            await saveProduct(
+                "draft"
+            );
+
+        }
+    );
+
+}
+
+
+/*==================================================
+SAVE PRODUCT TO FIREBASE
+==================================================*/
+
+async function saveProduct(status) {
+
+    const product =
+        getProductData(
+            status
+        );
+
+
+    if (!product) {
+
+        return;
+
+    }
+
+
+    try {
+
+        setButtonLoading(
+            true,
+            status
+        );
 
 
         /*
-        Validation
+        CREATE NEW PRODUCT ID
         */
 
-        if(!validateProduct(product)){
-
-            setButtonLoading(
-                finalSaveProductBtn,
-                false
+        const productRef =
+            push(
+                ref(
+                    database,
+                    "products"
+                )
             );
 
 
-            setButtonLoading(
-                saveDraftBtn,
-                false
-            );
-
-
-            return;
-
-        }
-
-
         /*
-        Firebase Realtime Database
-        */
-
-        const productsRef =
-        ref(
-            database,
-            "products"
-        );
-
-
-        const newProductRef =
-        push(productsRef);
-
-
-        /*
-        Product ID
-        */
-
-        product.id =
-        newProductRef.key;
-
-
-        /*
-        Save
+        SAVE PRODUCT
         */
 
         await set(
-            newProductRef,
+            productRef,
             product
         );
 
 
         /*
-        Success
+        SUCCESS
         */
 
-        showMessage(
-
-            mode === "draft"
-
-            ? "Product Draft Saved Successfully ✅"
-
-            : "Product Published Successfully ✅"
-
+        alert(
+            status === "active"
+                ? "Product Published Successfully ✅"
+                : "Product Draft Saved Successfully ✅"
         );
 
 
         /*
-        Reset state
+        SAVE PRODUCT ID
         */
 
-        mainImageFile = null;
-
-        mainImageFinalURL =
-        product.image;
-
-        galleryFiles = [];
+        localStorage.setItem(
+            "lastProductId",
+            productRef.key
+        );
 
 
         /*
-        Keep image URL
+        SAVE LOCAL COPY
         */
 
-        if(productImageUrl){
+        localStorage.setItem(
+            "lastProduct",
+            JSON.stringify({
+                id:
+                    productRef.key,
+                ...product
+            })
+        );
 
-            productImageUrl.value =
-            product.image;
+
+        /*
+        IF PUBLISHED
+        */
+
+        if (
+            status === "active"
+        ) {
+
+            /*
+            Go to Home Page
+            */
+
+            window.location.href =
+                "index.html";
 
         }
 
+    }
 
-    }catch(error){
+    catch (error) {
 
         console.error(
-            "Product Save Error:",
+            "PRODUCT SAVE ERROR:",
             error
         );
 
 
-        showMessage(
-            "Product Save Failed: " +
+        alert(
+            "Product save failed:\n" +
             error.message
         );
 
+    }
 
-    }finally{
-
-        setButtonLoading(
-            finalSaveProductBtn,
-            false
-        );
-
+    finally {
 
         setButtonLoading(
-            saveDraftBtn,
-            false
+            false,
+            status
         );
 
     }
@@ -1049,100 +1043,40 @@ async function saveProduct(mode){
 }
 
 
-
 /*==================================================
- SAVE PRODUCT BUTTON
+PREVIEW PRODUCT
 ==================================================*/
 
-if(saveProductBtn){
-
-    saveProductBtn.addEventListener(
-        "click",
-        function(){
-
-            saveProduct("active");
-
-        }
-    );
-
-}
-
-
-
-/*==================================================
- SAVE DRAFT
-==================================================*/
-
-if(saveDraftBtn){
-
-    saveDraftBtn.addEventListener(
-        "click",
-        function(){
-
-            saveProduct("draft");
-
-        }
-    );
-
-}
-
-
-
-/*==================================================
- PUBLISH PRODUCT
-==================================================*/
-
-if(finalSaveProductBtn){
-
-    finalSaveProductBtn.addEventListener(
-        "click",
-        function(){
-
-            saveProduct("active");
-
-        }
-    );
-
-}
-
-
-
-/*==================================================
- PREVIEW PRODUCT
-==================================================*/
-
-if(previewProductBtn){
+if (previewProductBtn) {
 
     previewProductBtn.addEventListener(
         "click",
-        function(){
+        function () {
 
             const product =
-            collectProductData();
+                getProductData(
+                    "preview"
+                );
 
 
-            if(!validateProduct(product)){
+            if (!product) {
 
                 return;
 
             }
 
 
-            /*
-            Save temporary preview
-            */
-
-            sessionStorage.setItem(
-
-                "smartbazaar_product_preview",
-
-                JSON.stringify(product)
-
+            localStorage.setItem(
+                "productPreview",
+                JSON.stringify(
+                    product
+                )
             );
 
 
-            showMessage(
-                "Product Preview Data Ready ✅"
+            window.open(
+                "product-preview.html",
+                "_blank"
             );
 
         }
@@ -1151,24 +1085,25 @@ if(previewProductBtn){
 }
 
 
-
 /*==================================================
- CANCEL
+CANCEL
 ==================================================*/
 
-if(cancelProductBtn){
+if (cancelProductBtn) {
 
     cancelProductBtn.addEventListener(
         "click",
-        function(){
+        function () {
 
             const confirmCancel =
-            confirm(
-                "Are you sure you want to cancel?"
-            );
+                confirm(
+                    "Are you sure you want to cancel?"
+                );
 
 
-            if(confirmCancel){
+            if (
+                confirmCancel
+            ) {
 
                 window.history.back();
 
@@ -1180,11 +1115,323 @@ if(cancelProductBtn){
 }
 
 
+/*==================================================
+BUTTON LOADING
+==================================================*/
+
+function setButtonLoading(
+    loading,
+    status
+) {
+
+    if (
+        !finalSaveProductBtn ||
+        !saveDraftBtn
+    ) {
+
+        return;
+
+    }
+
+
+    if (loading) {
+
+        finalSaveProductBtn.disabled =
+            true;
+
+        saveDraftBtn.disabled =
+            true;
+
+
+        if (status === "active") {
+
+            finalSaveProductBtn.innerHTML =
+                `<i class="fa-solid fa-spinner fa-spin"></i>
+                 Publishing...`;
+
+        }
+
+        else {
+
+            saveDraftBtn.innerHTML =
+                `<i class="fa-solid fa-spinner fa-spin"></i>
+                 Saving...`;
+
+        }
+
+    }
+
+    else {
+
+        finalSaveProductBtn.disabled =
+            false;
+
+        saveDraftBtn.disabled =
+            false;
+
+
+        finalSaveProductBtn.innerHTML =
+            `<i class="fa-solid fa-check"></i>
+             Publish Product`;
+
+
+        saveDraftBtn.innerHTML =
+            `<i class="fa-solid fa-file-pen"></i>
+             Save Draft`;
+
+    }
+
+}
+
 
 /*==================================================
- INITIAL STATE
+UPLOAD STATUS
+==================================================*/
+
+function setUploadStatus(text) {
+
+    if (!mainImagePreview) {
+
+        return;
+
+    }
+
+
+    if (text) {
+
+        const status =
+            document.createElement(
+                "div"
+            );
+
+
+        status.className =
+            "image-upload-status";
+
+
+        status.textContent =
+            text;
+
+
+        mainImagePreview.appendChild(
+            status
+        );
+
+    }
+
+}
+
+
+/*==================================================
+ESCAPE HTML
+==================================================*/
+
+function escapeHtml(value) {
+
+    const div =
+        document.createElement(
+            "div"
+        );
+
+
+    div.textContent =
+        value;
+
+
+    return div.innerHTML;
+
+}
+
+
+/*==================================================
+INITIAL IMAGE URL
+==================================================*/
+
+if (productImageUrl) {
+
+    productImageUrl.addEventListener(
+        "change",
+        function () {
+
+            const url =
+                this.value.trim();
+
+
+            if (
+                url.startsWith(
+                    "http://"
+                ) ||
+                url.startsWith(
+                    "https://"
+                )
+            ) {
+
+                mainImageUrl =
+                    url;
+
+
+                showMainImage(
+                    url
+                );
+
+            }
+
+        }
+    );
+
+}
+
+
+/*==================================================
+DRAG & DROP — WHOLE MEDIA SECTION
+==================================================*/
+
+const mediaSection =
+    document.querySelector(
+        ".media-section"
+    );
+
+
+if (mediaSection) {
+
+    mediaSection.addEventListener(
+        "dragover",
+        function (event) {
+
+            event.preventDefault();
+
+            this.classList.add(
+                "drag-active"
+            );
+
+        }
+    );
+
+
+    mediaSection.addEventListener(
+        "dragleave",
+        function () {
+
+            this.classList.remove(
+                "drag-active"
+            );
+
+        }
+    );
+
+
+    mediaSection.addEventListener(
+        "drop",
+        async function (event) {
+
+            event.preventDefault();
+
+
+            this.classList.remove(
+                "drag-active"
+            );
+
+
+            const files =
+                Array.from(
+                    event.dataTransfer.files
+                );
+
+
+            if (
+                files.length === 0
+            ) {
+
+                return;
+
+            }
+
+
+            /*
+            FIRST IMAGE = MAIN IMAGE
+            */
+
+            const firstImage =
+                files.find(
+                    file =>
+                        file.type.startsWith(
+                            "image/"
+                        )
+                );
+
+
+            if (firstImage) {
+
+                await handleMainImage(
+                    firstImage
+                );
+
+            }
+
+
+            /*
+            REMAINING IMAGES = GALLERY
+            */
+
+            const remaining =
+                files.filter(
+                    file =>
+                        file !==
+                        firstImage &&
+                        file.type.startsWith(
+                            "image/"
+                        )
+                );
+
+
+            if (
+                remaining.length
+            ) {
+
+                for (
+                    const file
+                    of remaining
+                ) {
+
+                    try {
+
+                        const url =
+                            await uploadToCloudinary(
+                                file
+                            );
+
+
+                        galleryImages.push(
+                            url
+                        );
+
+                    }
+
+                    catch (error) {
+
+                        console.error(
+                            error
+                        );
+
+                    }
+
+                }
+
+
+                renderGallery();
+
+            }
+
+        }
+    );
+
+}
+
+
+/*==================================================
+CONSOLE
 ==================================================*/
 
 console.log(
-    "SMARTBAZAAR PRO Product Editor Loaded ✅"
+    "SMARTBAZAAR PRO PRODUCT EDITOR READY ✓"
 );
