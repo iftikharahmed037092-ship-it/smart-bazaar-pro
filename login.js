@@ -1,98 +1,804 @@
 /*==================================================
 SMARTBAZAAR PRO
-LOGIN SYSTEM JAVASCRIPT
-LOGIN + SIGN UP + FORGOT PASSWORD
+LOGIN / SIGNUP / FORGOT PASSWORD
+login.js
 ==================================================*/
 
 
 /*==================================================
-FIREBASE AUTH
+FIREBASE CONFIG
 ==================================================*/
 
 import {
-    createUserWithEmailAndPassword,
-    signInWithEmailAndPassword,
-    sendPasswordResetEmail,
-    onAuthStateChanged,
-    signOut,
-    updateProfile
-}
-from "https://www.gstatic.com/firebasejs/12.17.1/firebase-auth.js";
+    auth,
+    database
+} from "./firebase-config.js";
 
+
+/*==================================================
+FIREBASE AUTH IMPORTS
+==================================================*/
 
 import {
-    auth
-}
-from "./firebase-config.js";
+    onAuthStateChanged,
+    signInWithEmailAndPassword,
+    createUserWithEmailAndPassword,
+    sendPasswordResetEmail,
+    sendEmailVerification,
+    signOut,
+    updateProfile,
+    GoogleAuthProvider,
+    signInWithPopup,
+    setPersistence,
+    browserLocalPersistence,
+    browserSessionPersistence
+} from "https://www.gstatic.com/firebasejs/12.17.1/firebase-auth.js";
+
+
+/*==================================================
+FIREBASE DATABASE IMPORTS
+==================================================*/
+
+import {
+    ref,
+    get,
+    set,
+    update
+} from "https://www.gstatic.com/firebasejs/12.17.1/firebase-database.js";
 
 
 /*==================================================
 DOM ELEMENTS
 ==================================================*/
 
+const authPage =
+    document.getElementById("auth-page");
+
+const authTitle =
+    document.getElementById("auth-title");
+
+const authSubtitle =
+    document.getElementById("auth-subtitle");
+
+const authMessage =
+    document.getElementById("auth-message");
+
+
+/*==============================
+FORMS
+==============================*/
+
 const loginForm =
-    document.getElementById("loginForm");
+    document.getElementById("login-form");
 
 const signupForm =
-    document.getElementById("signupForm");
+    document.getElementById("signup-form");
 
-const forgotForm =
-    document.getElementById("forgotForm");
+const forgotPasswordForm =
+    document.getElementById(
+        "forgot-password-form"
+    );
 
+
+/*==============================
+LOGIN
+==============================*/
 
 const loginEmail =
-    document.getElementById("loginEmail");
+    document.getElementById("login-email");
 
 const loginPassword =
-    document.getElementById("loginPassword");
+    document.getElementById("login-password");
 
+const loginButton =
+    document.getElementById("login-button");
+
+const rememberMe =
+    document.getElementById("remember-me");
+
+const googleLoginButton =
+    document.getElementById(
+        "google-login-button"
+    );
+
+
+/*==============================
+SIGNUP
+==============================*/
 
 const signupName =
-    document.getElementById("signupName");
+    document.getElementById("signup-name");
+
+const signupUsername =
+    document.getElementById(
+        "signup-username"
+    );
 
 const signupEmail =
-    document.getElementById("signupEmail");
+    document.getElementById(
+        "signup-email"
+    );
 
 const signupPassword =
-    document.getElementById("signupPassword");
+    document.getElementById(
+        "signup-password"
+    );
 
 const signupConfirmPassword =
-    document.getElementById("signupConfirmPassword");
+    document.getElementById(
+        "signup-confirm-password"
+    );
 
+const acceptTerms =
+    document.getElementById(
+        "accept-terms"
+    );
+
+const signupButton =
+    document.getElementById(
+        "signup-button"
+    );
+
+const googleSignupButton =
+    document.getElementById(
+        "google-signup-button"
+    );
+
+
+/*==============================
+FORGOT PASSWORD
+==============================*/
 
 const forgotEmail =
-    document.getElementById("forgotEmail");
+    document.getElementById(
+        "forgot-email"
+    );
+
+const resetPasswordButton =
+    document.getElementById(
+        "reset-password-button"
+    );
 
 
-const loginMessage =
-    document.getElementById("loginMessage");
+/*==============================
+SWITCH BUTTONS
+==============================*/
 
-const signupMessage =
-    document.getElementById("signupMessage");
+const showSignupButton =
+    document.getElementById(
+        "show-signup-button"
+    );
 
-const forgotMessage =
-    document.getElementById("forgotMessage");
+const showLoginButton =
+    document.getElementById(
+        "show-login-button"
+    );
+
+const forgotPasswordLink =
+    document.getElementById(
+        "forgot-password-link"
+    );
+
+const backToLoginButton =
+    document.getElementById(
+        "back-to-login-button"
+    );
+
+
+/*==============================
+BACK HOME
+==============================*/
+
+const authBackButton =
+    document.getElementById(
+        "auth-back-button"
+    );
+
+
+/*==============================
+PASSWORD TOGGLES
+==============================*/
+
+const toggleLoginPassword =
+    document.getElementById(
+        "toggle-login-password"
+    );
+
+const toggleSignupPassword =
+    document.getElementById(
+        "toggle-signup-password"
+    );
+
+const toggleConfirmPassword =
+    document.getElementById(
+        "toggle-confirm-password"
+    );
+
+
+/*==============================
+PASSWORD STRENGTH
+==============================*/
+
+const passwordStrengthBar =
+    document.getElementById(
+        "password-strength-bar"
+    );
+
+const passwordStrengthText =
+    document.getElementById(
+        "password-strength-text"
+    );
+
+
+/*==============================
+VERIFICATION
+==============================*/
+
+const verificationPanel =
+    document.getElementById(
+        "verification-panel"
+    );
+
+const resendVerificationButton =
+    document.getElementById(
+        "resend-verification-button"
+    );
+
+const verificationLogoutButton =
+    document.getElementById(
+        "verification-logout-button"
+    );
 
 
 /*==================================================
-HELPER
+CURRENT USER
+==================================================*/
+
+let currentUser = null;
+
+
+/*==================================================
+GOOGLE PROVIDER
+==================================================*/
+
+const googleProvider =
+    new GoogleAuthProvider();
+
+
+/*==================================================
+HELPER — SHOW MESSAGE
 ==================================================*/
 
 function showMessage(
-    element,
     message,
     type = "error"
 ) {
 
-    if (!element) {
+    if (!authMessage) {
         return;
     }
 
-    element.textContent =
+
+    authMessage.textContent =
         message;
 
-    element.className =
-        "auth-message " + type;
+
+    authMessage.className =
+        "auth-message";
+
+
+    if (type) {
+
+        authMessage.classList.add(
+            type
+        );
+
+    }
+
+}
+
+
+/*==================================================
+CLEAR MESSAGE
+==================================================*/
+
+function clearMessage() {
+
+    if (!authMessage) {
+        return;
+    }
+
+
+    authMessage.textContent =
+        "";
+
+
+    authMessage.className =
+        "auth-message";
+
+}
+
+
+/*==================================================
+SHOW FORM
+==================================================*/
+
+function showForm(
+    form
+) {
+
+    const forms = [
+
+        loginForm,
+
+        signupForm,
+
+        forgotPasswordForm
+
+    ];
+
+
+    forms.forEach(
+        function(item) {
+
+            if (!item) {
+                return;
+            }
+
+
+            item.classList.remove(
+                "active-form"
+            );
+
+        }
+    );
+
+
+    if (verificationPanel) {
+
+        verificationPanel.classList.remove(
+            "active-form"
+        );
+
+        verificationPanel.style.display =
+            "none";
+
+    }
+
+
+    if (form) {
+
+        form.classList.add(
+            "active-form"
+        );
+
+        form.style.display =
+            "";
+
+    }
+
+}
+
+
+/*==================================================
+LOGIN FORM
+==================================================*/
+
+function showLoginForm() {
+
+    showForm(
+        loginForm
+    );
+
+
+    if (authTitle) {
+
+        authTitle.textContent =
+            "Welcome Back";
+
+    }
+
+
+    if (authSubtitle) {
+
+        authSubtitle.textContent =
+            "Login to your SmartBazaar account";
+
+    }
+
+
+    clearMessage();
+
+}
+
+
+/*==================================================
+SIGNUP FORM
+==================================================*/
+
+function showSignupForm() {
+
+    showForm(
+        signupForm
+    );
+
+
+    if (authTitle) {
+
+        authTitle.textContent =
+            "Create Account";
+
+    }
+
+
+    if (authSubtitle) {
+
+        authSubtitle.textContent =
+            "Create your SmartBazaar account";
+
+    }
+
+
+    clearMessage();
+
+}
+
+
+/*==================================================
+FORGOT PASSWORD FORM
+==================================================*/
+
+function showForgotPasswordForm() {
+
+    showForm(
+        forgotPasswordForm
+    );
+
+
+    if (authTitle) {
+
+        authTitle.textContent =
+            "Forgot Password?";
+
+    }
+
+
+    if (authSubtitle) {
+
+        authSubtitle.textContent =
+            "Reset your SmartBazaar password";
+
+    }
+
+
+    clearMessage();
+
+}
+
+
+/*==================================================
+PASSWORD SHOW / HIDE
+==================================================*/
+
+function setupPasswordToggle(
+    button,
+    input
+) {
+
+    if (!button || !input) {
+        return;
+    }
+
+
+    button.addEventListener(
+        "click",
+        function() {
+
+            const isPassword =
+                input.type === "password";
+
+
+            input.type =
+                isPassword
+                    ? "text"
+                    : "password";
+
+
+            const icon =
+                button.querySelector("i");
+
+
+            if (icon) {
+
+                icon.className =
+                    isPassword
+                        ? "fa-regular fa-eye-slash"
+                        : "fa-regular fa-eye";
+
+            }
+
+
+            button.setAttribute(
+                "aria-label",
+                isPassword
+                    ? "Hide password"
+                    : "Show password"
+            );
+
+        }
+    );
+
+}
+
+
+/*==================================================
+INITIALIZE PASSWORD TOGGLES
+==================================================*/
+
+setupPasswordToggle(
+    toggleLoginPassword,
+    loginPassword
+);
+
+
+setupPasswordToggle(
+    toggleSignupPassword,
+    signupPassword
+);
+
+
+setupPasswordToggle(
+    toggleConfirmPassword,
+    signupConfirmPassword
+);
+
+
+/*==================================================
+EMAIL VALIDATION
+==================================================*/
+
+function isValidEmail(
+    email
+) {
+
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+        .test(
+            email
+        );
+
+}
+
+
+/*==================================================
+USERNAME VALIDATION
+==================================================*/
+
+function isValidUsername(
+    username
+) {
+
+    return /^[a-zA-Z0-9_.]{3,20}$/
+        .test(
+            username
+        );
+
+}
+
+
+/*==================================================
+PASSWORD STRENGTH
+==================================================*/
+
+function getPasswordStrength(
+    password
+) {
+
+    let score = 0;
+
+
+    if (
+        password.length >= 8
+    ) {
+
+        score++;
+
+    }
+
+
+    if (
+        /[a-z]/.test(password)
+    ) {
+
+        score++;
+
+    }
+
+
+    if (
+        /[A-Z]/.test(password)
+    ) {
+
+        score++;
+
+    }
+
+
+    if (
+        /[0-9]/.test(password)
+    ) {
+
+        score++;
+
+    }
+
+
+    if (
+        /[^A-Za-z0-9]/.test(password)
+    ) {
+
+        score++;
+
+    }
+
+
+    return score;
+
+}
+
+
+/*==================================================
+UPDATE PASSWORD STRENGTH UI
+==================================================*/
+
+function updatePasswordStrength() {
+
+    if (
+        !signupPassword ||
+        !passwordStrengthBar ||
+        !passwordStrengthText
+    ) {
+
+        return;
+
+    }
+
+
+    const password =
+        signupPassword.value;
+
+
+    if (!password) {
+
+        passwordStrengthBar.style.width =
+            "0%";
+
+
+        passwordStrengthText.textContent =
+            "Password strength";
+
+        return;
+
+    }
+
+
+    const score =
+        getPasswordStrength(
+            password
+        );
+
+
+    const percentages = [
+
+        0,
+
+        20,
+
+        40,
+
+        60,
+
+        80,
+
+        100
+
+    ];
+
+
+    passwordStrengthBar.style.width =
+        percentages[score] + "%";
+
+
+    if (score <= 2) {
+
+        passwordStrengthText.textContent =
+            "Weak password";
+
+    }
+    else if (score === 3) {
+
+        passwordStrengthText.textContent =
+            "Medium password";
+
+    }
+    else if (score === 4) {
+
+        passwordStrengthText.textContent =
+            "Strong password";
+
+    }
+    else {
+
+        passwordStrengthText.textContent =
+            "Very strong password";
+
+    }
+
+}
+
+
+if (signupPassword) {
+
+    signupPassword.addEventListener(
+        "input",
+        updatePasswordStrength
+    );
+
+}
+
+
+/*==================================================
+BUTTON LOADING
+==================================================*/
+
+function setButtonLoading(
+    button,
+    loading,
+    text
+) {
+
+    if (!button) {
+        return;
+    }
+
+
+    if (loading) {
+
+        button.disabled =
+            true;
+
+
+        button.dataset.originalText =
+            button.innerHTML;
+
+
+        button.innerHTML = `
+
+            <i class="fa-solid fa-spinner fa-spin"></i>
+
+            <span>
+                ${text}
+            </span>
+
+        `;
+
+    }
+    else {
+
+        button.disabled =
+            false;
+
+
+        if (
+            button.dataset.originalText
+        ) {
+
+            button.innerHTML =
+                button.dataset.originalText;
+
+        }
+
+    }
+
 }
 
 
@@ -100,9 +806,15 @@ function showMessage(
 FIREBASE ERROR MESSAGE
 ==================================================*/
 
-function getFirebaseErrorMessage(error) {
+function firebaseErrorMessage(
+    error
+) {
 
-    switch (error.code) {
+    const code =
+        error?.code || "";
+
+
+    switch (code) {
 
         case "auth/invalid-email":
 
@@ -111,7 +823,7 @@ function getFirebaseErrorMessage(error) {
 
         case "auth/user-not-found":
 
-            return "No account was found with this email.";
+            return "No account exists with this email.";
 
 
         case "auth/wrong-password":
@@ -126,22 +838,12 @@ function getFirebaseErrorMessage(error) {
 
         case "auth/email-already-in-use":
 
-            return "This email is already registered.";
+            return "An account already exists with this email.";
 
 
         case "auth/weak-password":
 
-            return "Password must be at least 6 characters.";
-
-
-        case "auth/network-request-failed":
-
-            return "Network error. Please check your internet connection.";
-
-
-        case "auth/too-many-requests":
-
-            return "Too many attempts. Please try again later.";
+            return "Password is too weak. Use at least 8 characters.";
 
 
         case "auth/user-disabled":
@@ -149,15 +851,35 @@ function getFirebaseErrorMessage(error) {
             return "This account has been disabled.";
 
 
+        case "auth/too-many-requests":
+
+            return "Too many attempts. Please wait and try again.";
+
+
+        case "auth/network-request-failed":
+
+            return "Network error. Please check your internet connection.";
+
+
+        case "auth/popup-closed-by-user":
+
+            return "Google sign-in was cancelled.";
+
+
+        case "auth/popup-blocked":
+
+            return "Your browser blocked the Google sign-in window.";
+
+
+        case "auth/operation-not-allowed":
+
+            return "This login method is not enabled in Firebase.";
+
+
         default:
 
-            console.error(
-                "Firebase Auth Error:",
-                error
-            );
-
             return (
-                error.message ||
+                error?.message ||
                 "Something went wrong. Please try again."
             );
 
@@ -167,13 +889,161 @@ function getFirebaseErrorMessage(error) {
 
 
 /*==================================================
-EMAIL VALIDATION
+SAVE USER TO REALTIME DATABASE
 ==================================================*/
 
-function isValidEmail(email) {
+async function createUserRecord(
+    user,
+    name,
+    username
+) {
 
-    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-        .test(email);
+    if (!user) {
+        return;
+    }
+
+
+    const userRef =
+        ref(
+            database,
+            "users/" +
+            user.uid
+        );
+
+
+    const snapshot =
+        await get(
+            userRef
+        );
+
+
+    if (snapshot.exists()) {
+
+        return;
+
+    }
+
+
+    await set(
+        userRef,
+        {
+
+            name:
+                name ||
+                user.displayName ||
+                "SmartBazaar User",
+
+            username:
+                username ||
+                "",
+
+            email:
+                user.email ||
+                "",
+
+            photoURL:
+                user.photoURL ||
+                "",
+
+            createdAt:
+                Date.now(),
+
+            updatedAt:
+                Date.now(),
+
+            stats: {
+
+                orders: 0,
+
+                products: 0,
+
+                projects: 0,
+
+                downloads: 0
+
+            },
+
+            wallet: {
+
+                balance: 0
+
+            }
+
+        }
+    );
+
+}
+
+
+/*==================================================
+UPDATE EXISTING GOOGLE USER
+==================================================*/
+
+async function updateGoogleUserRecord(
+    user
+) {
+
+    if (!user) {
+        return;
+    }
+
+
+    const userRef =
+        ref(
+            database,
+            "users/" +
+            user.uid
+        );
+
+
+    const snapshot =
+        await get(
+            userRef
+        );
+
+
+    if (!snapshot.exists()) {
+
+        await createUserRecord(
+            user,
+            user.displayName ||
+                "SmartBazaar User",
+            ""
+        );
+
+        return;
+
+    }
+
+
+    const existing =
+        snapshot.val();
+
+
+    await update(
+        userRef,
+        {
+
+            name:
+                existing.name ||
+                user.displayName ||
+                "SmartBazaar User",
+
+            email:
+                user.email ||
+                existing.email ||
+                "",
+
+            photoURL:
+                user.photoURL ||
+                existing.photoURL ||
+                "",
+
+            updatedAt:
+                Date.now()
+
+        }
+    );
 
 }
 
@@ -191,6 +1061,9 @@ if (loginForm) {
             event.preventDefault();
 
 
+            clearMessage();
+
+
             const email =
                 loginEmail
                     ? loginEmail.value.trim()
@@ -203,14 +1076,9 @@ if (loginForm) {
                     : "";
 
 
-            /*==============================
-            VALIDATION
-            ==============================*/
-
             if (!email) {
 
                 showMessage(
-                    loginMessage,
                     "Please enter your email."
                 );
 
@@ -222,7 +1090,6 @@ if (loginForm) {
             if (!isValidEmail(email)) {
 
                 showMessage(
-                    loginMessage,
                     "Please enter a valid email address."
                 );
 
@@ -234,7 +1101,6 @@ if (loginForm) {
             if (!password) {
 
                 showMessage(
-                    loginMessage,
                     "Please enter your password."
                 );
 
@@ -245,18 +1111,31 @@ if (loginForm) {
 
             try {
 
-                showMessage(
-                    loginMessage,
-                    "Logging in...",
-                    "loading"
+                setButtonLoading(
+                    loginButton,
+                    true,
+                    "Logging in..."
                 );
 
 
-                /*==============================
-                FIREBASE LOGIN
-                ==============================*/
+                /*==========================
+                REMEMBER ME
+                ==========================*/
 
-                const userCredential =
+                await setPersistence(
+                    auth,
+                    rememberMe &&
+                    rememberMe.checked
+                        ? browserLocalPersistence
+                        : browserSessionPersistence
+                );
+
+
+                /*==========================
+                FIREBASE LOGIN
+                ==========================*/
+
+                const result =
                     await signInWithEmailAndPassword(
                         auth,
                         email,
@@ -264,46 +1143,62 @@ if (loginForm) {
                     );
 
 
-                const user =
-                    userCredential.user;
+                currentUser =
+                    result.user;
 
 
-                console.log(
-                    "Login successful:",
-                    user.uid
-                );
+                /*==========================
+                EMAIL VERIFICATION
+                ==========================*/
 
+                if (
+                    !currentUser.emailVerified
+                ) {
+
+                    showVerificationPanel(
+                        currentUser
+                    );
+
+                    return;
+
+                }
+
+
+                /*==========================
+                SUCCESS
+                ==========================*/
 
                 showMessage(
-                    loginMessage,
                     "Login successful. Opening your account...",
                     "success"
                 );
 
 
-                /*==============================
-                OPEN ACCOUNT PAGE
-                ==============================*/
+                window.location.href =
+                    "account.html";
 
-                setTimeout(
-                    function() {
+            }
+            catch(error) {
 
-                        window.location.href =
-                            "account.html";
+                console.error(
+                    "LOGIN ERROR:",
+                    error
+                );
 
-                    },
-                    700
+
+                showMessage(
+                    firebaseErrorMessage(
+                        error
+                    ),
+                    "error"
                 );
 
             }
+            finally {
 
-
-            catch(error) {
-
-                showMessage(
-                    loginMessage,
-                    getFirebaseErrorMessage(error),
-                    "error"
+                setButtonLoading(
+                    loginButton,
+                    false
                 );
 
             }
@@ -315,7 +1210,7 @@ if (loginForm) {
 
 
 /*==================================================
-SIGN UP
+SIGNUP
 ==================================================*/
 
 if (signupForm) {
@@ -327,15 +1222,28 @@ if (signupForm) {
             event.preventDefault();
 
 
+            clearMessage();
+
+
             const name =
                 signupName
                     ? signupName.value.trim()
                     : "";
 
 
+            const username =
+                signupUsername
+                    ? signupUsername.value
+                        .trim()
+                        .toLowerCase()
+                    : "";
+
+
             const email =
                 signupEmail
-                    ? signupEmail.value.trim()
+                    ? signupEmail.value
+                        .trim()
+                        .toLowerCase()
                     : "";
 
 
@@ -351,15 +1259,14 @@ if (signupForm) {
                     : "";
 
 
-            /*==============================
+            /*==========================
             NAME
-            ==============================*/
+            ==========================*/
 
             if (!name) {
 
                 showMessage(
-                    signupMessage,
-                    "Please enter your name."
+                    "Please enter your full name."
                 );
 
                 return;
@@ -367,14 +1274,54 @@ if (signupForm) {
             }
 
 
-            /*==============================
+            if (name.length < 2) {
+
+                showMessage(
+                    "Your name is too short."
+                );
+
+                return;
+
+            }
+
+
+            /*==========================
+            USERNAME
+            ==========================*/
+
+            if (!username) {
+
+                showMessage(
+                    "Please choose a username."
+                );
+
+                return;
+
+            }
+
+
+            if (
+                !isValidUsername(
+                    username
+                )
+            ) {
+
+                showMessage(
+                    "Username must be 3–20 characters and use only letters, numbers, dots or underscores."
+                );
+
+                return;
+
+            }
+
+
+            /*==========================
             EMAIL
-            ==============================*/
+            ==========================*/
 
             if (!email) {
 
                 showMessage(
-                    signupMessage,
                     "Please enter your email."
                 );
 
@@ -386,7 +1333,6 @@ if (signupForm) {
             if (!isValidEmail(email)) {
 
                 showMessage(
-                    signupMessage,
                     "Please enter a valid email address."
                 );
 
@@ -395,15 +1341,16 @@ if (signupForm) {
             }
 
 
-            /*==============================
+            /*==========================
             PASSWORD
-            ==============================*/
+            ==========================*/
 
-            if (!password) {
+            if (
+                password.length < 8
+            ) {
 
                 showMessage(
-                    signupMessage,
-                    "Please enter a password."
+                    "Password must contain at least 8 characters."
                 );
 
                 return;
@@ -411,11 +1358,14 @@ if (signupForm) {
             }
 
 
-            if (password.length < 6) {
+            if (
+                getPasswordStrength(
+                    password
+                ) < 3
+            ) {
 
                 showMessage(
-                    signupMessage,
-                    "Password must be at least 6 characters."
+                    "Please create a stronger password."
                 );
 
                 return;
@@ -423,9 +1373,9 @@ if (signupForm) {
             }
 
 
-            /*==============================
-            CONFIRM PASSWORD
-            ==============================*/
+            /*==========================
+            CONFIRM
+            ==========================*/
 
             if (
                 password !==
@@ -433,8 +1383,25 @@ if (signupForm) {
             ) {
 
                 showMessage(
-                    signupMessage,
                     "Passwords do not match."
+                );
+
+                return;
+
+            }
+
+
+            /*==========================
+            TERMS
+            ==========================*/
+
+            if (
+                !acceptTerms ||
+                !acceptTerms.checked
+            ) {
+
+                showMessage(
+                    "Please accept the Terms & Conditions and Privacy Policy."
                 );
 
                 return;
@@ -444,18 +1411,18 @@ if (signupForm) {
 
             try {
 
-                showMessage(
-                    signupMessage,
-                    "Creating your account...",
-                    "loading"
+                setButtonLoading(
+                    signupButton,
+                    true,
+                    "Creating account..."
                 );
 
 
-                /*==============================
-                CREATE FIREBASE ACCOUNT
-                ==============================*/
+                /*==========================
+                CREATE FIREBASE USER
+                ==========================*/
 
-                const userCredential =
+                const result =
                     await createUserWithEmailAndPassword(
                         auth,
                         email,
@@ -463,59 +1430,81 @@ if (signupForm) {
                     );
 
 
-                const user =
-                    userCredential.user;
+                currentUser =
+                    result.user;
 
 
-                /*==============================
-                SAVE DISPLAY NAME
-                ==============================*/
+                /*==========================
+                UPDATE AUTH PROFILE
+                ==========================*/
 
                 await updateProfile(
-                    user,
+                    currentUser,
                     {
+
                         displayName:
                             name
+
                     }
                 );
 
 
-                console.log(
-                    "Account created:",
-                    user.uid
+                /*==========================
+                CREATE DATABASE RECORD
+                ==========================*/
+
+                await createUserRecord(
+                    currentUser,
+                    name,
+                    username
+                );
+
+
+                /*==========================
+                SEND VERIFICATION EMAIL
+                ==========================*/
+
+                await sendEmailVerification(
+                    currentUser
+                );
+
+
+                /*==========================
+                SHOW VERIFICATION
+                ==========================*/
+
+                showVerificationPanel(
+                    currentUser
                 );
 
 
                 showMessage(
-                    signupMessage,
-                    "Account created successfully!",
+                    "Account created successfully. Please verify your email.",
                     "success"
                 );
 
+            }
+            catch(error) {
 
-                /*==============================
-                OPEN ACCOUNT
-                ==============================*/
+                console.error(
+                    "SIGNUP ERROR:",
+                    error
+                );
 
-                setTimeout(
-                    function() {
 
-                        window.location.href =
-                            "account.html";
-
-                    },
-                    800
+                showMessage(
+                    firebaseErrorMessage(
+                        error
+                    ),
+                    "error"
                 );
 
             }
+            finally {
 
-
-            catch(error) {
-
-                showMessage(
-                    signupMessage,
-                    getFirebaseErrorMessage(error),
-                    "error"
+                setButtonLoading(
+                    signupButton,
+                    false
                 );
 
             }
@@ -530,13 +1519,16 @@ if (signupForm) {
 FORGOT PASSWORD
 ==================================================*/
 
-if (forgotForm) {
+if (forgotPasswordForm) {
 
-    forgotForm.addEventListener(
+    forgotPasswordForm.addEventListener(
         "submit",
         async function(event) {
 
             event.preventDefault();
+
+
+            clearMessage();
 
 
             const email =
@@ -545,15 +1537,10 @@ if (forgotForm) {
                     : "";
 
 
-            /*==============================
-            EMAIL REQUIRED
-            ==============================*/
-
             if (!email) {
 
                 showMessage(
-                    forgotMessage,
-                    "Please enter your email."
+                    "Please enter your email address."
                 );
 
                 return;
@@ -564,7 +1551,6 @@ if (forgotForm) {
             if (!isValidEmail(email)) {
 
                 showMessage(
-                    forgotMessage,
                     "Please enter a valid email address."
                 );
 
@@ -575,16 +1561,12 @@ if (forgotForm) {
 
             try {
 
-                showMessage(
-                    forgotMessage,
-                    "Sending password reset email...",
-                    "loading"
+                setButtonLoading(
+                    resetPasswordButton,
+                    true,
+                    "Sending..."
                 );
 
-
-                /*==============================
-                SEND RESET EMAIL
-                ==============================*/
 
                 await sendPasswordResetEmail(
                     auth,
@@ -593,20 +1575,40 @@ if (forgotForm) {
 
 
                 showMessage(
-                    forgotMessage,
                     "Password reset email sent. Please check your inbox.",
                     "success"
                 );
 
+
+                if (forgotEmail) {
+
+                    forgotEmail.value =
+                        "";
+
+                }
+
             }
-
-
             catch(error) {
 
+                console.error(
+                    "PASSWORD RESET ERROR:",
+                    error
+                );
+
+
                 showMessage(
-                    forgotMessage,
-                    getFirebaseErrorMessage(error),
+                    firebaseErrorMessage(
+                        error
+                    ),
                     "error"
+                );
+
+            }
+            finally {
+
+                setButtonLoading(
+                    resetPasswordButton,
+                    false
                 );
 
             }
@@ -618,40 +1620,491 @@ if (forgotForm) {
 
 
 /*==================================================
-LOGOUT
+GOOGLE LOGIN
 ==================================================*/
 
-const logoutButton =
-    document.getElementById(
-        "logout-button"
+async function googleLogin() {
+
+    clearMessage();
+
+
+    try {
+
+        setButtonLoading(
+            googleLoginButton,
+            true,
+            "Connecting..."
+        );
+
+
+        const result =
+            await signInWithPopup(
+                auth,
+                googleProvider
+            );
+
+
+        currentUser =
+            result.user;
+
+
+        await updateGoogleUserRecord(
+            currentUser
+        );
+
+
+        window.location.href =
+            "account.html";
+
+    }
+    catch(error) {
+
+        console.error(
+            "GOOGLE LOGIN ERROR:",
+            error
+        );
+
+
+        showMessage(
+            firebaseErrorMessage(
+                error
+            )
+        );
+
+    }
+    finally {
+
+        setButtonLoading(
+            googleLoginButton,
+            false
+        );
+
+    }
+
+}
+
+
+/*==================================================
+GOOGLE SIGNUP
+==================================================*/
+
+async function googleSignup() {
+
+    clearMessage();
+
+
+    try {
+
+        setButtonLoading(
+            googleSignupButton,
+            true,
+            "Connecting..."
+        );
+
+
+        const result =
+            await signInWithPopup(
+                auth,
+                googleProvider
+            );
+
+
+        currentUser =
+            result.user;
+
+
+        await updateGoogleUserRecord(
+            currentUser
+        );
+
+
+        window.location.href =
+            "account.html";
+
+    }
+    catch(error) {
+
+        console.error(
+            "GOOGLE SIGNUP ERROR:",
+            error
+        );
+
+
+        showMessage(
+            firebaseErrorMessage(
+                error
+            )
+        );
+
+    }
+    finally {
+
+        setButtonLoading(
+            googleSignupButton,
+            false
+        );
+
+    }
+
+}
+
+
+/*==================================================
+GOOGLE BUTTON EVENTS
+==================================================*/
+
+if (googleLoginButton) {
+
+    googleLoginButton.addEventListener(
+        "click",
+        googleLogin
+    );
+
+}
+
+
+if (googleSignupButton) {
+
+    googleSignupButton.addEventListener(
+        "click",
+        googleSignup
+    );
+
+}
+
+
+/*==================================================
+SHOW VERIFICATION PANEL
+==================================================*/
+
+function showVerificationPanel(
+    user
+) {
+
+    const forms = [
+
+        loginForm,
+
+        signupForm,
+
+        forgotPasswordForm
+
+    ];
+
+
+    forms.forEach(
+        function(form) {
+
+            if (!form) {
+                return;
+            }
+
+
+            form.classList.remove(
+                "active-form"
+            );
+
+
+            form.style.display =
+                "none";
+
+        }
     );
 
 
-if (logoutButton) {
+    if (verificationPanel) {
 
-    logoutButton.addEventListener(
+        verificationPanel.style.display =
+            "block";
+
+
+        verificationPanel.classList.add(
+            "active-form"
+        );
+
+    }
+
+
+    if (authTitle) {
+
+        authTitle.textContent =
+            "Verify Your Email";
+
+    }
+
+
+    if (authSubtitle) {
+
+        authSubtitle.textContent =
+            user?.email ||
+            "Check your email";
+
+    }
+
+}
+
+
+/*==================================================
+RESEND VERIFICATION
+==================================================*/
+
+if (resendVerificationButton) {
+
+    resendVerificationButton.addEventListener(
+        "click",
+        async function() {
+
+            if (!currentUser) {
+
+                showMessage(
+                    "Please login again."
+                );
+
+                return;
+
+            }
+
+
+            try {
+
+                setButtonLoading(
+                    resendVerificationButton,
+                    true,
+                    "Sending..."
+                );
+
+
+                await sendEmailVerification(
+                    currentUser
+                );
+
+
+                showMessage(
+                    "Verification email sent again.",
+                    "success"
+                );
+
+            }
+            catch(error) {
+
+                console.error(
+                    "VERIFICATION ERROR:",
+                    error
+                );
+
+
+                showMessage(
+                    firebaseErrorMessage(
+                        error
+                    )
+                );
+
+            }
+            finally {
+
+                setButtonLoading(
+                    resendVerificationButton,
+                    false
+                );
+
+            }
+
+        }
+    );
+
+}
+
+
+/*==================================================
+VERIFICATION LOGOUT
+==================================================*/
+
+if (verificationLogoutButton) {
+
+    verificationLogoutButton.addEventListener(
         "click",
         async function() {
 
             try {
 
-                await signOut(auth);
+                await signOut(
+                    auth
+                );
 
 
-                window.location.href =
-                    "login.html";
+                currentUser =
+                    null;
+
+
+                showLoginForm();
 
             }
-
-
             catch(error) {
 
                 console.error(
-                    "Logout error:",
+                    "VERIFICATION LOGOUT ERROR:",
                     error
                 );
 
             }
+
+        }
+    );
+
+}
+
+
+/*==================================================
+SHOW SIGNUP
+==================================================*/
+
+if (showSignupButton) {
+
+    showSignupButton.addEventListener(
+        "click",
+        function() {
+
+            showSignupForm();
+
+        }
+    );
+
+}
+
+
+/*==================================================
+SHOW LOGIN
+==================================================*/
+
+if (showLoginButton) {
+
+    showLoginButton.addEventListener(
+        "click",
+        function() {
+
+            showLoginForm();
+
+        }
+    );
+
+}
+
+
+/*==================================================
+FORGOT PASSWORD
+==================================================*/
+
+if (forgotPasswordLink) {
+
+    forgotPasswordLink.addEventListener(
+        "click",
+        function() {
+
+            if (
+                loginEmail &&
+                loginEmail.value.trim()
+            ) {
+
+                if (forgotEmail) {
+
+                    forgotEmail.value =
+                        loginEmail.value.trim();
+
+                }
+
+            }
+
+
+            showForgotPasswordForm();
+
+        }
+    );
+
+}
+
+
+/*==================================================
+BACK TO LOGIN
+==================================================*/
+
+if (backToLoginButton) {
+
+    backToLoginButton.addEventListener(
+        "click",
+        function() {
+
+            showLoginForm();
+
+        }
+    );
+
+}
+
+
+/*==================================================
+BACK TO HOME
+==================================================*/
+
+if (authBackButton) {
+
+    authBackButton.addEventListener(
+        "click",
+        function() {
+
+            window.location.href =
+                "index.html";
+
+        }
+    );
+
+}
+
+
+/*==================================================
+TERMS BUTTON
+==================================================*/
+
+const termsButton =
+    document.getElementById(
+        "terms-button"
+    );
+
+
+if (termsButton) {
+
+    termsButton.addEventListener(
+        "click",
+        function() {
+
+            alert(
+                "Terms & Conditions page will be connected here."
+            );
+
+        }
+    );
+
+}
+
+
+/*==================================================
+PRIVACY BUTTON
+==================================================*/
+
+const privacyButton =
+    document.getElementById(
+        "privacy-button"
+    );
+
+
+if (privacyButton) {
+
+    privacyButton.addEventListener(
+        "click",
+        function() {
+
+            alert(
+                "Privacy Policy page will be connected here."
+            );
 
         }
     );
@@ -665,30 +2118,112 @@ AUTH STATE
 
 onAuthStateChanged(
     auth,
-    function(user) {
+    async function(user) {
 
         if (user) {
 
-            console.log(
-                "Current user:",
-                user.email
-            );
+            currentUser =
+                user;
 
 
             console.log(
-                "User ID:",
+                "Authenticated user:",
                 user.uid
             );
 
-        }
 
+            /*
+             * IMPORTANT:
+             *
+             * If user is already verified,
+             * do not keep showing login page.
+             */
+
+            if (
+                user.emailVerified
+            ) {
+
+                /*
+                 * We only redirect when
+                 * the user is actually on
+                 * the authentication page.
+                 */
+
+                const currentPage =
+                    window.location.pathname
+                        .split("/")
+                        .pop();
+
+
+                if (
+                    currentPage ===
+                    "login.html"
+                ) {
+
+                    window.location.href =
+                        "account.html";
+
+                }
+
+            }
+            else {
+
+                /*
+                 * Google accounts normally
+                 * do not require this panel.
+                 *
+                 * Email/password users do.
+                 */
+
+                if (
+                    user.providerData &&
+                    user.providerData.some(
+                        provider =>
+                            provider.providerId ===
+                            "password"
+                    )
+                ) {
+
+                    showVerificationPanel(
+                        user
+                    );
+
+                }
+
+            }
+
+        }
         else {
 
-            console.log(
-                "No user is currently logged in."
-            );
+            currentUser =
+                null;
+
+
+            /*
+             * Stay on login page.
+             *
+             * Do not redirect repeatedly.
+             */
+
+            showLoginForm();
 
         }
 
     }
+);
+
+
+/*==================================================
+INITIAL FORM
+==================================================*/
+
+showLoginForm();
+
+
+/*==================================================
+CONSOLE
+==================================================*/
+
+console.log(
+    "SmartBazaar Pro authentication system loaded."
 );
