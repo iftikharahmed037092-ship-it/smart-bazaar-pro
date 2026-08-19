@@ -1,0 +1,989 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
+
+<title>Product Editor | SMARTBAZAAR PRO</title>
+
+<link rel="stylesheet"
+href="product-editor.css">
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+
+</head>
+
+
+<body>
+
+
+<!--==================================================
+ SMARTBAZAAR PRO
+ PRODUCT EDITOR
+ FEATURE (24) PRODUCT CARD ELEMENT
+==================================================-->
+
+
+<div class="product-editor">
+
+
+    <!--==============================================
+    EDITOR HEADER
+    ==============================================-->
+
+    <header class="editor-header">
+
+        <div class="editor-title">
+
+            <div class="editor-icon">
+                <i class="fa-solid fa-box-open"></i>
+            </div>
+
+            <div>
+
+                <h1>
+                    Product Editor
+                </h1>
+
+                <p>
+                    Create and customize your product
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="editor-actions">
+
+            <button
+                type="button"
+                class="preview-btn"
+                id="previewProductBtn">
+
+                <i class="fa-solid fa-eye"></i>
+
+                Preview
+
+            </button>
+
+
+            <button
+                type="button"
+                class="save-btn"
+                id="saveProductBtn">
+
+                <i class="fa-solid fa-floppy-disk"></i>
+
+                Save Product
+
+            </button>
+
+        </div>
+
+    </header>
+
+
+
+    <!--==============================================
+    MAIN EDITOR
+    ==============================================-->
+
+    <main class="editor-main">
+
+
+        <!--==========================================
+        LEFT SIDE
+        PRODUCT MEDIA
+        ==========================================-->
+
+        <section class="editor-card media-section">
+
+
+            <div class="section-header">
+
+                <div>
+
+                    <h2>
+                        Product Media
+                    </h2>
+
+                    <p>
+                        Upload product images
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <!-- MAIN IMAGE -->
+
+            <div class="main-image-upload">
+
+                <div class="image-preview"
+                     id="mainImagePreview">
+
+                    <i class="fa-regular fa-image"></i>
+
+                    <span>
+                        Product Image
+                    </span>
+
+                </div>
+
+
+                <input
+                    type="file"
+                    id="mainProductImage"
+                    accept="image/*"
+                    hidden>
+
+
+                <button
+                    type="button"
+                    class="upload-image-btn"
+                    id="uploadImageBtn">
+
+                    <i class="fa-solid fa-cloud-arrow-up"></i>
+
+                    Upload Main Image
+
+                </button>
+
+            </div>
+
+
+            <!-- IMAGE URL -->
+
+            <div class="form-group">
+
+                <label for="productImageUrl">
+
+                    Image URL
+
+                </label>
+
+                <input
+                    type="url"
+                    id="productImageUrl"
+                    placeholder="https://...">
+
+            </div>
+
+
+            <!-- GALLERY -->
+
+            <div class="form-group">
+
+                <label for="productGallery">
+
+                    Product Gallery
+
+                </label>
+
+                <input
+                    type="file"
+                    id="productGallery"
+                    accept="image/*"
+                    multiple>
+
+                <small>
+                    You can select multiple product images
+                </small>
+
+            </div>
+
+
+            <div
+                class="gallery-preview"
+                id="galleryPreview">
+
+            </div>
+
+
+        </section>
+
+
+
+        <!--==========================================
+        RIGHT SIDE
+        BASIC PRODUCT INFORMATION
+        ==========================================-->
+
+        <section class="editor-card basic-section">
+
+
+            <div class="section-header">
+
+                <div>
+
+                    <h2>
+                        Product Information
+                    </h2>
+
+                    <p>
+                        Basic product details
+                    </p>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- PRODUCT NAME -->
+
+            <div class="form-group">
+
+                <label for="productName">
+
+                    Product Name
+
+                </label>
+
+                <input
+                    type="text"
+                    id="productName"
+                    placeholder="Enter product name"
+                    required>
+
+            </div>
+
+
+
+            <!-- SKU -->
+
+            <div class="form-row">
+
+                <div class="form-group">
+
+                    <label for="productSKU">
+
+                        SKU
+
+                    </label>
+
+                    <input
+                        type="text"
+                        id="productSKU"
+                        placeholder="SKU-001">
+
+                </div>
+
+
+                <!-- CATEGORY -->
+
+                <div class="form-group">
+
+                    <label for="productCategory">
+
+                        Category
+
+                    </label>
+
+                    <select id="productCategory">
+
+                        <option value="">
+                            Select Category
+                        </option>
+
+                        <option>
+                            Electronics
+                        </option>
+
+                        <option>
+                            Clothing
+                        </option>
+
+                        <option>
+                            Shoes
+                        </option>
+
+                        <option>
+                            Beauty
+                        </option>
+
+                        <option>
+                            Home & Garden
+                        </option>
+
+                        <option>
+                            Digital Products
+                        </option>
+
+                        <option>
+                            Website Templates
+                        </option>
+
+                        <option>
+                            AI Tools
+                        </option>
+
+                        <option>
+                            Courses
+                        </option>
+
+                    </select>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- BRAND -->
+
+            <div class="form-group">
+
+                <label for="productBrand">
+
+                    Brand
+
+                </label>
+
+                <input
+                    type="text"
+                    id="productBrand"
+                    placeholder="Enter brand name">
+
+            </div>
+
+
+
+            <!-- DESCRIPTION -->
+
+            <div class="form-group">
+
+                <label for="productDescription">
+
+                    Product Description
+
+                </label>
+
+                <textarea
+                    id="productDescription"
+                    placeholder="Write product description...">
+                </textarea>
+
+            </div>
+
+
+        </section>
+
+
+
+        <!--==========================================
+        PRICING
+        ==========================================-->
+
+        <section class="editor-card pricing-section">
+
+
+            <div class="section-header">
+
+                <div>
+
+                    <h2>
+                        Pricing
+                    </h2>
+
+                    <p>
+                        Set product price and discount
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="form-row">
+
+
+                <div class="form-group">
+
+                    <label for="productPrice">
+
+                        Current Price
+
+                    </label>
+
+                    <input
+                        type="number"
+                        id="productPrice"
+                        placeholder="4999">
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="productOldPrice">
+
+                        Old Price
+
+                    </label>
+
+                    <input
+                        type="number"
+                        id="productOldPrice"
+                        placeholder="6999">
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="productDiscount">
+
+                        Discount
+
+                    </label>
+
+                    <input
+                        type="text"
+                        id="productDiscount"
+                        placeholder="29% OFF">
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="productCurrency">
+
+                        Currency
+
+                    </label>
+
+                    <select id="productCurrency">
+
+                        <option value="PKR">
+                            PKR - Rs.
+                        </option>
+
+                        <option value="USD">
+                            USD - $
+                        </option>
+
+                        <option value="EUR">
+                            EUR - €
+                        </option>
+
+                    </select>
+
+                </div>
+
+            </div>
+
+
+        </section>
+
+
+
+        <!--==========================================
+        PRODUCT STATUS
+        ==========================================-->
+
+        <section class="editor-card status-section">
+
+
+            <div class="section-header">
+
+                <div>
+
+                    <h2>
+                        Product Status
+                    </h2>
+
+                    <p>
+                        Control product availability
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="form-row">
+
+
+                <!-- STOCK -->
+
+                <div class="form-group">
+
+                    <label for="stockStatus">
+
+                        Stock Status
+
+                    </label>
+
+                    <select id="stockStatus">
+
+                        <option value="in-stock">
+                            In Stock
+                        </option>
+
+                        <option value="low-stock">
+                            Low Stock
+                        </option>
+
+                        <option value="out-of-stock">
+                            Out of Stock
+                        </option>
+
+                        <option value="coming-soon">
+                            Coming Soon
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <!-- STOCK QUANTITY -->
+
+                <div class="form-group">
+
+                    <label for="stockQuantity">
+
+                        Stock Quantity
+
+                    </label>
+
+                    <input
+                        type="number"
+                        id="stockQuantity"
+                        min="0"
+                        placeholder="100">
+
+                </div>
+
+
+                <!-- PRODUCT STATUS -->
+
+                <div class="form-group">
+
+                    <label for="productStatus">
+
+                        Product Status
+
+                    </label>
+
+                    <select id="productStatus">
+
+                        <option value="active">
+                            Active
+                        </option>
+
+                        <option value="draft">
+                            Draft
+                        </option>
+
+                        <option value="hidden">
+                            Hidden
+                        </option>
+
+                    </select>
+
+                </div>
+
+            </div>
+
+
+        </section>
+
+
+
+        <!--==========================================
+        BADGES
+        ==========================================-->
+
+        <section class="editor-card badge-section">
+
+
+            <div class="section-header">
+
+                <div>
+
+                    <h2>
+                        Product Badge
+                    </h2>
+
+                    <p>
+                        Display a badge on the product card
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="badge-options">
+
+
+                <label class="badge-option">
+
+                    <input
+                        type="radio"
+                        name="productBadge"
+                        value="none"
+                        checked>
+
+                    <span>
+                        None
+                    </span>
+
+                </label>
+
+
+                <label class="badge-option">
+
+                    <input
+                        type="radio"
+                        name="productBadge"
+                        value="new">
+
+                    <span>
+                        New
+                    </span>
+
+                </label>
+
+
+                <label class="badge-option">
+
+                    <input
+                        type="radio"
+                        name="productBadge"
+                        value="sale">
+
+                    <span>
+                        Sale
+                    </span>
+
+                </label>
+
+
+                <label class="badge-option">
+
+                    <input
+                        type="radio"
+                        name="productBadge"
+                        value="hot">
+
+                    <span>
+                        Hot
+                    </span>
+
+                </label>
+
+
+                <label class="badge-option">
+
+                    <input
+                        type="radio"
+                        name="productBadge"
+                        value="featured">
+
+                    <span>
+                        Featured
+                    </span>
+
+                </label>
+
+
+                <label class="badge-option">
+
+                    <input
+                        type="radio"
+                        name="productBadge"
+                        value="best-seller">
+
+                    <span>
+                        Best Seller
+                    </span>
+
+                </label>
+
+
+            </div>
+
+
+        </section>
+
+
+
+        <!--==========================================
+        RATING
+        ==========================================-->
+
+        <section class="editor-card rating-section">
+
+
+            <div class="section-header">
+
+                <div>
+
+                    <h2>
+                        Rating & Reviews
+                    </h2>
+
+                    <p>
+                        Product rating information
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="form-row">
+
+
+                <div class="form-group">
+
+                    <label for="productRating">
+
+                        Rating
+
+                    </label>
+
+                    <input
+                        type="number"
+                        id="productRating"
+                        min="0"
+                        max="5"
+                        step="0.1"
+                        value="5">
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="reviewCount">
+
+                        Review Count
+
+                    </label>
+
+                    <input
+                        type="number"
+                        id="reviewCount"
+                        min="0"
+                        value="0">
+
+                </div>
+
+            </div>
+
+
+        </section>
+
+
+
+        <!--==========================================
+        PRODUCT OPTIONS
+        ==========================================-->
+
+        <section class="editor-card options-section">
+
+
+            <div class="section-header">
+
+                <div>
+
+                    <h2>
+                        Product Options
+                    </h2>
+
+                    <p>
+                        Colors, sizes and variations
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <!-- COLORS -->
+
+            <div class="form-group">
+
+                <label for="productColors">
+
+                    Available Colors
+
+                </label>
+
+                <input
+                    type="text"
+                    id="productColors"
+                    placeholder="Black, Blue, White">
+
+            </div>
+
+
+            <!-- SIZES -->
+
+            <div class="form-group">
+
+                <label for="productSizes">
+
+                    Available Sizes
+
+                </label>
+
+                <input
+                    type="text"
+                    id="productSizes"
+                    placeholder="S, M, L, XL">
+
+            </div>
+
+
+        </section>
+
+
+
+        <!--==========================================
+        DELIVERY
+        ==========================================-->
+
+        <section class="editor-card delivery-section">
+
+
+            <div class="section-header">
+
+                <div>
+
+                    <h2>
+                        Delivery
+                    </h2>
+
+                    <p>
+                        Delivery information
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="form-row">
+
+
+                <div class="form-group">
+
+                    <label for="deliveryStatus">
+
+                        Delivery
+
+                    </label>
+
+                    <select id="deliveryStatus">
+
+                        <option value="free">
+                            Free Delivery
+                        </option>
+
+                        <option value="paid">
+                            Paid Delivery
+                        </option>
+
+                        <option value="unavailable">
+                            Delivery Unavailable
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="deliveryText">
+
+                        Delivery Text
+
+                    </label>
+
+                    <input
+                        type="text"
+                        id="deliveryText"
+                        value="Free Delivery Available">
+
+                </div>
+
+            </div>
+
+
+        </section>
+
+
+
+        <!--==========================================
+        FINAL ACTIONS
+        ==========================================-->
+
+        <section class="editor-footer">
+
+
+            <button
+                type="button"
+                class="cancel-btn"
+                id="cancelProductBtn">
+
+                Cancel
+
+            </button>
+
+
+            <button
+                type="button"
+                class="draft-btn"
+                id="saveDraftBtn">
+
+                <i class="fa-solid fa-file-pen"></i>
+
+                Save Draft
+
+            </button>
+
+
+            <button
+                type="button"
+                class="final-save-btn"
+                id="finalSaveProductBtn">
+
+                <i class="fa-solid fa-check"></i>
+
+                Publish Product
+
+            </button>
+
+
+        </section>
+
+
+    </main>
+
+
+</div>
+
+
+<script
+type="module"
+src="product-editor.js">
+</script>
+
+
+</body>
+
+</html>
