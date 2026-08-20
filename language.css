@@ -1,0 +1,882 @@
+/*==================================================
+SMARTBAZAAR PRO
+LANGUAGE SETTINGS PAGE
+FEATURE: Language
+==================================================*/
+
+
+/*==================================================
+ROOT VARIABLES
+==================================================*/
+
+:root{
+
+    --primary:#2e7d32;
+
+    --primary-dark:#1b5e20;
+
+    --primary-light:#e8f5e9;
+
+    --text:#1f2937;
+
+    --muted:#6b7280;
+
+    --border:#e5e7eb;
+
+    --background:#f5f7f6;
+
+    --white:#ffffff;
+
+    --shadow:
+        0 10px 30px rgba(0,0,0,0.08);
+
+}
+
+
+/*==================================================
+RESET
+==================================================*/
+
+*{
+
+    margin:0;
+
+    padding:0;
+
+    box-sizing:border-box;
+
+}
+
+
+body{
+
+    font-family:
+        Arial,
+        Helvetica,
+        sans-serif;
+
+    background:
+        var(--background);
+
+    color:
+        var(--text);
+
+}
+
+
+/*==================================================
+PAGE
+==================================================*/
+
+.language-page{
+
+    width:100%;
+
+    min-height:100vh;
+
+    padding:
+        35px 20px 60px;
+
+}
+
+
+/*==================================================
+HEADER
+==================================================*/
+
+.language-header{
+
+    width:100%;
+
+    max-width:850px;
+
+    margin:
+        0 auto 25px;
+
+    display:flex;
+
+    align-items:center;
+
+    gap:18px;
+
+}
+
+
+.back-button{
+
+    width:45px;
+
+    height:45px;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    text-decoration:none;
+
+    color:var(--text);
+
+    background:
+        var(--white);
+
+    border:
+        1px solid var(--border);
+
+    border-radius:12px;
+
+    font-size:24px;
+
+    transition:
+        0.25s ease;
+
+}
+
+
+.back-button:hover{
+
+    background:
+        var(--primary-light);
+
+    color:
+        var(--primary);
+
+    transform:
+        translateX(-3px);
+
+}
+
+
+/*==================================================
+HEADER CONTENT
+==================================================*/
+
+.header-content{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:14px;
+
+}
+
+
+.header-icon{
+
+    width:52px;
+
+    height:52px;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    background:
+        var(--primary-light);
+
+    border-radius:15px;
+
+    font-size:25px;
+
+}
+
+
+.header-content h1{
+
+    font-size:28px;
+
+    margin-bottom:5px;
+
+}
+
+
+.header-content p{
+
+    font-size:14px;
+
+    color:
+        var(--muted);
+
+}
+
+
+/*==================================================
+LANGUAGE CONTAINER
+==================================================*/
+
+.language-container{
+
+    width:100%;
+
+    max-width:850px;
+
+    margin:0 auto;
+
+    padding:30px;
+
+    background:
+        var(--white);
+
+    border:
+        1px solid var(--border);
+
+    border-radius:22px;
+
+    box-shadow:
+        var(--shadow);
+
+}
+
+
+/*==================================================
+CURRENT LANGUAGE
+==================================================*/
+
+.current-language{
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:space-between;
+
+    gap:20px;
+
+    padding:20px;
+
+    background:
+        var(--primary-light);
+
+    border:
+        1px solid #c8e6c9;
+
+    border-radius:16px;
+
+}
+
+
+.current-language-info{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:15px;
+
+}
+
+
+.language-icon{
+
+    width:50px;
+
+    height:50px;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    background:
+        var(--white);
+
+    border-radius:13px;
+
+    font-size:24px;
+
+}
+
+
+.small-label{
+
+    display:block;
+
+    margin-bottom:4px;
+
+    color:
+        var(--muted);
+
+    font-size:12px;
+
+}
+
+
+.current-language h2{
+
+    font-size:18px;
+
+    margin-bottom:3px;
+
+}
+
+
+.current-language p{
+
+    font-size:13px;
+
+    color:
+        var(--muted);
+
+}
+
+
+/*==================================================
+ACTIVE BADGE
+==================================================*/
+
+.active-badge{
+
+    padding:
+        6px 10px;
+
+    border-radius:7px;
+
+    background:
+        var(--primary);
+
+    color:
+        var(--white);
+
+    font-size:11px;
+
+    font-weight:700;
+
+}
+
+
+/*==================================================
+LANGUAGE SECTION
+==================================================*/
+
+.language-section{
+
+    padding:
+        28px 0;
+
+}
+
+
+/*==================================================
+SECTION HEADING
+==================================================*/
+
+.section-heading{
+
+    margin-bottom:16px;
+
+}
+
+
+.section-heading h2{
+
+    font-size:19px;
+
+    margin-bottom:5px;
+
+}
+
+
+.section-heading p{
+
+    font-size:13px;
+
+    color:
+        var(--muted);
+
+}
+
+
+/*==================================================
+LANGUAGE LIST
+==================================================*/
+
+.language-list{
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:10px;
+
+}
+
+
+/*==================================================
+LANGUAGE OPTION
+==================================================*/
+
+.language-option{
+
+    position:relative;
+
+    width:100%;
+
+    min-height:70px;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:space-between;
+
+    gap:15px;
+
+    padding:
+        14px 17px;
+
+    border:
+        1px solid var(--border);
+
+    border-radius:14px;
+
+    background:
+        var(--white);
+
+    cursor:pointer;
+
+    transition:
+        0.25s ease;
+
+}
+
+
+.language-option:hover{
+
+    border-color:
+        #a5d6a7;
+
+    background:
+        #fbfdfb;
+
+}
+
+
+.language-option.selected{
+
+    border:
+        2px solid var(--primary);
+
+    background:
+        var(--primary-light);
+
+}
+
+
+/*==================================================
+HIDE RADIO
+==================================================*/
+
+.language-option input{
+
+    position:absolute;
+
+    opacity:0;
+
+    pointer-events:none;
+
+}
+
+
+/*==================================================
+OPTION CONTENT
+==================================================*/
+
+.language-option-content{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:14px;
+
+}
+
+
+.language-flag{
+
+    width:42px;
+
+    height:42px;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    background:
+        #f3f4f6;
+
+    border-radius:10px;
+
+    font-size:23px;
+
+}
+
+
+.language-option h3{
+
+    font-size:15px;
+
+    margin-bottom:4px;
+
+}
+
+
+.language-option p{
+
+    font-size:12px;
+
+    color:
+        var(--muted);
+
+}
+
+
+/*==================================================
+RADIO CHECK
+==================================================*/
+
+.radio-check{
+
+    width:21px;
+
+    height:21px;
+
+    flex-shrink:0;
+
+    border:
+        2px solid #d1d5db;
+
+    border-radius:50%;
+
+    position:relative;
+
+}
+
+
+.language-option.selected .radio-check{
+
+    border-color:
+        var(--primary);
+
+}
+
+
+.language-option.selected .radio-check::after{
+
+    content:"";
+
+    position:absolute;
+
+    width:9px;
+
+    height:9px;
+
+    top:4px;
+
+    left:4px;
+
+    border-radius:50%;
+
+    background:
+        var(--primary);
+
+}
+
+
+/*==================================================
+LANGUAGE NOTE
+==================================================*/
+
+.language-note{
+
+    display:flex;
+
+    align-items:flex-start;
+
+    gap:10px;
+
+    padding:
+        14px 16px;
+
+    background:
+        #f9fafb;
+
+    border:
+        1px solid var(--border);
+
+    border-radius:12px;
+
+}
+
+
+.note-icon{
+
+    font-size:17px;
+
+    line-height:1.4;
+
+}
+
+
+.language-note p{
+
+    font-size:13px;
+
+    color:
+        var(--muted);
+
+    line-height:1.5;
+
+}
+
+
+/*==================================================
+ACTION BUTTONS
+==================================================*/
+
+.language-actions{
+
+    display:flex;
+
+    justify-content:flex-end;
+
+    gap:10px;
+
+    padding-top:25px;
+
+}
+
+
+.cancel-btn,
+.save-language-btn{
+
+    height:46px;
+
+    padding:
+        0 23px;
+
+    border-radius:11px;
+
+    font-size:14px;
+
+    font-weight:600;
+
+    cursor:pointer;
+
+    transition:
+        0.25s ease;
+
+}
+
+
+.cancel-btn{
+
+    border:
+        1px solid var(--border);
+
+    background:
+        var(--white);
+
+    color:
+        var(--text);
+
+}
+
+
+.cancel-btn:hover{
+
+    background:
+        #f3f4f6;
+
+}
+
+
+.save-language-btn{
+
+    border:none;
+
+    background:
+        var(--primary);
+
+    color:
+        var(--white);
+
+}
+
+
+.save-language-btn:hover{
+
+    background:
+        var(--primary-dark);
+
+    transform:
+        translateY(-1px);
+
+    box-shadow:
+        0 6px 15px rgba(46,125,50,0.20);
+
+}
+
+
+/*==================================================
+MOBILE
+==================================================*/
+
+@media(max-width:600px){
+
+    .language-page{
+
+        padding:
+            20px 14px 40px;
+
+    }
+
+
+    .language-container{
+
+        padding:20px;
+
+        border-radius:18px;
+
+    }
+
+
+    .header-icon{
+
+        width:45px;
+
+        height:45px;
+
+        font-size:22px;
+
+    }
+
+
+    .header-content h1{
+
+        font-size:21px;
+
+    }
+
+
+    .header-content p{
+
+        font-size:12px;
+
+    }
+
+
+    .back-button{
+
+        width:40px;
+
+        height:40px;
+
+    }
+
+
+    .current-language{
+
+        padding:16px;
+
+    }
+
+
+    .language-icon{
+
+        width:44px;
+
+        height:44px;
+
+    }
+
+
+    .active-badge{
+
+        font-size:10px;
+
+    }
+
+
+    .language-actions{
+
+        flex-direction:column-reverse;
+
+    }
+
+
+    .cancel-btn,
+    .save-language-btn{
+
+        width:100%;
+
+    }
+
+}
+
+
+/*==================================================
+SMALL MOBILE
+==================================================*/
+
+@media(max-width:400px){
+
+    .language-page{
+
+        padding:
+            15px 10px 30px;
+
+    }
+
+
+    .language-container{
+
+        padding:16px;
+
+    }
+
+
+    .current-language{
+
+        align-items:flex-start;
+
+        flex-direction:column;
+
+    }
+
+
+    .language-option{
+
+        min-height:65px;
+
+        padding:
+            12px;
+
+    }
+
+
+    .language-option-content{
+
+        gap:10px;
+
+    }
+
+
+    .language-flag{
+
+        width:38px;
+
+        height:38px;
+
+        font-size:20px;
+
+    }
+
+}
