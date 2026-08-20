@@ -1,0 +1,744 @@
+/*==================================================
+SMARTBAZAAR PRO
+PERSONAL INFORMATION PAGE
+FEATURE: Personal Information
+==================================================*/
+
+
+/*==================================================
+ROOT VARIABLES
+==================================================*/
+
+:root{
+
+    --primary:#2e7d32;
+
+    --primary-dark:#1b5e20;
+
+    --primary-light:#e8f5e9;
+
+    --text:#1f2937;
+
+    --muted:#6b7280;
+
+    --border:#e5e7eb;
+
+    --background:#f5f7f6;
+
+    --white:#ffffff;
+
+    --danger:#dc2626;
+
+    --shadow:
+        0 10px 30px rgba(0,0,0,0.08);
+
+}
+
+
+/*==================================================
+CSS RESET
+==================================================*/
+
+*{
+
+    margin:0;
+
+    padding:0;
+
+    box-sizing:border-box;
+
+}
+
+
+body{
+
+    font-family:
+        Arial,
+        Helvetica,
+        sans-serif;
+
+    background:
+        var(--background);
+
+    color:
+        var(--text);
+
+}
+
+
+/*==================================================
+PERSONAL PAGE
+==================================================*/
+
+.personal-page{
+
+    width:100%;
+
+    min-height:100vh;
+
+    padding:
+        35px 20px 60px;
+
+}
+
+
+/*==================================================
+PAGE HEADER
+==================================================*/
+
+.personal-header{
+
+    width:100%;
+
+    max-width:1000px;
+
+    margin:
+        0 auto 25px;
+
+    display:flex;
+
+    align-items:center;
+
+    gap:18px;
+
+}
+
+
+/*==================================================
+BACK BUTTON
+==================================================*/
+
+.back-button{
+
+    width:45px;
+
+    height:45px;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    text-decoration:none;
+
+    color:var(--text);
+
+    background:var(--white);
+
+    border:
+        1px solid var(--border);
+
+    border-radius:12px;
+
+    font-size:24px;
+
+    transition:
+        0.25s ease;
+
+}
+
+
+.back-button:hover{
+
+    background:
+        var(--primary-light);
+
+    color:
+        var(--primary);
+
+    transform:
+        translateX(-3px);
+
+}
+
+
+/*==================================================
+HEADER CONTENT
+==================================================*/
+
+.header-content{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:14px;
+
+}
+
+
+.header-icon{
+
+    width:52px;
+
+    height:52px;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    background:
+        var(--primary-light);
+
+    border-radius:15px;
+
+    font-size:25px;
+
+}
+
+
+.header-content h1{
+
+    font-size:28px;
+
+    font-weight:700;
+
+    margin-bottom:5px;
+
+}
+
+
+.header-content p{
+
+    font-size:14px;
+
+    color:var(--muted);
+
+}
+
+
+/*==================================================
+PERSONAL CARD
+==================================================*/
+
+.personal-card{
+
+    width:100%;
+
+    max-width:1000px;
+
+    margin:0 auto;
+
+    background:
+        var(--white);
+
+    border:
+        1px solid var(--border);
+
+    border-radius:22px;
+
+    padding:30px;
+
+    box-shadow:
+        var(--shadow);
+
+}
+
+
+/*==================================================
+CARD TITLE
+==================================================*/
+
+.card-title{
+
+    padding-bottom:22px;
+
+    border-bottom:
+        1px solid var(--border);
+
+}
+
+
+.card-title h2{
+
+    font-size:20px;
+
+    margin-bottom:6px;
+
+}
+
+
+.card-title p{
+
+    font-size:14px;
+
+    color:var(--muted);
+
+}
+
+
+/*==================================================
+PROFILE SECTION
+==================================================*/
+
+.profile-section{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:20px;
+
+    padding:25px 0;
+
+    border-bottom:
+        1px solid var(--border);
+
+}
+
+
+/*==================================================
+PROFILE IMAGE
+==================================================*/
+
+.profile-image{
+
+    width:85px;
+
+    height:85px;
+
+    flex-shrink:0;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    background:
+        var(--primary-light);
+
+    border:
+        2px solid #c8e6c9;
+
+    border-radius:50%;
+
+    font-size:38px;
+
+}
+
+
+.profile-info h3{
+
+    font-size:16px;
+
+    margin-bottom:5px;
+
+}
+
+
+.profile-info p{
+
+    font-size:13px;
+
+    color:var(--muted);
+
+    margin-bottom:12px;
+
+}
+
+
+/*==================================================
+CHANGE PHOTO BUTTON
+==================================================*/
+
+.change-photo-btn{
+
+    border:none;
+
+    background:
+        transparent;
+
+    color:
+        var(--primary);
+
+    font-size:14px;
+
+    font-weight:600;
+
+    cursor:pointer;
+
+    padding:0;
+
+}
+
+
+.change-photo-btn:hover{
+
+    text-decoration:underline;
+
+}
+
+
+/*==================================================
+PERSONAL FORM
+==================================================*/
+
+.personal-form{
+
+    padding-top:25px;
+
+    display:grid;
+
+    grid-template-columns:
+        repeat(2, 1fr);
+
+    gap:22px;
+
+}
+
+
+/*==================================================
+FORM GROUP
+==================================================*/
+
+.form-group{
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:8px;
+
+}
+
+
+.form-group label{
+
+    font-size:14px;
+
+    font-weight:600;
+
+    color:var(--text);
+
+}
+
+
+.form-group input,
+.form-group select{
+
+    width:100%;
+
+    height:48px;
+
+    padding:
+        0 15px;
+
+    border:
+        1px solid var(--border);
+
+    border-radius:12px;
+
+    background:
+        #fafafa;
+
+    color:
+        var(--text);
+
+    font-size:14px;
+
+    outline:none;
+
+    transition:
+        0.25s ease;
+
+}
+
+
+.form-group input:focus,
+.form-group select:focus{
+
+    border-color:
+        var(--primary);
+
+    background:
+        var(--white);
+
+    box-shadow:
+        0 0 0 3px rgba(46,125,50,0.10);
+
+}
+
+
+/*==================================================
+PLACEHOLDER
+==================================================*/
+
+.form-group input::placeholder{
+
+    color:#9ca3af;
+
+}
+
+
+/*==================================================
+FORM ACTIONS
+==================================================*/
+
+.form-actions{
+
+    grid-column:
+        1 / -1;
+
+    display:flex;
+
+    justify-content:flex-end;
+
+    gap:12px;
+
+    padding-top:8px;
+
+}
+
+
+/*==================================================
+CANCEL BUTTON
+==================================================*/
+
+.cancel-btn{
+
+    height:46px;
+
+    padding:
+        0 22px;
+
+    border:
+        1px solid var(--border);
+
+    border-radius:12px;
+
+    background:
+        var(--white);
+
+    color:
+        var(--text);
+
+    font-size:14px;
+
+    font-weight:600;
+
+    cursor:pointer;
+
+    transition:
+        0.25s ease;
+
+}
+
+
+.cancel-btn:hover{
+
+    background:
+        #f3f4f6;
+
+}
+
+
+/*==================================================
+SAVE BUTTON
+==================================================*/
+
+.save-btn{
+
+    height:46px;
+
+    padding:
+        0 25px;
+
+    border:none;
+
+    border-radius:12px;
+
+    background:
+        var(--primary);
+
+    color:
+        var(--white);
+
+    font-size:14px;
+
+    font-weight:600;
+
+    cursor:pointer;
+
+    transition:
+        0.25s ease;
+
+}
+
+
+.save-btn:hover{
+
+    background:
+        var(--primary-dark);
+
+    transform:
+        translateY(-1px);
+
+    box-shadow:
+        0 6px 15px rgba(46,125,50,0.20);
+
+}
+
+
+/*==================================================
+MOBILE RESPONSIVE
+==================================================*/
+
+@media(max-width:700px){
+
+    .personal-page{
+
+        padding:
+            20px 14px 40px;
+
+    }
+
+
+    .personal-header{
+
+        gap:12px;
+
+        margin-bottom:18px;
+
+    }
+
+
+    .back-button{
+
+        width:40px;
+
+        height:40px;
+
+        font-size:21px;
+
+    }
+
+
+    .header-icon{
+
+        width:45px;
+
+        height:45px;
+
+        font-size:22px;
+
+    }
+
+
+    .header-content h1{
+
+        font-size:21px;
+
+    }
+
+
+    .header-content p{
+
+        font-size:12px;
+
+    }
+
+
+    .personal-card{
+
+        padding:20px;
+
+        border-radius:18px;
+
+    }
+
+
+    .profile-section{
+
+        align-items:flex-start;
+
+    }
+
+
+    .profile-image{
+
+        width:70px;
+
+        height:70px;
+
+        font-size:30px;
+
+    }
+
+
+    .personal-form{
+
+        grid-template-columns:
+            1fr;
+
+        gap:18px;
+
+    }
+
+
+    .form-actions{
+
+        grid-column:
+            auto;
+
+        flex-direction:
+            column-reverse;
+
+    }
+
+
+    .cancel-btn,
+    .save-btn{
+
+        width:100%;
+
+    }
+
+}
+
+
+/*==================================================
+SMALL MOBILE
+==================================================*/
+
+@media(max-width:400px){
+
+    .personal-page{
+
+        padding:
+            15px 10px 30px;
+
+    }
+
+
+    .personal-card{
+
+        padding:16px;
+
+    }
+
+
+    .header-content h1{
+
+        font-size:19px;
+
+    }
+
+
+    .header-content p{
+
+        display:none;
+
+    }
+
+
+    .profile-section{
+
+        gap:13px;
+
+    }
+
+}
