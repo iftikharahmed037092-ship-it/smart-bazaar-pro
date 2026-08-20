@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0">
+
+    <meta
+        name="description"
+        content="Addresses - SmartBazaar Pro">
+
+    <title>Addresses - SmartBazaar Pro</title>
+
+    <!--
+    ==================================================
+    SMARTBAZAAR PRO
+    ADDRESSES PAGE
+    FEATURE: Addresses
+    ==================================================
+    -->
+
+    <link rel="stylesheet" href="addresses.css">
+
+</head>
+
+<body>
+
+    <!--================================================
+    ADDRESSES PAGE
+    FEATURE: Addresses
+    ================================================-->
+
+    <main class="addresses-page">
+
+        <!--============================================
+        PAGE HEADER
+        ============================================-->
+
+        <section class="addresses-header">
+
+            <a
+                href="account.html"
+                class="back-button"
+                aria-label="Go back">
+
+                ←
+
+            </a>
+
+            <div class="header-content">
+
+                <div class="header-icon">
+                    📍
+                </div>
+
+                <div>
+
+                    <h1>Addresses</h1>
+
+                    <p>
+                        Manage your delivery addresses
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!--============================================
+        ADDRESS CONTAINER
+        ============================================-->
+
+        <section class="addresses-container">
+
+            <div class="section-top">
+
+                <div>
+
+                    <h2>My Addresses</h2>
+
+                    <p>
+                        Save addresses for faster checkout
+                    </p>
+
+                </div>
+
+                <button
+                    type="button"
+                    class="add-address-btn">
+
+                    <span>+</span>
+                    Add Address
+
+                </button>
+
+            </div>
+
+
+            <!--========================================
+            ADDRESS CARD
+            ========================================-->
+
+            <div class="address-list">
+
+
+                <!-- ADDRESS 1 -->
+
+                <article class="address-card default-address">
+
+                    <div class="address-main">
+
+                        <div class="address-icon">
+                            🏠
+                        </div>
+
+                        <div class="address-details">
+
+                            <div class="address-title">
+
+                                <h3>Home</h3>
+
+                                <span class="default-badge">
+                                    Default
+                                </span>
+
+                            </div>
+
+                            <p class="recipient-name">
+                                Your Name
+                            </p>
+
+                            <p>
+                                House / Street Address
+                            </p>
+
+                            <p>
+                                City, District
+                            </p>
+
+                            <p>
+                                Punjab, Pakistan
+                            </p>
+
+                            <p class="phone-number">
+                                📞 +92 XXX XXXXXXX
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="address-actions">
+
+                        <button
+                            type="button"
+                            class="edit-address-btn">
+
+                            Edit
+
+                        </button>
+
+                        <button
+                            type="button"
+                            class="delete-address-btn">
+
+                            Delete
+
+                        </button>
+
+                    </div>
+
+                </article>
+
+
+                <!--====================================
+                ADD NEW ADDRESS CARD
+                ====================================-->
+
+                <button
+                    type="button"
+                    class="empty-add-card">
+
+                    <span class="plus-icon">
+                        +
+                    </span>
+
+                    <span>
+                        Add a New Address
+                    </span>
+
+                </button>
+
+            </div>
+
+        </section>
+
+
+        <!--============================================
+        ADD ADDRESS FORM
+        ============================================-->
+
+        <section
+            class="address-form-card"
+            id="addressFormCard">
+
+            <div class="form-header">
+
+                <div>
+
+                    <h2>Add New Address</h2>
+
+                    <p>
+                        Enter your delivery information
+                    </p>
+
+                </div>
+
+                <button
+                    type="button"
+                    class="close-form-btn">
+
+                    ×
+
+                </button>
+
+            </div>
+
+
+            <form id="addressForm">
+
+
+                <!-- RECIPIENT NAME -->
+
+                <div class="form-group">
+
+                    <label for="recipientName">
+                        Full Name
+                    </label>
+
+                    <input
+                        type="text"
+                        id="recipientName"
+                        name="recipientName"
+                        placeholder="Enter recipient name"
+                        autocomplete="name">
+
+                </div>
+
+
+                <!-- PHONE -->
+
+                <div class="form-group">
+
+                    <label for="addressPhone">
+                        Phone Number
+                    </label>
+
+                    <input
+                        type="tel"
+                        id="addressPhone"
+                        name="addressPhone"
+                        placeholder="+92 XXX XXXXXXX"
+                        autocomplete="tel">
+
+                </div>
+
+
+                <!-- ADDRESS -->
+
+                <div class="form-group full-width">
+
+                    <label for="streetAddress">
+                        Street / House Address
+                    </label>
+
+                    <input
+                        type="text"
+                        id="streetAddress"
+                        name="streetAddress"
+                        placeholder="House number, street, village or area">
+
+                </div>
+
+
+                <!-- CITY -->
+
+                <div class="form-group">
+
+                    <label for="city">
+                        City
+                    </label>
+
+                    <input
+                        type="text"
+                        id="city"
+                        name="city"
+                        placeholder="Enter city">
+
+                </div>
+
+
+                <!-- DISTRICT -->
+
+                <div class="form-group">
+
+                    <label for="district">
+                        District
+                    </label>
+
+                    <input
+                        type="text"
+                        id="district"
+                        name="district"
+                        placeholder="Enter district">
+
+                </div>
+
+
+                <!-- PROVINCE -->
+
+                <div class="form-group">
+
+                    <label for="province">
+                        Province
+                    </label>
+
+                    <select
+                        id="province"
+                        name="province">
+
+                        <option value="">
+                            Select Province
+                        </option>
+
+                        <option value="punjab">
+                            Punjab
+                        </option>
+
+                        <option value="sindh">
+                            Sindh
+                        </option>
+
+                        <option value="kpk">
+                            Khyber Pakhtunkhwa
+                        </option>
+
+                        <option value="balochistan">
+                            Balochistan
+                        </option>
+
+                        <option value="islamabad">
+                            Islamabad Capital Territory
+                        </option>
+
+                        <option value="gilgit-baltistan">
+                            Gilgit-Baltistan
+                        </option>
+
+                        <option value="ajk">
+                            Azad Jammu & Kashmir
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <!-- POSTAL CODE -->
+
+                <div class="form-group">
+
+                    <label for="postalCode">
+                        Postal Code
+                    </label>
+
+                    <input
+                        type="text"
+                        id="postalCode"
+                        name="postalCode"
+                        placeholder="Optional">
+
+                </div>
+
+
+                <!-- DEFAULT ADDRESS -->
+
+                <div class="default-option">
+
+                    <input
+                        type="checkbox"
+                        id="setDefault"
+                        name="setDefault">
+
+                    <label for="setDefault">
+                        Set as default address
+                    </label>
+
+                </div>
+
+
+                <!-- FORM BUTTONS -->
+
+                <div class="form-actions">
+
+                    <button
+                        type="button"
+                        class="cancel-btn">
+
+                        Cancel
+
+                    </button>
+
+                    <button
+                        type="submit"
+                        class="save-address-btn">
+
+                        Save Address
+
+                    </button>
+
+                </div>
+
+            </form>
+
+        </section>
+
+    </main>
+
+</body>
+
+</html>
