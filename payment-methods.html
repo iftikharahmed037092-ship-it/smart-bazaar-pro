@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0">
+
+    <meta
+        name="description"
+        content="Payment Methods - SmartBazaar Pro">
+
+    <title>Payment Methods - SmartBazaar Pro</title>
+
+    <!--
+    ==================================================
+    SMARTBAZAAR PRO
+    PAYMENT METHODS PAGE
+    FEATURE: Payment Methods
+    ==================================================
+    -->
+
+    <link rel="stylesheet" href="payment-methods.css">
+
+</head>
+
+<body>
+
+    <!--================================================
+    PAYMENT METHODS PAGE
+    FEATURE: Payment Methods
+    ================================================-->
+
+    <main class="payment-page">
+
+        <!--============================================
+        PAGE HEADER
+        ============================================-->
+
+        <section class="payment-header">
+
+            <a
+                href="account.html"
+                class="back-button"
+                aria-label="Go back">
+
+                ←
+
+            </a>
+
+            <div class="header-content">
+
+                <div class="header-icon">
+                    💳
+                </div>
+
+                <div>
+
+                    <h1>Payment Methods</h1>
+
+                    <p>
+                        Manage your saved payment methods
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!--============================================
+        PAYMENT METHODS CONTAINER
+        ============================================-->
+
+        <section class="payment-container">
+
+            <div class="section-top">
+
+                <div>
+
+                    <h2>My Payment Methods</h2>
+
+                    <p>
+                        Choose how you want to pay for your orders
+                    </p>
+
+                </div>
+
+                <button
+                    type="button"
+                    class="add-payment-btn">
+
+                    <span>+</span>
+
+                    Add Payment Method
+
+                </button>
+
+            </div>
+
+
+            <!--========================================
+            PAYMENT METHOD LIST
+            ========================================-->
+
+            <div class="payment-list">
+
+
+                <!--====================================
+                JAZZCASH
+                ====================================-->
+
+                <article class="payment-card default-payment">
+
+                    <div class="payment-main">
+
+                        <div class="payment-logo jazzcash-logo">
+                            JC
+                        </div>
+
+                        <div class="payment-details">
+
+                            <div class="payment-title">
+
+                                <h3>JazzCash</h3>
+
+                                <span class="default-badge">
+                                    Default
+                                </span>
+
+                            </div>
+
+                            <p>
+                                Mobile Account
+                            </p>
+
+                            <p class="payment-number">
+                                +92 XXX XXXXXXX
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="payment-actions">
+
+                        <button
+                            type="button"
+                            class="edit-payment-btn">
+
+                            Edit
+
+                        </button>
+
+                        <button
+                            type="button"
+                            class="delete-payment-btn">
+
+                            Delete
+
+                        </button>
+
+                    </div>
+
+                </article>
+
+
+                <!--====================================
+                EASYPAISA
+                ====================================-->
+
+                <article class="payment-card">
+
+                    <div class="payment-main">
+
+                        <div class="payment-logo easypaisa-logo">
+                            EP
+                        </div>
+
+                        <div class="payment-details">
+
+                            <div class="payment-title">
+
+                                <h3>EasyPaisa</h3>
+
+                            </div>
+
+                            <p>
+                                Mobile Account
+                            </p>
+
+                            <p class="payment-number">
+                                +92 XXX XXXXXXX
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="payment-actions">
+
+                        <button
+                            type="button"
+                            class="edit-payment-btn">
+
+                            Edit
+
+                        </button>
+
+                        <button
+                            type="button"
+                            class="delete-payment-btn">
+
+                            Delete
+
+                        </button>
+
+                    </div>
+
+                </article>
+
+
+                <!--====================================
+                CASH ON DELIVERY
+                ====================================-->
+
+                <article class="payment-card">
+
+                    <div class="payment-main">
+
+                        <div class="payment-logo cod-logo">
+                            💵
+                        </div>
+
+                        <div class="payment-details">
+
+                            <div class="payment-title">
+
+                                <h3>Cash on Delivery</h3>
+
+                            </div>
+
+                            <p>
+                                Pay when your order arrives
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="payment-actions">
+
+                        <button
+                            type="button"
+                            class="remove-method-btn">
+
+                            Remove
+
+                        </button>
+
+                    </div>
+
+                </article>
+
+
+                <!--====================================
+                ADD NEW PAYMENT CARD
+                ====================================-->
+
+                <button
+                    type="button"
+                    class="empty-add-card">
+
+                    <span class="plus-icon">
+                        +
+                    </span>
+
+                    <span>
+                        Add a New Payment Method
+                    </span>
+
+                </button>
+
+            </div>
+
+        </section>
+
+
+        <!--============================================
+        ADD PAYMENT FORM
+        ============================================-->
+
+        <section
+            class="payment-form-card"
+            id="paymentFormCard">
+
+            <div class="form-header">
+
+                <div>
+
+                    <h2>Add Payment Method</h2>
+
+                    <p>
+                        Select your preferred payment method
+                    </p>
+
+                </div>
+
+                <button
+                    type="button"
+                    class="close-form-btn">
+
+                    ×
+
+                </button>
+
+            </div>
+
+
+            <form id="paymentForm">
+
+
+                <!-- PAYMENT TYPE -->
+
+                <div class="form-group full-width">
+
+                    <label for="paymentType">
+                        Payment Method
+                    </label>
+
+                    <select
+                        id="paymentType"
+                        name="paymentType">
+
+                        <option value="">
+                            Select Payment Method
+                        </option>
+
+                        <option value="jazzcash">
+                            JazzCash
+                        </option>
+
+                        <option value="easypaisa">
+                            EasyPaisa
+                        </option>
+
+                        <option value="cod">
+                            Cash on Delivery
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <!-- ACCOUNT HOLDER -->
+
+                <div class="form-group">
+
+                    <label for="accountName">
+                        Account Holder Name
+                    </label>
+
+                    <input
+                        type="text"
+                        id="accountName"
+                        name="accountName"
+                        placeholder="Enter account holder name">
+
+                </div>
+
+
+                <!-- MOBILE NUMBER -->
+
+                <div class="form-group">
+
+                    <label for="accountNumber">
+                        Mobile / Account Number
+                    </label>
+
+                    <input
+                        type="tel"
+                        id="accountNumber"
+                        name="accountNumber"
+                        placeholder="+92 XXX XXXXXXX">
+
+                </div>
+
+
+                <!-- DEFAULT OPTION -->
+
+                <div class="default-option">
+
+                    <input
+                        type="checkbox"
+                        id="setDefaultPayment"
+                        name="setDefaultPayment">
+
+                    <label for="setDefaultPayment">
+                        Set as default payment method
+                    </label>
+
+                </div>
+
+
+                <!-- FORM ACTIONS -->
+
+                <div class="form-actions">
+
+                    <button
+                        type="button"
+                        class="cancel-btn">
+
+                        Cancel
+
+                    </button>
+
+                    <button
+                        type="submit"
+                        class="save-payment-btn">
+
+                        Save Payment Method
+
+                    </button>
+
+                </div>
+
+            </form>
+
+        </section>
+
+    </main>
+
+</body>
+
+</html>
