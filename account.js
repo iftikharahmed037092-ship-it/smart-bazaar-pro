@@ -1443,16 +1443,6 @@ const menuButtonIds = [
 
     "login-activity-button",
 
-    "personal-information-button",
-
-    "addresses-button",
-
-    "payment-methods-button",
-
-    "notifications-button",
-
-    "language-button",
-
     "help-center-button",
 
     "contact-support-button",
