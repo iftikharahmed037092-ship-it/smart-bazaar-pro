@@ -1,0 +1,703 @@
+/*==================================================
+SMARTBAZAAR PRO
+NOTIFICATIONS PAGE
+FEATURE: Notifications
+==================================================*/
+
+
+/*==================================================
+ROOT VARIABLES
+==================================================*/
+
+:root{
+
+    --primary:#2e7d32;
+
+    --primary-dark:#1b5e20;
+
+    --primary-light:#e8f5e9;
+
+    --text:#1f2937;
+
+    --muted:#6b7280;
+
+    --border:#e5e7eb;
+
+    --background:#f5f7f6;
+
+    --white:#ffffff;
+
+    --shadow:
+        0 10px 30px rgba(0,0,0,0.08);
+
+}
+
+
+/*==================================================
+RESET
+==================================================*/
+
+*{
+
+    margin:0;
+
+    padding:0;
+
+    box-sizing:border-box;
+
+}
+
+
+body{
+
+    font-family:
+        Arial,
+        Helvetica,
+        sans-serif;
+
+    background:
+        var(--background);
+
+    color:
+        var(--text);
+
+}
+
+
+/*==================================================
+PAGE
+==================================================*/
+
+.notifications-page{
+
+    width:100%;
+
+    min-height:100vh;
+
+    padding:
+        35px 20px 60px;
+
+}
+
+
+/*==================================================
+HEADER
+==================================================*/
+
+.notifications-header{
+
+    width:100%;
+
+    max-width:1000px;
+
+    margin:
+        0 auto 25px;
+
+    display:flex;
+
+    align-items:center;
+
+    gap:18px;
+
+}
+
+
+.back-button{
+
+    width:45px;
+
+    height:45px;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    text-decoration:none;
+
+    color:var(--text);
+
+    background:var(--white);
+
+    border:
+        1px solid var(--border);
+
+    border-radius:12px;
+
+    font-size:24px;
+
+    transition:0.25s ease;
+
+}
+
+
+.back-button:hover{
+
+    background:
+        var(--primary-light);
+
+    color:
+        var(--primary);
+
+    transform:
+        translateX(-3px);
+
+}
+
+
+/*==================================================
+HEADER CONTENT
+==================================================*/
+
+.header-content{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:14px;
+
+}
+
+
+.header-icon{
+
+    width:52px;
+
+    height:52px;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    background:
+        var(--primary-light);
+
+    border-radius:15px;
+
+    font-size:25px;
+
+}
+
+
+.header-content h1{
+
+    font-size:28px;
+
+    margin-bottom:5px;
+
+}
+
+
+.header-content p{
+
+    font-size:14px;
+
+    color:var(--muted);
+
+}
+
+
+/*==================================================
+NOTIFICATIONS CONTAINER
+==================================================*/
+
+.notifications-container{
+
+    width:100%;
+
+    max-width:1000px;
+
+    margin:0 auto;
+
+    background:
+        var(--white);
+
+    border:
+        1px solid var(--border);
+
+    border-radius:22px;
+
+    padding:30px;
+
+    box-shadow:
+        var(--shadow);
+
+}
+
+
+/*==================================================
+NOTIFICATION SECTION
+==================================================*/
+
+.notification-section{
+
+    padding-bottom:25px;
+
+    margin-bottom:25px;
+
+    border-bottom:
+        1px solid var(--border);
+
+}
+
+
+.notification-section:last-of-type{
+
+    margin-bottom:0;
+
+}
+
+
+/*==================================================
+SECTION HEADING
+==================================================*/
+
+.section-heading{
+
+    margin-bottom:16px;
+
+}
+
+
+.section-heading h2{
+
+    font-size:18px;
+
+    margin-bottom:5px;
+
+}
+
+
+.section-heading p{
+
+    font-size:13px;
+
+    color:var(--muted);
+
+}
+
+
+/*==================================================
+NOTIFICATION ITEM
+==================================================*/
+
+.notification-item{
+
+    min-height:75px;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:space-between;
+
+    gap:20px;
+
+    padding:
+        14px 0;
+
+}
+
+
+.notification-info{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:14px;
+
+}
+
+
+.notification-icon{
+
+    width:45px;
+
+    height:45px;
+
+    flex-shrink:0;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    background:
+        var(--primary-light);
+
+    border-radius:12px;
+
+    font-size:21px;
+
+}
+
+
+.notification-info h3{
+
+    font-size:15px;
+
+    margin-bottom:4px;
+
+}
+
+
+.notification-info p{
+
+    font-size:13px;
+
+    color:
+        var(--muted);
+
+    line-height:1.4;
+
+}
+
+
+/*==================================================
+TOGGLE SWITCH
+==================================================*/
+
+.switch{
+
+    position:relative;
+
+    width:50px;
+
+    height:28px;
+
+    flex-shrink:0;
+
+}
+
+
+.switch input{
+
+    opacity:0;
+
+    width:0;
+
+    height:0;
+
+}
+
+
+.slider{
+
+    position:absolute;
+
+    inset:0;
+
+    cursor:pointer;
+
+    background:
+        #d1d5db;
+
+    border-radius:30px;
+
+    transition:
+        0.25s ease;
+
+}
+
+
+.slider::before{
+
+    content:"";
+
+    position:absolute;
+
+    width:22px;
+
+    height:22px;
+
+    left:3px;
+
+    top:3px;
+
+    background:
+        var(--white);
+
+    border-radius:50%;
+
+    box-shadow:
+        0 2px 5px rgba(0,0,0,0.15);
+
+    transition:
+        0.25s ease;
+
+}
+
+
+.switch input:checked + .slider{
+
+    background:
+        var(--primary);
+
+}
+
+
+.switch input:checked + .slider::before{
+
+    transform:
+        translateX(22px);
+
+}
+
+
+/*==================================================
+SAVE ACTION
+==================================================*/
+
+.notification-actions{
+
+    display:flex;
+
+    justify-content:flex-end;
+
+    padding-top:5px;
+
+}
+
+
+.save-btn{
+
+    height:46px;
+
+    padding:
+        0 24px;
+
+    border:none;
+
+    border-radius:11px;
+
+    background:
+        var(--primary);
+
+    color:
+        var(--white);
+
+    font-size:14px;
+
+    font-weight:600;
+
+    cursor:pointer;
+
+    transition:
+        0.25s ease;
+
+}
+
+
+.save-btn:hover{
+
+    background:
+        var(--primary-dark);
+
+    transform:
+        translateY(-1px);
+
+    box-shadow:
+        0 6px 15px rgba(46,125,50,0.20);
+
+}
+
+
+/*==================================================
+TABLET
+==================================================*/
+
+@media(max-width:700px){
+
+    .notifications-container{
+
+        padding:25px;
+
+    }
+
+}
+
+
+/*==================================================
+MOBILE
+==================================================*/
+
+@media(max-width:600px){
+
+    .notifications-page{
+
+        padding:
+            20px 14px 40px;
+
+    }
+
+
+    .notifications-container{
+
+        padding:20px;
+
+        border-radius:18px;
+
+    }
+
+
+    .header-icon{
+
+        width:45px;
+
+        height:45px;
+
+        font-size:22px;
+
+    }
+
+
+    .header-content h1{
+
+        font-size:21px;
+
+    }
+
+
+    .header-content p{
+
+        font-size:12px;
+
+    }
+
+
+    .back-button{
+
+        width:40px;
+
+        height:40px;
+
+    }
+
+
+    .notification-item{
+
+        align-items:flex-start;
+
+        padding:
+            15px 0;
+
+    }
+
+
+    .notification-info{
+
+        align-items:flex-start;
+
+    }
+
+
+    .notification-icon{
+
+        width:40px;
+
+        height:40px;
+
+        font-size:18px;
+
+    }
+
+
+    .notification-info h3{
+
+        font-size:14px;
+
+    }
+
+
+    .notification-info p{
+
+        font-size:12px;
+
+    }
+
+
+    .notification-actions{
+
+        justify-content:stretch;
+
+    }
+
+
+    .save-btn{
+
+        width:100%;
+
+    }
+
+}
+
+
+/*==================================================
+SMALL MOBILE
+==================================================*/
+
+@media(max-width:400px){
+
+    .notifications-page{
+
+        padding:
+            15px 10px 30px;
+
+    }
+
+
+    .notifications-container{
+
+        padding:16px;
+
+    }
+
+
+    .notification-info{
+
+        gap:10px;
+
+    }
+
+
+    .notification-icon{
+
+        width:36px;
+
+        height:36px;
+
+    }
+
+
+    .switch{
+
+        width:46px;
+
+        height:26px;
+
+    }
+
+
+    .slider::before{
+
+        width:20px;
+
+        height:20px;
+
+    }
+
+
+    .switch input:checked + .slider::before{
+
+        transform:
+            translateX(20px);
+
+    }
+
+}
