@@ -1,0 +1,1026 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0">
+
+    <meta
+        name="description"
+        content="Edit Account - SmartBazaar Pro">
+
+    <meta
+        name="author"
+        content="Iftikhar Ahmed">
+
+    <title>Edit Account - SmartBazaar Pro</title>
+
+
+    <!--========================================
+    GOOGLE FONT
+    ========================================-->
+
+    <link
+        rel="preconnect"
+        href="https://fonts.googleapis.com">
+
+    <link
+        rel="preconnect"
+        href="https://fonts.gstatic.com"
+        crossorigin>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+
+
+    <!--========================================
+    FONT AWESOME
+    ========================================-->
+
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
+
+    <!--========================================
+    EDIT ACCOUNT CSS
+    ========================================-->
+
+    <link
+        rel="stylesheet"
+        href="edit-account.css">
+
+
+</head>
+
+
+<body>
+
+
+<!--==================================================
+SMARTBAZAAR PRO
+EDIT ACCOUNT PAGE
+==================================================-->
+
+
+<!--========================================
+PAGE HEADER
+========================================-->
+
+<header class="edit-account-header">
+
+    <div class="edit-header-inner">
+
+
+        <!-- BACK BUTTON -->
+
+        <a
+            href="account.html"
+            class="edit-back-btn"
+            aria-label="Back to Account">
+
+            <i class="fa-solid fa-arrow-left"></i>
+
+        </a>
+
+
+        <!-- TITLE -->
+
+        <div class="edit-header-title">
+
+            <span>
+                SmartBazaar Pro
+            </span>
+
+            <h1>
+                Edit Account
+            </h1>
+
+        </div>
+
+
+        <!-- SETTINGS -->
+
+        <button
+            type="button"
+            class="edit-settings-btn"
+            aria-label="Settings">
+
+            <i class="fa-solid fa-gear"></i>
+
+        </button>
+
+
+    </div>
+
+</header>
+
+
+
+<!--========================================
+MAIN
+========================================-->
+
+<main class="edit-account-main">
+
+
+    <!--========================================
+    PROFILE PHOTO SECTION
+    ========================================-->
+
+    <section class="edit-profile-card">
+
+
+        <div class="profile-photo-section">
+
+
+            <!-- PROFILE PHOTO -->
+
+            <div class="profile-photo-wrapper">
+
+
+                <div
+                    class="profile-photo"
+                    id="profilePhoto">
+
+                    <img
+                        id="profileImage"
+                        src=""
+                        alt="Profile Picture">
+
+                    <div
+                        class="profile-photo-placeholder"
+                        id="profilePhotoPlaceholder">
+
+                        <i class="fa-regular fa-user"></i>
+
+                    </div>
+
+                </div>
+
+
+                <!-- PHOTO EDIT BUTTON -->
+
+                <button
+                    type="button"
+                    class="change-photo-btn"
+                    id="changePhotoBtn"
+                    aria-label="Change Profile Photo">
+
+                    <i class="fa-solid fa-camera"></i>
+
+                </button>
+
+
+            </div>
+
+
+            <!-- HIDDEN FILE INPUT -->
+
+            <input
+                type="file"
+                id="profileImageInput"
+                accept="image/*"
+                hidden>
+
+
+            <!-- PROFILE TEXT -->
+
+            <div class="profile-photo-content">
+
+                <span class="section-label">
+                    PROFILE PHOTO
+                </span>
+
+                <h2>
+                    Your Profile Picture
+                </h2>
+
+                <p>
+                    Add a profile picture so people can recognize your account.
+                </p>
+
+
+                <div class="photo-actions">
+
+
+                    <button
+                        type="button"
+                        class="photo-change-action"
+                        id="uploadPhotoBtn">
+
+                        <i class="fa-solid fa-camera"></i>
+
+                        Change Photo
+
+                    </button>
+
+
+                    <button
+                        type="button"
+                        class="photo-remove-action"
+                        id="removePhotoBtn">
+
+                        <i class="fa-solid fa-trash"></i>
+
+                        Remove
+
+                    </button>
+
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+    </section>
+
+
+
+    <!--========================================
+    PERSONAL INFORMATION
+    ========================================-->
+
+    <section class="edit-section-card">
+
+
+        <div class="edit-section-heading">
+
+            <div class="section-icon">
+
+                <i class="fa-solid fa-user"></i>
+
+            </div>
+
+            <div>
+
+                <span>
+                    ACCOUNT INFORMATION
+                </span>
+
+                <h2>
+                    Personal Information
+                </h2>
+
+            </div>
+
+        </div>
+
+
+
+        <div class="edit-form-grid">
+
+
+            <!-- FULL NAME -->
+
+            <div class="form-group">
+
+                <label for="fullName">
+
+                    Full Name
+
+                </label>
+
+                <div class="input-wrapper">
+
+                    <i class="fa-regular fa-user"></i>
+
+                    <input
+                        type="text"
+                        id="fullName"
+                        name="fullName"
+                        placeholder="Enter your full name"
+                        autocomplete="name">
+
+                </div>
+
+            </div>
+
+
+            <!-- USERNAME -->
+
+            <div class="form-group">
+
+                <label for="username">
+
+                    Username
+
+                </label>
+
+                <div class="input-wrapper">
+
+                    <i class="fa-solid fa-at"></i>
+
+                    <input
+                        type="text"
+                        id="username"
+                        name="username"
+                        placeholder="@username"
+                        autocomplete="username">
+
+                </div>
+
+            </div>
+
+
+            <!-- EMAIL -->
+
+            <div class="form-group form-group-full">
+
+                <label for="email">
+
+                    Email Address
+
+                </label>
+
+                <div class="input-wrapper email-input-wrapper">
+
+                    <i class="fa-regular fa-envelope"></i>
+
+                    <input
+                        type="email"
+                        id="email"
+                        name="email"
+                        placeholder="Enter your email"
+                        autocomplete="email">
+
+                    <span
+                        class="email-status"
+                        id="emailStatus">
+
+                        <i class="fa-solid fa-circle-check"></i>
+
+                        <span>
+                            Verified
+                        </span>
+
+                    </span>
+
+                </div>
+
+                <small
+                    class="field-message"
+                    id="emailMessage">
+
+                    Your email address is used for account security and orders.
+
+                </small>
+
+            </div>
+
+
+            <!-- PHONE -->
+
+            <div class="form-group form-group-full">
+
+                <label for="phone">
+
+                    Phone Number
+
+                </label>
+
+                <div class="input-wrapper">
+
+                    <i class="fa-solid fa-phone"></i>
+
+                    <input
+                        type="tel"
+                        id="phone"
+                        name="phone"
+                        placeholder="03XX XXXXXXX"
+                        autocomplete="tel">
+
+                </div>
+
+            </div>
+
+
+        </div>
+
+    </section>
+
+
+
+    <!--========================================
+    EMAIL VERIFICATION
+    ========================================-->
+
+    <section
+        class="verification-card"
+        id="emailVerificationCard">
+
+
+        <div class="verification-icon">
+
+            <i class="fa-regular fa-envelope"></i>
+
+        </div>
+
+
+        <div class="verification-content">
+
+            <span class="verification-label">
+                EMAIL SECURITY
+            </span>
+
+            <h2>
+                Verify Your Email
+            </h2>
+
+            <p id="verificationText">
+
+                Your email address has not been verified yet.
+
+            </p>
+
+
+            <button
+                type="button"
+                class="send-verification-btn"
+                id="sendVerificationBtn">
+
+                <i class="fa-solid fa-paper-plane"></i>
+
+                Send Verification Email
+
+            </button>
+
+        </div>
+
+
+    </section>
+
+
+
+    <!--========================================
+    ADDRESS
+    ========================================-->
+
+    <section class="edit-section-card">
+
+
+        <div class="edit-section-heading">
+
+            <div class="section-icon">
+
+                <i class="fa-solid fa-location-dot"></i>
+
+            </div>
+
+            <div>
+
+                <span>
+                    DELIVERY INFORMATION
+                </span>
+
+                <h2>
+                    Shipping Address
+                </h2>
+
+            </div>
+
+        </div>
+
+
+
+        <div class="edit-form-grid">
+
+
+            <!-- HOUSE / STREET -->
+
+            <div class="form-group form-group-full">
+
+                <label for="address">
+
+                    House / Street Address
+
+                </label>
+
+                <div class="input-wrapper">
+
+                    <i class="fa-solid fa-location-dot"></i>
+
+                    <input
+                        type="text"
+                        id="address"
+                        name="address"
+                        placeholder="House, street, area">
+
+                </div>
+
+            </div>
+
+
+            <!-- CITY -->
+
+            <div class="form-group">
+
+                <label for="city">
+
+                    City
+
+                </label>
+
+                <div class="input-wrapper">
+
+                    <i class="fa-solid fa-city"></i>
+
+                    <input
+                        type="text"
+                        id="city"
+                        name="city"
+                        placeholder="Enter city">
+
+                </div>
+
+            </div>
+
+
+            <!-- DISTRICT -->
+
+            <div class="form-group">
+
+                <label for="district">
+
+                    District
+
+                </label>
+
+                <div class="input-wrapper">
+
+                    <i class="fa-solid fa-map"></i>
+
+                    <input
+                        type="text"
+                        id="district"
+                        name="district"
+                        placeholder="Enter district">
+
+                </div>
+
+            </div>
+
+
+            <!-- PROVINCE -->
+
+            <div class="form-group">
+
+                <label for="province">
+
+                    Province
+
+                </label>
+
+                <div class="input-wrapper">
+
+                    <i class="fa-solid fa-map-location-dot"></i>
+
+                    <select
+                        id="province"
+                        name="province">
+
+                        <option value="">
+                            Select Province
+                        </option>
+
+                        <option value="Punjab">
+                            Punjab
+                        </option>
+
+                        <option value="Sindh">
+                            Sindh
+                        </option>
+
+                        <option value="Khyber Pakhtunkhwa">
+                            Khyber Pakhtunkhwa
+                        </option>
+
+                        <option value="Balochistan">
+                            Balochistan
+                        </option>
+
+                        <option value="Islamabad Capital Territory">
+                            Islamabad Capital Territory
+                        </option>
+
+                        <option value="Gilgit-Baltistan">
+                            Gilgit-Baltistan
+                        </option>
+
+                        <option value="Azad Jammu and Kashmir">
+                            Azad Jammu and Kashmir
+                        </option>
+
+                    </select>
+
+                </div>
+
+            </div>
+
+
+            <!-- POSTAL CODE -->
+
+            <div class="form-group">
+
+                <label for="postalCode">
+
+                    Postal Code
+
+                </label>
+
+                <div class="input-wrapper">
+
+                    <i class="fa-solid fa-envelopes-bulk"></i>
+
+                    <input
+                        type="text"
+                        id="postalCode"
+                        name="postalCode"
+                        placeholder="Postal code">
+
+                </div>
+
+            </div>
+
+
+        </div>
+
+
+        <!-- DEFAULT ADDRESS -->
+
+        <label class="default-address-option">
+
+            <input
+                type="checkbox"
+                id="defaultAddress"
+                name="defaultAddress"
+                checked>
+
+            <span class="custom-checkbox">
+
+                <i class="fa-solid fa-check"></i>
+
+            </span>
+
+            <span>
+
+                Use this as my default shipping address
+
+            </span>
+
+        </label>
+
+
+    </section>
+
+
+
+    <!--========================================
+    SECURITY
+    ========================================-->
+
+    <section class="edit-section-card">
+
+
+        <div class="edit-section-heading">
+
+            <div class="section-icon">
+
+                <i class="fa-solid fa-shield-halved"></i>
+
+            </div>
+
+            <div>
+
+                <span>
+                    ACCOUNT SECURITY
+                </span>
+
+                <h2>
+                    Password & Security
+                </h2>
+
+            </div>
+
+        </div>
+
+
+        <div class="security-row">
+
+
+            <div class="security-info">
+
+                <div class="security-row-icon">
+
+                    <i class="fa-solid fa-lock"></i>
+
+                </div>
+
+                <div>
+
+                    <strong>
+                        Password
+                    </strong>
+
+                    <p>
+                        Keep your account protected with a strong password.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <button
+                type="button"
+                class="change-password-btn"
+                id="changePasswordBtn">
+
+                Change Password
+
+                <i class="fa-solid fa-chevron-right"></i>
+
+            </button>
+
+
+        </div>
+
+
+    </section>
+
+
+
+    <!--========================================
+    NOTIFICATION PREFERENCES
+    ========================================-->
+
+    <section class="edit-section-card">
+
+
+        <div class="edit-section-heading">
+
+            <div class="section-icon">
+
+                <i class="fa-regular fa-bell"></i>
+
+            </div>
+
+            <div>
+
+                <span>
+                    PREFERENCES
+                </span>
+
+                <h2>
+                    Notifications
+                </h2>
+
+            </div>
+
+        </div>
+
+
+        <!-- ORDER NOTIFICATIONS -->
+
+        <label class="toggle-option">
+
+            <div class="toggle-info">
+
+                <strong>
+                    Order Notifications
+                </strong>
+
+                <span>
+                    Get updates about your orders.
+                </span>
+
+            </div>
+
+
+            <input
+                type="checkbox"
+                id="orderNotifications"
+                checked>
+
+            <span class="toggle-switch"></span>
+
+        </label>
+
+
+        <!-- PROMOTIONAL NOTIFICATIONS -->
+
+        <label class="toggle-option">
+
+            <div class="toggle-info">
+
+                <strong>
+                    Promotional Notifications
+                </strong>
+
+                <span>
+                    Receive special offers and deals.
+                </span>
+
+            </div>
+
+
+            <input
+                type="checkbox"
+                id="promoNotifications"
+                checked>
+
+            <span class="toggle-switch"></span>
+
+        </label>
+
+
+        <!-- EMAIL NOTIFICATIONS -->
+
+        <label class="toggle-option">
+
+            <div class="toggle-info">
+
+                <strong>
+                    Email Notifications
+                </strong>
+
+                <span>
+                    Receive important account emails.
+                </span>
+
+            </div>
+
+
+            <input
+                type="checkbox"
+                id="emailNotifications"
+                checked>
+
+            <span class="toggle-switch"></span>
+
+        </label>
+
+
+    </section>
+
+
+
+    <!--========================================
+    SAVE AREA
+    ========================================-->
+
+    <section class="save-account-section">
+
+
+        <button
+            type="button"
+            class="cancel-account-btn"
+            id="cancelAccountBtn">
+
+            Cancel
+
+        </button>
+
+
+        <button
+            type="button"
+            class="save-account-btn"
+            id="saveAccountBtn">
+
+            <i class="fa-solid fa-check"></i>
+
+            Save Changes
+
+        </button>
+
+
+    </section>
+
+
+</main>
+
+
+
+<!--========================================
+MESSAGE / NOTIFICATION
+========================================-->
+
+<div
+    id="accountMessage"
+    class="account-message">
+
+</div>
+
+
+
+<!--==================================================
+MOBILE BOTTOM NAVIGATION
+SAME SYSTEM AS SMARTBAZAAR PRO
+==================================================-->
+
+<nav class="mobile-bottom-nav">
+
+
+    <!-- HOME -->
+
+    <a
+        href="index.html"
+        class="mobile-bottom-item">
+
+        <i class="fa-solid fa-house"></i>
+
+        <span>
+            Home
+        </span>
+
+    </a>
+
+
+    <!-- PRODUCTS -->
+
+    <a
+        href="products.html"
+        class="mobile-bottom-item">
+
+        <i class="fa-solid fa-bag-shopping"></i>
+
+        <span>
+            Products
+        </span>
+
+    </a>
+
+
+    <!-- CREATE -->
+
+    <a
+        href="smartbazaar-editor.html"
+        class="mobile-bottom-item mobile-editor-btn">
+
+        <span class="mobile-plus-icon">
+
+            <i class="fa-solid fa-plus"></i>
+
+        </span>
+
+        <span>
+            Create
+        </span>
+
+    </a>
+
+
+    <!-- ORDERS -->
+
+    <a
+        href="#"
+        class="mobile-bottom-item">
+
+        <i class="fa-solid fa-box"></i>
+
+        <span>
+            Orders
+        </span>
+
+    </a>
+
+
+    <!-- ACCOUNT -->
+
+    <a
+        href="account.html"
+        class="mobile-bottom-item active">
+
+        <i class="fa-regular fa-user"></i>
+
+        <span>
+            Account
+        </span>
+
+    </a>
+
+
+</nav>
+
+
+
+<!--========================================
+EDIT ACCOUNT JAVASCRIPT
+========================================-->
+
+<script
+    type="module"
+    src="edit-account.js">
+</script>
+
+
+</body>
+
+</html>
