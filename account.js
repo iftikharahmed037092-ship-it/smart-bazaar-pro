@@ -894,7 +894,7 @@ async function uploadSelectedProfileImage() {
 
 /*==================================================
 EDIT PROFILE
-==================================================*/
+==================================================*
 
 if (editProfileButton) {
 
@@ -1034,6 +1034,30 @@ if (editProfileButton) {
                 );
 
             }
+
+        }
+    );
+
+}*/
+
+/*==================================================
+EDIT PROFILE — REDIRECT TO EDIT PAGE
+==================================================*/
+
+if (editProfileButton) {
+
+    editProfileButton.addEventListener(
+        "click",
+        function() {
+
+            /* یوزر لاگ ان ہے یا نہیں، یہ چیک کریں */
+            if (!currentUser) {
+                alert("Please login first.");
+                return;
+            }
+
+            /* نئے ایڈٹ پیج پر بھیج دیں */
+            window.location.href = "edit-account.html";
 
         }
     );
