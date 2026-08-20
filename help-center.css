@@ -1,0 +1,868 @@
+/*==================================================
+SMARTBAZAAR PRO
+HELP CENTER PAGE
+FEATURE: Help Center
+==================================================*/
+
+
+/*==================================================
+ROOT VARIABLES
+==================================================*/
+
+:root{
+
+    --primary:#2e7d32;
+
+    --primary-dark:#1b5e20;
+
+    --primary-light:#e8f5e9;
+
+    --text:#1f2937;
+
+    --muted:#6b7280;
+
+    --border:#e5e7eb;
+
+    --background:#f5f7f6;
+
+    --white:#ffffff;
+
+    --shadow:
+        0 10px 30px rgba(0,0,0,0.08);
+
+}
+
+
+/*==================================================
+RESET
+==================================================*/
+
+*{
+
+    margin:0;
+
+    padding:0;
+
+    box-sizing:border-box;
+
+}
+
+
+html{
+
+    scroll-behavior:smooth;
+
+}
+
+
+body{
+
+    font-family:
+        Arial,
+        Helvetica,
+        sans-serif;
+
+    background:
+        var(--background);
+
+    color:
+        var(--text);
+
+}
+
+
+/*==================================================
+PAGE
+==================================================*/
+
+.help-center-page{
+
+    width:100%;
+
+    min-height:100vh;
+
+    padding:
+        35px 20px 60px;
+
+}
+
+
+/*==================================================
+HEADER
+==================================================*/
+
+.help-header{
+
+    width:100%;
+
+    max-width:1000px;
+
+    margin:
+        0 auto 25px;
+
+    display:flex;
+
+    align-items:center;
+
+    gap:18px;
+
+}
+
+
+.back-button{
+
+    width:45px;
+
+    height:45px;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    text-decoration:none;
+
+    color:var(--text);
+
+    background:
+        var(--white);
+
+    border:
+        1px solid var(--border);
+
+    border-radius:12px;
+
+    font-size:24px;
+
+    transition:
+        0.25s ease;
+
+}
+
+
+.back-button:hover{
+
+    background:
+        var(--primary-light);
+
+    color:
+        var(--primary);
+
+    transform:
+        translateX(-3px);
+
+}
+
+
+/*==================================================
+HEADER CONTENT
+==================================================*/
+
+.header-content{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:14px;
+
+}
+
+
+.header-icon{
+
+    width:52px;
+
+    height:52px;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    background:
+        var(--primary-light);
+
+    border-radius:15px;
+
+    font-size:25px;
+
+}
+
+
+.header-content h1{
+
+    font-size:28px;
+
+    margin-bottom:5px;
+
+}
+
+
+.header-content p{
+
+    font-size:14px;
+
+    color:
+        var(--muted);
+
+}
+
+
+/*==================================================
+SEARCH
+==================================================*/
+
+.help-search{
+
+    width:100%;
+
+    max-width:1000px;
+
+    height:58px;
+
+    margin:
+        0 auto 30px;
+
+    display:flex;
+
+    align-items:center;
+
+    gap:12px;
+
+    padding:
+        0 18px;
+
+    background:
+        var(--white);
+
+    border:
+        1px solid var(--border);
+
+    border-radius:16px;
+
+    box-shadow:
+        0 5px 18px rgba(0,0,0,0.05);
+
+}
+
+
+.search-icon{
+
+    font-size:20px;
+
+}
+
+
+.help-search input{
+
+    width:100%;
+
+    height:100%;
+
+    border:none;
+
+    outline:none;
+
+    background:transparent;
+
+    color:
+        var(--text);
+
+    font-size:15px;
+
+}
+
+
+.help-search input::placeholder{
+
+    color:
+        #9ca3af;
+
+}
+
+
+/*==================================================
+SECTION
+==================================================*/
+
+.help-section,
+.faq-section{
+
+    width:100%;
+
+    max-width:1000px;
+
+    margin:
+        0 auto 30px;
+
+}
+
+
+/*==================================================
+SECTION HEADING
+==================================================*/
+
+.section-heading{
+
+    margin-bottom:16px;
+
+}
+
+
+.section-heading h2{
+
+    font-size:20px;
+
+    margin-bottom:5px;
+
+}
+
+
+.section-heading p{
+
+    font-size:13px;
+
+    color:
+        var(--muted);
+
+}
+
+
+/*==================================================
+HELP GRID
+==================================================*/
+
+.help-grid{
+
+    display:grid;
+
+    grid-template-columns:
+        repeat(2, 1fr);
+
+    gap:14px;
+
+}
+
+
+/*==================================================
+HELP CARD
+==================================================*/
+
+.help-card{
+
+    min-height:90px;
+
+    display:flex;
+
+    align-items:center;
+
+    gap:14px;
+
+    padding:
+        17px;
+
+    text-decoration:none;
+
+    color:
+        var(--text);
+
+    background:
+        var(--white);
+
+    border:
+        1px solid var(--border);
+
+    border-radius:16px;
+
+    transition:
+        0.25s ease;
+
+}
+
+
+.help-card:hover{
+
+    border-color:
+        #a5d6a7;
+
+    transform:
+        translateY(-2px);
+
+    box-shadow:
+        0 8px 20px rgba(0,0,0,0.06);
+
+}
+
+
+.help-card-icon{
+
+    width:46px;
+
+    height:46px;
+
+    flex-shrink:0;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    background:
+        var(--primary-light);
+
+    border-radius:12px;
+
+    font-size:22px;
+
+}
+
+
+.help-card div:nth-child(2){
+
+    flex:1;
+
+}
+
+
+.help-card h3{
+
+    font-size:15px;
+
+    margin-bottom:5px;
+
+}
+
+
+.help-card p{
+
+    font-size:12px;
+
+    line-height:1.4;
+
+    color:
+        var(--muted);
+
+}
+
+
+.help-card > span{
+
+    font-size:20px;
+
+    color:
+        var(--muted);
+
+}
+
+
+/*==================================================
+FAQ
+==================================================*/
+
+.faq-section{
+
+    background:
+        var(--white);
+
+    padding:25px;
+
+    border:
+        1px solid var(--border);
+
+    border-radius:20px;
+
+    box-shadow:
+        var(--shadow);
+
+}
+
+
+.faq-item{
+
+    border:
+        1px solid var(--border);
+
+    border-radius:12px;
+
+    margin-bottom:10px;
+
+    overflow:hidden;
+
+}
+
+
+.faq-item:last-child{
+
+    margin-bottom:0;
+
+}
+
+
+.faq-item summary{
+
+    min-height:58px;
+
+    padding:
+        16px;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:space-between;
+
+    gap:15px;
+
+    cursor:pointer;
+
+    list-style:none;
+
+    font-size:14px;
+
+    font-weight:600;
+
+}
+
+
+.faq-item summary::-webkit-details-marker{
+
+    display:none;
+
+}
+
+
+.faq-arrow{
+
+    font-size:20px;
+
+    color:
+        var(--primary);
+
+    transition:
+        transform 0.25s ease;
+
+}
+
+
+.faq-item[open]
+.faq-arrow{
+
+    transform:
+        rotate(45deg);
+
+}
+
+
+.faq-answer{
+
+    padding:
+        0 16px 16px;
+
+}
+
+
+.faq-answer p{
+
+    color:
+        var(--muted);
+
+    font-size:13px;
+
+    line-height:1.6;
+
+}
+
+
+/*==================================================
+SUPPORT CARD
+==================================================*/
+
+.support-card{
+
+    width:100%;
+
+    max-width:1000px;
+
+    margin:
+        0 auto;
+
+    padding:22px;
+
+    display:flex;
+
+    align-items:center;
+
+    gap:15px;
+
+    background:
+        var(--primary-light);
+
+    border:
+        1px solid #c8e6c9;
+
+    border-radius:18px;
+
+}
+
+
+.support-icon{
+
+    width:50px;
+
+    height:50px;
+
+    flex-shrink:0;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    background:
+        var(--white);
+
+    border-radius:13px;
+
+    font-size:23px;
+
+}
+
+
+.support-content{
+
+    flex:1;
+
+}
+
+
+.support-content h2{
+
+    font-size:17px;
+
+    margin-bottom:4px;
+
+}
+
+
+.support-content p{
+
+    color:
+        var(--muted);
+
+    font-size:13px;
+
+}
+
+
+.support-button{
+
+    height:44px;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    padding:
+        0 20px;
+
+    text-decoration:none;
+
+    background:
+        var(--primary);
+
+    color:
+        var(--white);
+
+    border-radius:10px;
+
+    font-size:13px;
+
+    font-weight:600;
+
+    transition:
+        0.25s ease;
+
+}
+
+
+.support-button:hover{
+
+    background:
+        var(--primary-dark);
+
+    transform:
+        translateY(-1px);
+
+}
+
+
+/*==================================================
+TABLET
+==================================================*/
+
+@media(max-width:700px){
+
+    .help-grid{
+
+        grid-template-columns:
+            1fr;
+
+    }
+
+}
+
+
+/*==================================================
+MOBILE
+==================================================*/
+
+@media(max-width:600px){
+
+    .help-center-page{
+
+        padding:
+            20px 14px 40px;
+
+    }
+
+
+    .header-icon{
+
+        width:45px;
+
+        height:45px;
+
+        font-size:22px;
+
+    }
+
+
+    .header-content h1{
+
+        font-size:21px;
+
+    }
+
+
+    .header-content p{
+
+        font-size:12px;
+
+    }
+
+
+    .back-button{
+
+        width:40px;
+
+        height:40px;
+
+    }
+
+
+    .help-search{
+
+        height:52px;
+
+        border-radius:13px;
+
+    }
+
+
+    .help-search input{
+
+        font-size:14px;
+
+    }
+
+
+    .faq-section{
+
+        padding:18px;
+
+        border-radius:17px;
+
+    }
+
+
+    .faq-item summary{
+
+        font-size:13px;
+
+    }
+
+
+    .support-card{
+
+        align-items:flex-start;
+
+        flex-wrap:wrap;
+
+        padding:18px;
+
+    }
+
+
+    .support-content{
+
+        min-width:
+            calc(100% - 65px);
+
+    }
+
+
+    .support-button{
+
+        width:100%;
+
+    }
+
+}
+
+
+/*==================================================
+SMALL MOBILE
+==================================================*/
+
+@media(max-width:400px){
+
+    .help-center-page{
+
+        padding:
+            15px 10px 30px;
+
+    }
+
+
+    .help-card{
+
+        padding:14px;
+
+    }
+
+
+    .help-card-icon{
+
+        width:40px;
+
+        height:40px;
+
+        font-size:19px;
+
+    }
+
+
+    .faq-section{
+
+        padding:14px;
+
+    }
+
+}
