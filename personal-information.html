@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0">
+
+    <meta
+        name="description"
+        content="Personal Information - SmartBazaar Pro">
+
+    <title>Personal Information - SmartBazaar Pro</title>
+
+    <!--
+    ==================================================
+    SMARTBAZAAR PRO
+    PERSONAL INFORMATION PAGE
+    FEATURE: Personal Information
+    ==================================================
+    -->
+
+    <link rel="stylesheet" href="personal-information.css">
+
+</head>
+
+<body>
+
+    <!--================================================
+    PERSONAL INFORMATION PAGE
+    FEATURE: Personal Information
+    ==================================================-->
+
+    <main class="personal-page">
+
+        <!--============================================
+        PAGE HEADER
+        ============================================-->
+
+        <section class="personal-header">
+
+            <a
+                href="account.html"
+                class="back-button"
+                aria-label="Go back">
+
+                ←
+
+            </a>
+
+            <div class="header-content">
+
+                <div class="header-icon">
+                    👤
+                </div>
+
+                <div>
+
+                    <h1>Personal Information</h1>
+
+                    <p>
+                        Manage your personal account information
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!--============================================
+        PERSONAL INFORMATION CARD
+        ============================================-->
+
+        <section class="personal-card">
+
+            <div class="card-title">
+
+                <div>
+
+                    <h2>Basic Information</h2>
+
+                    <p>
+                        Update your personal details
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <!--========================================
+            PROFILE PHOTO
+            ========================================-->
+
+            <div class="profile-section">
+
+                <div class="profile-image">
+
+                    <span>👤</span>
+
+                </div>
+
+                <div class="profile-info">
+
+                    <h3>Profile Photo</h3>
+
+                    <p>
+                        JPG, PNG or WEBP. Maximum size 2MB.
+                    </p>
+
+                    <button
+                        type="button"
+                        class="change-photo-btn">
+
+                        Change Photo
+
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <!--========================================
+            PERSONAL INFORMATION FORM
+            ========================================-->
+
+            <form
+                class="personal-form"
+                id="personalInformationForm">
+
+
+                <!-- FULL NAME -->
+
+                <div class="form-group">
+
+                    <label for="fullName">
+                        Full Name
+                    </label>
+
+                    <input
+                        type="text"
+                        id="fullName"
+                        name="fullName"
+                        placeholder="Enter your full name"
+                        autocomplete="name">
+
+                </div>
+
+
+                <!-- EMAIL -->
+
+                <div class="form-group">
+
+                    <label for="email">
+                        Email Address
+                    </label>
+
+                    <input
+                        type="email"
+                        id="email"
+                        name="email"
+                        placeholder="Enter your email address"
+                        autocomplete="email">
+
+                </div>
+
+
+                <!-- PHONE -->
+
+                <div class="form-group">
+
+                    <label for="phone">
+                        Phone Number
+                    </label>
+
+                    <input
+                        type="tel"
+                        id="phone"
+                        name="phone"
+                        placeholder="Enter your phone number"
+                        autocomplete="tel">
+
+                </div>
+
+
+                <!-- DATE OF BIRTH -->
+
+                <div class="form-group">
+
+                    <label for="dateOfBirth">
+                        Date of Birth
+                    </label>
+
+                    <input
+                        type="date"
+                        id="dateOfBirth"
+                        name="dateOfBirth">
+
+                </div>
+
+
+                <!-- GENDER -->
+
+                <div class="form-group">
+
+                    <label for="gender">
+                        Gender
+                    </label>
+
+                    <select
+                        id="gender"
+                        name="gender">
+
+                        <option value="">
+                            Select Gender
+                        </option>
+
+                        <option value="male">
+                            Male
+                        </option>
+
+                        <option value="female">
+                            Female
+                        </option>
+
+                        <option value="other">
+                            Other
+                        </option>
+
+                        <option value="prefer-not">
+                            Prefer not to say
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <!--====================================
+                ACTION BUTTONS
+                ====================================-->
+
+                <div class="form-actions">
+
+                    <button
+                        type="button"
+                        class="cancel-btn">
+
+                        Cancel
+
+                    </button>
+
+                    <button
+                        type="submit"
+                        class="save-btn">
+
+                        Save Changes
+
+                    </button>
+
+                </div>
+
+            </form>
+
+        </section>
+
+    </main>
+
+
+    <!--
+    ==================================================
+    SMARTBAZAAR PRO
+    PERSONAL INFORMATION PAGE
+    FEATURE: Personal Information
+    ==================================================
+    -->
+
+</body>
+
+</html>
