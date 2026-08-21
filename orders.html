@@ -1,0 +1,822 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <meta
+        name="description"
+        content="My Orders - SmartBazaar Pro"
+    >
+
+    <meta
+        name="author"
+        content="Iftikhar Ahmed"
+    >
+
+    <title>
+        My Orders - SmartBazaar Pro
+    </title>
+
+
+    <!--==================================================
+    GOOGLE FONT
+    ==================================================-->
+
+    <link
+        rel="preconnect"
+        href="https://fonts.googleapis.com"
+    >
+
+    <link
+        rel="preconnect"
+        href="https://fonts.gstatic.com"
+        crossorigin
+    >
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet"
+    >
+
+
+    <!--==================================================
+    FONT AWESOME
+    ==================================================-->
+
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+    >
+
+
+    <!--==================================================
+    ORDERS CSS
+    ==================================================-->
+
+    <link
+        rel="stylesheet"
+        href="orders.css"
+    >
+
+</head>
+
+
+<body>
+
+
+<!--==================================================
+SMARTBAZAAR PRO
+MY ORDERS PAGE
+==================================================-->
+
+
+<!--==================================================
+PAGE HEADER
+==================================================-->
+
+<header
+    class="orders-header"
+    id="orders-header"
+>
+
+    <div class="orders-header-inner">
+
+
+        <!-- BACK -->
+
+        <a
+            href="account.html"
+            class="orders-back-button"
+            aria-label="Back to Account"
+        >
+
+            <i class="fa-solid fa-arrow-left"></i>
+
+        </a>
+
+
+        <!-- TITLE -->
+
+        <div class="orders-title">
+
+            <span>
+                SmartBazaar Pro
+            </span>
+
+            <h1>
+                My Orders
+            </h1>
+
+        </div>
+
+
+        <!-- REFRESH -->
+
+        <button
+            type="button"
+            id="refresh-orders-button"
+            class="orders-refresh-button"
+            aria-label="Refresh Orders"
+        >
+
+            <i class="fa-solid fa-rotate"></i>
+
+        </button>
+
+    </div>
+
+</header>
+
+
+
+<!--==================================================
+MAIN
+==================================================-->
+
+<main
+    class="orders-main"
+    id="orders-page"
+>
+
+
+    <!--================================================
+    ACCOUNT / ORDER SUMMARY
+    =================================================-->
+
+    <section
+        class="orders-summary-section"
+        id="orders-summary-section"
+    >
+
+        <div class="orders-summary-card">
+
+
+            <div class="summary-icon">
+
+                <i class="fa-solid fa-box"></i>
+
+            </div>
+
+
+            <div class="summary-content">
+
+                <span>
+                    YOUR ORDERS
+                </span>
+
+                <h2>
+                    <span id="total-orders-count">
+                        0
+                    </span>
+
+                    Orders
+                </h2>
+
+                <p id="orders-summary-text">
+                    Loading your orders...
+                </p>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+
+    <!--================================================
+    ORDER FILTERS
+    =================================================-->
+
+    <section
+        class="orders-filter-section"
+        id="orders-filter-section"
+    >
+
+        <div
+            class="orders-filter"
+            role="tablist"
+            aria-label="Order Filters"
+        >
+
+
+            <button
+                type="button"
+                class="order-filter-button active"
+                data-filter="all"
+                role="tab"
+            >
+
+                All
+
+                <span id="filter-count-all">
+                    0
+                </span>
+
+            </button>
+
+
+            <button
+                type="button"
+                class="order-filter-button"
+                data-filter="pending"
+                role="tab"
+            >
+
+                Pending
+
+                <span id="filter-count-pending">
+                    0
+                </span>
+
+            </button>
+
+
+            <button
+                type="button"
+                class="order-filter-button"
+                data-filter="processing"
+                role="tab"
+            >
+
+                Processing
+
+                <span id="filter-count-processing">
+                    0
+                </span>
+
+            </button>
+
+
+            <button
+                type="button"
+                class="order-filter-button"
+                data-filter="shipped"
+                role="tab"
+            >
+
+                Shipped
+
+                <span id="filter-count-shipped">
+                    0
+                </span>
+
+            </button>
+
+
+            <button
+                type="button"
+                class="order-filter-button"
+                data-filter="delivered"
+                role="tab"
+            >
+
+                Delivered
+
+                <span id="filter-count-delivered">
+                    0
+                </span>
+
+            </button>
+
+
+            <button
+                type="button"
+                class="order-filter-button"
+                data-filter="cancelled"
+                role="tab"
+            >
+
+                Cancelled
+
+                <span id="filter-count-cancelled">
+                    0
+                </span>
+
+            </button>
+
+
+        </div>
+
+    </section>
+
+
+
+    <!--================================================
+    SEARCH
+    =================================================-->
+
+    <section
+        class="orders-search-section"
+        id="orders-search-section"
+    >
+
+        <div class="orders-search-box">
+
+            <i class="fa-solid fa-magnifying-glass"></i>
+
+            <input
+                type="search"
+                id="orders-search-input"
+                placeholder="Search by Order ID or product..."
+                autocomplete="off"
+            >
+
+            <button
+                type="button"
+                id="clear-orders-search"
+                aria-label="Clear Search"
+            >
+
+                <i class="fa-solid fa-xmark"></i>
+
+            </button>
+
+        </div>
+
+    </section>
+
+
+
+    <!--================================================
+    LOADING STATE
+    =================================================-->
+
+    <section
+        id="orders-loading"
+        class="orders-loading"
+    >
+
+        <div class="loading-spinner">
+
+            <i class="fa-solid fa-spinner"></i>
+
+        </div>
+
+        <p>
+            Loading your orders...
+        </p>
+
+    </section>
+
+
+
+    <!--================================================
+    ERROR STATE
+    =================================================-->
+
+    <section
+        id="orders-error"
+        class="orders-error"
+        hidden
+    >
+
+        <div class="error-icon">
+
+            <i class="fa-solid fa-triangle-exclamation"></i>
+
+        </div>
+
+        <h2>
+            Unable to Load Orders
+        </h2>
+
+        <p id="orders-error-message">
+            Something went wrong while loading your orders.
+        </p>
+
+        <button
+            type="button"
+            id="retry-orders-button"
+        >
+
+            <i class="fa-solid fa-rotate-right"></i>
+
+            Try Again
+
+        </button>
+
+    </section>
+
+
+
+    <!--================================================
+    EMPTY STATE
+    ==================================================-->
+
+    <section
+        id="orders-empty"
+        class="orders-empty"
+        hidden
+    >
+
+        <div class="empty-orders-icon">
+
+            <i class="fa-solid fa-box-open"></i>
+
+        </div>
+
+        <h2>
+            No Orders Yet
+        </h2>
+
+        <p>
+            You haven't placed any orders yet.
+            Browse SmartBazaar Pro and find something you like.
+        </p>
+
+        <a
+            href="products.html"
+            id="browse-products-from-orders"
+            class="browse-products-button"
+        >
+
+            <i class="fa-solid fa-bag-shopping"></i>
+
+            Browse Products
+
+        </a>
+
+    </section>
+
+
+
+    <!--================================================
+    ORDERS LIST
+    ==================================================-->
+
+    <section
+        id="orders-list-section"
+        class="orders-list-section"
+    >
+
+        <div
+            id="orders-list"
+            class="orders-list"
+        >
+
+            <!--
+            ORDERS WILL BE CREATED BY orders.js
+            -->
+
+        </div>
+
+    </section>
+
+
+
+    <!--================================================
+    NO FILTER RESULTS
+    ==================================================-->
+
+    <section
+        id="no-filter-results"
+        class="no-filter-results"
+        hidden
+    >
+
+        <div>
+
+            <i class="fa-solid fa-filter-circle-xmark"></i>
+
+        </div>
+
+        <h2>
+            No Matching Orders
+        </h2>
+
+        <p>
+            No orders match the selected filter or search.
+        </p>
+
+        <button
+            type="button"
+            id="reset-order-filter"
+        >
+
+            Reset Filters
+
+        </button>
+
+    </section>
+
+
+
+    <!--================================================
+    ORDER DETAILS MODAL
+    ==================================================-->
+
+    <div
+        id="order-details-modal"
+        class="order-modal"
+        aria-hidden="true"
+    >
+
+        <div
+            class="order-modal-overlay"
+            id="order-modal-overlay"
+        ></div>
+
+
+        <div
+            class="order-modal-content"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="order-modal-title"
+        >
+
+
+            <!-- MODAL HEADER -->
+
+            <div class="order-modal-header">
+
+                <div>
+
+                    <span>
+                        ORDER DETAILS
+                    </span>
+
+                    <h2 id="order-modal-title">
+                        Order
+                    </h2>
+
+                </div>
+
+
+                <button
+                    type="button"
+                    id="close-order-modal"
+                    aria-label="Close Order Details"
+                >
+
+                    <i class="fa-solid fa-xmark"></i>
+
+                </button>
+
+            </div>
+
+
+
+            <!-- ORDER STATUS -->
+
+            <div
+                id="modal-order-status"
+                class="modal-order-status"
+            >
+
+                <span id="modal-status-badge">
+                    Pending
+                </span>
+
+            </div>
+
+
+
+            <!-- ORDER INFORMATION -->
+
+            <div
+                id="modal-order-information"
+                class="modal-order-information"
+            >
+
+                <div class="modal-info-row">
+
+                    <span>
+                        Order ID
+                    </span>
+
+                    <strong id="modal-order-id">
+                        —
+                    </strong>
+
+                </div>
+
+
+                <div class="modal-info-row">
+
+                    <span>
+                        Order Date
+                    </span>
+
+                    <strong id="modal-order-date">
+                        —
+                    </strong>
+
+                </div>
+
+
+                <div class="modal-info-row">
+
+                    <span>
+                        Payment Method
+                    </span>
+
+                    <strong id="modal-payment-method">
+                        —
+                    </strong>
+
+                </div>
+
+
+                <div class="modal-info-row">
+
+                    <span>
+                        Total Amount
+                    </span>
+
+                    <strong id="modal-total-amount">
+                        Rs. 0
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- PRODUCTS -->
+
+            <div class="modal-products-section">
+
+                <h3>
+                    Products
+                </h3>
+
+
+                <div
+                    id="modal-products-list"
+                    class="modal-products-list"
+                >
+
+                </div>
+
+            </div>
+
+
+
+            <!-- SHIPPING -->
+
+            <div class="modal-shipping-section">
+
+                <h3>
+                    Shipping Address
+                </h3>
+
+
+                <div
+                    id="modal-shipping-address"
+                    class="modal-shipping-address"
+                >
+
+                    —
+
+                </div>
+
+            </div>
+
+
+
+            <!-- MODAL ACTION -->
+
+            <div class="order-modal-actions">
+
+                <button
+                    type="button"
+                    id="close-order-details-button"
+                >
+
+                    Close
+
+                </button>
+
+            </div>
+
+
+        </div>
+
+    </div>
+
+
+
+</main>
+
+
+
+<!--==================================================
+MOBILE BOTTOM NAVIGATION
+==================================================-->
+
+<nav
+    class="mobile-bottom-nav"
+    aria-label="Mobile Navigation"
+>
+
+
+    <!-- HOME -->
+
+    <a
+        href="index.html"
+        class="mobile-bottom-item"
+    >
+
+        <i class="fa-solid fa-house"></i>
+
+        <span>
+            Home
+        </span>
+
+    </a>
+
+
+    <!-- PRODUCTS -->
+
+    <a
+        href="products.html"
+        class="mobile-bottom-item"
+    >
+
+        <i class="fa-solid fa-bag-shopping"></i>
+
+        <span>
+            Products
+        </span>
+
+    </a>
+
+
+    <!-- CREATE -->
+
+    <a
+        href="smartbazaar-editor.html"
+        class="mobile-bottom-item mobile-editor-btn"
+    >
+
+        <span class="mobile-plus-icon">
+
+            <i class="fa-solid fa-plus"></i>
+
+        </span>
+
+        <span>
+            Create
+        </span>
+
+    </a>
+
+
+    <!-- ORDERS -->
+
+    <a
+        href="orders.html"
+        class="mobile-bottom-item active"
+    >
+
+        <i class="fa-solid fa-box"></i>
+
+        <span>
+            Orders
+        </span>
+
+    </a>
+
+
+    <!-- ACCOUNT -->
+
+    <a
+        href="account.html"
+        class="mobile-bottom-item"
+    >
+
+        <i class="fa-regular fa-user"></i>
+
+        <span>
+            Account
+        </span>
+
+    </a>
+
+
+</nav>
+
+
+
+<!--==================================================
+ORDERS JAVASCRIPT
+==================================================-->
+
+<script
+    type="module"
+    src="orders.js"
+></script>
+
+
+</body>
+
+</html>
