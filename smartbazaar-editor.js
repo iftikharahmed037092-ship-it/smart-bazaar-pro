@@ -1,25 +1,24 @@
 /*==================================================
 SMARTBAZAAR PRO
-WEBSITE BUILDER EDITOR
-COMPLETE JAVASCRIPT
+WEBSITE BUILDER
+JAVASCRIPT ENGINE
+
+FEATURE: CODE EDITOR + LIVE PREVIEW
+HTML / CSS / JAVASCRIPT
 ==================================================*/
 
 document.addEventListener("DOMContentLoaded", () => {
 
     /*==================================================
-    FEATURE: EDITOR INITIALIZATION
+    FEATURE: CORE ELEMENT REFERENCES
     ==================================================*/
 
-    const canvas = document.getElementById("live-canvas");
     const leftSidebar = document.getElementById("left-sidebar");
     const rightSidebar = document.getElementById("right-sidebar");
-    const layersTreeView = document.getElementById("layers-tree-view");
+    const canvas = document.getElementById("live-canvas");
     const projectTitleInput = document.getElementById("project-title-input");
-
-    if (!canvas) {
-        console.error("SmartBazaar Pro: #live-canvas not found.");
-        return;
-    }
+    const layersTreeView = document.getElementById("layers-tree-view");
+    const addBlockBtn = document.getElementById("btn-add-block");
 
     let selectedElement = null;
     let elementCounter = 0;
@@ -27,657 +26,31 @@ document.addEventListener("DOMContentLoaded", () => {
     let historyStack = [];
     let historyIndex = -1;
 
-    let draggedType = null;
-    let draggedPattern = null;
-
     /*==================================================
-    FEATURE: CODING PANEL
-    HTML / CSS / JAVASCRIPT LIVE EDITOR
+    FEATURE: PROJECT DATA
     ==================================================*/
 
-    let codingPanel = null;
-    let htmlCodeBox = null;
-    let cssCodeBox = null;
-    let jsCodeBox = null;
-    let codingToggleButton = null;
-    let codingPreviewFrame = null;
-
-    function createCodingSystem() {
-
-        if (document.getElementById("sb-coding-panel")) {
-            codingPanel = document.getElementById("sb-coding-panel");
-            return;
-        }
-
-        codingPanel = document.createElement("section");
-        codingPanel.id = "sb-coding-panel";
-
-        codingPanel.innerHTML = `
-            <div class="sb-coding-header">
-
-                <div class="sb-coding-title">
-                    <span>💻</span>
-                    <strong>Live Code Editor</strong>
-                </div>
-
-                <div class="sb-coding-actions">
-                    <button id="sb-run-code">▶ Run</button>
-                    <button id="sb-copy-code">📋 Copy</button>
-                    <button id="sb-close-code">×</button>
-                </div>
-
-            </div>
-
-            <div class="sb-code-editors">
-
-                <div class="sb-code-box">
-                    <div class="sb-code-label html-label">
-                        <span>HTML</span>
-                    </div>
-                    <textarea
-                        id="sb-html-code"
-                        spellcheck="false"
-                        placeholder="Write HTML here..."
-                    ></textarea>
-                </div>
-
-                <div class="sb-code-box">
-                    <div class="sb-code-label css-label">
-                        <span>CSS</span>
-                    </div>
-                    <textarea
-                        id="sb-css-code"
-                        spellcheck="false"
-                        placeholder="Write CSS here..."
-                    ></textarea>
-                </div>
-
-                <div class="sb-code-box">
-                    <div class="sb-code-label js-label">
-                        <span>JavaScript</span>
-                    </div>
-                    <textarea
-                        id="sb-js-code"
-                        spellcheck="false"
-                        placeholder="Write JavaScript here..."
-                    ></textarea>
-                </div>
-
-            </div>
-
-            <div class="sb-code-preview-area">
-
-                <div class="sb-preview-title">
-                    <span>👁 Live Coding Preview</span>
-                    <span id="sb-preview-status">Ready</span>
-                </div>
-
-                <iframe
-                    id="sb-coding-preview"
-                    sandbox="allow-scripts allow-forms allow-modals"
-                ></iframe>
-
-            </div>
-        `;
-
-        /*
-        FEATURE: CODING PANEL LOCATION
-
-        Coding system is placed INSIDE the existing canvas container.
-        It does NOT create a second main preview system.
-        */
-
-        const canvasContainer = document.getElementById("canvas-container");
-
-        if (canvasContainer) {
-            canvasContainer.appendChild(codingPanel);
-        }
-
-        htmlCodeBox = document.getElementById("sb-html-code");
-        cssCodeBox = document.getElementById("sb-css-code");
-        jsCodeBox = document.getElementById("sb-js-code");
-        codingPreviewFrame = document.getElementById("sb-coding-preview");
-
-        addCodingStyles();
-
-        bindCodingEvents();
-
-        /*
-        Initially hidden.
-        It will appear when Coding button is pressed.
-        */
-
-        codingPanel.style.display = "none";
-    }
+    let projectData = {
+        title: localStorage.getItem("smartbazaar_project_name") || "My_Awesome_Page",
+        htmlCode: localStorage.getItem("smartbazaar_html_code") || "",
+        cssCode: localStorage.getItem("smartbazaar_css_code") || "",
+        jsCode: localStorage.getItem("smartbazaar_js_code") || ""
+    };
 
     /*==================================================
-    FEATURE: CODING PANEL CSS
+    FEATURE: BASIC PROJECT TITLE
     ==================================================*/
 
-    function addCodingStyles() {
+    if (projectTitleInput) {
+        projectTitleInput.value = projectData.title;
 
-        if (document.getElementById("sb-coding-styles")) {
-            return;
-        }
-
-        const style = document.createElement("style");
-
-        style.id = "sb-coding-styles";
-
-        style.textContent = `
-
-        #canvas-container{
-            position:relative;
-            flex:1;
-            min-width:0;
-            min-height:0;
-        }
-
-        #sb-coding-panel{
-            position:absolute;
-            inset:10px;
-            z-index:500;
-            background:#101217;
-            border:1px solid #303746;
-            border-radius:12px;
-            display:none;
-            flex-direction:column;
-            overflow:hidden;
-            box-shadow:0 15px 40px rgba(0,0,0,.55);
-        }
-
-        .sb-coding-header{
-            min-height:48px;
-            display:flex;
-            justify-content:space-between;
-            align-items:center;
-            padding:8px 12px;
-            background:#181b22;
-            border-bottom:1px solid #303746;
-        }
-
-        .sb-coding-title{
-            display:flex;
-            align-items:center;
-            gap:8px;
-            color:#e5e7eb;
-            font-size:13px;
-        }
-
-        .sb-coding-actions{
-            display:flex;
-            gap:6px;
-        }
-
-        .sb-coding-actions button{
-            border:1px solid #374151;
-            background:#20242d;
-            color:#e5e7eb;
-            padding:6px 10px;
-            border-radius:6px;
-            cursor:pointer;
-            font-size:11px;
-        }
-
-        .sb-coding-actions button:hover{
-            background:#2d3440;
-            border-color:#38bdf8;
-        }
-
-        .sb-code-editors{
-            flex:0 0 42%;
-            min-height:180px;
-            display:grid;
-            grid-template-columns:repeat(3,1fr);
-            gap:6px;
-            padding:7px;
-            background:#0c0e12;
-        }
-
-        .sb-code-box{
-            min-width:0;
-            display:flex;
-            flex-direction:column;
-            border:1px solid #303746;
-            border-radius:7px;
-            overflow:hidden;
-            background:#11141a;
-        }
-
-        .sb-code-label{
-            height:30px;
-            display:flex;
-            align-items:center;
-            padding:0 9px;
-            font-size:10px;
-            font-weight:bold;
-            color:#fff;
-            background:#1c2028;
-            border-bottom:1px solid #303746;
-        }
-
-        .html-label{
-            border-left:3px solid #f97316;
-        }
-
-        .css-label{
-            border-left:3px solid #38bdf8;
-        }
-
-        .js-label{
-            border-left:3px solid #facc15;
-        }
-
-        .sb-code-box textarea{
-            flex:1;
-            width:100%;
-            min-height:120px;
-            resize:none;
-            outline:none;
-            border:none;
-            padding:10px;
-            background:#0b0d11;
-            color:#e5e7eb;
-            font-family:Consolas,Monaco,monospace;
-            font-size:12px;
-            line-height:1.5;
-        }
-
-        #sb-html-code{
-            color:#fb923c;
-        }
-
-        #sb-css-code{
-            color:#38bdf8;
-        }
-
-        #sb-js-code{
-            color:#facc15;
-        }
-
-        .sb-code-preview-area{
-            flex:1;
-            min-height:180px;
-            display:flex;
-            flex-direction:column;
-            background:#080a0e;
-        }
-
-        .sb-preview-title{
-            height:34px;
-            flex-shrink:0;
-            display:flex;
-            justify-content:space-between;
-            align-items:center;
-            padding:0 10px;
-            color:#cbd5e1;
-            font-size:10px;
-            background:#181b22;
-            border-top:1px solid #303746;
-            border-bottom:1px solid #303746;
-        }
-
-        #sb-preview-status{
-            color:#4ade80;
-        }
-
-        #sb-coding-preview{
-            flex:1;
-            width:100%;
-            min-height:150px;
-            border:none;
-            background:#fff;
-        }
-
-        #btn-code-editor{
-            background:#27272a !important;
-            color:#38bdf8 !important;
-            border-color:#38bdf8 !important;
-        }
-
-        #btn-code-editor.active{
-            background:#2563eb !important;
-            color:#fff !important;
-        }
-
-        @media(max-width:800px){
-
-            .sb-code-editors{
-                grid-template-columns:1fr;
-                flex:0 0 48%;
-                overflow-y:auto;
-            }
-
-            .sb-code-box{
-                min-height:130px;
-            }
-
-            .sb-coding-panel{
-                inset:5px;
-            }
-
-            .sb-coding-actions button{
-                padding:5px 7px;
-            }
-        }
-
-        @media(max-width:500px){
-
-            .sb-coding-header{
-                padding:6px;
-            }
-
-            .sb-coding-title strong{
-                font-size:11px;
-            }
-
-            .sb-code-editors{
-                flex:0 0 45%;
-            }
-
-            .sb-code-box textarea{
-                font-size:11px;
-            }
-
-        }
-
-        `;
-
-        document.head.appendChild(style);
-    }
-
-    /*==================================================
-    FEATURE: CODING BUTTON
-    ==================================================*/
-
-    function createCodingButton() {
-
-        if (document.getElementById("btn-code-editor")) {
-            codingToggleButton = document.getElementById("btn-code-editor");
-            return;
-        }
-
-        codingToggleButton = document.createElement("button");
-
-        codingToggleButton.id = "btn-code-editor";
-        codingToggleButton.className = "toolbar-btn";
-        codingToggleButton.title = "Live Code Editor";
-        codingToggleButton.innerHTML = "💻";
-
-        const settingsButton = document.getElementById("btn-settings");
-
-        if (settingsButton && settingsButton.parentElement) {
-            settingsButton.parentElement.insertBefore(
-                codingToggleButton,
-                settingsButton
+        projectTitleInput.addEventListener("input", () => {
+            projectData.title = projectTitleInput.value;
+            localStorage.setItem(
+                "smartbazaar_project_name",
+                projectData.title
             );
-        }
-
-        codingToggleButton.addEventListener("click", () => {
-
-            if (!codingPanel) return;
-
-            const isOpen =
-                codingPanel.style.display === "flex";
-
-            if (isOpen) {
-
-                codingPanel.style.display = "none";
-                codingToggleButton.classList.remove("active");
-
-            } else {
-
-                codingPanel.style.display = "flex";
-                codingToggleButton.classList.add("active");
-
-                syncCanvasToCode();
-
-            }
-
         });
-    }
-
-    /*==================================================
-    FEATURE: CODING EVENTS
-    ==================================================*/
-
-    function bindCodingEvents() {
-
-        if (!htmlCodeBox) return;
-
-        htmlCodeBox.addEventListener("input", () => {
-            runLiveCode();
-        });
-
-        cssCodeBox.addEventListener("input", () => {
-            runLiveCode();
-        });
-
-        jsCodeBox.addEventListener("input", () => {
-            runLiveCode();
-        });
-
-        document
-            .getElementById("sb-run-code")
-            ?.addEventListener("click", runLiveCode);
-
-        document
-            .getElementById("sb-close-code")
-            ?.addEventListener("click", () => {
-
-                codingPanel.style.display = "none";
-
-                if (codingToggleButton) {
-                    codingToggleButton.classList.remove("active");
-                }
-
-            });
-
-        document
-            .getElementById("sb-copy-code")
-            ?.addEventListener("click", copyAllCode);
-    }
-
-    /*==================================================
-    FEATURE: LIVE CODE EXECUTION
-    ==================================================*/
-
-    function runLiveCode() {
-
-        if (!codingPreviewFrame) return;
-
-        const html = htmlCodeBox.value || "";
-        const css = cssCodeBox.value || "";
-        const js = jsCodeBox.value || "";
-
-        const finalDocument = `
-<!DOCTYPE html>
-<html>
-<head>
-
-<meta charset="UTF-8">
-
-<meta name="viewport"
-content="width=device-width,initial-scale=1.0">
-
-<style>
-
-${css}
-
-</style>
-
-</head>
-
-<body>
-
-${html}
-
-<script>
-
-try{
-
-${js}
-
-}catch(error){
-
-console.error(error);
-
-}
-
-<\/script>
-
-</body>
-</html>
-        `;
-
-        codingPreviewFrame.srcdoc = finalDocument;
-
-        const status =
-            document.getElementById("sb-preview-status");
-
-        if (status) {
-            status.textContent = "● Live";
-            status.style.color = "#4ade80";
-        }
-    }
-
-    /*==================================================
-    FEATURE: CANVAS → CODE
-    ==================================================*/
-
-    function syncCanvasToCode() {
-
-        if (!htmlCodeBox) return;
-
-        const elements =
-            canvas.querySelectorAll(".canvas-element");
-
-        let html = "";
-
-        elements.forEach(el => {
-
-            const clone = el.cloneNode(true);
-
-            clone.classList.remove("selected");
-
-            html += clone.outerHTML + "\n";
-
-        });
-
-        htmlCodeBox.value = html;
-
-        /*
-        Existing inline styles already contain
-        the visual CSS created by Drag & Drop.
-        */
-
-        cssCodeBox.value = `/* SmartBazaar Pro Generated CSS */
-
-.canvas-element{
-    box-sizing:border-box;
-}
-
-.canvas-img-box{
-    max-width:100%;
-    display:block;
-}
-
-.canvas-video-box{
-    max-width:100%;
-}
-`;
-
-        runLiveCode();
-    }
-
-    /*==================================================
-    FEATURE: CODE → CANVAS
-    ==================================================*/
-
-    function applyCodeToCanvas() {
-
-        if (!htmlCodeBox) return;
-
-        const html = htmlCodeBox.value.trim();
-
-        if (!html) return;
-
-        canvas.innerHTML = "";
-
-        const wrapper = document.createElement("div");
-
-        wrapper.innerHTML = html;
-
-        while (wrapper.firstChild) {
-
-            canvas.appendChild(
-                wrapper.firstChild
-            );
-
-        }
-
-        bindCanvasElements();
-
-        updateLayers();
-
-        saveState();
-    }
-
-    /*==================================================
-    FEATURE: COPY CODE
-    ==================================================*/
-
-    function copyAllCode() {
-
-        const combinedCode = `
-
-<!-- HTML -->
-
-${htmlCodeBox.value}
-
-<style>
-
-/* CSS */
-
-${cssCodeBox.value}
-
-</style>
-
-<script>
-
-/* JavaScript */
-
-${jsCodeBox.value}
-
-<\/script>
-
-`;
-
-        navigator.clipboard
-            ?.writeText(combinedCode)
-            .then(() => {
-
-                const btn =
-                    document.getElementById("sb-copy-code");
-
-                if (btn) {
-
-                    const oldText = btn.textContent;
-
-                    btn.textContent = "✓ Copied";
-
-                    setTimeout(() => {
-                        btn.textContent = oldText;
-                    }, 1500);
-
-                }
-
-            })
-            .catch(() => {
-
-                alert("Copy failed. Please copy manually.");
-
-            });
     }
 
     /*==================================================
@@ -686,14 +59,13 @@ ${jsCodeBox.value}
 
     function saveState() {
 
+        if (!canvas) return;
+
         if (historyIndex < historyStack.length - 1) {
-
-            historyStack =
-                historyStack.slice(
-                    0,
-                    historyIndex + 1
-                );
-
+            historyStack = historyStack.slice(
+                0,
+                historyIndex + 1
+            );
         }
 
         historyStack.push(canvas.innerHTML);
@@ -701,24 +73,53 @@ ${jsCodeBox.value}
         historyIndex++;
 
         if (historyStack.length > 50) {
-
             historyStack.shift();
-
             historyIndex--;
-
         }
     }
 
     function restoreState(html) {
 
+        if (!canvas) return;
+
         canvas.innerHTML = html;
 
-        bindCanvasElements();
+        canvas
+            .querySelectorAll(".canvas-element")
+            .forEach(el => {
+
+                el.addEventListener("click", e => {
+
+                    e.stopPropagation();
+
+                    selectElement(el);
+
+                    if (rightSidebar) {
+                        rightSidebar.classList.remove("hidden");
+                    }
+
+                });
+
+            });
 
         updateLayers();
 
-        selectedElement = null;
+        const placeholder =
+            canvas.querySelector(".placeholder-text");
+
+        if (placeholder) {
+
+            const elements =
+                canvas.querySelectorAll(".canvas-element");
+
+            placeholder.style.display =
+                elements.length === 0 ? "block" : "none";
+        }
     }
+
+    /*==================================================
+    FEATURE: UNDO
+    ==================================================*/
 
     document
         .getElementById("btn-undo")
@@ -731,10 +132,13 @@ ${jsCodeBox.value}
                 restoreState(
                     historyStack[historyIndex]
                 );
-
             }
 
         });
+
+    /*==================================================
+    FEATURE: REDO
+    ==================================================*/
 
     document
         .getElementById("btn-redo")
@@ -750,13 +154,12 @@ ${jsCodeBox.value}
                 restoreState(
                     historyStack[historyIndex]
                 );
-
             }
 
         });
 
     /*==================================================
-    FEATURE: SIDEBAR CONTROL
+    FEATURE: SIDEBAR CONTROLS
     ==================================================*/
 
     document
@@ -775,76 +178,50 @@ ${jsCodeBox.value}
 
         });
 
-    document
-        .getElementById("btn-add-block")
-        ?.addEventListener("click", () => {
+    addBlockBtn?.addEventListener("click", () => {
 
-            leftSidebar?.classList.toggle("hidden");
+        leftSidebar?.classList.toggle("hidden");
 
-        });
+    });
 
     /*==================================================
-    FEATURE: TAB SYSTEM
+    FEATURE: CANVAS SELECTION
     ==================================================*/
 
-    document
-        .querySelectorAll(".sidebar")
-        .forEach(sidebar => {
+    canvas?.addEventListener("click", e => {
 
-            const buttons =
-                sidebar.querySelectorAll(".sub-tab-btn");
+        const target =
+            e.target.closest(".canvas-element");
 
-            buttons.forEach(button => {
+        if (target) {
 
-                button.addEventListener("click", () => {
+            selectElement(target);
 
-                    buttons.forEach(b =>
-                        b.classList.remove("active")
-                    );
+            rightSidebar?.classList.remove("hidden");
 
-                    button.classList.add("active");
+        }
+        else if (
+            e.target === canvas ||
+            e.target.classList.contains("placeholder-text")
+        ) {
 
-                    const target =
-                        button.getAttribute("data-target");
+            canvas
+                .querySelectorAll(".canvas-element")
+                .forEach(el =>
+                    el.classList.remove("selected")
+                );
 
-                    sidebar
-                        .querySelectorAll(".tab-pane")
-                        .forEach(pane =>
-                            pane.classList.remove("active")
-                        );
+            selectedElement = null;
+        }
 
-                    sidebar
-                        .querySelector(`#${target}`)
-                        ?.classList.add("active");
-
-                });
-
-            });
-
-        });
-
-    /*==================================================
-    FEATURE: ACCORDION
-    ==================================================*/
-
-    document
-        .querySelectorAll(".accordion-header")
-        .forEach(header => {
-
-            header.addEventListener("click", () => {
-
-                header
-                    .parentElement
-                    .classList
-                    .toggle("open");
-
-            });
-
-        });
+    });
 
     /*==================================================
     FEATURE: DRAG & DROP
     ==================================================*/
+
+    let draggedType = null;
+    let draggedPattern = null;
 
     document
         .querySelectorAll(
@@ -874,221 +251,139 @@ ${jsCodeBox.value}
 
         });
 
-    canvas.addEventListener(
-        "dragover",
-        e => {
+    canvas?.addEventListener("dragover", e => {
 
-            e.preventDefault();
+        e.preventDefault();
 
-            canvas.classList.add("drag-over");
+        canvas.classList.add("drag-over");
+
+    });
+
+    canvas?.addEventListener("dragleave", () => {
+
+        canvas.classList.remove("drag-over");
+
+    });
+
+    canvas?.addEventListener("drop", e => {
+
+        e.preventDefault();
+
+        canvas.classList.remove("drag-over");
+
+        const placeholder =
+            canvas.querySelector(".placeholder-text");
+
+        if (placeholder) {
+            placeholder.style.display = "none";
+        }
+
+        if (draggedPattern) {
+
+            createPattern(draggedPattern);
 
         }
-    );
+        else if (draggedType) {
 
-    canvas.addEventListener(
-        "dragleave",
-        () => {
-
-            canvas.classList.remove(
-                "drag-over"
-            );
+            createElementByType(draggedType);
 
         }
-    );
 
-    canvas.addEventListener(
-        "drop",
-        e => {
+        draggedType = null;
+        draggedPattern = null;
 
-            e.preventDefault();
+        rightSidebar?.classList.remove("hidden");
 
-            canvas.classList.remove(
-                "drag-over"
-            );
+        saveState();
 
-            const placeholder =
-                canvas.querySelector(
-                    ".placeholder-text"
-                );
-
-            if (placeholder) {
-                placeholder.style.display = "none";
-            }
-
-            if (draggedPattern) {
-
-                createPattern(
-                    draggedPattern
-                );
-
-                draggedPattern = null;
-
-            } else if (draggedType) {
-
-                createElementByType(
-                    draggedType
-                );
-
-                draggedType = null;
-
-            }
-
-            rightSidebar?.classList.remove(
-                "hidden"
-            );
-
-            saveState();
-
-            syncCanvasToCode();
-
-        }
-    );
+    });
 
     /*==================================================
-    FEATURE: CLICK TO CREATE
+    FEATURE: SIDEBAR TABS
     ==================================================*/
 
     document
-        .querySelectorAll(".draggable-item")
-        .forEach(item => {
+        .querySelectorAll(".sidebar")
+        .forEach(sidebar => {
 
-            item.addEventListener("click", () => {
+            sidebar
+                .querySelectorAll(".sub-tab-btn")
+                .forEach(btn => {
 
-                const type =
-                    item.getAttribute("data-type");
+                    btn.addEventListener(
+                        "click",
+                        () => {
 
-                hidePlaceholder();
+                            sidebar
+                                .querySelectorAll(
+                                    ".sub-tab-btn"
+                                )
+                                .forEach(b =>
+                                    b.classList.remove(
+                                        "active"
+                                    )
+                                );
 
-                createElementByType(type);
+                            btn.classList.add("active");
 
-                rightSidebar?.classList.remove(
-                    "hidden"
-                );
+                            const target =
+                                btn.getAttribute(
+                                    "data-target"
+                                );
 
-                saveState();
+                            sidebar
+                                .querySelectorAll(
+                                    ".tab-pane"
+                                )
+                                .forEach(p =>
+                                    p.classList.remove(
+                                        "active"
+                                    )
+                                );
 
-                syncCanvasToCode();
+                            sidebar
+                                .querySelector(
+                                    `#${target}`
+                                )
+                                ?.classList.add(
+                                    "active"
+                                );
 
-            });
+                        }
+                    );
+
+                });
 
         });
-
-    document
-        .querySelectorAll(".pattern-item")
-        .forEach(item => {
-
-            item.addEventListener("click", () => {
-
-                const pattern =
-                    item.getAttribute("data-pattern");
-
-                hidePlaceholder();
-
-                createPattern(pattern);
-
-                rightSidebar?.classList.remove(
-                    "hidden"
-                );
-
-                saveState();
-
-                syncCanvasToCode();
-
-            });
-
-        });
-
-    function hidePlaceholder() {
-
-        const ph =
-            canvas.querySelector(
-                ".placeholder-text"
-            );
-
-        if (ph) {
-            ph.style.display = "none";
-        }
-    }
 
     /*==================================================
-    FEATURE: ELEMENT CREATION
+    FEATURE: ACCORDIONS
+    ==================================================*/
+
+    document
+        .querySelectorAll(".accordion-header")
+        .forEach(header => {
+
+            header.addEventListener(
+                "click",
+                () => {
+
+                    header
+                        .parentElement
+                        .classList.toggle("open");
+
+                }
+            );
+
+        });
+
+    /*==================================================
+    FEATURE: CREATE ELEMENT
     ==================================================*/
 
     function createElementByType(type) {
 
-        if (type === "heading") {
-
-            createElement(
-                "heading",
-                "Sample Heading",
-                "",
-                "",
-                "#27272a",
-                "#ffffff",
-                "26",
-                "12",
-                "6",
-                "100%",
-                "auto",
-                "none",
-                "1",
-                "#3f3f46",
-                "6",
-                "none",
-                "left"
-            );
-
-        }
-
-        else if (type === "paragraph") {
-
-            createElement(
-                "paragraph",
-                "Sample paragraph text",
-                "",
-                "",
-                "#27272a",
-                "#ffffff",
-                "16",
-                "12",
-                "6",
-                "100%",
-                "auto",
-                "none",
-                "1",
-                "#3f3f46",
-                "6",
-                "none",
-                "left"
-            );
-
-        }
-
-        else if (type === "button") {
-
-            createElement(
-                "button",
-                "Click Me",
-                "",
-                "",
-                "#2563eb",
-                "#ffffff",
-                "14",
-                "12",
-                "6",
-                "auto",
-                "auto",
-                "none",
-                "1",
-                "#3f3f46",
-                "6",
-                "none",
-                "center"
-            );
-
-        }
-
-        else if (type === "image") {
+        if (type === "image") {
 
             createElement(
                 "image",
@@ -1111,12 +406,11 @@ ${jsCodeBox.value}
             );
 
         }
-
         else if (type === "video") {
 
             createElement(
                 "video",
-                "https://www.youtube.com/embed/dQw4w9WgXcQ",
+                "",
                 "",
                 "",
                 "#14161b",
@@ -1135,7 +429,6 @@ ${jsCodeBox.value}
             );
 
         }
-
         else if (type === "icon") {
 
             createElement(
@@ -1159,7 +452,6 @@ ${jsCodeBox.value}
             );
 
         }
-
         else if (type === "flex") {
 
             createElement(
@@ -1185,7 +477,6 @@ ${jsCodeBox.value}
             );
 
         }
-
         else if (type === "grid") {
 
             createElement(
@@ -1210,20 +501,33 @@ ${jsCodeBox.value}
             );
 
         }
-
         else {
 
             createElement(
                 type,
-                `Sample ${String(type).toUpperCase()} Box`
+                `Sample ${type.toUpperCase()}`,
+                "",
+                "",
+                "#27272a",
+                "#ffffff",
+                "16",
+                "12",
+                "6",
+                "100%",
+                "auto",
+                "none",
+                "1",
+                "#3f3f46",
+                "6",
+                "none",
+                "left"
             );
 
         }
-
     }
 
     /*==================================================
-    FEATURE: CREATE ELEMENT
+    FEATURE: CREATE CANVAS ELEMENT
     ==================================================*/
 
     function createElement(
@@ -1248,6 +552,8 @@ ${jsCodeBox.value}
         flexDir = "row"
     ) {
 
+        if (!canvas) return;
+
         elementCounter++;
 
         const el =
@@ -1263,71 +569,51 @@ ${jsCodeBox.value}
             type
         );
 
+        /*------------------------------------------
+        FEATURE: IMAGE ELEMENT
+        ------------------------------------------*/
+
         if (type === "image") {
 
-            const placeholderBox =
+            const box =
                 document.createElement("div");
 
-            placeholderBox.className =
+            box.className =
                 "empty-img-placeholder";
 
-            placeholderBox.innerHTML =
-                `<span>🖼 No Image Selected</span>
-                 <small>Paste image URL in right panel</small>`;
+            box.innerHTML = `
+                <span>🖼 No Image Selected</span>
+                <small>Paste image URL in right panel</small>
+            `;
 
-            el.appendChild(
-                placeholderBox
-            );
+            el.appendChild(box);
 
         }
+
+        /*------------------------------------------
+        FEATURE: VIDEO ELEMENT
+        ------------------------------------------*/
 
         else if (type === "video") {
 
-            const iframe =
-                document.createElement("iframe");
+            const box =
+                document.createElement("div");
 
-            iframe.className =
-                "canvas-video-box";
+            box.className =
+                "empty-img-placeholder";
 
-            iframe.src = text;
+            box.innerHTML = `
+                <span>🎥 Video</span>
+                <small>Paste video URL in right panel</small>
+            `;
 
-            iframe.setAttribute(
-                "allowfullscreen",
-                ""
-            );
-
-            el.appendChild(iframe);
+            el.appendChild(box);
 
         }
 
-        else if (type === "button") {
-
-            const button =
-                document.createElement("button");
-
-            button.type = "button";
-
-            button.textContent =
-                text;
-
-            button.style.background =
-                "transparent";
-
-            button.style.border =
-                "none";
-
-            button.style.color =
-                "inherit";
-
-            button.style.fontSize =
-                "inherit";
-
-            button.style.cursor =
-                "pointer";
-
-            el.appendChild(button);
-
-        }
+        /*------------------------------------------
+        FEATURE: NORMAL ELEMENT
+        ------------------------------------------*/
 
         else {
 
@@ -1335,7 +621,7 @@ ${jsCodeBox.value}
 
         }
 
-        applyStyles(
+        applyStylesToElement(
             el,
             {
                 bgColor,
@@ -1377,14 +663,16 @@ ${jsCodeBox.value}
 
         selectElement(el);
 
-        return el;
     }
 
     /*==================================================
-    FEATURE: APPLY STYLES
+    FEATURE: ELEMENT STYLING
     ==================================================*/
 
-    function applyStyles(el, styles) {
+    function applyStylesToElement(
+        el,
+        styles
+    ) {
 
         el.style.backgroundColor =
             styles.bgColor;
@@ -1428,48 +716,137 @@ ${jsCodeBox.value}
         el.style.display =
             styles.displayMode;
 
-        if (
-            styles.displayMode === "flex"
-        ) {
+        if (styles.displayMode === "flex") {
 
             el.style.flexDirection =
                 styles.flexDir;
 
         }
 
-        if (
-            styles.displayMode === "grid"
-        ) {
+        if (styles.displayMode === "grid") {
 
             el.style.gridTemplateColumns =
                 "1fr 1fr";
-
-            el.style.gap =
-                "10px";
 
         }
 
         if (styles.align === "center") {
 
-            el.style.marginLeft =
-                "auto";
+            el.style.marginLeft = "auto";
+            el.style.marginRight = "auto";
 
-            el.style.marginRight =
-                "auto";
+        }
+        else if (styles.align === "right") {
+
+            el.style.marginLeft = "auto";
+            el.style.marginRight = "0";
+
+        }
+        else {
+
+            el.style.marginLeft = "0";
+            el.style.marginRight = "0";
 
         }
 
-        else if (
-            styles.align === "right"
-        ) {
+    }
 
-            el.style.marginLeft =
-                "auto";
+    /*==================================================
+    FEATURE: SELECT ELEMENT
+    ==================================================*/
 
-            el.style.marginRight =
-                "0";
+    function selectElement(el) {
+
+        document
+            .querySelectorAll(
+                ".canvas-element"
+            )
+            .forEach(item =>
+                item.classList.remove(
+                    "selected"
+                )
+            );
+
+        selectedElement = el;
+
+        if (selectedElement) {
+
+            selectedElement.classList.add(
+                "selected"
+            );
+
+            syncPropsToForm();
 
         }
+
+    }
+
+    /*==================================================
+    FEATURE: LAYERS
+    ==================================================*/
+
+    function updateLayers() {
+
+        if (!layersTreeView || !canvas)
+            return;
+
+        const elements =
+            canvas.querySelectorAll(
+                ".canvas-element"
+            );
+
+        if (elements.length === 0) {
+
+            layersTreeView.innerHTML =
+                `<p class="no-layers">
+                    No layers added yet
+                </p>`;
+
+            return;
+
+        }
+
+        layersTreeView.innerHTML = "";
+
+        elements.forEach(
+            (el, index) => {
+
+                const layer =
+                    document.createElement(
+                        "div"
+                    );
+
+                layer.className =
+                    "layer-item";
+
+                layer.textContent =
+                    `${index + 1}. ${
+                        el.getAttribute(
+                            "data-type"
+                        ).toUpperCase()
+                    }`;
+
+                layer.addEventListener(
+                    "click",
+                    e => {
+
+                        e.stopPropagation();
+
+                        selectElement(el);
+
+                        rightSidebar?.classList.remove(
+                            "hidden"
+                        );
+
+                    }
+                );
+
+                layersTreeView.appendChild(
+                    layer
+                );
+
+            }
+        );
 
     }
 
@@ -1531,7 +908,7 @@ ${jsCodeBox.value}
                 "14",
                 "12",
                 "6",
-                "auto",
+                "100%",
                 "auto",
                 "none",
                 "1",
@@ -1546,12 +923,43 @@ ${jsCodeBox.value}
         else if (type === "image-box") {
 
             createElement(
-                "image"
+                "image",
+                "",
+                "",
+                "",
+                "#181b22",
+                "#ffffff",
+                "16",
+                "10",
+                "6",
+                "100%",
+                "180px",
+                "solid",
+                "1",
+                "#38bdf8",
+                "8",
+                "none",
+                "left"
             );
 
             createElement(
                 "heading",
-                "Professional Web Development"
+                "Professional Web Development",
+                "",
+                "",
+                "#181b22",
+                "#ffffff",
+                "18",
+                "8",
+                "4",
+                "100%",
+                "auto",
+                "none",
+                "1",
+                "#3f3f46",
+                "4",
+                "none",
+                "left"
             );
 
         }
@@ -1580,7 +988,22 @@ ${jsCodeBox.value}
 
             createElement(
                 "paragraph",
-                "Unlimited blocks and instant export."
+                "Includes unlimited blocks and instant export.",
+                "",
+                "",
+                "#181b22",
+                "#94a3b8",
+                "14",
+                "8",
+                "4",
+                "100%",
+                "auto",
+                "none",
+                "1",
+                "#2d3748",
+                "6",
+                "none",
+                "center"
             );
 
             createElement(
@@ -1609,12 +1032,42 @@ ${jsCodeBox.value}
 
             createElement(
                 "paragraph",
-                `"This builder completely changed how fast I launch client sites!"`
+                "This builder completely changed how fast I launch client sites!",
+                "",
+                "",
+                "#252833",
+                "#e2e8f0",
+                "14",
+                "14",
+                "6",
+                "100%",
+                "auto",
+                "dashed",
+                "1",
+                "#38bdf8",
+                "8",
+                "none",
+                "left"
             );
 
             createElement(
                 "heading",
-                "- Alex Johnson, Developer"
+                "- Alex Johnson, Developer",
+                "",
+                "",
+                "#252833",
+                "#38bdf8",
+                "12",
+                "6",
+                "4",
+                "100%",
+                "auto",
+                "none",
+                "1",
+                "#3f3f46",
+                "4",
+                "none",
+                "left"
             );
 
         }
@@ -1622,143 +1075,7 @@ ${jsCodeBox.value}
     }
 
     /*==================================================
-    FEATURE: SELECT ELEMENT
-    ==================================================*/
-
-    function selectElement(el) {
-
-        document
-            .querySelectorAll(".canvas-element")
-            .forEach(item =>
-                item.classList.remove(
-                    "selected"
-                )
-            );
-
-        selectedElement = el;
-
-        if (selectedElement) {
-
-            selectedElement.classList.add(
-                "selected"
-            );
-
-            syncPropsToForm();
-
-        }
-
-    }
-
-    /*==================================================
-    FEATURE: REBIND ELEMENTS
-    ==================================================*/
-
-    function bindCanvasElements() {
-
-        canvas
-            .querySelectorAll(".canvas-element")
-            .forEach(el => {
-
-                if (
-                    el.dataset.sbBound === "true"
-                ) return;
-
-                el.dataset.sbBound = "true";
-
-                el.addEventListener(
-                    "click",
-                    e => {
-
-                        e.stopPropagation();
-
-                        selectElement(el);
-
-                        rightSidebar?.classList.remove(
-                            "hidden"
-                        );
-
-                    }
-                );
-
-            });
-
-    }
-
-    /*==================================================
-    FEATURE: LAYERS
-    ==================================================*/
-
-    function updateLayers() {
-
-        if (!layersTreeView) return;
-
-        const elements =
-            canvas.querySelectorAll(
-                ".canvas-element"
-            );
-
-        if (elements.length === 0) {
-
-            layersTreeView.innerHTML =
-                `<p class="no-layers">
-                    No layers added yet
-                </p>`;
-
-            const ph =
-                canvas.querySelector(
-                    ".placeholder-text"
-                );
-
-            if (ph) {
-                ph.style.display = "block";
-            }
-
-            return;
-        }
-
-        layersTreeView.innerHTML = "";
-
-        elements.forEach(
-            (el, index) => {
-
-                const layer =
-                    document.createElement("div");
-
-                layer.className =
-                    "layer-item";
-
-                layer.textContent =
-                    `${index + 1}. ${
-                        el.getAttribute(
-                            "data-type"
-                        )?.toUpperCase() ||
-                        "ELEMENT"
-                    }`;
-
-                layer.addEventListener(
-                    "click",
-                    () => {
-
-                        selectElement(el);
-
-                        rightSidebar?.classList.remove(
-                            "hidden"
-                        );
-
-                    }
-                );
-
-                layersTreeView.appendChild(
-                    layer
-                );
-
-            }
-        );
-
-    }
-
-    /*==================================================
-    FEATURE: INSPECTOR
+    FEATURE: PROPERTY PANEL
     ==================================================*/
 
     const textInput =
@@ -1774,6 +1091,36 @@ ${jsCodeBox.value}
     const videoInput =
         document.getElementById(
             "prop-video-input"
+        );
+
+    const groupTextContent =
+        document.getElementById(
+            "group-text-content"
+        );
+
+    const groupImageContent =
+        document.getElementById(
+            "group-image-content"
+        );
+
+    const groupVideoContent =
+        document.getElementById(
+            "group-video-content"
+        );
+
+    const displayModeInput =
+        document.getElementById(
+            "prop-display-mode"
+        );
+
+    const flexDirectionInput =
+        document.getElementById(
+            "prop-flex-direction"
+        );
+
+    const gridColumnsInput =
+        document.getElementById(
+            "prop-grid-columns"
         );
 
     const bgColorInput =
@@ -1831,42 +1178,13 @@ ${jsCodeBox.value}
             "prop-border-radius"
         );
 
-    const displayModeInput =
-        document.getElementById(
-            "prop-display-mode"
-        );
-
-    const flexDirectionInput =
-        document.getElementById(
-            "prop-flex-direction"
-        );
-
-    const gridColumnsInput =
-        document.getElementById(
-            "prop-grid-columns"
-        );
-
-    const groupTextContent =
-        document.getElementById(
-            "group-text-content"
-        );
-
-    const groupImageContent =
-        document.getElementById(
-            "group-image-content"
-        );
-
-    const groupVideoContent =
-        document.getElementById(
-            "group-video-content"
-        );
-
     function syncPropsToForm() {
 
-        if (!selectedElement) return;
+        if (!selectedElement)
+            return;
 
-        const comp =
-            getComputedStyle(
+        const computed =
+            window.getComputedStyle(
                 selectedElement
             );
 
@@ -1875,157 +1193,126 @@ ${jsCodeBox.value}
                 "data-type"
             );
 
-        if (groupTextContent)
-            groupTextContent.style.display =
-                "none";
+        groupTextContent.style.display =
+            "none";
 
-        if (groupImageContent)
-            groupImageContent.style.display =
-                "none";
+        groupImageContent.style.display =
+            "none";
 
-        if (groupVideoContent)
-            groupVideoContent.style.display =
-                "none";
+        groupVideoContent.style.display =
+            "none";
 
         if (type === "image") {
 
-            if (groupImageContent)
-                groupImageContent.style.display =
-                    "block";
+            groupImageContent.style.display =
+                "block";
 
             const img =
                 selectedElement.querySelector(
                     "img"
                 );
 
-            if (imageInput)
-                imageInput.value =
-                    img?.src || "";
+            imageInput.value =
+                img ? img.src : "";
 
         }
-
         else if (type === "video") {
 
-            if (groupVideoContent)
-                groupVideoContent.style.display =
-                    "block";
+            groupVideoContent.style.display =
+                "block";
 
             const iframe =
                 selectedElement.querySelector(
                     "iframe"
                 );
 
-            if (videoInput)
-                videoInput.value =
-                    iframe?.src || "";
+            videoInput.value =
+                iframe ? iframe.src : "";
 
         }
-
         else {
 
-            if (groupTextContent)
-                groupTextContent.style.display =
-                    "block";
+            groupTextContent.style.display =
+                "block";
 
-            if (textInput)
-                textInput.value =
-                    selectedElement.textContent;
+            textInput.value =
+                selectedElement.textContent;
 
         }
 
-        if (bgColorInput)
-            bgColorInput.value =
-                rgbToHex(
-                    comp.backgroundColor
-                );
-
-        if (textColorInput)
-            textColorInput.value =
-                rgbToHex(
-                    comp.color
-                );
-
-        if (fontSizeInput)
-            fontSizeInput.value =
-                parseInt(comp.fontSize) || 16;
-
-        if (widthInput)
-            widthInput.value =
-                comp.width || "100%";
-
-        if (heightInput)
-            heightInput.value =
-                comp.height || "auto";
-
-        if (paddingInput)
-            paddingInput.value =
-                parseInt(
-                    comp.paddingTop
-                ) || 12;
-
-        if (marginInput)
-            marginInput.value =
-                parseInt(
-                    comp.marginTop
-                ) || 6;
-
-        if (borderStyleInput)
-            borderStyleInput.value =
-                comp.borderTopStyle ||
-                "none";
-
-        if (borderWidthInput)
-            borderWidthInput.value =
-                parseInt(
-                    comp.borderTopWidth
-                ) || 1;
-
-        if (borderColorInput)
-            borderColorInput.value =
-                rgbToHex(
-                    comp.borderTopColor
-                );
-
-        if (radiusInput)
-            radiusInput.value =
-                parseInt(
-                    comp.borderRadius
-                ) || 6;
-
-        if (displayModeInput)
-            displayModeInput.value =
-                ["flex", "grid"].includes(
-                    comp.display
-                )
-                    ? comp.display
+        displayModeInput.value =
+            computed.display === "flex"
+                ? "flex"
+                : computed.display === "grid"
+                    ? "grid"
                     : "block";
 
-        if (flexDirectionInput)
-            flexDirectionInput.value =
-                comp.flexDirection ||
-                "row";
+        flexDirectionInput.value =
+            computed.flexDirection ||
+            "row";
+
+        bgColorInput.value =
+            rgbToHex(
+                computed.backgroundColor
+            );
+
+        textColorInput.value =
+            rgbToHex(
+                computed.color
+            );
+
+        fontSizeInput.value =
+            parseInt(
+                computed.fontSize
+            ) || 16;
+
+        widthInput.value =
+            computed.width;
+
+        heightInput.value =
+            computed.height;
+
+        paddingInput.value =
+            parseInt(
+                computed.paddingTop
+            ) || 12;
+
+        marginInput.value =
+            parseInt(
+                computed.marginTop
+            ) || 6;
+
+        borderStyleInput.value =
+            computed.borderTopStyle ||
+            "none";
+
+        borderWidthInput.value =
+            parseInt(
+                computed.borderTopWidth
+            ) || 1;
+
+        borderColorInput.value =
+            rgbToHex(
+                computed.borderTopColor
+            );
+
+        radiusInput.value =
+            parseInt(
+                computed.borderRadius
+            ) || 6;
 
     }
 
     /*==================================================
-    FEATURE: LIVE INSPECTOR CHANGES
+    FEATURE: CONTENT EDITING
     ==================================================*/
-
-    function afterInspectorChange() {
-
-        saveState();
-
-        updateLayers();
-
-        syncCanvasToCode();
-
-    }
 
     textInput?.addEventListener(
         "input",
         e => {
 
-            if (!selectedElement) return;
+            if (!selectedElement)
+                return;
 
             const type =
                 selectedElement.getAttribute(
@@ -2033,19 +1320,31 @@ ${jsCodeBox.value}
                 );
 
             if (
-                type !== "image" &&
-                type !== "video"
+                [
+                    "heading",
+                    "paragraph",
+                    "button",
+                    "container",
+                    "card",
+                    "flex",
+                    "grid",
+                    "icon"
+                ].includes(type)
             ) {
 
                 selectedElement.textContent =
                     e.target.value;
 
-                afterInspectorChange();
+                updateLayers();
 
             }
 
         }
     );
+
+    /*==================================================
+    FEATURE: IMAGE URL
+    ==================================================*/
 
     imageInput?.addEventListener(
         "input",
@@ -2056,12 +1355,13 @@ ${jsCodeBox.value}
                 selectedElement.getAttribute(
                     "data-type"
                 ) !== "image"
-            ) return;
-
-            selectedElement.innerHTML = "";
+            )
+                return;
 
             const url =
                 e.target.value.trim();
+
+            selectedElement.innerHTML = "";
 
             if (url) {
 
@@ -2090,8 +1390,10 @@ ${jsCodeBox.value}
                 box.className =
                     "empty-img-placeholder";
 
-                box.innerHTML =
-                    "🖼 No Image Selected";
+                box.innerHTML = `
+                    <span>🖼 No Image Selected</span>
+                    <small>Paste image URL</small>
+                `;
 
                 selectedElement.appendChild(
                     box
@@ -2099,10 +1401,12 @@ ${jsCodeBox.value}
 
             }
 
-            afterInspectorChange();
-
         }
     );
+
+    /*==================================================
+    FEATURE: VIDEO URL
+    ==================================================*/
 
     videoInput?.addEventListener(
         "input",
@@ -2113,9 +1417,16 @@ ${jsCodeBox.value}
                 selectedElement.getAttribute(
                     "data-type"
                 ) !== "video"
-            ) return;
+            )
+                return;
+
+            const url =
+                e.target.value.trim();
 
             selectedElement.innerHTML = "";
+
+            if (!url)
+                return;
 
             const iframe =
                 document.createElement(
@@ -2125,8 +1436,7 @@ ${jsCodeBox.value}
             iframe.className =
                 "canvas-video-box";
 
-            iframe.src =
-                e.target.value.trim();
+            iframe.src = url;
 
             iframe.setAttribute(
                 "allowfullscreen",
@@ -2137,21 +1447,20 @@ ${jsCodeBox.value}
                 iframe
             );
 
-            afterInspectorChange();
-
         }
     );
+
+    /*==================================================
+    FEATURE: STYLE CONTROLS
+    ==================================================*/
 
     bgColorInput?.addEventListener(
         "input",
         e => {
 
-            if (!selectedElement) return;
-
-            selectedElement.style.backgroundColor =
-                e.target.value;
-
-            afterInspectorChange();
+            if (selectedElement)
+                selectedElement.style.backgroundColor =
+                    e.target.value;
 
         }
     );
@@ -2160,12 +1469,9 @@ ${jsCodeBox.value}
         "input",
         e => {
 
-            if (!selectedElement) return;
-
-            selectedElement.style.color =
-                e.target.value;
-
-            afterInspectorChange();
+            if (selectedElement)
+                selectedElement.style.color =
+                    e.target.value;
 
         }
     );
@@ -2174,12 +1480,9 @@ ${jsCodeBox.value}
         "input",
         e => {
 
-            if (!selectedElement) return;
-
-            selectedElement.style.fontSize =
-                e.target.value + "px";
-
-            afterInspectorChange();
+            if (selectedElement)
+                selectedElement.style.fontSize =
+                    e.target.value + "px";
 
         }
     );
@@ -2188,12 +1491,9 @@ ${jsCodeBox.value}
         "input",
         e => {
 
-            if (!selectedElement) return;
-
-            selectedElement.style.width =
-                e.target.value;
-
-            afterInspectorChange();
+            if (selectedElement)
+                selectedElement.style.width =
+                    e.target.value;
 
         }
     );
@@ -2202,12 +1502,9 @@ ${jsCodeBox.value}
         "input",
         e => {
 
-            if (!selectedElement) return;
-
-            selectedElement.style.height =
-                e.target.value;
-
-            afterInspectorChange();
+            if (selectedElement)
+                selectedElement.style.height =
+                    e.target.value;
 
         }
     );
@@ -2216,12 +1513,9 @@ ${jsCodeBox.value}
         "input",
         e => {
 
-            if (!selectedElement) return;
-
-            selectedElement.style.padding =
-                e.target.value + "px";
-
-            afterInspectorChange();
+            if (selectedElement)
+                selectedElement.style.padding =
+                    e.target.value + "px";
 
         }
     );
@@ -2230,12 +1524,9 @@ ${jsCodeBox.value}
         "input",
         e => {
 
-            if (!selectedElement) return;
-
-            selectedElement.style.margin =
-                e.target.value + "px";
-
-            afterInspectorChange();
+            if (selectedElement)
+                selectedElement.style.margin =
+                    e.target.value + "px";
 
         }
     );
@@ -2244,12 +1535,9 @@ ${jsCodeBox.value}
         "change",
         e => {
 
-            if (!selectedElement) return;
-
-            selectedElement.style.borderStyle =
-                e.target.value;
-
-            afterInspectorChange();
+            if (selectedElement)
+                selectedElement.style.borderStyle =
+                    e.target.value;
 
         }
     );
@@ -2258,12 +1546,9 @@ ${jsCodeBox.value}
         "input",
         e => {
 
-            if (!selectedElement) return;
-
-            selectedElement.style.borderWidth =
-                e.target.value + "px";
-
-            afterInspectorChange();
+            if (selectedElement)
+                selectedElement.style.borderWidth =
+                    e.target.value + "px";
 
         }
     );
@@ -2272,12 +1557,9 @@ ${jsCodeBox.value}
         "input",
         e => {
 
-            if (!selectedElement) return;
-
-            selectedElement.style.borderColor =
-                e.target.value;
-
-            afterInspectorChange();
+            if (selectedElement)
+                selectedElement.style.borderColor =
+                    e.target.value;
 
         }
     );
@@ -2286,12 +1568,9 @@ ${jsCodeBox.value}
         "input",
         e => {
 
-            if (!selectedElement) return;
-
-            selectedElement.style.borderRadius =
-                e.target.value + "px";
-
-            afterInspectorChange();
+            if (selectedElement)
+                selectedElement.style.borderRadius =
+                    e.target.value + "px";
 
         }
     );
@@ -2300,12 +1579,11 @@ ${jsCodeBox.value}
         "change",
         e => {
 
-            if (!selectedElement) return;
+            if (!selectedElement)
+                return;
 
             selectedElement.style.display =
                 e.target.value;
-
-            afterInspectorChange();
 
         }
     );
@@ -2314,12 +1592,11 @@ ${jsCodeBox.value}
         "change",
         e => {
 
-            if (!selectedElement) return;
+            if (!selectedElement)
+                return;
 
             selectedElement.style.flexDirection =
                 e.target.value;
-
-            afterInspectorChange();
 
         }
     );
@@ -2328,7 +1605,8 @@ ${jsCodeBox.value}
         "change",
         e => {
 
-            if (!selectedElement) return;
+            if (!selectedElement)
+                return;
 
             selectedElement.style.display =
                 "grid";
@@ -2336,126 +1614,42 @@ ${jsCodeBox.value}
             selectedElement.style.gridTemplateColumns =
                 e.target.value;
 
-            afterInspectorChange();
-
         }
     );
 
     /*==================================================
-    FEATURE: ALIGNMENT
-    ==================================================*/
-
-    document
-        .querySelectorAll(".align-btn")
-        .forEach(button => {
-
-            button.addEventListener(
-                "click",
-                () => {
-
-                    if (!selectedElement)
-                        return;
-
-                    const align =
-                        button.getAttribute(
-                            "data-align"
-                        );
-
-                    document
-                        .querySelectorAll(
-                            ".align-btn"
-                        )
-                        .forEach(
-                            b =>
-                                b.classList.remove(
-                                    "active"
-                                )
-                        );
-
-                    button.classList.add(
-                        "active"
-                    );
-
-                    selectedElement.style.textAlign =
-                        align;
-
-                    if (align === "center") {
-
-                        selectedElement.style.marginLeft =
-                            "auto";
-
-                        selectedElement.style.marginRight =
-                            "auto";
-
-                    }
-
-                    else if (
-                        align === "right"
-                    ) {
-
-                        selectedElement.style.marginLeft =
-                            "auto";
-
-                        selectedElement.style.marginRight =
-                            "0";
-
-                    }
-
-                    else {
-
-                        selectedElement.style.marginLeft =
-                            "0";
-
-                        selectedElement.style.marginRight =
-                            "0";
-
-                    }
-
-                    afterInspectorChange();
-
-                }
-            );
-
-        });
-
-    /*==================================================
-    FEATURE: DELETE
+    FEATURE: DELETE ELEMENT
     ==================================================*/
 
     document
         .getElementById("btn-delete-el")
-        ?.addEventListener(
-            "click",
-            () => {
+        ?.addEventListener("click", () => {
 
-                if (!selectedElement) {
+            if (!selectedElement) {
 
-                    alert(
-                        "Please select an element first!"
-                    );
-
-                    return;
-                }
-
-                selectedElement.remove();
-
-                selectedElement = null;
-
-                updateLayers();
-
-                rightSidebar?.classList.add(
-                    "hidden"
+                alert(
+                    "Please select an element first!"
                 );
 
-                saveState();
-
-                syncCanvasToCode();
-
+                return;
             }
-        );
+
+            selectedElement.remove();
+
+            selectedElement = null;
+
+            updateLayers();
+
+            rightSidebar?.classList.add(
+                "hidden"
+            );
+
+            saveState();
+
+        });
 
     /*==================================================
-    FEATURE: DUPLICATE
+    FEATURE: DUPLICATE ELEMENT
     ==================================================*/
 
     document
@@ -2487,22 +1681,24 @@ ${jsCodeBox.value}
                     "selected"
                 );
 
-                clone.dataset.sbBound =
-                    "false";
+                clone.addEventListener(
+                    "click",
+                    e => {
 
-                canvas.appendChild(
-                    clone
+                        e.stopPropagation();
+
+                        selectElement(clone);
+
+                    }
                 );
 
-                bindCanvasElements();
+                selectedElement.after(clone);
 
                 updateLayers();
 
                 selectElement(clone);
 
                 saveState();
-
-                syncCanvasToCode();
 
             }
         );
@@ -2546,483 +1742,6 @@ ${jsCodeBox.value}
         });
 
     /*==================================================
-    FEATURE: CANVAS CLICK
-    ==================================================*/
-
-    canvas.addEventListener(
-        "click",
-        e => {
-
-            const target =
-                e.target.closest(
-                    ".canvas-element"
-                );
-
-            if (target) {
-
-                selectElement(target);
-
-                rightSidebar?.classList.remove(
-                    "hidden"
-                );
-
-            }
-
-        }
-    );
-
-    /*==================================================
-    FEATURE: SAVE
-    ==================================================*/
-
-    document
-        .getElementById("btn-save")
-        ?.addEventListener(
-            "click",
-            () => {
-
-                const data = {
-
-                    title:
-                        projectTitleInput?.value ||
-                        "My_Awesome_Page",
-
-                    html:
-                        canvas.innerHTML,
-
-                    codingHTML:
-                        htmlCodeBox?.value ||
-                        "",
-
-                    codingCSS:
-                        cssCodeBox?.value ||
-                        "",
-
-                    codingJS:
-                        jsCodeBox?.value ||
-                        "",
-
-                    savedAt:
-                        new Date().toISOString()
-
-                };
-
-                localStorage.setItem(
-                    "smartbazaar_page_project",
-                    JSON.stringify(data)
-                );
-
-                localStorage.setItem(
-                    "smartbazaar_page_content",
-                    canvas.innerHTML
-                );
-
-                alert(
-                    "Page saved successfully!"
-                );
-
-            }
-        );
-
-    /*==================================================
-    FEATURE: LOAD SAVED PROJECT
-    ==================================================*/
-
-    function loadSavedProject() {
-
-        const saved =
-            localStorage.getItem(
-                "smartbazaar_page_project"
-            );
-
-        if (!saved) return;
-
-        try {
-
-            const data =
-                JSON.parse(saved);
-
-            if (data.html) {
-
-                canvas.innerHTML =
-                    data.html;
-
-                bindCanvasElements();
-
-                updateLayers();
-
-            }
-
-            if (htmlCodeBox) {
-
-                htmlCodeBox.value =
-                    data.codingHTML || "";
-
-            }
-
-            if (cssCodeBox) {
-
-                cssCodeBox.value =
-                    data.codingCSS || "";
-
-            }
-
-            if (jsCodeBox) {
-
-                jsCodeBox.value =
-                    data.codingJS || "";
-
-            }
-
-        }
-
-        catch(error) {
-
-            console.warn(
-                "Saved project could not be loaded.",
-                error
-            );
-
-        }
-
-    }
-
-    /*==================================================
-    FEATURE: EXPORT
-    ==================================================*/
-
-    function exportProject() {
-
-        const title =
-            projectTitleInput?.value.trim() ||
-            "smartbazaar-page";
-
-        const html =
-            htmlCodeBox?.value.trim() ||
-            canvas.innerHTML;
-
-        const css =
-            cssCodeBox?.value ||
-            "";
-
-        const js =
-            jsCodeBox?.value ||
-            "";
-
-        const finalHTML = `
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-
-<meta charset="UTF-8">
-
-<meta name="viewport"
-content="width=device-width, initial-scale=1.0">
-
-<title>${escapeHTML(title)}</title>
-
-<style>
-
-${css}
-
-</style>
-
-</head>
-
-<body>
-
-${html}
-
-<script>
-
-${js}
-
-<\/script>
-
-</body>
-
-</html>
-`;
-
-        const blob =
-            new Blob(
-                [finalHTML],
-                {
-                    type:
-                        "text/html;charset=utf-8"
-                }
-            );
-
-        const url =
-            URL.createObjectURL(
-                blob
-            );
-
-        const a =
-            document.createElement(
-                "a"
-            );
-
-        a.href = url;
-
-        a.download =
-            `${title.replace(
-                /[^a-z0-9-_]/gi,
-                "_"
-            )}.html`;
-
-        document.body.appendChild(a);
-
-        a.click();
-
-        a.remove();
-
-        setTimeout(
-            () =>
-                URL.revokeObjectURL(url),
-            1000
-        );
-
-    }
-
-    document
-        .getElementById("btn-export")
-        ?.addEventListener(
-            "click",
-            exportProject
-        );
-
-    document
-        .getElementById("modal-btn-export")
-        ?.addEventListener(
-            "click",
-            exportProject
-        );
-
-    /*==================================================
-    FEATURE: CLEAR CANVAS
-    ==================================================*/
-
-    document
-        .getElementById("modal-btn-clear")
-        ?.addEventListener(
-            "click",
-            () => {
-
-                if (
-                    !confirm(
-                        "Are you sure you want to clear all blocks?"
-                    )
-                ) return;
-
-                canvas.innerHTML = `
-                    <div class="placeholder-text">
-                        Drag & drop blocks here or click Add (+) from top toolbar
-                    </div>
-                `;
-
-                selectedElement = null;
-
-                updateLayers();
-
-                saveState();
-
-                syncCanvasToCode();
-
-                document
-                    .getElementById(
-                        "options-modal"
-                    )
-                    ?.style &&
-                    (
-                        document.getElementById(
-                            "options-modal"
-                        ).style.display =
-                            "none"
-                    );
-
-            }
-        );
-
-    /*==================================================
-    FEATURE: SETTINGS MODAL
-    ==================================================*/
-
-    const settingsModal =
-        document.getElementById(
-            "settings-modal"
-        );
-
-    document
-        .getElementById("btn-settings")
-        ?.addEventListener(
-            "click",
-            () => {
-
-                const modalTitle =
-                    document.getElementById(
-                        "modal-project-title"
-                    );
-
-                if (modalTitle) {
-
-                    modalTitle.value =
-                        projectTitleInput?.value ||
-                        "";
-
-                }
-
-                if (settingsModal) {
-
-                    settingsModal.style.display =
-                        "flex";
-
-                }
-
-            }
-        );
-
-    document
-        .getElementById(
-            "close-settings-modal"
-        )
-        ?.addEventListener(
-            "click",
-            () => {
-
-                if (settingsModal) {
-
-                    settingsModal.style.display =
-                        "none";
-
-                }
-
-            }
-        );
-
-    document
-        .getElementById(
-            "btn-save-settings"
-        )
-        ?.addEventListener(
-            "click",
-            () => {
-
-                const title =
-                    document.getElementById(
-                        "modal-project-title"
-                    )?.value;
-
-                const bg =
-                    document.getElementById(
-                        "modal-canvas-bg"
-                    )?.value;
-
-                if (
-                    projectTitleInput &&
-                    title
-                ) {
-
-                    projectTitleInput.value =
-                        title;
-
-                    localStorage.setItem(
-                        "smartbazaar_project_name",
-                        title
-                    );
-
-                }
-
-                if (bg) {
-
-                    canvas.style.backgroundColor =
-                        bg;
-
-                }
-
-                if (settingsModal) {
-
-                    settingsModal.style.display =
-                        "none";
-
-                }
-
-                saveState();
-
-            }
-        );
-
-    /*==================================================
-    FEATURE: OPTIONS MODAL
-    ==================================================*/
-
-    const optionsModal =
-        document.getElementById(
-            "options-modal"
-        );
-
-    document
-        .getElementById("btn-options")
-        ?.addEventListener(
-            "click",
-            () => {
-
-                if (optionsModal) {
-
-                    optionsModal.style.display =
-                        "flex";
-
-                }
-
-            }
-        );
-
-    document
-        .getElementById(
-            "close-options-modal"
-        )
-        ?.addEventListener(
-            "click",
-            () => {
-
-                if (optionsModal) {
-
-                    optionsModal.style.display =
-                        "none";
-
-                }
-
-            }
-        );
-
-    /*==================================================
-    FEATURE: PROJECT TITLE
-    ==================================================*/
-
-    if (projectTitleInput) {
-
-        projectTitleInput.value =
-            localStorage.getItem(
-                "smartbazaar_project_name"
-            ) ||
-            "My_Awesome_Page";
-
-        projectTitleInput.addEventListener(
-            "input",
-            e => {
-
-                localStorage.setItem(
-                    "smartbazaar_project_name",
-                    e.target.value
-                );
-
-            }
-        );
-
-    }
-
-    /*==================================================
     FEATURE: PREVIEW MODE
     ==================================================*/
 
@@ -3042,7 +1761,8 @@ ${js}
             "preview-mode"
         );
 
-        if (!previewBtn) return;
+        if (!previewBtn)
+            return;
 
         previewBtn.textContent =
             document.body.classList.contains(
@@ -3071,15 +1791,991 @@ ${js}
         .getElementById("btn-back")
         ?.addEventListener(
             "click",
+            () => window.history.back()
+        );
+
+    /*==================================================
+    FEATURE: CODE STUDIO CREATION
+    ==================================================
+    Important:
+    HTML میں الگ coding boxes لکھنے کی ضرورت نہیں۔
+    JavaScript خود Code Studio بنائے گا.
+    ==================================================*/
+
+    createCodeStudio();
+
+    /*==================================================
+    FEATURE: CODE STUDIO
+    ==================================================*/
+
+    function createCodeStudio() {
+
+        if (document.getElementById(
+            "smartbazaar-code-studio"
+        ))
+            return;
+
+        const studio =
+            document.createElement("section");
+
+        studio.id =
+            "smartbazaar-code-studio";
+
+        studio.innerHTML = `
+
+            <div class="code-studio-header">
+
+                <div class="code-studio-title">
+                    <span>💻</span>
+                    SmartBazaar Code Studio
+                </div>
+
+                <div class="code-studio-actions">
+
+                    <button
+                        id="code-studio-run"
+                        class="code-action-btn"
+                    >
+                        ▶ Run
+                    </button>
+
+                    <button
+                        id="code-studio-save"
+                        class="code-action-btn"
+                    >
+                        💾 Save
+                    </button>
+
+                    <button
+                        id="code-studio-export"
+                        class="code-action-btn primary"
+                    >
+                        ⬇ Export
+                    </button>
+
+                    <button
+                        id="code-studio-close"
+                        class="code-action-btn close"
+                    >
+                        ×
+                    </button>
+
+                </div>
+
+            </div>
+
+            <div class="code-studio-workspace">
+
+                <div class="code-editor-panel">
+
+                    <div class="code-tabs">
+
+                        <button
+                            class="code-tab active"
+                            data-code-target="html"
+                        >
+                            HTML
+                        </button>
+
+                        <button
+                            class="code-tab"
+                            data-code-target="css"
+                        >
+                            CSS
+                        </button>
+
+                        <button
+                            class="code-tab"
+                            data-code-target="js"
+                        >
+                            JavaScript
+                        </button>
+
+                    </div>
+
+                    <div
+                        class="code-box active"
+                        id="code-box-html"
+                    >
+
+                        <div class="code-box-title">
+                            HTML
+                        </div>
+
+                        <textarea
+                            id="smartbazaar-html-editor"
+                            spellcheck="false"
+                            placeholder="Write HTML code here..."
+                        ></textarea>
+
+                    </div>
+
+                    <div
+                        class="code-box"
+                        id="code-box-css"
+                    >
+
+                        <div class="code-box-title">
+                            CSS
+                        </div>
+
+                        <textarea
+                            id="smartbazaar-css-editor"
+                            spellcheck="false"
+                            placeholder="Write CSS code here..."
+                        ></textarea>
+
+                    </div>
+
+                    <div
+                        class="code-box"
+                        id="code-box-js"
+                    >
+
+                        <div class="code-box-title">
+                            JavaScript
+                        </div>
+
+                        <textarea
+                            id="smartbazaar-js-editor"
+                            spellcheck="false"
+                            placeholder="Write JavaScript code here..."
+                        ></textarea>
+
+                    </div>
+
+                </div>
+
+                <div class="code-preview-panel">
+
+                    <div class="code-preview-header">
+
+                        <span>
+                            👁 Live Preview
+                        </span>
+
+                        <button
+                            id="code-preview-maximize"
+                            title="Maximize Preview"
+                        >
+                            ⛶
+                        </button>
+
+                    </div>
+
+                    <iframe
+                        id="smartbazaar-code-preview"
+                        sandbox="allow-scripts allow-forms allow-modals"
+                    ></iframe>
+
+                </div>
+
+            </div>
+
+        `;
+
+        document.body.appendChild(studio);
+
+        injectCodeStudioStyles();
+
+        setupCodeStudio();
+
+    }
+
+    /*==================================================
+    FEATURE: CODE STUDIO LOGIC
+    ==================================================*/
+
+    function setupCodeStudio() {
+
+        const htmlEditor =
+            document.getElementById(
+                "smartbazaar-html-editor"
+            );
+
+        const cssEditor =
+            document.getElementById(
+                "smartbazaar-css-editor"
+            );
+
+        const jsEditor =
+            document.getElementById(
+                "smartbazaar-js-editor"
+            );
+
+        const preview =
+            document.getElementById(
+                "smartbazaar-code-preview"
+            );
+
+        htmlEditor.value =
+            projectData.htmlCode;
+
+        cssEditor.value =
+            projectData.cssCode;
+
+        jsEditor.value =
+            projectData.jsCode;
+
+        /*------------------------------------------
+        FEATURE: CODE TABS
+        ------------------------------------------*/
+
+        document
+            .querySelectorAll(".code-tab")
+            .forEach(tab => {
+
+                tab.addEventListener(
+                    "click",
+                    () => {
+
+                        document
+                            .querySelectorAll(
+                                ".code-tab"
+                            )
+                            .forEach(t =>
+                                t.classList.remove(
+                                    "active"
+                                )
+                            );
+
+                        document
+                            .querySelectorAll(
+                                ".code-box"
+                            )
+                            .forEach(box =>
+                                box.classList.remove(
+                                    "active"
+                                )
+                            );
+
+                        tab.classList.add(
+                            "active"
+                        );
+
+                        const target =
+                            tab.getAttribute(
+                                "data-code-target"
+                            );
+
+                        document
+                            .getElementById(
+                                `code-box-${target}`
+                            )
+                            ?.classList.add(
+                                "active"
+                            );
+
+                    }
+                );
+
+            });
+
+        /*------------------------------------------
+        FEATURE: LIVE CODING
+        ------------------------------------------*/
+
+        function updateCodePreview() {
+
+            const html =
+                htmlEditor.value;
+
+            const css =
+                cssEditor.value;
+
+            const js =
+                jsEditor.value;
+
+            const completeDocument = `
+
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta
+name="viewport"
+content="width=device-width, initial-scale=1.0"
+>
+
+<style>
+
+${css}
+
+</style>
+
+</head>
+
+<body>
+
+${html}
+
+<script>
+
+${js}
+
+<\/script>
+
+</body>
+
+</html>
+
+            `;
+
+            preview.srcdoc =
+                completeDocument;
+
+        }
+
+        htmlEditor.addEventListener(
+            "input",
             () => {
 
-                window.history.back();
+                projectData.htmlCode =
+                    htmlEditor.value;
+
+                updateCodePreview();
+
+            }
+        );
+
+        cssEditor.addEventListener(
+            "input",
+            () => {
+
+                projectData.cssCode =
+                    cssEditor.value;
+
+                updateCodePreview();
+
+            }
+        );
+
+        jsEditor.addEventListener(
+            "input",
+            () => {
+
+                projectData.jsCode =
+                    jsEditor.value;
+
+                updateCodePreview();
+
+            }
+        );
+
+        /*------------------------------------------
+        FEATURE: RUN BUTTON
+        ------------------------------------------*/
+
+        document
+            .getElementById(
+                "code-studio-run"
+            )
+            ?.addEventListener(
+                "click",
+                updateCodePreview
+            );
+
+        /*------------------------------------------
+        FEATURE: SAVE CODE
+        ------------------------------------------*/
+
+        document
+            .getElementById(
+                "code-studio-save"
+            )
+            ?.addEventListener(
+                "click",
+                () => {
+
+                    localStorage.setItem(
+                        "smartbazaar_html_code",
+                        htmlEditor.value
+                    );
+
+                    localStorage.setItem(
+                        "smartbazaar_css_code",
+                        cssEditor.value
+                    );
+
+                    localStorage.setItem(
+                        "smartbazaar_js_code",
+                        jsEditor.value
+                    );
+
+                    alert(
+                        "Coding saved successfully!"
+                    );
+
+                }
+            );
+
+        /*------------------------------------------
+        FEATURE: CLOSE CODE STUDIO
+        ------------------------------------------*/
+
+        document
+            .getElementById(
+                "code-studio-close"
+            )
+            ?.addEventListener(
+                "click",
+                () => {
+
+                    studioClose();
+
+                }
+            );
+
+        /*------------------------------------------
+        FEATURE: MAXIMIZE PREVIEW
+        ------------------------------------------*/
+
+        document
+            .getElementById(
+                "code-preview-maximize"
+            )
+            ?.addEventListener(
+                "click",
+                () => {
+
+                    document
+                        .getElementById(
+                            "smartbazaar-code-studio"
+                        )
+                        ?.classList.toggle(
+                            "preview-maximized"
+                        );
+
+                }
+            );
+
+        updateCodePreview();
+
+    }
+
+    /*==================================================
+    FEATURE: CODE STUDIO CLOSE
+    ==================================================*/
+
+    function studioClose() {
+
+        const studio =
+            document.getElementById(
+                "smartbazaar-code-studio"
+            );
+
+        if (studio) {
+
+            studio.classList.remove(
+                "studio-open"
+            );
+
+            studio.classList.add(
+                "studio-closed"
+            );
+
+        }
+
+    }
+
+    /*==================================================
+    FEATURE: OPEN CODE STUDIO BUTTON
+    ==================================================*/
+
+    function createCodeStudioToggle() {
+
+        if (
+            document.getElementById(
+                "open-code-studio-btn"
+            )
+        )
+            return;
+
+        const button =
+            document.createElement("button");
+
+        button.id =
+            "open-code-studio-btn";
+
+        button.innerHTML =
+            "💻 Code";
+
+        button.title =
+            "Open HTML CSS JavaScript Editor";
+
+        document.body.appendChild(button);
+
+        button.addEventListener(
+            "click",
+            () => {
+
+                const studio =
+                    document.getElementById(
+                        "smartbazaar-code-studio"
+                    );
+
+                studio?.classList.remove(
+                    "studio-closed"
+                );
+
+                studio?.classList.add(
+                    "studio-open"
+                );
+
+            }
+        );
+
+    }
+
+    createCodeStudioToggle();
+
+    /*==================================================
+    FEATURE: EXPORT COMPLETE WEBSITE
+    ==================================================*/
+
+    function exportCompleteWebsite() {
+
+        const htmlEditor =
+            document.getElementById(
+                "smartbazaar-html-editor"
+            );
+
+        const cssEditor =
+            document.getElementById(
+                "smartbazaar-css-editor"
+            );
+
+        const jsEditor =
+            document.getElementById(
+                "smartbazaar-js-editor"
+            );
+
+        const title =
+            projectTitleInput?.value ||
+            "SmartBazaar Page";
+
+        const finalHTML = `
+
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta
+name="viewport"
+content="width=device-width, initial-scale=1.0"
+>
+
+<title>${escapeHTML(title)}</title>
+
+<style>
+
+${cssEditor?.value || ""}
+
+</style>
+
+</head>
+
+<body>
+
+${htmlEditor?.value || ""}
+
+<script>
+
+${jsEditor?.value || ""}
+
+<\/script>
+
+</body>
+
+</html>
+
+        `;
+
+        const blob =
+            new Blob(
+                [finalHTML],
+                {
+                    type:
+                        "text/html;charset=utf-8"
+                }
+            );
+
+        const url =
+            URL.createObjectURL(blob);
+
+        const link =
+            document.createElement("a");
+
+        link.href = url;
+
+        link.download =
+            `${sanitizeFilename(title)}.html`;
+
+        document.body.appendChild(link);
+
+        link.click();
+
+        link.remove();
+
+        setTimeout(
+            () =>
+                URL.revokeObjectURL(url),
+            1000
+        );
+
+    }
+
+    /*==================================================
+    FEATURE: EXPORT BUTTONS
+    ==================================================*/
+
+    document
+        .getElementById(
+            "btn-export"
+        )
+        ?.addEventListener(
+            "click",
+            exportCompleteWebsite
+        );
+
+    document
+        .getElementById(
+            "modal-btn-export"
+        )
+        ?.addEventListener(
+            "click",
+            exportCompleteWebsite
+        );
+
+    document
+        .getElementById(
+            "code-studio-export"
+        )
+        ?.addEventListener(
+            "click",
+            exportCompleteWebsite
+        );
+
+    /*==================================================
+    FEATURE: SAVE MAIN BUILDER
+    ==================================================*/
+
+    document
+        .getElementById(
+            "btn-save"
+        )
+        ?.addEventListener(
+            "click",
+            () => {
+
+                localStorage.setItem(
+                    "smartbazaar_page_content",
+                    canvas?.innerHTML || ""
+                );
+
+                localStorage.setItem(
+                    "smartbazaar_project_name",
+                    projectTitleInput?.value ||
+                    "My_Awesome_Page"
+                );
+
+                saveCodeData();
+
+                alert(
+                    "Project saved successfully!"
+                );
 
             }
         );
 
     /*==================================================
-    FEATURE: RGB → HEX
+    FEATURE: SAVE CODE DATA
+    ==================================================*/
+
+    function saveCodeData() {
+
+        const html =
+            document.getElementById(
+                "smartbazaar-html-editor"
+            )?.value || "";
+
+        const css =
+            document.getElementById(
+                "smartbazaar-css-editor"
+            )?.value || "";
+
+        const js =
+            document.getElementById(
+                "smartbazaar-js-editor"
+            )?.value || "";
+
+        localStorage.setItem(
+            "smartbazaar_html_code",
+            html
+        );
+
+        localStorage.setItem(
+            "smartbazaar_css_code",
+            css
+        );
+
+        localStorage.setItem(
+            "smartbazaar_js_code",
+            js
+        );
+
+    }
+
+    /*==================================================
+    FEATURE: SETTINGS MODAL
+    ==================================================*/
+
+    const settingsModal =
+        document.getElementById(
+            "settings-modal"
+        );
+
+    const optionsModal =
+        document.getElementById(
+            "options-modal"
+        );
+
+    document
+        .getElementById(
+            "btn-settings"
+        )
+        ?.addEventListener(
+            "click",
+            () => {
+
+                document.getElementById(
+                    "modal-project-title"
+                ).value =
+                    projectTitleInput?.value || "";
+
+                settingsModal.style.display =
+                    "flex";
+
+            }
+        );
+
+    document
+        .getElementById(
+            "close-settings-modal"
+        )
+        ?.addEventListener(
+            "click",
+            () => {
+
+                settingsModal.style.display =
+                    "none";
+
+            }
+        );
+
+    document
+        .getElementById(
+            "btn-save-settings"
+        )
+        ?.addEventListener(
+            "click",
+            () => {
+
+                const title =
+                    document.getElementById(
+                        "modal-project-title"
+                    ).value;
+
+                if (projectTitleInput) {
+
+                    projectTitleInput.value =
+                        title;
+
+                    localStorage.setItem(
+                        "smartbazaar_project_name",
+                        title
+                    );
+
+                }
+
+                const bg =
+                    document.getElementById(
+                        "modal-canvas-bg"
+                    ).value;
+
+                if (canvas) {
+
+                    canvas.style.backgroundColor =
+                        bg;
+
+                }
+
+                settingsModal.style.display =
+                    "none";
+
+                saveState();
+
+            }
+        );
+
+    /*==================================================
+    FEATURE: OPTIONS MODAL
+    ==================================================*/
+
+    document
+        .getElementById(
+            "btn-options"
+        )
+        ?.addEventListener(
+            "click",
+            () => {
+
+                optionsModal.style.display =
+                    "flex";
+
+            }
+        );
+
+    document
+        .getElementById(
+            "close-options-modal"
+        )
+        ?.addEventListener(
+            "click",
+            () => {
+
+                optionsModal.style.display =
+                    "none";
+
+            }
+        );
+
+    /*==================================================
+    FEATURE: CLEAR CANVAS
+    ==================================================*/
+
+    document
+        .getElementById(
+            "modal-btn-clear"
+        )
+        ?.addEventListener(
+            "click",
+            () => {
+
+                if (
+                    !confirm(
+                        "Are you sure you want to clear all blocks?"
+                    )
+                )
+                    return;
+
+                canvas.innerHTML = `
+                    <div class="placeholder-text">
+                        Drag & drop blocks here
+                    </div>
+                `;
+
+                updateLayers();
+
+                optionsModal.style.display =
+                    "none";
+
+                saveState();
+
+            }
+        );
+
+    /*==================================================
+    FEATURE: CLICK CREATE BLOCKS
+    ==================================================*/
+
+    document
+        .querySelectorAll(
+            ".draggable-item"
+        )
+        .forEach(item => {
+
+            item.addEventListener(
+                "click",
+                () => {
+
+                    const type =
+                        item.getAttribute(
+                            "data-type"
+                        );
+
+                    const placeholder =
+                        canvas.querySelector(
+                            ".placeholder-text"
+                        );
+
+                    if (placeholder)
+                        placeholder.style.display =
+                            "none";
+
+                    createElementByType(type);
+
+                    rightSidebar?.classList.remove(
+                        "hidden"
+                    );
+
+                    saveState();
+
+                }
+            );
+
+        });
+
+    /*==================================================
+    FEATURE: CLICK PATTERNS
+    ==================================================*/
+
+    document
+        .querySelectorAll(
+            ".pattern-item"
+        )
+        .forEach(item => {
+
+            item.addEventListener(
+                "click",
+                () => {
+
+                    const placeholder =
+                        canvas.querySelector(
+                            ".placeholder-text"
+                        );
+
+                    if (placeholder)
+                        placeholder.style.display =
+                            "none";
+
+                    createPattern(
+                        item.getAttribute(
+                            "data-pattern"
+                        )
+                    );
+
+                    rightSidebar?.classList.remove(
+                        "hidden"
+                    );
+
+                    saveState();
+
+                }
+            );
+
+        });
+
+    /*==================================================
+    FEATURE: RGB TO HEX
     ==================================================*/
 
     function rgbToHex(rgb) {
@@ -3087,43 +2783,24 @@ ${js}
         if (
             !rgb ||
             rgb === "transparent" ||
-            rgb ===
-            "rgba(0, 0, 0, 0)"
-        ) {
-
+            rgb === "rgba(0, 0, 0, 0)"
+        )
             return "#27272a";
 
-        }
-
-        if (
-            rgb.startsWith("#")
-        ) {
-
+        if (rgb.startsWith("#"))
             return rgb;
-
-        }
 
         const match =
             rgb.match(
-                /^rgba?\(
-                \s*(\d+),
-                \s*(\d+),
-                \s*(\d+)/x
+                /^rgba?\((\d+),\s*(\d+),\s*(\d+)/
             );
 
-        if (!match) {
-
+        if (!match)
             return "#27272a";
-
-        }
 
         return (
             "#" +
-            [
-                match[1],
-                match[2],
-                match[3]
-            ]
+            [match[1], match[2], match[3]]
                 .map(
                     x =>
                         (
@@ -3138,96 +2815,556 @@ ${js}
     }
 
     /*==================================================
+    FEATURE: SAFE FILE NAME
+    ==================================================*/
+
+    function sanitizeFilename(name) {
+
+        return String(name)
+            .replace(
+                /[<>:"/\\|?*]+/g,
+                "_"
+            )
+            .trim() ||
+            "smartbazaar-page";
+
+    }
+
+    /*==================================================
     FEATURE: HTML ESCAPE
     ==================================================*/
 
     function escapeHTML(value) {
 
         return String(value)
-            .replace(
-                /&/g,
-                "&amp;"
-            )
-            .replace(
-                /</g,
-                "&lt;"
-            )
-            .replace(
-                />/g,
-                "&gt;"
-            )
-            .replace(
-                /"/g,
-                "&quot;"
-            )
-            .replace(
-                /'/g,
-                "&#039;"
-            );
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;")
+            .replace(/'/g, "&#039;");
 
     }
 
     /*==================================================
-    FEATURE: CLOSE MODALS BY BACKGROUND CLICK
+    FEATURE: CODE STUDIO CSS
     ==================================================*/
 
-    document
-        .querySelectorAll(
-            ".modal-overlay"
+    function injectCodeStudioStyles() {
+
+        if (
+            document.getElementById(
+                "smartbazaar-code-studio-style"
+            )
         )
-        .forEach(modal => {
+            return;
 
-            modal.addEventListener(
-                "click",
-                e => {
+        const style =
+            document.createElement("style");
 
-                    if (
-                        e.target === modal
-                    ) {
+        style.id =
+            "smartbazaar-code-studio-style";
 
-                        modal.style.display =
-                            "none";
+        style.textContent = `
 
-                    }
+/*========================================
+FEATURE: CODE STUDIO CONTAINER
+========================================*/
 
-                }
-            );
+#smartbazaar-code-studio{
 
-        });
+    position:fixed;
+
+    left:0;
+
+    right:0;
+
+    bottom:0;
+
+    height:360px;
+
+    background:#101217;
+
+    border-top:1px solid #334155;
+
+    z-index:9998;
+
+    display:flex;
+
+    flex-direction:column;
+
+    box-shadow:0 -10px 30px rgba(0,0,0,.45);
+
+    transition:
+        height .3s ease,
+        transform .3s ease;
+
+}
+
+#smartbazaar-code-studio.studio-closed{
+
+    transform:translateY(calc(100% - 42px));
+
+}
+
+/*========================================
+FEATURE: CODE STUDIO HEADER
+========================================*/
+
+.code-studio-header{
+
+    height:42px;
+
+    min-height:42px;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:space-between;
+
+    padding:0 10px;
+
+    background:#181b22;
+
+    border-bottom:1px solid #2d3748;
+
+}
+
+.code-studio-title{
+
+    font-size:12px;
+
+    font-weight:700;
+
+    color:#e2e8f0;
+
+    display:flex;
+
+    align-items:center;
+
+    gap:7px;
+
+}
+
+.code-studio-actions{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:5px;
+
+}
+
+.code-action-btn{
+
+    background:#252833;
+
+    color:#cbd5e1;
+
+    border:1px solid #3f4654;
+
+    border-radius:5px;
+
+    padding:5px 9px;
+
+    font-size:10px;
+
+    cursor:pointer;
+
+}
+
+.code-action-btn:hover{
+
+    border-color:#38bdf8;
+
+    color:#38bdf8;
+
+}
+
+.code-action-btn.primary{
+
+    background:#2563eb;
+
+    color:#fff;
+
+    border-color:#2563eb;
+
+}
+
+.code-action-btn.close{
+
+    font-size:16px;
+
+    line-height:12px;
+
+}
+
+/*========================================
+FEATURE: CODE WORKSPACE
+========================================*/
+
+.code-studio-workspace{
+
+    flex:1;
+
+    min-height:0;
+
+    display:flex;
+
+    gap:1px;
+
+    background:#0b0d11;
+
+}
+
+.code-editor-panel{
+
+    flex:1.2;
+
+    min-width:0;
+
+    display:flex;
+
+    flex-direction:column;
+
+    background:#111318;
+
+}
+
+.code-tabs{
+
+    height:35px;
+
+    min-height:35px;
+
+    display:flex;
+
+    background:#181b22;
+
+    border-bottom:1px solid #2d3748;
+
+}
+
+.code-tab{
+
+    border:none;
+
+    background:transparent;
+
+    color:#64748b;
+
+    padding:0 15px;
+
+    cursor:pointer;
+
+    font-size:10px;
+
+    font-weight:700;
+
+}
+
+.code-tab.active{
+
+    color:#38bdf8;
+
+    background:#252833;
+
+    box-shadow:inset 0 -2px 0 #38bdf8;
+
+}
+
+.code-box{
+
+    display:none;
+
+    flex:1;
+
+    min-height:0;
+
+    position:relative;
+
+}
+
+.code-box.active{
+
+    display:flex;
+
+    flex-direction:column;
+
+}
+
+.code-box-title{
+
+    padding:5px 8px;
+
+    color:#64748b;
+
+    font-size:9px;
+
+    background:#14161b;
+
+}
+
+.code-box textarea{
+
+    flex:1;
+
+    width:100%;
+
+    min-height:0;
+
+    resize:none;
+
+    border:none;
+
+    outline:none;
+
+    padding:12px;
+
+    background:#0d0f14;
+
+    color:#dbeafe;
+
+    font-family:
+
+        Consolas,
+
+        "Courier New",
+
+        monospace;
+
+    font-size:12px;
+
+    line-height:1.6;
+
+    tab-size:2;
+
+}
+
+/*========================================
+FEATURE: LIVE PREVIEW
+========================================*/
+
+.code-preview-panel{
+
+    flex:1;
+
+    min-width:0;
+
+    display:flex;
+
+    flex-direction:column;
+
+    background:#0b0d11;
+
+}
+
+.code-preview-header{
+
+    height:35px;
+
+    min-height:35px;
+
+    padding:0 10px;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:space-between;
+
+    color:#94a3b8;
+
+    font-size:10px;
+
+    background:#181b22;
+
+    border-bottom:1px solid #2d3748;
+
+}
+
+.code-preview-header button{
+
+    background:#252833;
+
+    color:#cbd5e1;
+
+    border:1px solid #3f4654;
+
+    border-radius:4px;
+
+    cursor:pointer;
+
+    padding:3px 7px;
+
+}
+
+#smartbazaar-code-preview{
+
+    width:100%;
+
+    height:100%;
+
+    border:none;
+
+    background:#fff;
+
+}
+
+/*========================================
+FEATURE: OPEN CODE BUTTON
+========================================*/
+
+#open-code-studio-btn{
+
+    position:fixed;
+
+    right:18px;
+
+    bottom:18px;
+
+    z-index:10000;
+
+    border:none;
+
+    border-radius:9px;
+
+    background:#2563eb;
+
+    color:#fff;
+
+    padding:10px 15px;
+
+    font-size:11px;
+
+    font-weight:700;
+
+    cursor:pointer;
+
+    box-shadow:0 5px 20px rgba(0,0,0,.4);
+
+}
+
+#open-code-studio-btn:hover{
+
+    background:#3b82f6;
+
+    transform:translateY(-1px);
+
+}
+
+/*========================================
+FEATURE: MAXIMIZED PREVIEW
+========================================*/
+
+#smartbazaar-code-studio.preview-maximized{
+
+    height:80vh;
+
+}
+
+/*========================================
+FEATURE: MOBILE
+========================================*/
+
+@media(max-width:800px){
+
+    #smartbazaar-code-studio{
+
+        height:430px;
+
+    }
+
+    .code-studio-workspace{
+
+        flex-direction:column;
+
+    }
+
+    .code-editor-panel{
+
+        flex:1;
+
+        min-height:180px;
+
+    }
+
+    .code-preview-panel{
+
+        flex:1;
+
+        min-height:160px;
+
+    }
+
+    .code-action-btn{
+
+        padding:5px 7px;
+
+    }
+
+    .code-studio-title{
+
+        font-size:10px;
+
+    }
+
+    #open-code-studio-btn{
+
+        right:10px;
+
+        bottom:10px;
+
+    }
+
+}
+
+        `;
+
+        document.head.appendChild(style);
+
+    }
 
     /*==================================================
-    FEATURE: INITIALIZE EVERYTHING
+    FEATURE: INITIAL STATE
     ==================================================*/
 
-    createCodingSystem();
+    if (canvas) {
 
-    createCodingButton();
+        const existing =
+            canvas.querySelectorAll(
+                ".canvas-element"
+            );
 
-    loadSavedProject();
+        if (existing.length > 0) {
 
-    bindCanvasElements();
+            existing.forEach(el => {
 
-    updateLayers();
+                const number =
+                    parseInt(
+                        el.id?.replace(
+                            "el-",
+                            ""
+                        )
+                    );
 
-    /*
-    IMPORTANT:
-    Do not immediately overwrite saved coding.
-    If no coding exists, generate it from canvas.
-    */
+                if (!isNaN(number)) {
 
-    if (
-        htmlCodeBox &&
-        !htmlCodeBox.value.trim()
-    ) {
+                    elementCounter =
+                        Math.max(
+                            elementCounter,
+                            number
+                        );
 
-        syncCanvasToCode();
+                }
+
+            });
+
+        }
 
     }
 
     saveState();
-
-    console.log(
-        "SmartBazaar Pro Editor initialized successfully."
-    );
 
 });
