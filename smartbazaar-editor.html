@@ -326,6 +326,190 @@
         </div>
     </div>
 
+    <!--==================================================
+SMARTBAZAAR PRO
+CODING EDITOR PANEL
+HTML + CSS + JAVASCRIPT
+==================================================-->
+
+<section id="coding-editor-panel">
+
+    <!-- Coding Editor Header -->
+    <div id="coding-editor-header">
+
+        <div class="coding-editor-title">
+            <span class="coding-icon">{"</>"}</span>
+            <span>Code Editor</span>
+        </div>
+
+        <div class="coding-editor-actions">
+
+            <button
+                id="btn-code-run"
+                class="code-action-btn run-code-btn"
+                title="Run Code">
+                ▶ Run
+            </button>
+
+            <button
+                id="btn-code-reset"
+                class="code-action-btn"
+                title="Reset Code">
+                ↻ Reset
+            </button>
+
+            <button
+                id="btn-code-close"
+                class="code-action-btn"
+                title="Close Code Editor">
+                ×
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <!-- Coding Tabs -->
+    <div id="coding-tabs">
+
+        <button
+            class="coding-tab active"
+            data-code-tab="html">
+            <span>HTML</span>
+        </button>
+
+        <button
+            class="coding-tab"
+            data-code-tab="css">
+            <span>CSS</span>
+        </button>
+
+        <button
+            class="coding-tab"
+            data-code-tab="javascript">
+            <span>JavaScript</span>
+        </button>
+
+    </div>
+
+
+    <!-- Coding Workspace -->
+    <div id="coding-workspace">
+
+
+        <!-- HTML Editor -->
+        <div
+            class="code-editor-pane active"
+            id="code-pane-html">
+
+            <div class="code-pane-header">
+
+                <span class="code-file-name">
+                    index.html
+                </span>
+
+                <span class="code-language">
+                    HTML
+                </span>
+
+            </div>
+
+            <textarea
+                id="html-code-editor"
+                class="code-editor-textarea"
+                spellcheck="false"
+                autocomplete="off"
+                autocorrect="off"
+                autocapitalize="off"
+                placeholder="Write your HTML here..."></textarea>
+
+        </div>
+
+
+        <!-- CSS Editor -->
+        <div
+            class="code-editor-pane"
+            id="code-pane-css">
+
+            <div class="code-pane-header">
+
+                <span class="code-file-name">
+                    style.css
+                </span>
+
+                <span class="code-language">
+                    CSS
+                </span>
+
+            </div>
+
+            <textarea
+                id="css-code-editor"
+                class="code-editor-textarea"
+                spellcheck="false"
+                autocomplete="off"
+                autocorrect="off"
+                autocapitalize="off"
+                placeholder="Write your CSS here..."></textarea>
+
+        </div>
+
+
+        <!-- JavaScript Editor -->
+        <div
+            class="code-editor-pane"
+            id="code-pane-javascript">
+
+            <div class="code-pane-header">
+
+                <span class="code-file-name">
+                    script.js
+                </span>
+
+                <span class="code-language">
+                    JavaScript
+                </span>
+
+            </div>
+
+            <textarea
+                id="javascript-code-editor"
+                class="code-editor-textarea"
+                spellcheck="false"
+                autocomplete="off"
+                autocorrect="off"
+                autocapitalize="off"
+                placeholder="Write your JavaScript here..."></textarea>
+
+        </div>
+
+
+    </div>
+
+
+    <!-- Resize Handle -->
+    <div
+        id="coding-resize-handle"
+        title="Drag to resize Code Editor">
+    </div>
+
+
+    <!-- Coding Status Bar -->
+    <div id="coding-status-bar">
+
+        <span id="coding-status">
+            Ready
+        </span>
+
+        <span id="coding-character-count">
+            HTML: 0 | CSS: 0 | JS: 0
+        </span>
+
+    </div>
+
+</section>
+
     <!-- Options Modal Popup -->
     <div id="options-modal" class="modal-overlay">
         <div class="modal-box">
