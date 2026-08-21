@@ -1,174 +1,1809 @@
-// Firebase اور Cloudinary کی سیٹنگز یہاں شامل کریں
-// (اگر آپ کی فائل میں پہلے سے Firebase امپورٹ ہے تو صرف لاجک استعمال کریں)
+/*==================================================
+SMARTBAZAAR PRO
+EDIT ACCOUNT SYSTEM JAVASCRIPT
+==================================================*/
 
-document.addEventListener("DOMContentLoaded", function () {
-    
-    // 1. Toast Notification Function
-    function showMessage(text, isError = false) {
-        let msgBox = document.querySelector(".account-message");
-        if (!msgBox) {
-            msgBox = document.createElement("div");
-            msgBox.className = "account-message";
-            document.body.appendChild(msgBox);
+
+/*==================================================
+FIREBASE
+==================================================*/
+
+import {
+    auth,
+    database
+} from "./firebase-config.js";
+
+
+/*==================================================
+FIREBASE AUTH
+==================================================*/
+
+import {
+    onAuthStateChanged,
+    updateProfile,
+    sendEmailVerification,
+    sendPasswordResetEmail
+} from "https://www.gstatic.com/firebasejs/12.17.1/firebase-auth.js";
+
+
+/*==================================================
+FIREBASE REALTIME DATABASE
+==================================================*/
+
+import {
+    ref,
+    get,
+    update
+} from "https://www.gstatic.com/firebasejs/12.17.1/firebase-database.js";
+
+
+/*==================================================
+CLOUDINARY CONFIG
+==================================================*/
+
+const cloudName =
+    "jlrjn7lu";
+
+const uploadPreset =
+    "smartbazaar_uploads";
+
+
+/*==================================================
+CURRENT USER
+==================================================*/
+
+let currentUser = null;
+
+let selectedPhotoFile = null;
+
+let saving = false;
+
+
+/*==================================================
+DOM ELEMENTS
+==================================================*/
+
+const profileImage =
+    document.getElementById(
+        "profileImage"
+    );
+
+const profilePhotoPlaceholder =
+    document.getElementById(
+        "profilePhotoPlaceholder"
+    );
+
+const changePhotoBtn =
+    document.getElementById(
+        "changePhotoBtn"
+    );
+
+const uploadPhotoBtn =
+    document.getElementById(
+        "uploadPhotoBtn"
+    );
+
+const removePhotoBtn =
+    document.getElementById(
+        "removePhotoBtn"
+    );
+
+const profileImageInput =
+    document.getElementById(
+        "profileImageInput"
+    );
+
+
+/*==================================================
+PERSONAL INFORMATION
+==================================================*/
+
+const fullName =
+    document.getElementById(
+        "fullName"
+    );
+
+const username =
+    document.getElementById(
+        "username"
+    );
+
+const email =
+    document.getElementById(
+        "email"
+    );
+
+const phone =
+    document.getElementById(
+        "phone"
+    );
+
+
+/*==================================================
+EMAIL
+==================================================*/
+
+const emailStatus =
+    document.getElementById(
+        "emailStatus"
+    );
+
+const emailMessage =
+    document.getElementById(
+        "emailMessage"
+    );
+
+const verificationText =
+    document.getElementById(
+        "verificationText"
+    );
+
+const sendVerificationBtn =
+    document.getElementById(
+        "sendVerificationBtn"
+    );
+
+
+/*==================================================
+ADDRESS
+==================================================*/
+
+const address =
+    document.getElementById(
+        "address"
+    );
+
+const city =
+    document.getElementById(
+        "city"
+    );
+
+const district =
+    document.getElementById(
+        "district"
+    );
+
+const province =
+    document.getElementById(
+        "province"
+    );
+
+const postalCode =
+    document.getElementById(
+        "postalCode"
+    );
+
+const defaultAddress =
+    document.getElementById(
+        "defaultAddress"
+    );
+
+
+/*==================================================
+SECURITY
+==================================================*/
+
+const changePasswordBtn =
+    document.getElementById(
+        "changePasswordBtn"
+    );
+
+
+/*==================================================
+NOTIFICATIONS
+==================================================*/
+
+const orderNotifications =
+    document.getElementById(
+        "orderNotifications"
+    );
+
+const promoNotifications =
+    document.getElementById(
+        "promoNotifications"
+    );
+
+const emailNotifications =
+    document.getElementById(
+        "emailNotifications"
+    );
+
+
+/*==================================================
+SAVE / CANCEL
+==================================================*/
+
+const saveAccountBtn =
+    document.getElementById(
+        "saveAccountBtn"
+    );
+
+const cancelAccountBtn =
+    document.getElementById(
+        "cancelAccountBtn"
+    );
+
+
+/*==================================================
+MESSAGE
+==================================================*/
+
+const accountMessage =
+    document.getElementById(
+        "accountMessage"
+    );
+
+
+/*==================================================
+UTILITY
+==================================================*/
+
+function safeText(value) {
+
+    if (
+        value === null ||
+        value === undefined
+    ) {
+
+        return "";
+
+    }
+
+    return String(value);
+
+}
+
+
+/*==================================================
+SHOW MESSAGE
+==================================================*/
+
+function showMessage(
+    message,
+    type = "success"
+) {
+
+    if (!accountMessage) {
+
+        alert(message);
+
+        return;
+
+    }
+
+
+    accountMessage.textContent =
+        message;
+
+
+    accountMessage.classList.add(
+        "show"
+    );
+
+
+    if (type === "error") {
+
+        accountMessage.style.background =
+            "#dc2626";
+
+    }
+    else if (type === "warning") {
+
+        accountMessage.style.background =
+            "#d97706";
+
+    }
+    else {
+
+        accountMessage.style.background =
+            "#16a34a";
+
+    }
+
+
+    clearTimeout(
+        showMessage.timer
+    );
+
+
+    showMessage.timer =
+        setTimeout(
+            function() {
+
+                accountMessage.classList.remove(
+                    "show"
+                );
+
+            },
+            4000
+        );
+
+}
+
+
+/*==================================================
+BUTTON LOADING
+==================================================*/
+
+function buttonLoading(
+    button,
+    loading,
+    text
+) {
+
+    if (!button) {
+
+        return;
+
+    }
+
+
+    if (loading) {
+
+        button.dataset.oldHTML =
+            button.innerHTML;
+
+
+        button.disabled =
+            true;
+
+
+        button.innerHTML =
+            `<i class="fa-solid fa-spinner fa-spin"></i> ${text}`;
+
+    }
+    else {
+
+        button.disabled =
+            false;
+
+
+        if (
+            button.dataset.oldHTML
+        ) {
+
+            button.innerHTML =
+                button.dataset.oldHTML;
+
+
+            delete button.dataset.oldHTML;
+
         }
-        msgBox.textContent = text;
-        msgBox.style.background = isError ? "#dc2626" : "#2e7d32";
-        msgBox.classList.add("show");
 
-        setTimeout(() => {
-            msgBox.classList.remove("show");
-        }, 3000);
     }
 
-    // 2. DOM Elements
-    const photoInput = document.getElementById("profile-photo-input") || createHiddenFileInput();
-    const profilePhotoContainer = document.querySelector(".profile-photo");
-    const profileImg = profilePhotoContainer ? profilePhotoContainer.querySelector("img") : null;
-    const changePhotoBtns = document.querySelectorAll(".change-photo-btn, .photo-change-action");
-    const removePhotoBtn = document.querySelector(".photo-remove-action");
-    const saveBtn = document.querySelector(".save-account-btn");
-    
-    let uploadedImageUrl = ""; // کلاؤڈنری کا لنک یہاں محفوظ ہوگا
+}
 
-    function createHiddenFileInput() {
-        const input = document.createElement("input");
-        input.type = "file";
-        input.id = "profile-photo-input";
-        input.accept = "image/*";
-        input.style.display = "none";
-        document.body.appendChild(input);
-        return input;
+
+/*==================================================
+PROFILE IMAGE DISPLAY
+==================================================*/
+
+function displayProfileImage(
+    imageURL
+) {
+
+    if (!profileImage) {
+
+        return;
+
     }
 
-    // بٹن کلک پر گیلری کھلنا
-    changePhotoBtns.forEach(btn => {
-        btn.addEventListener("click", function (e) {
-            e.preventDefault();
-            photoInput.click();
-        });
-    });
 
-    // 3. Cloudinary پر تصویر اپلوڈ کرنے کا فنکشن
-    photoInput.addEventListener("change", async function (e) {
-        const file = e.target.files[0];
-        if (!file) return;
+    if (imageURL) {
 
-        // پہلے لوکل پریویو دکھائیں تاکہ یوزر کو فوری رسپانس ملے
-        const reader = new FileReader();
-        reader.onload = function (event) {
-            if (profileImg) {
-                profileImg.src = event.target.result;
-                profilePhotoContainer.classList.add("has-image");
-            }
-        };
-        reader.readAsDataURL(file);
+        profileImage.src =
+            imageURL;
 
-        showMessage("تصویر اپلوڈ ہو رہی ہے، براہ کرم انتظار کریں...");
 
-        // اب Cloudinary پر اپلوڈ کریں
-        const formData = new FormData();
-        formData.append("file", file);
-        formData.append("upload_preset", "YAHAN_APNA_CLOUDINARY_UPLOAD_PRESET_ LIKHEIN"); // اپنا کلاؤڈنری پری سیٹ یہاں لکھیں
+        profileImage.style.display =
+            "block";
 
-        try {
-            const cloudName = "YAHAN_APNA_CLOUD_NAME_LIKHEIN"; // اپنا کلاؤڈ نیم یہاں لکھیں
-            const response = await fetch(`https://api.cloudinary.com/v1_1/${cloudName}/image/upload`, {
-                method: "POST",
-                body: formData
-            });
-            const data = await response.json();
-            
-            if (data.secure_url) {
-                uploadedImageUrl = data.secure_url; // یہ ہے وہ پکا لنک جو فائر بیس میں سیو ہوگا
-                showMessage("تصویر کامیابی سے کلاؤڈنری پر اپلوڈ ہو گئی!");
-            } else {
-                throw new Error("اپلوڈ ناکام ہو گیا");
-            }
-        } catch (error) {
-            console.error(error);
-            showMessage("تصویر اپلوڈ کرنے میں خرابی پیش آئی!", true);
+
+        if (profilePhotoPlaceholder) {
+
+            profilePhotoPlaceholder.style.display =
+                "none";
+
         }
-    });
 
-    // تصویر ہٹانے کا بٹن
-    if (removePhotoBtn) {
-        removePhotoBtn.addEventListener("click", function (e) {
-            e.preventDefault();
-            if (profileImg) {
-                profileImg.src = "";
-                profilePhotoContainer.classList.remove("has-image");
-                photoInput.value = "";
-                uploadedImageUrl = "";
-                showMessage("پروفائل تصویر ہٹا دی گئی ہے۔");
+    }
+    else {
+
+        profileImage.removeAttribute(
+            "src"
+        );
+
+
+        profileImage.style.display =
+            "none";
+
+
+        if (profilePhotoPlaceholder) {
+
+            profilePhotoPlaceholder.style.display =
+                "flex";
+
+        }
+
+    }
+
+}
+
+
+/*==================================================
+OPEN FILE SELECTOR
+==================================================*/
+
+function openPhotoSelector() {
+
+    if (profileImageInput) {
+
+        profileImageInput.click();
+
+    }
+
+}
+
+
+/*==================================================
+CHANGE PHOTO BUTTON
+==================================================*/
+
+if (changePhotoBtn) {
+
+    changePhotoBtn.addEventListener(
+        "click",
+        openPhotoSelector
+    );
+
+}
+
+
+/*==================================================
+UPLOAD PHOTO BUTTON
+==================================================*/
+
+if (uploadPhotoBtn) {
+
+    uploadPhotoBtn.addEventListener(
+        "click",
+        openPhotoSelector
+    );
+
+}
+
+
+/*==================================================
+SELECT PHOTO
+==================================================*/
+
+if (profileImageInput) {
+
+    profileImageInput.addEventListener(
+        "change",
+        function() {
+
+            const file =
+                this.files &&
+                this.files[0];
+
+
+            if (!file) {
+
+                return;
+
             }
-        });
+
+
+            if (
+                !file.type ||
+                !file.type.startsWith(
+                    "image/"
+                )
+            ) {
+
+                showMessage(
+                    "Please select a valid image.",
+                    "error"
+                );
+
+
+                this.value =
+                    "";
+
+
+                return;
+
+            }
+
+
+            const maxSize =
+                10 * 1024 * 1024;
+
+
+            if (file.size > maxSize) {
+
+                showMessage(
+                    "Image must be smaller than 10MB.",
+                    "error"
+                );
+
+
+                this.value =
+                    "";
+
+
+                return;
+
+            }
+
+
+            selectedPhotoFile =
+                file;
+
+
+            /*====================================
+            INSTANT PREVIEW
+            ====================================*/
+
+            const reader =
+                new FileReader();
+
+
+            reader.onload =
+                function(event) {
+
+                    displayProfileImage(
+                        event.target.result
+                    );
+
+                };
+
+
+            reader.readAsDataURL(
+                file
+            );
+
+
+            showMessage(
+                "Photo selected. Click Save Changes to save it."
+            );
+
+        }
+    );
+
+}
+
+
+/*==================================================
+REMOVE PROFILE PHOTO
+==================================================*/
+
+if (removePhotoBtn) {
+
+    removePhotoBtn.addEventListener(
+        "click",
+        function() {
+
+            selectedPhotoFile =
+                null;
+
+
+            if (profileImageInput) {
+
+                profileImageInput.value =
+                    "";
+
+            }
+
+
+            displayProfileImage(
+                ""
+            );
+
+
+            showMessage(
+                "Profile photo will be removed when you save."
+            );
+
+        }
+    );
+
+}
+
+
+/*==================================================
+CLOUDINARY UPLOAD
+==================================================*/
+
+async function uploadProfilePhoto(
+    file
+) {
+
+    if (!file) {
+
+        throw new Error(
+            "No image selected."
+        );
+
     }
 
-    // 4. پیج لوڈ ہونے پر فائر بیس سے ڈیٹا (اور تصویر کا پرانا لنک) لانا تاکہ ریفریش پر غائب نہ ہو
-    async function loadUserDataFromFirebase() {
-        // یہاں فائر بیس سے یوزر کا ڈیٹا گیٹ کرنے کا کوڈ آئے گا
-        // مثال کے طور پر:
-        // const userId = firebase.auth().currentUser.uid;
-        // const doc = await firebase.firestore().collection("users").doc(userId).get();
-        // if (doc.exists) {
-        //     const data = doc.data();
-        //     document.getElementById("name-input").value = data.name || "";
-        //     if (data.profileImage) {
-        //         profileImg.src = data.profileImage;
-        //         profilePhotoContainer.classList.add("has-image");
-        //         uploadedImageUrl = data.profileImage;
-        //     }
-        // }
+
+    const formData =
+        new FormData();
+
+
+    formData.append(
+        "file",
+        file
+    );
+
+
+    formData.append(
+        "upload_preset",
+        uploadPreset
+    );
+
+
+    const uploadURL =
+        `https://api.cloudinary.com/v1_1/${cloudName}/image/upload`;
+
+
+    const response =
+        await fetch(
+            uploadURL,
+            {
+
+                method:
+                    "POST",
+
+                body:
+                    formData
+
+            }
+        );
+
+
+    const data =
+        await response.json();
+
+
+    if (!response.ok) {
+
+        throw new Error(
+            data?.error?.message ||
+            "Cloudinary upload failed."
+        );
+
     }
-    
-    // loadUserDataFromFirebase(); // جب فائر بیس کنیکٹ ہو تو اسے ان کممنٹ کر دیں
 
-    // 5. فائر بیس میں تمام ڈیٹا (بشمول کلاؤڈنری تصویر کا لنک) سیو کرنا
-    if (saveBtn) {
-        saveBtn.addEventListener("click", async function (e) {
-            e.preventDefault();
 
-            // فارم کی فیلڈز کا ڈیٹا حاصل کریں
-            const fullName = document.querySelector('input[name="full_name"]')?.value || "";
-            const phone = document.querySelector('input[name="phone"]')?.value || "";
-            const email = document.querySelector('input[name="email"]')?.value || "";
-            const gender = document.querySelector('select[name="gender"]')?.value || "";
+    if (!data.secure_url) {
+
+        throw new Error(
+            "Cloudinary did not return an image URL."
+        );
+
+    }
+
+
+    return data.secure_url;
+
+}
+
+
+/*==================================================
+UPDATE EMAIL STATUS
+==================================================*/
+
+function updateEmailStatus(
+    user
+) {
+
+    if (!user) {
+
+        return;
+
+    }
+
+
+    if (user.emailVerified) {
+
+        if (emailStatus) {
+
+            emailStatus.classList.add(
+                "verified"
+            );
+
+
+            emailStatus.innerHTML =
+                `
+                <i class="fa-solid fa-circle-check"></i>
+                <span>Verified</span>
+                `;
+
+        }
+
+
+        if (verificationText) {
+
+            verificationText.textContent =
+                "Your email address is verified and your account is protected.";
+
+        }
+
+
+        if (emailMessage) {
+
+            emailMessage.textContent =
+                "Your email address has been verified.";
+
+        }
+
+
+        if (sendVerificationBtn) {
+
+            sendVerificationBtn.style.display =
+                "none";
+
+        }
+
+    }
+    else {
+
+        if (emailStatus) {
+
+            emailStatus.classList.remove(
+                "verified"
+            );
+
+
+            emailStatus.innerHTML =
+                `
+                <i class="fa-solid fa-circle-xmark"></i>
+                <span>Not Verified</span>
+                `;
+
+        }
+
+
+        if (verificationText) {
+
+            verificationText.textContent =
+                "Your email address has not been verified yet.";
+
+        }
+
+
+        if (emailMessage) {
+
+            emailMessage.textContent =
+                "Please verify your email address for better account security.";
+
+        }
+
+
+        if (sendVerificationBtn) {
+
+            sendVerificationBtn.style.display =
+                "inline-flex";
+
+        }
+
+    }
+
+}
+
+
+/*==================================================
+LOAD ACCOUNT DATA
+==================================================*/
+
+async function loadAccountData(
+    user
+) {
+
+    try {
+
+        const userRef =
+            ref(
+                database,
+                "users/" +
+                user.uid
+            );
+
+
+        const snapshot =
+            await get(
+                userRef
+            );
+
+
+        const data =
+            snapshot.exists()
+                ? snapshot.val()
+                : {};
+
+
+        /*========================================
+        NAME
+        ========================================*/
+
+        if (fullName) {
+
+            fullName.value =
+                safeText(
+                    data.name ||
+                    user.displayName ||
+                    ""
+                );
+
+        }
+
+
+        /*========================================
+        USERNAME
+        ========================================*/
+
+        if (username) {
+
+            username.value =
+                safeText(
+                    data.username ||
+                    ""
+                )
+                .replace(
+                    /^@+/,
+                    ""
+                );
+
+        }
+
+
+        /*========================================
+        EMAIL
+        ========================================*/
+
+        if (email) {
+
+            email.value =
+                safeText(
+                    data.email ||
+                    user.email ||
+                    ""
+                );
+
+        }
+
+
+        /*========================================
+        PHONE
+        ========================================*/
+
+        if (phone) {
+
+            phone.value =
+                safeText(
+                    data.phone ||
+                    ""
+                );
+
+        }
+
+
+        /*========================================
+        PROFILE PHOTO
+        ========================================*/
+
+        const photoURL =
+            safeText(
+                data.photoURL ||
+                user.photoURL ||
+                ""
+            );
+
+
+        displayProfileImage(
+            photoURL
+        );
+
+
+        /*========================================
+        EMAIL STATUS
+        ========================================*/
+
+        updateEmailStatus(
+            user
+        );
+
+
+        /*========================================
+        ADDRESS
+        ========================================*/
+
+        const savedAddress =
+            data.address ||
+            {};
+
+
+        if (address) {
+
+            address.value =
+                safeText(
+                    savedAddress.address ||
+                    ""
+                );
+
+        }
+
+
+        if (city) {
+
+            city.value =
+                safeText(
+                    savedAddress.city ||
+                    ""
+                );
+
+        }
+
+
+        if (district) {
+
+            district.value =
+                safeText(
+                    savedAddress.district ||
+                    ""
+                );
+
+        }
+
+
+        if (province) {
+
+            province.value =
+                safeText(
+                    savedAddress.province ||
+                    ""
+                );
+
+        }
+
+
+        if (postalCode) {
+
+            postalCode.value =
+                safeText(
+                    savedAddress.postalCode ||
+                    ""
+                );
+
+        }
+
+
+        if (defaultAddress) {
+
+            defaultAddress.checked =
+                savedAddress.isDefault !== false;
+
+        }
+
+
+        /*========================================
+        NOTIFICATIONS
+        ========================================*/
+
+        const notifications =
+            data.notifications ||
+            {};
+
+
+        if (orderNotifications) {
+
+            orderNotifications.checked =
+                notifications.order !== false;
+
+        }
+
+
+        if (promoNotifications) {
+
+            promoNotifications.checked =
+                notifications.promotional !== false;
+
+        }
+
+
+        if (emailNotifications) {
+
+            emailNotifications.checked =
+                notifications.email !== false;
+
+        }
+
+
+        console.log(
+            "Edit Account Data Loaded"
+        );
+
+    }
+    catch(error) {
+
+        console.error(
+            "LOAD ACCOUNT ERROR:",
+            error
+        );
+
+
+        showMessage(
+            "Account information could not be loaded.",
+            "error"
+        );
+
+    }
+
+}
+
+
+/*==================================================
+SAVE ACCOUNT
+==================================================*/
+
+if (saveAccountBtn) {
+
+    saveAccountBtn.addEventListener(
+        "click",
+        async function() {
+
+            if (
+                !currentUser ||
+                saving
+            ) {
+
+                return;
+
+            }
+
+
+            /*====================================
+            BASIC VALIDATION
+            ====================================*/
+
+            const name =
+                safeText(
+                    fullName?.value
+                ).trim();
+
+
+            const userName =
+                safeText(
+                    username?.value
+                )
+                .trim()
+                .replace(
+                    /^@+/,
+                    ""
+                );
+
+
+            const phoneNumber =
+                safeText(
+                    phone?.value
+                ).trim();
+
+
+            if (!name) {
+
+                showMessage(
+                    "Please enter your full name.",
+                    "error"
+                );
+
+
+                fullName?.focus();
+
+
+                return;
+
+            }
+
+
+            if (
+                userName &&
+                !/^[a-zA-Z0-9._-]{3,30}$/.test(
+                    userName
+                )
+            ) {
+
+                showMessage(
+                    "Username must contain 3–30 valid characters.",
+                    "error"
+                );
+
+
+                username?.focus();
+
+
+                return;
+
+            }
+
+
+            saving =
+                true;
+
+
+            buttonLoading(
+                saveAccountBtn,
+                true,
+                "Saving..."
+            );
+
 
             try {
-                showMessage("ڈیٹا محفوظ کیا جا رہا ہے...");
 
-                // فائر بیس فائر اسٹور میں سیو کرنے کا کوڈ
-                /*
-                const userId = firebase.auth().currentUser.uid;
-                await firebase.firestore().collection("users").doc(userId).set({
-                    fullName: fullName,
-                    phone: phone,
-                    email: email,
-                    gender: gender,
-                    profileImage: uploadedImageUrl, // کلاؤڈنری کا لنک یہاں فائر بیس میں سیو ہو رہا ہے
-                    updatedAt: new Date()
-                }, { merge: true });
-                */
+                /*================================
+                CURRENT PHOTO
+                =================================*/
 
-                setTimeout(() => {
-                    showMessage("آپ کی تبدیلیاں اور پروفائل تصویر کامیابی سے محفوظ کر دی گئی ہیں!");
-                }, 1000);
+                let photoURL =
+                    currentUser.photoURL ||
+                    "";
 
-            } catch (error) {
-                console.error(error);
-                showMessage("ڈیٹا محفوظ کرنے میں مسئلہ پیش آیا!", true);
+
+                /*================================
+                UPLOAD NEW PHOTO
+                =================================*/
+
+                if (selectedPhotoFile) {
+
+                    photoURL =
+                        await uploadProfilePhoto(
+                            selectedPhotoFile
+                        );
+
+                }
+
+
+                /*================================
+                REMOVE PHOTO
+                =================================*/
+
+                if (
+                    !selectedPhotoFile &&
+                    profileImage &&
+                    !profileImage.getAttribute(
+                        "src"
+                    )
+                ) {
+
+                    photoURL =
+                        "";
+
+                }
+
+
+                /*================================
+                ADDRESS OBJECT
+                =================================*/
+
+                const addressData = {
+
+                    address:
+                        safeText(
+                            address?.value
+                        ).trim(),
+
+                    city:
+                        safeText(
+                            city?.value
+                        ).trim(),
+
+                    district:
+                        safeText(
+                            district?.value
+                        ).trim(),
+
+                    province:
+                        safeText(
+                            province?.value
+                        ).trim(),
+
+                    postalCode:
+                        safeText(
+                            postalCode?.value
+                        ).trim(),
+
+                    isDefault:
+                        Boolean(
+                            defaultAddress?.checked
+                        )
+
+                };
+
+
+                /*================================
+                NOTIFICATIONS OBJECT
+                =================================*/
+
+                const notificationData = {
+
+                    order:
+                        Boolean(
+                            orderNotifications?.checked
+                        ),
+
+                    promotional:
+                        Boolean(
+                            promoNotifications?.checked
+                        ),
+
+                    email:
+                        Boolean(
+                            emailNotifications?.checked
+                        )
+
+                };
+
+
+                /*================================
+                FIREBASE DATABASE
+                =================================*/
+
+                const userRef =
+                    ref(
+                        database,
+                        "users/" +
+                        currentUser.uid
+                    );
+
+
+                await update(
+                    userRef,
+                    {
+
+                        name:
+                            name,
+
+                        username:
+                            userName,
+
+                        email:
+                            currentUser.email ||
+                            safeText(
+                                email?.value
+                            ),
+
+                        phone:
+                            phoneNumber,
+
+                        photoURL:
+                            photoURL,
+
+                        address:
+                            addressData,
+
+                        notifications:
+                            notificationData,
+
+                        updatedAt:
+                            Date.now()
+
+                    }
+                );
+
+
+                /*================================
+                FIREBASE AUTH PROFILE
+                =================================*/
+
+                await updateProfile(
+                    currentUser,
+                    {
+
+                        displayName:
+                            name,
+
+                        photoURL:
+                            photoURL ||
+                            null
+
+                    }
+                );
+
+
+                /*================================
+                UPDATE LOCAL PHOTO
+                =================================*/
+
+                displayProfileImage(
+                    photoURL
+                );
+
+
+                selectedPhotoFile =
+                    null;
+
+
+                if (profileImageInput) {
+
+                    profileImageInput.value =
+                        "";
+
+                }
+
+
+                showMessage(
+                    "Account changes saved successfully."
+                );
+
+
+                /*================================
+                GO ACCOUNT PAGE
+                =================================*/
+
+                setTimeout(
+                    function() {
+
+                        window.location.href =
+                            "account.html";
+
+                    },
+                    1000
+                );
+
             }
-        });
-    }
+            catch(error) {
 
-    // Cancel Button Action
-    const cancelBtn = document.querySelector(".cancel-account-btn");
-    if (cancelBtn) {
-        cancelBtn.addEventListener("click", function (e) {
-            e.preventDefault();
-            if (confirm("کیا آپ واقعی تبدیلیاں منسوخ کرنا چاہتے ہیں؟")) {
-                location.reload();
+                console.error(
+                    "SAVE ACCOUNT ERROR:",
+                    error
+                );
+
+
+                showMessage(
+                    error?.message ||
+                    "Could not save account changes.",
+                    "error"
+                );
+
             }
-        });
+            finally {
+
+                saving =
+                    false;
+
+
+                buttonLoading(
+                    saveAccountBtn,
+                    false
+                );
+
+            }
+
+        }
+    );
+
+}
+
+
+/*==================================================
+REMOVE PHOTO STATE FIX
+==================================================*/
+
+if (removePhotoBtn) {
+
+    removePhotoBtn.addEventListener(
+        "click",
+        function() {
+
+            if (profileImageInput) {
+
+                profileImageInput.value =
+                    "";
+
+            }
+
+        }
+    );
+
+}
+
+
+/*==================================================
+EMAIL VERIFICATION
+==================================================*/
+
+if (sendVerificationBtn) {
+
+    sendVerificationBtn.addEventListener(
+        "click",
+        async function() {
+
+            if (!currentUser) {
+
+                showMessage(
+                    "Please login first.",
+                    "error"
+                );
+
+
+                return;
+
+            }
+
+
+            if (
+                currentUser.emailVerified
+            ) {
+
+                showMessage(
+                    "Your email is already verified."
+                );
+
+
+                return;
+
+            }
+
+
+            buttonLoading(
+                sendVerificationBtn,
+                true,
+                "Sending..."
+            );
+
+
+            try {
+
+                await sendEmailVerification(
+                    currentUser
+                );
+
+
+                showMessage(
+                    "Verification email sent. Please check your inbox."
+                );
+
+
+                if (verificationText) {
+
+                    verificationText.textContent =
+                        "Verification email sent. Please check your inbox.";
+
+                }
+
+            }
+            catch(error) {
+
+                console.error(
+                    "VERIFICATION ERROR:",
+                    error
+                );
+
+
+                showMessage(
+                    error?.message ||
+                    "Could not send verification email.",
+                    "error"
+                );
+
+            }
+            finally {
+
+                buttonLoading(
+                    sendVerificationBtn,
+                    false
+                );
+
+            }
+
+        }
+    );
+
+}
+
+
+/*==================================================
+CHANGE PASSWORD
+==================================================*/
+
+if (changePasswordBtn) {
+
+    changePasswordBtn.addEventListener(
+        "click",
+        async function() {
+
+            if (
+                !currentUser ||
+                !currentUser.email
+            ) {
+
+                showMessage(
+                    "Please login first.",
+                    "error"
+                );
+
+
+                return;
+
+            }
+
+
+            const confirmed =
+                confirm(
+                    "A password reset email will be sent to your email. Continue?"
+                );
+
+
+            if (!confirmed) {
+
+                return;
+
+            }
+
+
+            buttonLoading(
+                changePasswordBtn,
+                true,
+                "Sending..."
+            );
+
+
+            try {
+
+                await sendPasswordResetEmail(
+                    auth,
+                    currentUser.email
+                );
+
+
+                showMessage(
+                    "Password reset email sent successfully."
+                );
+
+            }
+            catch(error) {
+
+                console.error(
+                    "PASSWORD RESET ERROR:",
+                    error
+                );
+
+
+                showMessage(
+                    error?.message ||
+                    "Could not send password reset email.",
+                    "error"
+                );
+
+            }
+            finally {
+
+                buttonLoading(
+                    changePasswordBtn,
+                    false
+                );
+
+            }
+
+        }
+    );
+
+}
+
+
+/*==================================================
+CANCEL
+==================================================*/
+
+if (cancelAccountBtn) {
+
+    cancelAccountBtn.addEventListener(
+        "click",
+        function() {
+
+            window.location.href =
+                "account.html";
+
+        }
+    );
+
+}
+
+
+/*==================================================
+SETTINGS BUTTON
+==================================================*/
+
+const settingsButton =
+    document.querySelector(
+        ".edit-settings-btn"
+    );
+
+
+if (settingsButton) {
+
+    settingsButton.addEventListener(
+        "click",
+        function() {
+
+            const notificationSection =
+                orderNotifications?.closest(
+                    ".edit-section-card"
+                );
+
+
+            if (notificationSection) {
+
+                notificationSection.scrollIntoView({
+                    behavior:
+                        "smooth",
+
+                    block:
+                        "start"
+
+                });
+
+            }
+
+        }
+    );
+
+}
+
+
+/*==================================================
+AUTH STATE
+==================================================*/
+
+onAuthStateChanged(
+    auth,
+    async function(user) {
+
+        if (!user) {
+
+            window.location.href =
+                "login.html";
+
+
+            return;
+
+        }
+
+
+        currentUser =
+            user;
+
+
+        /*========================================
+        REFRESH AUTH USER
+        ========================================*/
+
+        try {
+
+            await currentUser.reload();
+
+        }
+        catch(error) {
+
+            console.warn(
+                "AUTH RELOAD WARNING:",
+                error
+            );
+
+        }
+
+
+        currentUser =
+            auth.currentUser ||
+            user;
+
+
+        /*========================================
+        LOAD ACCOUNT
+        ========================================*/
+
+        await loadAccountData(
+            currentUser
+        );
+
     }
-});
+);
+
+
+/*==================================================
+REFRESH EMAIL STATUS
+==================================================*/
+
+window.addEventListener(
+    "focus",
+    async function() {
+
+        if (!currentUser) {
+
+            return;
+
+        }
+
+
+        try {
+
+            await currentUser.reload();
+
+
+            currentUser =
+                auth.currentUser ||
+                currentUser;
+
+
+            updateEmailStatus(
+                currentUser
+            );
+
+        }
+        catch(error) {
+
+            console.warn(
+                "EMAIL STATUS ERROR:",
+                error
+            );
+
+        }
+
+    }
+);
+
+
+/*==================================================
+MOBILE ORDERS
+==================================================*/
+
+const mobileBottomItems =
+    document.querySelectorAll(
+        ".mobile-bottom-item"
+    );
+
+
+if (
+    mobileBottomItems &&
+    mobileBottomItems.length >= 4
+) {
+
+    const ordersItem =
+        mobileBottomItems[3];
+
+
+    ordersItem.addEventListener(
+        "click",
+        function(event) {
+
+            const href =
+                ordersItem.getAttribute(
+                    "href"
+                );
+
+
+            if (
+                !href ||
+                href === "#"
+            ) {
+
+                event.preventDefault();
+
+
+                window.location.href =
+                    "orders.html";
+
+            }
+
+        }
+    );
+
+}
+
+
+/*==================================================
+END
+==================================================*/
