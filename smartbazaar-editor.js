@@ -1800,13 +1800,13 @@ document.addEventListener("DOMContentLoaded", () => {
     Important:
     HTML میں الگ coding boxes لکھنے کی ضرورت نہیں۔
     JavaScript خود Code Studio بنائے گا.
-    ==================================================*/
+    ==================================================/
 
     createCodeStudio();
 
     /*==================================================
     FEATURE: CODE STUDIO
-    ==================================================*/
+    ==================================================*
 
     function createCodeStudio() {
 
@@ -1984,7 +1984,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     /*==================================================
     FEATURE: CODE STUDIO LOGIC
-    ==================================================*/
+    ==================================================*
 
     function setupCodeStudio() {
 
@@ -2019,7 +2019,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         /*------------------------------------------
         FEATURE: CODE TABS
-        ------------------------------------------*/
+        ------------------------------------------*
 
         document
             .querySelectorAll(".code-tab")
@@ -2073,7 +2073,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         /*------------------------------------------
         FEATURE: LIVE CODING
-        ------------------------------------------*/
+        ------------------------------------------*
 
         function updateCodePreview() {
 
@@ -2168,7 +2168,7 @@ ${js}
 
         /*------------------------------------------
         FEATURE: RUN BUTTON
-        ------------------------------------------*/
+        ------------------------------------------*
 
         document
             .getElementById(
@@ -2181,7 +2181,7 @@ ${js}
 
         /*------------------------------------------
         FEATURE: SAVE CODE
-        ------------------------------------------*/
+        ------------------------------------------*
 
         document
             .getElementById(
@@ -2215,7 +2215,7 @@ ${js}
 
         /*------------------------------------------
         FEATURE: CLOSE CODE STUDIO
-        ------------------------------------------*/
+        ------------------------------------------*
 
         document
             .getElementById(
@@ -2232,7 +2232,7 @@ ${js}
 
         /*------------------------------------------
         FEATURE: MAXIMIZE PREVIEW
-        ------------------------------------------*/
+        ------------------------------------------*
 
         document
             .getElementById(
@@ -2259,7 +2259,7 @@ ${js}
 
     /*==================================================
     FEATURE: CODE STUDIO CLOSE
-    ==================================================*/
+    ==================================================*
 
     function studioClose() {
 
@@ -2284,7 +2284,7 @@ ${js}
 
     /*==================================================
     FEATURE: OPEN CODE STUDIO BUTTON
-    ==================================================*/
+    ==================================================*
 
     function createCodeStudioToggle() {
 
@@ -2335,7 +2335,7 @@ ${js}
 
     /*==================================================
     FEATURE: EXPORT COMPLETE WEBSITE
-    ==================================================*/
+    ==================================================*
 
     function exportCompleteWebsite() {
 
@@ -2435,7 +2435,7 @@ ${jsEditor?.value || ""}
 
     /*==================================================
     FEATURE: EXPORT BUTTONS
-    ==================================================*/
+    ==================================================*
 
     document
         .getElementById(
@@ -2466,7 +2466,7 @@ ${jsEditor?.value || ""}
 
     /*==================================================
     FEATURE: SAVE MAIN BUILDER
-    ==================================================*/
+    ==================================================*
 
     document
         .getElementById(
@@ -2498,7 +2498,7 @@ ${jsEditor?.value || ""}
 
     /*==================================================
     FEATURE: SAVE CODE DATA
-    ==================================================*/
+    ==================================================*
 
     function saveCodeData() {
 
@@ -2536,7 +2536,7 @@ ${jsEditor?.value || ""}
 
     /*==================================================
     FEATURE: SETTINGS MODAL
-    ==================================================*/
+    ==================================================*
 
     const settingsModal =
         document.getElementById(
@@ -2628,7 +2628,7 @@ ${jsEditor?.value || ""}
 
     /*==================================================
     FEATURE: OPTIONS MODAL
-    ==================================================*/
+    ==================================================*
 
     document
         .getElementById(
@@ -2660,7 +2660,7 @@ ${jsEditor?.value || ""}
 
     /*==================================================
     FEATURE: CLEAR CANVAS
-    ==================================================*/
+    ==================================================*
 
     document
         .getElementById(
@@ -2695,7 +2695,7 @@ ${jsEditor?.value || ""}
 
     /*==================================================
     FEATURE: CLICK CREATE BLOCKS
-    ==================================================*/
+    ==================================================*
 
     document
         .querySelectorAll(
@@ -2736,7 +2736,7 @@ ${jsEditor?.value || ""}
 
     /*==================================================
     FEATURE: CLICK PATTERNS
-    ==================================================*/
+    ==================================================*
 
     document
         .querySelectorAll(
@@ -2776,7 +2776,7 @@ ${jsEditor?.value || ""}
 
     /*==================================================
     FEATURE: RGB TO HEX
-    ==================================================*/
+    ==================================================*
 
     function rgbToHex(rgb) {
 
@@ -2816,7 +2816,7 @@ ${jsEditor?.value || ""}
 
     /*==================================================
     FEATURE: SAFE FILE NAME
-    ==================================================*/
+    ==================================================*
 
     function sanitizeFilename(name) {
 
@@ -2832,7 +2832,7 @@ ${jsEditor?.value || ""}
 
     /*==================================================
     FEATURE: HTML ESCAPE
-    ==================================================*/
+    ==================================================*
 
     function escapeHTML(value) {
 
@@ -2847,7 +2847,7 @@ ${jsEditor?.value || ""}
 
     /*==================================================
     FEATURE: CODE STUDIO CSS
-    ==================================================*/
+    ==================================================*
 
     function injectCodeStudioStyles() {
 
@@ -2868,7 +2868,7 @@ ${jsEditor?.value || ""}
 
 /*========================================
 FEATURE: CODE STUDIO CONTAINER
-========================================*/
+========================================*
 
 #smartbazaar-code-studio{
 
@@ -2908,7 +2908,7 @@ FEATURE: CODE STUDIO CONTAINER
 
 /*========================================
 FEATURE: CODE STUDIO HEADER
-========================================*/
+========================================*
 
 .code-studio-header{
 
@@ -3002,7 +3002,7 @@ FEATURE: CODE STUDIO HEADER
 
 /*========================================
 FEATURE: CODE WORKSPACE
-========================================*/
+========================================*
 
 .code-studio-workspace{
 
@@ -3144,7 +3144,7 @@ FEATURE: CODE WORKSPACE
 
 /*========================================
 FEATURE: LIVE PREVIEW
-========================================*/
+========================================*
 
 .code-preview-panel{
 
@@ -3214,7 +3214,7 @@ FEATURE: LIVE PREVIEW
 
 /*========================================
 FEATURE: OPEN CODE BUTTON
-========================================*/
+========================================*
 
 #open-code-studio-btn{
 
@@ -3256,7 +3256,7 @@ FEATURE: OPEN CODE BUTTON
 
 /*========================================
 FEATURE: MAXIMIZED PREVIEW
-========================================*/
+========================================*
 
 #smartbazaar-code-studio.preview-maximized{
 
@@ -3266,7 +3266,7 @@ FEATURE: MAXIMIZED PREVIEW
 
 /*========================================
 FEATURE: MOBILE
-========================================*/
+========================================*
 
 @media(max-width:800px){
 
@@ -3324,7 +3324,1408 @@ FEATURE: MOBILE
 
         document.head.appendChild(style);
 
+    }==*/
+
+    /*==================================================
+SMARTBAZAAR PRO
+FEATURE: CODE STUDIO
+HTML + CSS + JAVASCRIPT
+CONNECTED WITH MAIN CANVAS PREVIEW
+==================================================*/
+
+/*==================================================
+FEATURE: CODE STUDIO CREATION
+==================================================*/
+
+createCodeStudio();
+
+function createCodeStudio() {
+
+    if (
+        document.getElementById(
+            "smartbazaar-code-studio"
+        )
+    ) {
+        return;
     }
+
+    const studio =
+        document.createElement("section");
+
+    studio.id =
+        "smartbazaar-code-studio";
+
+    studio.className =
+        "studio-closed";
+
+    studio.innerHTML = `
+
+        <!--========================================
+        CODE STUDIO HEADER
+        ========================================-->
+
+        <div class="code-studio-header">
+
+            <div class="code-studio-title">
+
+                <span>💻</span>
+
+                <span>
+                    SmartBazaar Code Studio
+                </span>
+
+            </div>
+
+
+            <div class="code-studio-actions">
+
+                <button
+                    id="code-studio-run"
+                    class="code-action-btn"
+                    type="button"
+                >
+                    ▶ Run
+                </button>
+
+
+                <button
+                    id="code-studio-save"
+                    class="code-action-btn"
+                    type="button"
+                >
+                    💾 Save
+                </button>
+
+
+                <button
+                    id="code-studio-export"
+                    class="code-action-btn primary"
+                    type="button"
+                >
+                    ⬇ Export
+                </button>
+
+
+                <button
+                    id="code-studio-close"
+                    class="code-action-btn close"
+                    type="button"
+                >
+                    ×
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <!--========================================
+        CODE EDITOR WORKSPACE
+        NO SECOND PREVIEW
+        ========================================-->
+
+        <div class="code-studio-workspace">
+
+            <div class="code-editor-panel">
+
+
+                <!-- HTML -->
+
+                <div
+                    class="code-box active"
+                    id="code-box-html"
+                >
+
+                    <div class="code-box-title">
+                        HTML
+                    </div>
+
+                    <textarea
+                        id="smartbazaar-html-editor"
+                        spellcheck="false"
+                        placeholder="Write HTML code here..."
+                    ></textarea>
+
+                </div>
+
+
+                <!-- CSS -->
+
+                <div
+                    class="code-box"
+                    id="code-box-css"
+                >
+
+                    <div class="code-box-title">
+                        CSS
+                    </div>
+
+                    <textarea
+                        id="smartbazaar-css-editor"
+                        spellcheck="false"
+                        placeholder="Write CSS code here..."
+                    ></textarea>
+
+                </div>
+
+
+                <!-- JAVASCRIPT -->
+
+                <div
+                    class="code-box"
+                    id="code-box-js"
+                >
+
+                    <div class="code-box-title">
+                        JavaScript
+                    </div>
+
+                    <textarea
+                        id="smartbazaar-js-editor"
+                        spellcheck="false"
+                        placeholder="Write JavaScript code here..."
+                    ></textarea>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    `;
+
+    document.body.appendChild(studio);
+
+    injectCodeStudioStyles();
+
+    setupCodeStudio();
+
+    createCodeStudioToggle();
+}
+
+
+/*==================================================
+FEATURE: CODE STUDIO LOGIC
+==================================================*/
+
+function setupCodeStudio() {
+
+    const htmlEditor =
+        document.getElementById(
+            "smartbazaar-html-editor"
+        );
+
+    const cssEditor =
+        document.getElementById(
+            "smartbazaar-css-editor"
+        );
+
+    const jsEditor =
+        document.getElementById(
+            "smartbazaar-js-editor"
+        );
+
+    if (
+        !htmlEditor ||
+        !cssEditor ||
+        !jsEditor
+    ) {
+        return;
+    }
+
+
+    /*==============================================
+    LOAD SAVED CODE
+    ==============================================*/
+
+    htmlEditor.value =
+        projectData.htmlCode || "";
+
+    cssEditor.value =
+        projectData.cssCode || "";
+
+    jsEditor.value =
+        projectData.jsCode || "";
+
+
+    /*==============================================
+    CODE TABS
+    ==============================================*/
+
+    createCodeTabs();
+
+
+    /*==============================================
+    LIVE CODING
+    ==============================================*/
+
+    htmlEditor.addEventListener(
+        "input",
+        () => {
+
+            projectData.htmlCode =
+                htmlEditor.value;
+
+            updateCanvasFromCode();
+
+        }
+    );
+
+
+    cssEditor.addEventListener(
+        "input",
+        () => {
+
+            projectData.cssCode =
+                cssEditor.value;
+
+            updateCanvasFromCode();
+
+        }
+    );
+
+
+    jsEditor.addEventListener(
+        "input",
+        () => {
+
+            projectData.jsCode =
+                jsEditor.value;
+
+            updateCanvasFromCode();
+
+        }
+    );
+
+
+    /*==============================================
+    RUN BUTTON
+    ==============================================*/
+
+    document
+        .getElementById(
+            "code-studio-run"
+        )
+        ?.addEventListener(
+            "click",
+            () => {
+
+                updateCanvasFromCode();
+
+            }
+        );
+
+
+    /*==============================================
+    SAVE BUTTON
+    ==============================================*/
+
+    document
+        .getElementById(
+            "code-studio-save"
+        )
+        ?.addEventListener(
+            "click",
+            () => {
+
+                saveCodeData();
+
+                alert(
+                    "Coding saved successfully!"
+                );
+
+            }
+        );
+
+
+    /*==============================================
+    CLOSE BUTTON
+    ==============================================*/
+
+    document
+        .getElementById(
+            "code-studio-close"
+        )
+        ?.addEventListener(
+            "click",
+            () => {
+
+                closeCodeStudio();
+
+            }
+        );
+
+
+    /*==============================================
+    EXPORT BUTTON
+    ==============================================*/
+
+    document
+        .getElementById(
+            "code-studio-export"
+        )
+        ?.addEventListener(
+            "click",
+            () => {
+
+                exportCompleteWebsite();
+
+            }
+        );
+
+
+    /*==============================================
+    INITIAL CODE PREVIEW
+    ==============================================*/
+
+    if (
+        htmlEditor.value.trim() ||
+        cssEditor.value.trim() ||
+        jsEditor.value.trim()
+    ) {
+
+        updateCanvasFromCode();
+
+    }
+
+}
+
+
+/*==================================================
+FEATURE: CODE TABS
+==================================================*/
+
+function createCodeTabs() {
+
+    const panel =
+        document.querySelector(
+            ".code-editor-panel"
+        );
+
+    if (!panel) {
+        return;
+    }
+
+
+    const oldTabs =
+        panel.querySelector(
+            ".code-tabs"
+        );
+
+    if (oldTabs) {
+        oldTabs.remove();
+    }
+
+
+    const tabs =
+        document.createElement(
+            "div"
+        );
+
+    tabs.className =
+        "code-tabs";
+
+    tabs.innerHTML = `
+
+        <button
+            class="code-tab active"
+            type="button"
+            data-code-target="html"
+        >
+            HTML
+        </button>
+
+        <button
+            class="code-tab"
+            type="button"
+            data-code-target="css"
+        >
+            CSS
+        </button>
+
+        <button
+            class="code-tab"
+            type="button"
+            data-code-target="js"
+        >
+            JavaScript
+        </button>
+
+    `;
+
+
+    panel.insertBefore(
+        tabs,
+        panel.firstChild
+    );
+
+
+    tabs
+        .querySelectorAll(
+            ".code-tab"
+        )
+        .forEach(
+            tab => {
+
+                tab.addEventListener(
+                    "click",
+                    () => {
+
+                        tabs
+                            .querySelectorAll(
+                                ".code-tab"
+                            )
+                            .forEach(
+                                item =>
+                                    item.classList.remove(
+                                        "active"
+                                    )
+                            );
+
+
+                        document
+                            .querySelectorAll(
+                                "#smartbazaar-code-studio .code-box"
+                            )
+                            .forEach(
+                                box =>
+                                    box.classList.remove(
+                                        "active"
+                                    )
+                            );
+
+
+                        tab.classList.add(
+                            "active"
+                        );
+
+
+                        const target =
+                            tab.getAttribute(
+                                "data-code-target"
+                            );
+
+
+                        document
+                            .getElementById(
+                                `code-box-${target}`
+                            )
+                            ?.classList.add(
+                                "active"
+                            );
+
+                    }
+                );
+
+            }
+        );
+
+}
+
+
+/*==================================================
+FEATURE: HTML CSS JS → MAIN CANVAS
+==================================================*/
+
+function updateCanvasFromCode() {
+
+    const canvas =
+        document.getElementById(
+            "live-canvas"
+        );
+
+    const htmlEditor =
+        document.getElementById(
+            "smartbazaar-html-editor"
+        );
+
+    const cssEditor =
+        document.getElementById(
+            "smartbazaar-css-editor"
+        );
+
+    const jsEditor =
+        document.getElementById(
+            "smartbazaar-js-editor"
+        );
+
+
+    if (
+        !canvas ||
+        !htmlEditor ||
+        !cssEditor ||
+        !jsEditor
+    ) {
+        return;
+    }
+
+
+    const html =
+        htmlEditor.value;
+
+    const css =
+        cssEditor.value;
+
+    const js =
+        jsEditor.value;
+
+
+    /*==============================================
+    SAVE CURRENT CODE
+    ==============================================*/
+
+    projectData.htmlCode =
+        html;
+
+    projectData.cssCode =
+        css;
+
+    projectData.jsCode =
+        js;
+
+
+    /*==============================================
+    REMOVE PREVIOUS CODE STYLE
+    ==============================================*/
+
+    document
+        .getElementById(
+            "smartbazaar-code-live-style"
+        )
+        ?.remove();
+
+
+    /*==============================================
+    REMOVE PREVIOUS CODE CONTENT
+    ==============================================*/
+
+    const oldCodeContent =
+        canvas.querySelector(
+            ".smartbazaar-code-content"
+        );
+
+    if (oldCodeContent) {
+
+        oldCodeContent.remove();
+
+    }
+
+
+    /*==============================================
+    IF HTML IS EMPTY
+    KEEP NORMAL BUILDER CANVAS
+    ==============================================*/
+
+    if (!html.trim()) {
+
+        return;
+
+    }
+
+
+    /*==============================================
+    CREATE CODE CONTENT INSIDE
+    THE SAME MAIN CANVAS
+    ==============================================*/
+
+    const codeContent =
+        document.createElement(
+            "div"
+        );
+
+    codeContent.className =
+        "smartbazaar-code-content";
+
+    codeContent.innerHTML =
+        html;
+
+
+    canvas.appendChild(
+        codeContent
+    );
+
+
+    /*==============================================
+    APPLY CSS TO MAIN PAGE
+    ==============================================*/
+
+    if (css.trim()) {
+
+        const style =
+            document.createElement(
+                "style"
+            );
+
+        style.id =
+            "smartbazaar-code-live-style";
+
+        style.textContent =
+            css;
+
+        document.head.appendChild(
+            style
+        );
+
+    }
+
+
+    /*==============================================
+    RUN JAVASCRIPT
+    ==============================================*/
+
+    if (js.trim()) {
+
+        setTimeout(
+            () => {
+
+                try {
+
+                    const runCode =
+                        new Function(
+                            "canvas",
+                            js
+                        );
+
+                    runCode(
+                        codeContent
+                    );
+
+                }
+                catch (error) {
+
+                    console.error(
+                        "SmartBazaar Code Error:",
+                        error
+                    );
+
+                }
+
+            },
+            0
+        );
+
+    }
+
+}
+
+
+/*==================================================
+FEATURE: OPEN CODE STUDIO BUTTON
+==================================================*/
+
+function createCodeStudioToggle() {
+
+    if (
+        document.getElementById(
+            "open-code-studio-btn"
+        )
+    ) {
+        return;
+    }
+
+
+    const button =
+        document.createElement(
+            "button"
+        );
+
+    button.id =
+        "open-code-studio-btn";
+
+    button.type =
+        "button";
+
+    button.innerHTML =
+        "💻 Code";
+
+    button.title =
+        "Open HTML CSS JavaScript Editor";
+
+
+    document.body.appendChild(
+        button
+    );
+
+
+    button.addEventListener(
+        "click",
+        () => {
+
+            const studio =
+                document.getElementById(
+                    "smartbazaar-code-studio"
+                );
+
+            if (!studio) {
+                return;
+            }
+
+
+            studio.classList.remove(
+                "studio-closed"
+            );
+
+            studio.classList.add(
+                "studio-open"
+            );
+
+        }
+    );
+
+}
+
+
+/*==================================================
+FEATURE: CLOSE CODE STUDIO
+==================================================*/
+
+function closeCodeStudio() {
+
+    const studio =
+        document.getElementById(
+            "smartbazaar-code-studio"
+        );
+
+    if (!studio) {
+        return;
+    }
+
+
+    studio.classList.remove(
+        "studio-open"
+    );
+
+    studio.classList.add(
+        "studio-closed"
+    );
+
+}
+
+
+/*==================================================
+FEATURE: SAVE CODE DATA
+==================================================*/
+
+function saveCodeData() {
+
+    const html =
+        document.getElementById(
+            "smartbazaar-html-editor"
+        )?.value || "";
+
+
+    const css =
+        document.getElementById(
+            "smartbazaar-css-editor"
+        )?.value || "";
+
+
+    const js =
+        document.getElementById(
+            "smartbazaar-js-editor"
+        )?.value || "";
+
+
+    projectData.htmlCode =
+        html;
+
+    projectData.cssCode =
+        css;
+
+    projectData.jsCode =
+        js;
+
+
+    localStorage.setItem(
+        "smartbazaar_html_code",
+        html
+    );
+
+
+    localStorage.setItem(
+        "smartbazaar_css_code",
+        css
+    );
+
+
+    localStorage.setItem(
+        "smartbazaar_js_code",
+        js
+    );
+
+}
+
+
+/*==================================================
+FEATURE: EXPORT COMPLETE WEBSITE
+==================================================*/
+
+function exportCompleteWebsite() {
+
+    const html =
+        document.getElementById(
+            "smartbazaar-html-editor"
+        )?.value || "";
+
+
+    const css =
+        document.getElementById(
+            "smartbazaar-css-editor"
+        )?.value || "";
+
+
+    const js =
+        document.getElementById(
+            "smartbazaar-js-editor"
+        )?.value || "";
+
+
+    const title =
+        document.getElementById(
+            "project-title-input"
+        )?.value ||
+        "SmartBazaar Website";
+
+
+    const finalHTML = `<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+>
+
+<title>${escapeHTML(title)}</title>
+
+<style>
+
+${css}
+
+</style>
+
+</head>
+
+<body>
+
+${html}
+
+<script>
+
+${js}
+
+<\/script>
+
+</body>
+
+</html>`;
+
+
+    const blob =
+        new Blob(
+            [finalHTML],
+            {
+                type:
+                    "text/html;charset=utf-8"
+            }
+        );
+
+
+    const url =
+        URL.createObjectURL(
+            blob
+        );
+
+
+    const link =
+        document.createElement(
+            "a"
+        );
+
+
+    link.href =
+        url;
+
+
+    link.download =
+        `${sanitizeFilename(title)}.html`;
+
+
+    document.body.appendChild(
+        link
+    );
+
+
+    link.click();
+
+
+    link.remove();
+
+
+    setTimeout(
+        () => {
+
+            URL.revokeObjectURL(
+                url
+            );
+
+        },
+        1000
+    );
+
+}
+
+
+/*==================================================
+FEATURE: CODE STUDIO CSS
+==================================================*/
+
+function injectCodeStudioStyles() {
+
+    if (
+        document.getElementById(
+            "smartbazaar-code-studio-style"
+        )
+    ) {
+        return;
+    }
+
+
+    const style =
+        document.createElement(
+            "style"
+        );
+
+
+    style.id =
+        "smartbazaar-code-studio-style";
+
+
+    style.textContent = `
+
+/*========================================
+CODE STUDIO
+========================================*/
+
+#smartbazaar-code-studio{
+
+    position:fixed;
+
+    left:0;
+
+    right:0;
+
+    bottom:0;
+
+    height:340px;
+
+    background:#101217;
+
+    border-top:1px solid #334155;
+
+    z-index:9998;
+
+    display:flex;
+
+    flex-direction:column;
+
+    box-shadow:
+        0 -10px 30px rgba(0,0,0,.45);
+
+    transition:
+        transform .3s ease;
+
+}
+
+
+/*========================================
+CLOSED
+========================================*/
+
+#smartbazaar-code-studio.studio-closed{
+
+    transform:
+        translateY(calc(100% - 42px));
+
+}
+
+
+/*========================================
+HEADER
+========================================*/
+
+.code-studio-header{
+
+    height:42px;
+
+    min-height:42px;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:space-between;
+
+    padding:0 10px;
+
+    background:#181b22;
+
+    border-bottom:
+        1px solid #2d3748;
+
+}
+
+
+.code-studio-title{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:7px;
+
+    color:#e2e8f0;
+
+    font-size:12px;
+
+    font-weight:700;
+
+}
+
+
+.code-studio-actions{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:5px;
+
+}
+
+
+.code-action-btn{
+
+    background:#252833;
+
+    color:#cbd5e1;
+
+    border:
+        1px solid #3f4654;
+
+    border-radius:5px;
+
+    padding:5px 9px;
+
+    font-size:10px;
+
+    cursor:pointer;
+
+}
+
+
+.code-action-btn:hover{
+
+    border-color:#38bdf8;
+
+    color:#38bdf8;
+
+}
+
+
+.code-action-btn.primary{
+
+    background:#2563eb;
+
+    color:#fff;
+
+    border-color:#2563eb;
+
+}
+
+
+.code-action-btn.close{
+
+    font-size:16px;
+
+}
+
+
+/*========================================
+WORKSPACE
+========================================*/
+
+.code-studio-workspace{
+
+    flex:1;
+
+    min-height:0;
+
+    display:flex;
+
+    background:#0b0d11;
+
+}
+
+
+.code-editor-panel{
+
+    width:100%;
+
+    height:100%;
+
+    display:flex;
+
+    flex-direction:column;
+
+    background:#111318;
+
+}
+
+
+/*========================================
+CODE TABS
+========================================*/
+
+.code-tabs{
+
+    height:35px;
+
+    min-height:35px;
+
+    display:flex;
+
+    background:#181b22;
+
+    border-bottom:
+        1px solid #2d3748;
+
+}
+
+
+.code-tab{
+
+    border:none;
+
+    background:transparent;
+
+    color:#64748b;
+
+    padding:
+        0 18px;
+
+    cursor:pointer;
+
+    font-size:10px;
+
+    font-weight:700;
+
+}
+
+
+.code-tab.active{
+
+    color:#38bdf8;
+
+    background:#252833;
+
+    box-shadow:
+        inset 0 -2px 0 #38bdf8;
+
+}
+
+
+/*========================================
+CODE BOX
+========================================*/
+
+.code-box{
+
+    display:none;
+
+    flex:1;
+
+    min-height:0;
+
+    flex-direction:column;
+
+}
+
+
+.code-box.active{
+
+    display:flex;
+
+}
+
+
+.code-box-title{
+
+    padding:5px 8px;
+
+    color:#64748b;
+
+    font-size:9px;
+
+    background:#14161b;
+
+}
+
+
+.code-box textarea{
+
+    flex:1;
+
+    width:100%;
+
+    min-height:0;
+
+    resize:none;
+
+    border:none;
+
+    outline:none;
+
+    box-sizing:border-box;
+
+    padding:12px;
+
+    background:#0d0f14;
+
+    color:#dbeafe;
+
+    font-family:
+        Consolas,
+        "Courier New",
+        monospace;
+
+    font-size:12px;
+
+    line-height:1.6;
+
+    tab-size:2;
+
+}
+
+
+/*========================================
+CODE CONTENT INSIDE MAIN CANVAS
+========================================*/
+
+.smartbazaar-code-content{
+
+    width:100%;
+
+    min-height:100%;
+
+    box-sizing:border-box;
+
+}
+
+
+/*========================================
+CODE BUTTON
+========================================*/
+
+#open-code-studio-btn{
+
+    position:fixed;
+
+    right:18px;
+
+    bottom:18px;
+
+    z-index:10000;
+
+    border:none;
+
+    border-radius:9px;
+
+    background:#2563eb;
+
+    color:#fff;
+
+    padding:10px 15px;
+
+    font-size:11px;
+
+    font-weight:700;
+
+    cursor:pointer;
+
+    box-shadow:
+        0 5px 20px rgba(0,0,0,.4);
+
+}
+
+
+#open-code-studio-btn:hover{
+
+    background:#3b82f6;
+
+    transform:
+        translateY(-1px);
+
+}
+
+
+/*========================================
+MOBILE
+========================================*/
+
+@media(max-width:800px){
+
+    #smartbazaar-code-studio{
+
+        height:430px;
+
+    }
+
+
+    .code-studio-title{
+
+        font-size:10px;
+
+    }
+
+
+    .code-action-btn{
+
+        padding:
+            5px 7px;
+
+    }
+
+
+    #open-code-studio-btn{
+
+        right:10px;
+
+        bottom:10px;
+
+    }
+
+}
+
+    `;
+
+
+    document.head.appendChild(
+        style
+    );
+
+}
+
+
+/*==================================================
+FEATURE: INITIALIZE CODE STUDIO
+==================================================*/
+
+createCodeStudioToggle();
 
     /*==================================================
     FEATURE: INITIAL STATE
