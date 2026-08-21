@@ -3822,10 +3822,957 @@ function createCodeTabs() {
 
 }
 
+/*==================================================
+SMARTBAZAAR PRO
+FEATURE: TWO-WAY CODE SYNCHRONIZATION ENGINE
+DRAG & DROP ↔ HTML / CSS / JAVASCRIPT ↔ CANVAS
+==================================================*/
+
+let codeSyncLock = false;
+
 
 /*==================================================
-FEATURE: HTML CSS JS → MAIN CANVAS
+FEATURE: CANVAS → CODE
 ==================================================*/
+
+function syncCanvasToCode() {
+
+    if (codeSyncLock) return;
+
+    const canvas =
+        document.getElementById("live-canvas");
+
+    const htmlEditor =
+        document.getElementById(
+            "smartbazaar-html-editor"
+        );
+
+    const cssEditor =
+        document.getElementById(
+            "smartbazaar-css-editor"
+        );
+
+    if (
+        !canvas ||
+        !htmlEditor ||
+        !cssEditor
+    ) {
+        return;
+    }
+
+
+    codeSyncLock = true;
+
+
+    /*----------------------------------------------
+    CLONE CANVAS
+    ----------------------------------------------*/
+
+    const clone =
+        canvas.cloneNode(true);
+
+
+    /*----------------------------------------------
+    REMOVE BUILDER UI
+    ----------------------------------------------*/
+
+    clone
+        .querySelectorAll(
+            ".placeholder-text, .selected"
+        )
+        .forEach(el => {
+
+            if (
+                el.classList.contains(
+                    "placeholder-text"
+                )
+            ) {
+
+                el.remove();
+
+            }
+            else {
+
+                el.classList.remove(
+                    "selected"
+                );
+
+            }
+
+        });
+
+
+    clone
+        .querySelectorAll(
+            "[contenteditable]"
+        )
+        .forEach(el => {
+
+            el.removeAttribute(
+                "contenteditable"
+            );
+
+        });
+
+
+    /*----------------------------------------------
+    REMOVE BUILDER ONLY ATTRIBUTES
+    ----------------------------------------------*/
+
+    clone
+        .querySelectorAll(
+            ".canvas-element"
+        )
+        .forEach(el => {
+
+            el.removeAttribute(
+                "draggable"
+            );
+
+        });
+
+
+    /*----------------------------------------------
+    HTML
+    ----------------------------------------------*/
+
+    htmlEditor.value =
+        clone.innerHTML.trim();
+
+
+    projectData.htmlCode =
+        htmlEditor.value;
+
+
+    /*----------------------------------------------
+    GENERATE CSS
+    ----------------------------------------------*/
+
+    let generatedCSS = "";
+
+
+    clone
+        .querySelectorAll(
+            ".canvas-element"
+        )
+        .forEach(
+            (el, index) => {
+
+                const original =
+                    canvas.querySelector(
+                        `#${el.id}`
+                    );
+
+                if (!original)
+                    return;
+
+
+                let className =
+                    "sb-element-" +
+                    (index + 1);
+
+
+                original.classList.add(
+                    className
+                );
+
+                el.classList.add(
+                    className
+                );
+
+
+                const computed =
+                    window.getComputedStyle(
+                        original
+                    );
+
+
+                generatedCSS += `
+
+.${className} {
+
+    background-color: ${computed.backgroundColor};
+
+    color: ${computed.color};
+
+    font-size: ${computed.fontSize};
+
+    padding: ${computed.padding};
+
+    margin: ${computed.margin};
+
+    width: ${computed.width};
+
+    height: ${computed.height};
+
+    border:
+        ${computed.borderWidth}
+        ${computed.borderStyle}
+        ${computed.borderColor};
+
+    border-radius:
+        ${computed.borderRadius};
+
+    box-shadow:
+        ${computed.boxShadow};
+
+    text-align:
+        ${computed.textAlign};
+
+    display:
+        ${computed.display};
+
+`;
+
+
+                if (
+                    computed.display ===
+                    "flex"
+                ) {
+
+                    generatedCSS += `
+
+    flex-direction:
+        ${computed.flexDirection};
+
+    gap:
+        ${computed.gap};
+
+`;
+
+                }
+
+
+                if (
+                    computed.display ===
+                    "grid"
+                ) {
+
+                    generatedCSS += `
+
+    grid-template-columns:
+        ${computed.gridTemplateColumns};
+
+    gap:
+        ${computed.gap};
+
+`;
+
+                }
+
+
+                generatedCSS += `
+
+}
+
+`;
+
+            }
+        );
+
+
+    cssEditor.value =
+        generatedCSS.trim();
+
+
+    projectData.cssCode =
+        cssEditor.value;
+
+
+    codeSyncLock = false;
+
+}
+
+
+/*==================================================
+FEATURE: CODE → CANVAS
+==================================================*/
+
+function syncCodeToCanvas() {
+
+    if (codeSyncLock) return;
+
+
+    const canvas =
+        document.getElementById(
+            "live-canvas"
+        );
+
+    const htmlEditor =
+        document.getElementById(
+            "smartbazaar-html-editor"
+        );
+
+    const cssEditor =
+        document.getElementById(
+            "smartbazaar-css-editor"
+        );
+
+    const jsEditor =
+        document.getElementById(
+            "smartbazaar-js-editor"
+        );
+
+
+    if (
+        !canvas ||
+        !htmlEditor ||
+        !cssEditor ||
+        !jsEditor
+    ) {
+
+        return;
+
+    }
+
+
+    codeSyncLock = true;
+
+
+    const html =
+        htmlEditor.value;
+
+
+    const css =
+        cssEditor.value;
+
+
+    const js =
+        jsEditor.value;
+
+
+    /*----------------------------------------------
+    REMOVE PREVIOUS CODE CONTENT ONLY
+    ----------------------------------------------*/
+
+    canvas
+        .querySelectorAll(
+            ".smartbazaar-code-content"
+        )
+        .forEach(el =>
+            el.remove()
+        );
+
+
+    /*----------------------------------------------
+    CREATE CODE CONTENT
+    ----------------------------------------------*/
+
+    if (html.trim()) {
+
+        const content =
+            document.createElement(
+                "div"
+            );
+
+
+        content.className =
+            "smartbazaar-code-content";
+
+
+        content.innerHTML =
+            html;
+
+
+        canvas.appendChild(
+            content
+        );
+
+    }
+
+
+    /*----------------------------------------------
+    UPDATE LIVE CSS
+    ----------------------------------------------*/
+
+    document
+        .getElementById(
+            "smartbazaar-code-live-style"
+        )
+        ?.remove();
+
+
+    if (css.trim()) {
+
+        const style =
+            document.createElement(
+                "style"
+            );
+
+
+        style.id =
+            "smartbazaar-code-live-style";
+
+
+        style.textContent =
+            css;
+
+
+        document.head.appendChild(
+            style
+        );
+
+    }
+
+
+    /*----------------------------------------------
+    SAVE PROJECT DATA
+    ----------------------------------------------*/
+
+    projectData.htmlCode =
+        html;
+
+    projectData.cssCode =
+        css;
+
+    projectData.jsCode =
+        js;
+
+
+    codeSyncLock = false;
+
+
+    /*----------------------------------------------
+    RUN JAVASCRIPT
+    ----------------------------------------------*/
+
+    if (js.trim()) {
+
+        setTimeout(
+            () => {
+
+                try {
+
+                    const runner =
+                        new Function(
+                            "canvas",
+                            js
+                        );
+
+
+                    runner(
+                        canvas
+                    );
+
+                }
+                catch (error) {
+
+                    console.error(
+                        "SmartBazaar JavaScript Error:",
+                        error
+                    );
+
+                }
+
+            },
+            50
+        );
+
+    }
+
+}
+
+
+/*==================================================
+FEATURE: CONNECT CODE EDITORS
+==================================================*/
+
+function connectCodeEditors() {
+
+    const htmlEditor =
+        document.getElementById(
+            "smartbazaar-html-editor"
+        );
+
+    const cssEditor =
+        document.getElementById(
+            "smartbazaar-css-editor"
+        );
+
+    const jsEditor =
+        document.getElementById(
+            "smartbazaar-js-editor"
+        );
+
+
+    htmlEditor?.addEventListener(
+        "input",
+        () => {
+
+            projectData.htmlCode =
+                htmlEditor.value;
+
+            syncCodeToCanvas();
+
+        }
+    );
+
+
+    cssEditor?.addEventListener(
+        "input",
+        () => {
+
+            projectData.cssCode =
+                cssEditor.value;
+
+            syncCodeToCanvas();
+
+        }
+    );
+
+
+    jsEditor?.addEventListener(
+        "input",
+        () => {
+
+            projectData.jsCode =
+                jsEditor.value;
+
+            syncCodeToCanvas();
+
+        }
+    );
+
+}
+
+
+/*==================================================
+FEATURE: WATCH DRAG & DROP CANVAS
+==================================================*/
+
+function startCanvasCodeSync() {
+
+    const canvas =
+        document.getElementById(
+            "live-canvas"
+        );
+
+
+    if (!canvas) return;
+
+
+    let timer = null;
+
+
+    const observer =
+        new MutationObserver(
+            mutations => {
+
+                if (codeSyncLock)
+                    return;
+
+
+                let changed = false;
+
+
+                mutations.forEach(
+                    mutation => {
+
+                        if (
+                            mutation.type ===
+                            "childList"
+                        ) {
+
+                            changed = true;
+
+                        }
+
+
+                        if (
+                            mutation.type ===
+                            "attributes"
+                        ) {
+
+                            changed = true;
+
+                        }
+
+                    }
+                );
+
+
+                if (!changed)
+                    return;
+
+
+                clearTimeout(timer);
+
+
+                timer =
+                    setTimeout(
+                        () => {
+
+                            syncCanvasToCode();
+
+                        },
+                        150
+                    );
+
+            }
+        );
+
+
+    observer.observe(
+        canvas,
+        {
+            childList: true,
+            subtree: true,
+            attributes: true
+        }
+    );
+
+}
+
+
+/*==================================================
+FEATURE: INITIALIZE TWO-WAY SYSTEM
+==================================================*/
+
+setTimeout(
+    () => {
+
+        connectCodeEditors();
+
+        startCanvasCodeSync();
+
+        syncCanvasToCode();
+
+    },
+    300
+); 
+
+    /*==================================================
+SMARTBAZAAR PRO
+FEATURE: CANVAS → CODE SYNC
+DRAG & DROP → HTML / CSS / JS
+==================================================*/
+
+function syncCanvasToCode() {
+
+    const canvas =
+        document.getElementById("live-canvas");
+
+    const htmlEditor =
+        document.getElementById(
+            "smartbazaar-html-editor"
+        );
+
+    const cssEditor =
+        document.getElementById(
+            "smartbazaar-css-editor"
+        );
+
+    const jsEditor =
+        document.getElementById(
+            "smartbazaar-js-editor"
+        );
+
+    if (
+        !canvas ||
+        !htmlEditor ||
+        !cssEditor ||
+        !jsEditor
+    ) {
+        return;
+    }
+
+
+    /*==============================================
+    GET CANVAS ELEMENTS
+    ==============================================*/
+
+    const elements =
+        canvas.querySelectorAll(
+            ".canvas-element"
+        );
+
+
+    let htmlCode = "";
+
+    let cssCode = "";
+
+
+    /*==============================================
+    CONVERT EACH CANVAS ELEMENT
+    ==============================================*/
+
+    elements.forEach((el, index) => {
+
+        const type =
+            el.getAttribute("data-type") ||
+            "element";
+
+
+        /*------------------------------------------
+        CREATE UNIQUE CLASS
+        ------------------------------------------*/
+
+        const className =
+            `smart-element-${index + 1}`;
+
+
+        /*------------------------------------------
+        CLONE ELEMENT
+        ------------------------------------------*/
+
+        const clone =
+            el.cloneNode(true);
+
+
+        /*------------------------------------------
+        REMOVE BUILDER CLASSES
+        ------------------------------------------*/
+
+        clone.classList.remove(
+            "selected"
+        );
+
+
+        clone.classList.remove(
+            "canvas-element"
+        );
+
+
+        /*------------------------------------------
+        REMOVE BUILDER ID
+        ------------------------------------------*/
+
+        clone.removeAttribute("id");
+
+
+        /*------------------------------------------
+        ADD GENERATED CLASS
+        ------------------------------------------*/
+
+        clone.classList.add(
+            className
+        );
+
+
+        /*------------------------------------------
+        REMOVE BUILDER ONLY ATTRIBUTES
+        ------------------------------------------*/
+
+        clone.removeAttribute(
+            "data-type"
+        );
+
+
+        /*------------------------------------------
+        GET INLINE STYLES
+        ------------------------------------------*/
+
+        const computed =
+            window.getComputedStyle(el);
+
+
+        /*------------------------------------------
+        GENERATE CSS
+        ------------------------------------------*/
+
+        cssCode += `
+
+.${className}{
+
+    background-color:${computed.backgroundColor};
+
+    color:${computed.color};
+
+    font-size:${computed.fontSize};
+
+    padding:${computed.padding};
+
+    margin:${computed.margin};
+
+    width:${computed.width};
+
+    height:${computed.height};
+
+    border-style:${computed.borderTopStyle};
+
+    border-width:${computed.borderTopWidth};
+
+    border-color:${computed.borderTopColor};
+
+    border-radius:${computed.borderRadius};
+
+    box-shadow:${computed.boxShadow};
+
+    text-align:${computed.textAlign};
+
+    display:${computed.display};
+
+    box-sizing:border-box;
+
+`;
+
+
+        if (
+            computed.display === "flex"
+        ) {
+
+            cssCode += `
+
+    flex-direction:${computed.flexDirection};
+
+    justify-content:${computed.justifyContent};
+
+    align-items:${computed.alignItems};
+
+`;
+
+        }
+
+
+        if (
+            computed.display === "grid"
+        ) {
+
+            cssCode += `
+
+    grid-template-columns:${computed.gridTemplateColumns};
+
+    grid-template-rows:${computed.gridTemplateRows};
+
+`;
+
+        }
+
+
+        cssCode += `
+
+}
+
+`;
+
+
+        /*------------------------------------------
+        IMAGE
+        ------------------------------------------*/
+
+        const img =
+            clone.querySelector("img");
+
+        if (img) {
+
+            img.removeAttribute(
+                "class"
+            );
+
+            img.setAttribute(
+                "style",
+                "max-width:100%;height:auto;display:block;"
+            );
+
+        }
+
+
+        /*------------------------------------------
+        VIDEO / IFRAME
+        ------------------------------------------*/
+
+        const iframe =
+            clone.querySelector("iframe");
+
+        if (iframe) {
+
+            iframe.removeAttribute(
+                "class"
+            );
+
+            iframe.setAttribute(
+                "style",
+                "width:100%;height:100%;border:0;"
+            );
+
+        }
+
+
+        /*------------------------------------------
+        ADD HTML
+        ------------------------------------------*/
+
+        htmlCode +=
+            clone.outerHTML +
+            "\n\n";
+
+    });
+
+
+    /*==============================================
+    WRITE GENERATED CODE
+    ==============================================*/
+
+    htmlEditor.value =
+        htmlCode.trim();
+
+
+    cssEditor.value =
+        cssCode.trim();
+
+
+    /*==============================================
+    KEEP JAVASCRIPT
+    ==============================================*/
+
+    if (
+        !jsEditor.value.trim()
+    ) {
+
+        jsEditor.value =
+            `// SmartBazaar Pro JavaScript
+
+document.addEventListener("DOMContentLoaded", () => {
+
+    // Add your JavaScript here
+
+});`;
+
+    }
+
+
+    /*==============================================
+    UPDATE PROJECT DATA
+    ==============================================*/
+
+    projectData.htmlCode =
+        htmlEditor.value;
+
+    projectData.cssCode =
+        cssEditor.value;
+
+    projectData.jsCode =
+        jsEditor.value;
+
+
+    /*==============================================
+    SAVE AUTOMATICALLY
+    ==============================================*/
+
+    localStorage.setItem(
+        "smartbazaar_html_code",
+        htmlEditor.value
+    );
+
+    localStorage.setItem(
+        "smartbazaar_css_code",
+        cssEditor.value
+    );
+
+    localStorage.setItem(
+        "smartbazaar_js_code",
+        jsEditor.value
+    );
+
+}
+
+
+
+
+    
+/*==================================================
+FEATURE: HTML CSS JS → MAIN CANVAS
+==================================================*
 
 function updateCanvasFromCode() {
 
@@ -3872,7 +4819,7 @@ function updateCanvasFromCode() {
 
     /*==============================================
     SAVE CURRENT CODE
-    ==============================================*/
+    ==============================================*
 
     projectData.htmlCode =
         html;
@@ -3886,7 +4833,7 @@ function updateCanvasFromCode() {
 
     /*==============================================
     REMOVE PREVIOUS CODE STYLE
-    ==============================================*/
+    ==============================================*
 
     document
         .getElementById(
@@ -3897,7 +4844,7 @@ function updateCanvasFromCode() {
 
     /*==============================================
     REMOVE PREVIOUS CODE CONTENT
-    ==============================================*/
+    ==============================================*
 
     const oldCodeContent =
         canvas.querySelector(
@@ -3914,7 +4861,7 @@ function updateCanvasFromCode() {
     /*==============================================
     IF HTML IS EMPTY
     KEEP NORMAL BUILDER CANVAS
-    ==============================================*/
+    ==============================================*
 
     if (!html.trim()) {
 
@@ -3926,7 +4873,7 @@ function updateCanvasFromCode() {
     /*==============================================
     CREATE CODE CONTENT INSIDE
     THE SAME MAIN CANVAS
-    ==============================================*/
+    ==============================================*
 
     const codeContent =
         document.createElement(
@@ -3947,7 +4894,7 @@ function updateCanvasFromCode() {
 
     /*==============================================
     APPLY CSS TO MAIN PAGE
-    ==============================================*/
+    ==============================================*
 
     if (css.trim()) {
 
@@ -3971,7 +4918,7 @@ function updateCanvasFromCode() {
 
     /*==============================================
     RUN JAVASCRIPT
-    ==============================================*/
+    ==============================================*
 
     if (js.trim()) {
 
@@ -4006,7 +4953,7 @@ function updateCanvasFromCode() {
 
     }
 
-}
+}*/
 
 
 /*==================================================
