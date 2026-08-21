@@ -1,20 +1,25 @@
 /*==================================================
 SMARTBAZAAR PRO
-EDITOR ENGINE
-FEATURE: DRAG & DROP + LIVE HTML/CSS/JS EDITOR
+WEBSITE BUILDER EDITOR
+COMPLETE JAVASCRIPT
 ==================================================*/
 
 document.addEventListener("DOMContentLoaded", () => {
 
     /*==================================================
-    BASIC ELEMENTS
+    FEATURE: EDITOR INITIALIZATION
     ==================================================*/
 
+    const canvas = document.getElementById("live-canvas");
     const leftSidebar = document.getElementById("left-sidebar");
     const rightSidebar = document.getElementById("right-sidebar");
-    const canvas = document.getElementById("live-canvas");
     const layersTreeView = document.getElementById("layers-tree-view");
     const projectTitleInput = document.getElementById("project-title-input");
+
+    if (!canvas) {
+        console.error("SmartBazaar Pro: #live-canvas not found.");
+        return;
+    }
 
     let selectedElement = null;
     let elementCounter = 0;
@@ -26,86 +31,662 @@ document.addEventListener("DOMContentLoaded", () => {
     let draggedPattern = null;
 
     /*==================================================
-    CODING EDITOR ELEMENTS
+    FEATURE: CODING PANEL
+    HTML / CSS / JAVASCRIPT LIVE EDITOR
     ==================================================*/
 
-    const codingPanel =
-        document.getElementById("coding-editor-panel");
+    let codingPanel = null;
+    let htmlCodeBox = null;
+    let cssCodeBox = null;
+    let jsCodeBox = null;
+    let codingToggleButton = null;
+    let codingPreviewFrame = null;
 
-    const htmlEditor =
-        document.getElementById("html-code-editor");
+    function createCodingSystem() {
 
-    const cssEditor =
-        document.getElementById("css-code-editor");
+        if (document.getElementById("sb-coding-panel")) {
+            codingPanel = document.getElementById("sb-coding-panel");
+            return;
+        }
 
-    const jsEditor =
-        document.getElementById("javascript-code-editor");
+        codingPanel = document.createElement("section");
+        codingPanel.id = "sb-coding-panel";
 
-    const codingStatus =
-        document.getElementById("coding-status");
+        codingPanel.innerHTML = `
+            <div class="sb-coding-header">
 
-    const characterCount =
-        document.getElementById("coding-character-count");
+                <div class="sb-coding-title">
+                    <span>💻</span>
+                    <strong>Live Code Editor</strong>
+                </div>
 
-    const resizeHandle =
-        document.getElementById("coding-resize-handle");
+                <div class="sb-coding-actions">
+                    <button id="sb-run-code">▶ Run</button>
+                    <button id="sb-copy-code">📋 Copy</button>
+                    <button id="sb-close-code">×</button>
+                </div>
 
-    const codeTabs =
-        document.querySelectorAll(".coding-tab");
+            </div>
 
-    const codePanes =
-        document.querySelectorAll(".code-editor-pane");
+            <div class="sb-code-editors">
 
+                <div class="sb-code-box">
+                    <div class="sb-code-label html-label">
+                        <span>HTML</span>
+                    </div>
+                    <textarea
+                        id="sb-html-code"
+                        spellcheck="false"
+                        placeholder="Write HTML here..."
+                    ></textarea>
+                </div>
+
+                <div class="sb-code-box">
+                    <div class="sb-code-label css-label">
+                        <span>CSS</span>
+                    </div>
+                    <textarea
+                        id="sb-css-code"
+                        spellcheck="false"
+                        placeholder="Write CSS here..."
+                    ></textarea>
+                </div>
+
+                <div class="sb-code-box">
+                    <div class="sb-code-label js-label">
+                        <span>JavaScript</span>
+                    </div>
+                    <textarea
+                        id="sb-js-code"
+                        spellcheck="false"
+                        placeholder="Write JavaScript here..."
+                    ></textarea>
+                </div>
+
+            </div>
+
+            <div class="sb-code-preview-area">
+
+                <div class="sb-preview-title">
+                    <span>👁 Live Coding Preview</span>
+                    <span id="sb-preview-status">Ready</span>
+                </div>
+
+                <iframe
+                    id="sb-coding-preview"
+                    sandbox="allow-scripts allow-forms allow-modals"
+                ></iframe>
+
+            </div>
+        `;
+
+        /*
+        FEATURE: CODING PANEL LOCATION
+
+        Coding system is placed INSIDE the existing canvas container.
+        It does NOT create a second main preview system.
+        */
+
+        const canvasContainer = document.getElementById("canvas-container");
+
+        if (canvasContainer) {
+            canvasContainer.appendChild(codingPanel);
+        }
+
+        htmlCodeBox = document.getElementById("sb-html-code");
+        cssCodeBox = document.getElementById("sb-css-code");
+        jsCodeBox = document.getElementById("sb-js-code");
+        codingPreviewFrame = document.getElementById("sb-coding-preview");
+
+        addCodingStyles();
+
+        bindCodingEvents();
+
+        /*
+        Initially hidden.
+        It will appear when Coding button is pressed.
+        */
+
+        codingPanel.style.display = "none";
+    }
 
     /*==================================================
-    INITIAL PROJECT DATA
+    FEATURE: CODING PANEL CSS
     ==================================================*/
 
-    projectTitleInput.value =
-        localStorage.getItem("smartbazaar_project_name")
-        || "My_Awesome_Page";
+    function addCodingStyles() {
 
+        if (document.getElementById("sb-coding-styles")) {
+            return;
+        }
 
-    projectTitleInput.addEventListener("input", () => {
+        const style = document.createElement("style");
 
-        localStorage.setItem(
-            "smartbazaar_project_name",
-            projectTitleInput.value
-        );
+        style.id = "sb-coding-styles";
 
-    });
+        style.textContent = `
 
+        #canvas-container{
+            position:relative;
+            flex:1;
+            min-width:0;
+            min-height:0;
+        }
+
+        #sb-coding-panel{
+            position:absolute;
+            inset:10px;
+            z-index:500;
+            background:#101217;
+            border:1px solid #303746;
+            border-radius:12px;
+            display:none;
+            flex-direction:column;
+            overflow:hidden;
+            box-shadow:0 15px 40px rgba(0,0,0,.55);
+        }
+
+        .sb-coding-header{
+            min-height:48px;
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+            padding:8px 12px;
+            background:#181b22;
+            border-bottom:1px solid #303746;
+        }
+
+        .sb-coding-title{
+            display:flex;
+            align-items:center;
+            gap:8px;
+            color:#e5e7eb;
+            font-size:13px;
+        }
+
+        .sb-coding-actions{
+            display:flex;
+            gap:6px;
+        }
+
+        .sb-coding-actions button{
+            border:1px solid #374151;
+            background:#20242d;
+            color:#e5e7eb;
+            padding:6px 10px;
+            border-radius:6px;
+            cursor:pointer;
+            font-size:11px;
+        }
+
+        .sb-coding-actions button:hover{
+            background:#2d3440;
+            border-color:#38bdf8;
+        }
+
+        .sb-code-editors{
+            flex:0 0 42%;
+            min-height:180px;
+            display:grid;
+            grid-template-columns:repeat(3,1fr);
+            gap:6px;
+            padding:7px;
+            background:#0c0e12;
+        }
+
+        .sb-code-box{
+            min-width:0;
+            display:flex;
+            flex-direction:column;
+            border:1px solid #303746;
+            border-radius:7px;
+            overflow:hidden;
+            background:#11141a;
+        }
+
+        .sb-code-label{
+            height:30px;
+            display:flex;
+            align-items:center;
+            padding:0 9px;
+            font-size:10px;
+            font-weight:bold;
+            color:#fff;
+            background:#1c2028;
+            border-bottom:1px solid #303746;
+        }
+
+        .html-label{
+            border-left:3px solid #f97316;
+        }
+
+        .css-label{
+            border-left:3px solid #38bdf8;
+        }
+
+        .js-label{
+            border-left:3px solid #facc15;
+        }
+
+        .sb-code-box textarea{
+            flex:1;
+            width:100%;
+            min-height:120px;
+            resize:none;
+            outline:none;
+            border:none;
+            padding:10px;
+            background:#0b0d11;
+            color:#e5e7eb;
+            font-family:Consolas,Monaco,monospace;
+            font-size:12px;
+            line-height:1.5;
+        }
+
+        #sb-html-code{
+            color:#fb923c;
+        }
+
+        #sb-css-code{
+            color:#38bdf8;
+        }
+
+        #sb-js-code{
+            color:#facc15;
+        }
+
+        .sb-code-preview-area{
+            flex:1;
+            min-height:180px;
+            display:flex;
+            flex-direction:column;
+            background:#080a0e;
+        }
+
+        .sb-preview-title{
+            height:34px;
+            flex-shrink:0;
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+            padding:0 10px;
+            color:#cbd5e1;
+            font-size:10px;
+            background:#181b22;
+            border-top:1px solid #303746;
+            border-bottom:1px solid #303746;
+        }
+
+        #sb-preview-status{
+            color:#4ade80;
+        }
+
+        #sb-coding-preview{
+            flex:1;
+            width:100%;
+            min-height:150px;
+            border:none;
+            background:#fff;
+        }
+
+        #btn-code-editor{
+            background:#27272a !important;
+            color:#38bdf8 !important;
+            border-color:#38bdf8 !important;
+        }
+
+        #btn-code-editor.active{
+            background:#2563eb !important;
+            color:#fff !important;
+        }
+
+        @media(max-width:800px){
+
+            .sb-code-editors{
+                grid-template-columns:1fr;
+                flex:0 0 48%;
+                overflow-y:auto;
+            }
+
+            .sb-code-box{
+                min-height:130px;
+            }
+
+            .sb-coding-panel{
+                inset:5px;
+            }
+
+            .sb-coding-actions button{
+                padding:5px 7px;
+            }
+        }
+
+        @media(max-width:500px){
+
+            .sb-coding-header{
+                padding:6px;
+            }
+
+            .sb-coding-title strong{
+                font-size:11px;
+            }
+
+            .sb-code-editors{
+                flex:0 0 45%;
+            }
+
+            .sb-code-box textarea{
+                font-size:11px;
+            }
+
+        }
+
+        `;
+
+        document.head.appendChild(style);
+    }
 
     /*==================================================
-    HISTORY SYSTEM
+    FEATURE: CODING BUTTON
+    ==================================================*/
+
+    function createCodingButton() {
+
+        if (document.getElementById("btn-code-editor")) {
+            codingToggleButton = document.getElementById("btn-code-editor");
+            return;
+        }
+
+        codingToggleButton = document.createElement("button");
+
+        codingToggleButton.id = "btn-code-editor";
+        codingToggleButton.className = "toolbar-btn";
+        codingToggleButton.title = "Live Code Editor";
+        codingToggleButton.innerHTML = "💻";
+
+        const settingsButton = document.getElementById("btn-settings");
+
+        if (settingsButton && settingsButton.parentElement) {
+            settingsButton.parentElement.insertBefore(
+                codingToggleButton,
+                settingsButton
+            );
+        }
+
+        codingToggleButton.addEventListener("click", () => {
+
+            if (!codingPanel) return;
+
+            const isOpen =
+                codingPanel.style.display === "flex";
+
+            if (isOpen) {
+
+                codingPanel.style.display = "none";
+                codingToggleButton.classList.remove("active");
+
+            } else {
+
+                codingPanel.style.display = "flex";
+                codingToggleButton.classList.add("active");
+
+                syncCanvasToCode();
+
+            }
+
+        });
+    }
+
+    /*==================================================
+    FEATURE: CODING EVENTS
+    ==================================================*/
+
+    function bindCodingEvents() {
+
+        if (!htmlCodeBox) return;
+
+        htmlCodeBox.addEventListener("input", () => {
+            runLiveCode();
+        });
+
+        cssCodeBox.addEventListener("input", () => {
+            runLiveCode();
+        });
+
+        jsCodeBox.addEventListener("input", () => {
+            runLiveCode();
+        });
+
+        document
+            .getElementById("sb-run-code")
+            ?.addEventListener("click", runLiveCode);
+
+        document
+            .getElementById("sb-close-code")
+            ?.addEventListener("click", () => {
+
+                codingPanel.style.display = "none";
+
+                if (codingToggleButton) {
+                    codingToggleButton.classList.remove("active");
+                }
+
+            });
+
+        document
+            .getElementById("sb-copy-code")
+            ?.addEventListener("click", copyAllCode);
+    }
+
+    /*==================================================
+    FEATURE: LIVE CODE EXECUTION
+    ==================================================*/
+
+    function runLiveCode() {
+
+        if (!codingPreviewFrame) return;
+
+        const html = htmlCodeBox.value || "";
+        const css = cssCodeBox.value || "";
+        const js = jsCodeBox.value || "";
+
+        const finalDocument = `
+<!DOCTYPE html>
+<html>
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+content="width=device-width,initial-scale=1.0">
+
+<style>
+
+${css}
+
+</style>
+
+</head>
+
+<body>
+
+${html}
+
+<script>
+
+try{
+
+${js}
+
+}catch(error){
+
+console.error(error);
+
+}
+
+<\/script>
+
+</body>
+</html>
+        `;
+
+        codingPreviewFrame.srcdoc = finalDocument;
+
+        const status =
+            document.getElementById("sb-preview-status");
+
+        if (status) {
+            status.textContent = "● Live";
+            status.style.color = "#4ade80";
+        }
+    }
+
+    /*==================================================
+    FEATURE: CANVAS → CODE
+    ==================================================*/
+
+    function syncCanvasToCode() {
+
+        if (!htmlCodeBox) return;
+
+        const elements =
+            canvas.querySelectorAll(".canvas-element");
+
+        let html = "";
+
+        elements.forEach(el => {
+
+            const clone = el.cloneNode(true);
+
+            clone.classList.remove("selected");
+
+            html += clone.outerHTML + "\n";
+
+        });
+
+        htmlCodeBox.value = html;
+
+        /*
+        Existing inline styles already contain
+        the visual CSS created by Drag & Drop.
+        */
+
+        cssCodeBox.value = `/* SmartBazaar Pro Generated CSS */
+
+.canvas-element{
+    box-sizing:border-box;
+}
+
+.canvas-img-box{
+    max-width:100%;
+    display:block;
+}
+
+.canvas-video-box{
+    max-width:100%;
+}
+`;
+
+        runLiveCode();
+    }
+
+    /*==================================================
+    FEATURE: CODE → CANVAS
+    ==================================================*/
+
+    function applyCodeToCanvas() {
+
+        if (!htmlCodeBox) return;
+
+        const html = htmlCodeBox.value.trim();
+
+        if (!html) return;
+
+        canvas.innerHTML = "";
+
+        const wrapper = document.createElement("div");
+
+        wrapper.innerHTML = html;
+
+        while (wrapper.firstChild) {
+
+            canvas.appendChild(
+                wrapper.firstChild
+            );
+
+        }
+
+        bindCanvasElements();
+
+        updateLayers();
+
+        saveState();
+    }
+
+    /*==================================================
+    FEATURE: COPY CODE
+    ==================================================*/
+
+    function copyAllCode() {
+
+        const combinedCode = `
+
+<!-- HTML -->
+
+${htmlCodeBox.value}
+
+<style>
+
+/* CSS */
+
+${cssCodeBox.value}
+
+</style>
+
+<script>
+
+/* JavaScript */
+
+${jsCodeBox.value}
+
+<\/script>
+
+`;
+
+        navigator.clipboard
+            ?.writeText(combinedCode)
+            .then(() => {
+
+                const btn =
+                    document.getElementById("sb-copy-code");
+
+                if (btn) {
+
+                    const oldText = btn.textContent;
+
+                    btn.textContent = "✓ Copied";
+
+                    setTimeout(() => {
+                        btn.textContent = oldText;
+                    }, 1500);
+
+                }
+
+            })
+            .catch(() => {
+
+                alert("Copy failed. Please copy manually.");
+
+            });
+    }
+
+    /*==================================================
+    FEATURE: HISTORY SYSTEM
     ==================================================*/
 
     function saveState() {
 
-        const state = {
-
-            canvasHTML: canvas.innerHTML,
-
-            htmlCode: htmlEditor
-                ? htmlEditor.value
-                : "",
-
-            cssCode: cssEditor
-                ? cssEditor.value
-                : "",
-
-            jsCode: jsEditor
-                ? jsEditor.value
-                : "",
-
-            title: projectTitleInput.value
-
-        };
-
-        if (
-            historyIndex <
-            historyStack.length - 1
-        ) {
+        if (historyIndex < historyStack.length - 1) {
 
             historyStack =
                 historyStack.slice(
@@ -115,76 +696,29 @@ document.addEventListener("DOMContentLoaded", () => {
 
         }
 
-        historyStack.push(
-            JSON.stringify(state)
-        );
+        historyStack.push(canvas.innerHTML);
 
         historyIndex++;
 
         if (historyStack.length > 50) {
 
             historyStack.shift();
+
             historyIndex--;
 
         }
-
     }
 
+    function restoreState(html) {
 
-    function restoreState(stateString) {
+        canvas.innerHTML = html;
 
-        try {
+        bindCanvasElements();
 
-            const state =
-                JSON.parse(stateString);
+        updateLayers();
 
-            canvas.innerHTML =
-                state.canvasHTML || "";
-
-            if (htmlEditor) {
-                htmlEditor.value =
-                    state.htmlCode || "";
-            }
-
-            if (cssEditor) {
-                cssEditor.value =
-                    state.cssCode || "";
-            }
-
-            if (jsEditor) {
-                jsEditor.value =
-                    state.jsCode || "";
-            }
-
-            projectTitleInput.value =
-                state.title ||
-                "My_Awesome_Page";
-
-            bindCanvasElements();
-
-            updateLayers();
-
-            updatePlaceholder();
-
-            updateCharacterCount();
-
-            updateCodingPreview();
-
-        } catch (error) {
-
-            console.error(
-                "Restore Error:",
-                error
-            );
-
-        }
-
+        selectedElement = null;
     }
-
-
-    /*==================================================
-    UNDO
-    ==================================================*/
 
     document
         .getElementById("btn-undo")
@@ -195,19 +729,12 @@ document.addEventListener("DOMContentLoaded", () => {
                 historyIndex--;
 
                 restoreState(
-                    historyStack[
-                        historyIndex
-                    ]
+                    historyStack[historyIndex]
                 );
 
             }
 
         });
-
-
-    /*==================================================
-    REDO
-    ==================================================*/
 
     document
         .getElementById("btn-redo")
@@ -221,108 +748,102 @@ document.addEventListener("DOMContentLoaded", () => {
                 historyIndex++;
 
                 restoreState(
-                    historyStack[
-                        historyIndex
-                    ]
+                    historyStack[historyIndex]
                 );
 
             }
 
         });
 
-
     /*==================================================
-    SIDEBAR SYSTEM
+    FEATURE: SIDEBAR CONTROL
     ==================================================*/
 
     document
         .getElementById("close-left-sidebar")
-        ?.addEventListener(
-            "click",
-            () => {
+        ?.addEventListener("click", () => {
 
-                leftSidebar
-                    ?.classList
-                    .add("hidden");
+            leftSidebar?.classList.add("hidden");
 
-            }
-        );
-
+        });
 
     document
         .getElementById("close-right-sidebar")
-        ?.addEventListener(
-            "click",
-            () => {
+        ?.addEventListener("click", () => {
 
-                rightSidebar
-                    ?.classList
-                    .add("hidden");
+            rightSidebar?.classList.add("hidden");
 
-            }
-        );
-
+        });
 
     document
         .getElementById("btn-add-block")
-        ?.addEventListener(
-            "click",
-            () => {
+        ?.addEventListener("click", () => {
 
-                leftSidebar
-                    ?.classList
-                    .toggle("hidden");
+            leftSidebar?.classList.toggle("hidden");
 
-            }
-        );
-
+        });
 
     /*==================================================
-    CANVAS CLICK
+    FEATURE: TAB SYSTEM
     ==================================================*/
 
-    canvas.addEventListener(
-        "click",
-        (event) => {
+    document
+        .querySelectorAll(".sidebar")
+        .forEach(sidebar => {
 
-            const element =
-                event.target.closest(
-                    ".canvas-element"
-                );
+            const buttons =
+                sidebar.querySelectorAll(".sub-tab-btn");
 
-            if (element) {
+            buttons.forEach(button => {
 
-                event.stopPropagation();
+                button.addEventListener("click", () => {
 
-                selectElement(element);
+                    buttons.forEach(b =>
+                        b.classList.remove("active")
+                    );
 
-                rightSidebar
-                    ?.classList
-                    .remove("hidden");
+                    button.classList.add("active");
 
-            } else {
+                    const target =
+                        button.getAttribute("data-target");
 
-                document
-                    .querySelectorAll(
-                        ".canvas-element"
-                    )
-                    .forEach(el => {
+                    sidebar
+                        .querySelectorAll(".tab-pane")
+                        .forEach(pane =>
+                            pane.classList.remove("active")
+                        );
 
-                        el.classList
-                            .remove("selected");
+                    sidebar
+                        .querySelector(`#${target}`)
+                        ?.classList.add("active");
 
-                    });
+                });
 
-                selectedElement = null;
+            });
 
-            }
-
-        }
-    );
-
+        });
 
     /*==================================================
-    DRAG START
+    FEATURE: ACCORDION
+    ==================================================*/
+
+    document
+        .querySelectorAll(".accordion-header")
+        .forEach(header => {
+
+            header.addEventListener("click", () => {
+
+                header
+                    .parentElement
+                    .classList
+                    .toggle("open");
+
+            });
+
+        });
+
+    /*==================================================
+    FEATURE: DRAG & DROP
     ==================================================*/
 
     document
@@ -333,72 +854,66 @@ document.addEventListener("DOMContentLoaded", () => {
 
             item.addEventListener(
                 "dragstart",
-                event => {
+                e => {
 
                     draggedType =
-                        item.getAttribute(
-                            "data-type"
-                        );
+                        item.getAttribute("data-type");
 
                     draggedPattern =
-                        item.getAttribute(
-                            "data-pattern"
-                        );
+                        item.getAttribute("data-pattern");
 
-                    event.dataTransfer
-                        .setData(
-                            "text/plain",
-                            draggedType ||
-                            draggedPattern ||
-                            ""
-                        );
+                    e.dataTransfer.setData(
+                        "text/plain",
+                        draggedType ||
+                        draggedPattern ||
+                        ""
+                    );
 
                 }
             );
 
         });
 
-
-    /*==================================================
-    CANVAS DRAG OVER
-    ==================================================*/
-
     canvas.addEventListener(
         "dragover",
-        event => {
+        e => {
 
-            event.preventDefault();
+            e.preventDefault();
 
-            canvas.classList
-                .add("drag-over");
+            canvas.classList.add("drag-over");
 
         }
     );
-
 
     canvas.addEventListener(
         "dragleave",
         () => {
 
-            canvas.classList
-                .remove("drag-over");
+            canvas.classList.remove(
+                "drag-over"
+            );
 
         }
     );
 
-
-    /*==================================================
-    CANVAS DROP
-    ==================================================*/
-
     canvas.addEventListener(
         "drop",
-        event => {
+        e => {
 
-            event.preventDefault();
+            e.preventDefault();
 
-            canvas.classList
-                .remove("drag-over");
+            canvas.classList.remove(
+                "drag-over"
+            );
+
+            const placeholder =
+                canvas.querySelector(
+                    ".placeholder-text"
+                );
+
+            if (placeholder) {
+                placeholder.style.display = "none";
+            }
 
             if (draggedPattern) {
 
@@ -406,161 +921,174 @@ document.addEventListener("DOMContentLoaded", () => {
                     draggedPattern
                 );
 
+                draggedPattern = null;
+
             } else if (draggedType) {
 
                 createElementByType(
                     draggedType
                 );
 
+                draggedType = null;
+
             }
 
-            draggedType = null;
-            draggedPattern = null;
-
-            rightSidebar
-                ?.classList
-                .remove("hidden");
-
-            updatePlaceholder();
-
-            generateCodeFromCanvas();
+            rightSidebar?.classList.remove(
+                "hidden"
+            );
 
             saveState();
+
+            syncCanvasToCode();
 
         }
     );
 
-
     /*==================================================
-    SIDEBAR TABS
+    FEATURE: CLICK TO CREATE
     ==================================================*/
 
     document
-        .querySelectorAll(".sidebar")
-        .forEach(sidebar => {
+        .querySelectorAll(".draggable-item")
+        .forEach(item => {
 
-            const tabs =
-                sidebar.querySelectorAll(
-                    ".sub-tab-btn"
+            item.addEventListener("click", () => {
+
+                const type =
+                    item.getAttribute("data-type");
+
+                hidePlaceholder();
+
+                createElementByType(type);
+
+                rightSidebar?.classList.remove(
+                    "hidden"
                 );
 
-            tabs.forEach(button => {
+                saveState();
 
-                button.addEventListener(
-                    "click",
-                    () => {
-
-                        tabs.forEach(btn => {
-
-                            btn.classList
-                                .remove("active");
-
-                        });
-
-                        button.classList
-                            .add("active");
-
-                        const target =
-                            button.getAttribute(
-                                "data-target"
-                            );
-
-                        sidebar
-                            .querySelectorAll(
-                                ".tab-pane"
-                            )
-                            .forEach(pane => {
-
-                                pane.classList
-                                    .remove("active");
-
-                            });
-
-                        sidebar
-                            .querySelector(
-                                "#" + target
-                            )
-                            ?.classList
-                            .add("active");
-
-                    }
-                );
+                syncCanvasToCode();
 
             });
 
         });
 
-
-    /*==================================================
-    ACCORDIONS
-    ==================================================*/
-
     document
-        .querySelectorAll(
-            ".accordion-header"
-        )
-        .forEach(header => {
+        .querySelectorAll(".pattern-item")
+        .forEach(item => {
 
-            header.addEventListener(
-                "click",
-                () => {
+            item.addEventListener("click", () => {
 
-                    header.parentElement
-                        .classList
-                        .toggle("open");
+                const pattern =
+                    item.getAttribute("data-pattern");
 
-                }
-            );
+                hidePlaceholder();
+
+                createPattern(pattern);
+
+                rightSidebar?.classList.remove(
+                    "hidden"
+                );
+
+                saveState();
+
+                syncCanvasToCode();
+
+            });
 
         });
 
+    function hidePlaceholder() {
 
-    /*==================================================
-    ELEMENT SEARCH
-    ==================================================*/
+        const ph =
+            canvas.querySelector(
+                ".placeholder-text"
+            );
 
-    const elementSearch =
-        document.getElementById(
-            "element-search"
-        );
-
-    elementSearch?.addEventListener(
-        "input",
-        () => {
-
-            const query =
-                elementSearch.value
-                    .toLowerCase()
-                    .trim();
-
-            document
-                .querySelectorAll(
-                    ".draggable-item, .pattern-item"
-                )
-                .forEach(item => {
-
-                    const text =
-                        item.textContent
-                            .toLowerCase();
-
-                    item.style.display =
-                        text.includes(query)
-                            ? ""
-                            : "none";
-
-                });
-
+        if (ph) {
+            ph.style.display = "none";
         }
-    );
-
+    }
 
     /*==================================================
-    CREATE ELEMENT BY TYPE
+    FEATURE: ELEMENT CREATION
     ==================================================*/
 
     function createElementByType(type) {
 
-        if (type === "image") {
+        if (type === "heading") {
+
+            createElement(
+                "heading",
+                "Sample Heading",
+                "",
+                "",
+                "#27272a",
+                "#ffffff",
+                "26",
+                "12",
+                "6",
+                "100%",
+                "auto",
+                "none",
+                "1",
+                "#3f3f46",
+                "6",
+                "none",
+                "left"
+            );
+
+        }
+
+        else if (type === "paragraph") {
+
+            createElement(
+                "paragraph",
+                "Sample paragraph text",
+                "",
+                "",
+                "#27272a",
+                "#ffffff",
+                "16",
+                "12",
+                "6",
+                "100%",
+                "auto",
+                "none",
+                "1",
+                "#3f3f46",
+                "6",
+                "none",
+                "left"
+            );
+
+        }
+
+        else if (type === "button") {
+
+            createElement(
+                "button",
+                "Click Me",
+                "",
+                "",
+                "#2563eb",
+                "#ffffff",
+                "14",
+                "12",
+                "6",
+                "auto",
+                "auto",
+                "none",
+                "1",
+                "#3f3f46",
+                "6",
+                "none",
+                "center"
+            );
+
+        }
+
+        else if (type === "image") {
 
             createElement(
                 "image",
@@ -569,15 +1097,15 @@ document.addEventListener("DOMContentLoaded", () => {
                 "",
                 "#1e1e24",
                 "#ffffff",
-                16,
-                12,
-                6,
+                "16",
+                "12",
+                "6",
                 "100%",
                 "auto",
                 "solid",
-                1,
+                "1",
                 "#3f3f46",
-                6,
+                "6",
                 "none",
                 "left"
             );
@@ -588,20 +1116,20 @@ document.addEventListener("DOMContentLoaded", () => {
 
             createElement(
                 "video",
-                "",
+                "https://www.youtube.com/embed/dQw4w9WgXcQ",
                 "",
                 "",
                 "#14161b",
                 "#ffffff",
-                16,
-                12,
-                6,
+                "16",
+                "12",
+                "6",
                 "100%",
                 "auto",
                 "solid",
-                1,
+                "1",
                 "#3f3f46",
-                6,
+                "6",
                 "none",
                 "left"
             );
@@ -617,15 +1145,15 @@ document.addEventListener("DOMContentLoaded", () => {
                 "",
                 "#27272a",
                 "#38bdf8",
-                28,
-                12,
-                6,
+                "28",
+                "12",
+                "6",
                 "auto",
                 "auto",
                 "none",
-                1,
+                "1",
                 "#3f3f46",
-                6,
+                "6",
                 "none",
                 "center"
             );
@@ -641,16 +1169,16 @@ document.addEventListener("DOMContentLoaded", () => {
                 "",
                 "#252833",
                 "#ffffff",
-                16,
-                16,
-                8,
+                "16",
+                "16",
+                "8",
                 "100%",
                 "120px",
                 "dashed",
-                1,
+                "1",
                 "#38bdf8",
-                8,
-                "0 4px 6px rgba(0,0,0,0.3)",
+                "8",
+                "none",
                 "left",
                 "flex",
                 "row"
@@ -667,47 +1195,18 @@ document.addEventListener("DOMContentLoaded", () => {
                 "",
                 "#252833",
                 "#ffffff",
-                16,
-                16,
-                8,
+                "16",
+                "16",
+                "8",
                 "100%",
                 "120px",
                 "solid",
-                1,
+                "1",
                 "#2563eb",
-                8,
-                "0 4px 6px rgba(0,0,0,0.3)",
+                "8",
+                "none",
                 "left",
                 "grid"
-            );
-
-        }
-
-        else if (
-            type === "container" ||
-            type === "card"
-        ) {
-
-            createElement(
-                type,
-                "Sample " +
-                type.toUpperCase() +
-                " Box",
-                "",
-                "",
-                "#27272a",
-                "#ffffff",
-                16,
-                16,
-                6,
-                "100%",
-                "100px",
-                "solid",
-                1,
-                "#38bdf8",
-                8,
-                "0 4px 6px rgba(0,0,0,0.3)",
-                "left"
             );
 
         }
@@ -716,258 +1215,15 @@ document.addEventListener("DOMContentLoaded", () => {
 
             createElement(
                 type,
-                "Sample " +
-                type.toUpperCase() +
-                " Text",
-                "",
-                "",
-                "#27272a",
-                "#ffffff",
-                16,
-                12,
-                6,
-                "100%",
-                "auto",
-                "none",
-                1,
-                "#3f3f46",
-                6,
-                "none",
-                "left"
+                `Sample ${String(type).toUpperCase()} Box`
             );
 
         }
 
     }
 
-
     /*==================================================
-    CREATE PATTERNS
-    ==================================================*/
-
-    function createPattern(type) {
-
-        if (type === "hero") {
-
-            createElement(
-                "heading",
-                "Build Your Dream Website Today",
-                "",
-                "",
-                "#1e1e24",
-                "#38bdf8",
-                26,
-                14,
-                6,
-                "100%",
-                "auto",
-                "none",
-                1,
-                "#3f3f46",
-                6,
-                "none",
-                "center"
-            );
-
-            createElement(
-                "paragraph",
-                "The ultimate live website builder with responsive grids and elements.",
-                "",
-                "",
-                "#1e1e24",
-                "#f1f5f9",
-                14,
-                10,
-                4,
-                "100%",
-                "auto",
-                "none",
-                1,
-                "#3f3f46",
-                6,
-                "none",
-                "center"
-            );
-
-            createElement(
-                "button",
-                "Get Started Now",
-                "",
-                "",
-                "#2563eb",
-                "#ffffff",
-                14,
-                12,
-                6,
-                "100%",
-                "auto",
-                "none",
-                1,
-                "#3f3f46",
-                6,
-                "0 4px 10px rgba(37,99,235,0.4)",
-                "center"
-            );
-
-        }
-
-        else if (type === "image-box") {
-
-            createElement(
-                "image",
-                "",
-                "",
-                "",
-                "#181b22",
-                "#ffffff",
-                16,
-                10,
-                6,
-                "100%",
-                "180px",
-                "solid",
-                1,
-                "#38bdf8",
-                8,
-                "0 6px 12px rgba(0,0,0,0.4)",
-                "left"
-            );
-
-            createElement(
-                "heading",
-                "Professional Web Development",
-                "",
-                "",
-                "#181b22",
-                "#ffffff",
-                18,
-                8,
-                4,
-                "100%",
-                "auto",
-                "none",
-                1,
-                "#3f3f46",
-                4,
-                "none",
-                "left"
-            );
-
-        }
-
-        else if (type === "pricing") {
-
-            createElement(
-                "heading",
-                "Pro Plan - $29/mo",
-                "",
-                "",
-                "#181b22",
-                "#ffffff",
-                20,
-                12,
-                6,
-                "100%",
-                "auto",
-                "solid",
-                1,
-                "#2563eb",
-                8,
-                "0 8px 16px rgba(0,0,0,0.4)",
-                "center"
-            );
-
-            createElement(
-                "paragraph",
-                "Includes unlimited blocks, custom CSS dimensions, and instant export.",
-                "",
-                "",
-                "#181b22",
-                "#94a3b8",
-                14,
-                8,
-                4,
-                "100%",
-                "auto",
-                "none",
-                1,
-                "#2d3748",
-                6,
-                "none",
-                "center"
-            );
-
-            createElement(
-                "button",
-                "Choose Plan",
-                "",
-                "",
-                "#10b981",
-                "#ffffff",
-                14,
-                10,
-                6,
-                "100%",
-                "auto",
-                "none",
-                1,
-                "#3f3f46",
-                6,
-                "none",
-                "center"
-            );
-
-        }
-
-        else if (type === "testimonial") {
-
-            createElement(
-                "paragraph",
-                '"This builder completely changed how fast I launch client sites. Absolutely incredible!"',
-                "",
-                "",
-                "#252833",
-                "#e2e8f0",
-                14,
-                14,
-                6,
-                "100%",
-                "auto",
-                "dashed",
-                1,
-                "#38bdf8",
-                8,
-                "0 4px 12px rgba(0,0,0,0.3)",
-                "left"
-            );
-
-            createElement(
-                "heading",
-                "- Alex Johnson, Developer",
-                "",
-                "",
-                "#252833",
-                "#38bdf8",
-                12,
-                6,
-                4,
-                "100%",
-                "auto",
-                "none",
-                1,
-                "#3f3f46",
-                4,
-                "none",
-                "left"
-            );
-
-        }
-
-    }
-
-
-    /*==================================================
-    CREATE ELEMENT
+    FEATURE: CREATE ELEMENT
     ==================================================*/
 
     function createElement(
@@ -977,19 +1233,19 @@ document.addEventListener("DOMContentLoaded", () => {
         videoSrc = "",
         bgColor = "#27272a",
         color = "#ffffff",
-        fontSize = 16,
-        padding = 12,
-        margin = 6,
+        fontSize = "16",
+        padding = "12",
+        margin = "6",
         width = "100%",
         height = "auto",
-        borderStyle = "none",
-        borderWidth = 1,
-        borderColor = "#3f3f46",
-        radius = 6,
+        bStyle = "none",
+        bWidth = "1",
+        bColor = "#3f3f46",
+        radius = "6",
         shadow = "none",
         align = "left",
         displayMode = "block",
-        flexDirection = "row"
+        flexDir = "row"
     ) {
 
         elementCounter++;
@@ -997,31 +1253,31 @@ document.addEventListener("DOMContentLoaded", () => {
         const el =
             document.createElement("div");
 
-        el.className =
-            "canvas-element";
+        el.className = "canvas-element";
 
         el.id =
-            "el-" + elementCounter;
+            `el-${elementCounter}`;
 
         el.setAttribute(
             "data-type",
             type
         );
 
-
         if (type === "image") {
 
-            const box =
+            const placeholderBox =
                 document.createElement("div");
 
-            box.className =
+            placeholderBox.className =
                 "empty-img-placeholder";
 
-            box.innerHTML =
-                "<span>🖼 No Image Selected</span>" +
-                "<small>Paste image URL in right panel</small>";
+            placeholderBox.innerHTML =
+                `<span>🖼 No Image Selected</span>
+                 <small>Paste image URL in right panel</small>`;
 
-            el.appendChild(box);
+            el.appendChild(
+                placeholderBox
+            );
 
         }
 
@@ -1033,8 +1289,7 @@ document.addEventListener("DOMContentLoaded", () => {
             iframe.className =
                 "canvas-video-box";
 
-            iframe.src =
-                videoSrc || text || "";
+            iframe.src = text;
 
             iframe.setAttribute(
                 "allowfullscreen",
@@ -1045,15 +1300,42 @@ document.addEventListener("DOMContentLoaded", () => {
 
         }
 
-        else {
+        else if (type === "button") {
 
-            el.textContent =
+            const button =
+                document.createElement("button");
+
+            button.type = "button";
+
+            button.textContent =
                 text;
+
+            button.style.background =
+                "transparent";
+
+            button.style.border =
+                "none";
+
+            button.style.color =
+                "inherit";
+
+            button.style.fontSize =
+                "inherit";
+
+            button.style.cursor =
+                "pointer";
+
+            el.appendChild(button);
 
         }
 
+        else {
 
-        applyStylesToElement(
+            el.textContent = text;
+
+        }
+
+        applyStyles(
             el,
             {
                 bgColor,
@@ -1063,41 +1345,46 @@ document.addEventListener("DOMContentLoaded", () => {
                 margin,
                 width,
                 height,
-                borderStyle,
-                borderWidth,
-                borderColor,
+                bStyle,
+                bWidth,
+                bColor,
                 radius,
                 shadow,
                 align,
                 displayMode,
-                flexDirection
+                flexDir
             }
         );
 
+        el.addEventListener(
+            "click",
+            e => {
 
-        bindElementClick(el);
+                e.stopPropagation();
+
+                selectElement(el);
+
+                rightSidebar?.classList.remove(
+                    "hidden"
+                );
+
+            }
+        );
 
         canvas.appendChild(el);
 
         updateLayers();
 
-        updatePlaceholder();
-
         selectElement(el);
 
-        generateCodeFromCanvas();
-
+        return el;
     }
 
-
     /*==================================================
-    APPLY STYLES
+    FEATURE: APPLY STYLES
     ==================================================*/
 
-    function applyStylesToElement(
-        el,
-        styles
-    ) {
+    function applyStyles(el, styles) {
 
         el.style.backgroundColor =
             styles.bgColor;
@@ -1121,13 +1408,13 @@ document.addEventListener("DOMContentLoaded", () => {
             styles.height;
 
         el.style.borderStyle =
-            styles.borderStyle;
+            styles.bStyle;
 
         el.style.borderWidth =
-            styles.borderWidth + "px";
+            styles.bWidth + "px";
 
         el.style.borderColor =
-            styles.borderColor;
+            styles.bColor;
 
         el.style.borderRadius =
             styles.radius + "px";
@@ -1141,16 +1428,26 @@ document.addEventListener("DOMContentLoaded", () => {
         el.style.display =
             styles.displayMode;
 
-
         if (
             styles.displayMode === "flex"
         ) {
 
             el.style.flexDirection =
-                styles.flexDirection;
+                styles.flexDir;
 
         }
 
+        if (
+            styles.displayMode === "grid"
+        ) {
+
+            el.style.gridTemplateColumns =
+                "1fr 1fr";
+
+            el.style.gap =
+                "10px";
+
+        }
 
         if (styles.align === "center") {
 
@@ -1174,85 +1471,177 @@ document.addEventListener("DOMContentLoaded", () => {
 
         }
 
-        else {
+    }
 
-            el.style.marginLeft =
-                "0";
+    /*==================================================
+    FEATURE: PATTERNS
+    ==================================================*/
 
-            el.style.marginRight =
-                "0";
+    function createPattern(type) {
+
+        if (type === "hero") {
+
+            createElement(
+                "heading",
+                "Build Your Dream Website Today",
+                "",
+                "",
+                "#1e1e24",
+                "#38bdf8",
+                "26",
+                "14",
+                "6",
+                "100%",
+                "auto",
+                "none",
+                "1",
+                "#3f3f46",
+                "6",
+                "none",
+                "center"
+            );
+
+            createElement(
+                "paragraph",
+                "The ultimate live website builder.",
+                "",
+                "",
+                "#1e1e24",
+                "#f1f5f9",
+                "14",
+                "10",
+                "4",
+                "100%",
+                "auto",
+                "none",
+                "1",
+                "#3f3f46",
+                "6",
+                "none",
+                "center"
+            );
+
+            createElement(
+                "button",
+                "Get Started Now",
+                "",
+                "",
+                "#2563eb",
+                "#ffffff",
+                "14",
+                "12",
+                "6",
+                "auto",
+                "auto",
+                "none",
+                "1",
+                "#3f3f46",
+                "6",
+                "none",
+                "center"
+            );
+
+        }
+
+        else if (type === "image-box") {
+
+            createElement(
+                "image"
+            );
+
+            createElement(
+                "heading",
+                "Professional Web Development"
+            );
+
+        }
+
+        else if (type === "pricing") {
+
+            createElement(
+                "heading",
+                "Pro Plan - $29/mo",
+                "",
+                "",
+                "#181b22",
+                "#ffffff",
+                "20",
+                "12",
+                "6",
+                "100%",
+                "auto",
+                "solid",
+                "1",
+                "#2563eb",
+                "8",
+                "none",
+                "center"
+            );
+
+            createElement(
+                "paragraph",
+                "Unlimited blocks and instant export."
+            );
+
+            createElement(
+                "button",
+                "Choose Plan",
+                "",
+                "",
+                "#10b981",
+                "#ffffff",
+                "14",
+                "10",
+                "6",
+                "100%",
+                "auto",
+                "none",
+                "1",
+                "#3f3f46",
+                "6",
+                "none",
+                "center"
+            );
+
+        }
+
+        else if (type === "testimonial") {
+
+            createElement(
+                "paragraph",
+                `"This builder completely changed how fast I launch client sites!"`
+            );
+
+            createElement(
+                "heading",
+                "- Alex Johnson, Developer"
+            );
 
         }
 
     }
 
-
     /*==================================================
-    BIND ELEMENT CLICK
-    ==================================================*/
-
-    function bindElementClick(el) {
-
-        el.addEventListener(
-            "click",
-            event => {
-
-                event.stopPropagation();
-
-                selectElement(el);
-
-                rightSidebar
-                    ?.classList
-                    .remove("hidden");
-
-            }
-        );
-
-    }
-
-
-    /*==================================================
-    REBIND AFTER UNDO / REDO
-    ==================================================*/
-
-    function bindCanvasElements() {
-
-        canvas
-            .querySelectorAll(
-                ".canvas-element"
-            )
-            .forEach(el => {
-
-                bindElementClick(el);
-
-            });
-
-    }
-
-
-    /*==================================================
-    SELECT ELEMENT
+    FEATURE: SELECT ELEMENT
     ==================================================*/
 
     function selectElement(el) {
 
         document
-            .querySelectorAll(
-                ".canvas-element"
-            )
-            .forEach(item => {
-
-                item.classList
-                    .remove("selected");
-
-            });
+            .querySelectorAll(".canvas-element")
+            .forEach(item =>
+                item.classList.remove(
+                    "selected"
+                )
+            );
 
         selectedElement = el;
 
-        if (el) {
+        if (selectedElement) {
 
-            el.classList
-                .add("selected");
+            selectedElement.classList.add(
+                "selected"
+            );
 
             syncPropsToForm();
 
@@ -1260,40 +1649,48 @@ document.addEventListener("DOMContentLoaded", () => {
 
     }
 
-
     /*==================================================
-    UPDATE PLACEHOLDER
+    FEATURE: REBIND ELEMENTS
     ==================================================*/
 
-    function updatePlaceholder() {
+    function bindCanvasElements() {
 
-        const placeholder =
-            canvas.querySelector(
-                ".placeholder-text"
-            );
+        canvas
+            .querySelectorAll(".canvas-element")
+            .forEach(el => {
 
-        const count =
-            canvas.querySelectorAll(
-                ".canvas-element"
-            ).length;
+                if (
+                    el.dataset.sbBound === "true"
+                ) return;
 
-        if (placeholder) {
+                el.dataset.sbBound = "true";
 
-            placeholder.style.display =
-                count === 0
-                    ? "block"
-                    : "none";
+                el.addEventListener(
+                    "click",
+                    e => {
 
-        }
+                        e.stopPropagation();
+
+                        selectElement(el);
+
+                        rightSidebar?.classList.remove(
+                            "hidden"
+                        );
+
+                    }
+                );
+
+            });
 
     }
 
-
     /*==================================================
-    UPDATE LAYERS
+    FEATURE: LAYERS
     ==================================================*/
 
     function updateLayers() {
+
+        if (!layersTreeView) return;
 
         const elements =
             canvas.querySelectorAll(
@@ -1303,63 +1700,65 @@ document.addEventListener("DOMContentLoaded", () => {
         if (elements.length === 0) {
 
             layersTreeView.innerHTML =
-                '<p class="no-layers">' +
-                "No layers added yet" +
-                "</p>";
+                `<p class="no-layers">
+                    No layers added yet
+                </p>`;
+
+            const ph =
+                canvas.querySelector(
+                    ".placeholder-text"
+                );
+
+            if (ph) {
+                ph.style.display = "block";
+            }
 
             return;
-
         }
 
-
         layersTreeView.innerHTML = "";
-
 
         elements.forEach(
             (el, index) => {
 
                 const layer =
-                    document.createElement(
-                        "div"
-                    );
+                    document.createElement("div");
 
                 layer.className =
                     "layer-item";
 
                 layer.textContent =
-                    `${index + 1}. ` +
-                    `${el.getAttribute(
-                        "data-type"
-                    ).toUpperCase()}`;
-
+                    `${index + 1}. ${
+                        el.getAttribute(
+                            "data-type"
+                        )?.toUpperCase() ||
+                        "ELEMENT"
+                    }`;
 
                 layer.addEventListener(
                     "click",
-                    event => {
-
-                        event.stopPropagation();
+                    () => {
 
                         selectElement(el);
 
-                        rightSidebar
-                            ?.classList
-                            .remove("hidden");
+                        rightSidebar?.classList.remove(
+                            "hidden"
+                        );
 
                     }
                 );
 
-
-                layersTreeView
-                    .appendChild(layer);
+                layersTreeView.appendChild(
+                    layer
+                );
 
             }
         );
 
     }
 
-
     /*==================================================
-    INSPECTOR ELEMENTS
+    FEATURE: INSPECTOR
     ==================================================*/
 
     const textInput =
@@ -1375,36 +1774,6 @@ document.addEventListener("DOMContentLoaded", () => {
     const videoInput =
         document.getElementById(
             "prop-video-input"
-        );
-
-    const groupTextContent =
-        document.getElementById(
-            "group-text-content"
-        );
-
-    const groupImageContent =
-        document.getElementById(
-            "group-image-content"
-        );
-
-    const groupVideoContent =
-        document.getElementById(
-            "group-video-content"
-        );
-
-    const displayModeInput =
-        document.getElementById(
-            "prop-display-mode"
-        );
-
-    const flexDirectionInput =
-        document.getElementById(
-            "prop-flex-direction"
-        );
-
-    const gridColumnsInput =
-        document.getElementById(
-            "prop-grid-columns"
         );
 
     const bgColorInput =
@@ -1462,17 +1831,42 @@ document.addEventListener("DOMContentLoaded", () => {
             "prop-border-radius"
         );
 
+    const displayModeInput =
+        document.getElementById(
+            "prop-display-mode"
+        );
 
-    /*==================================================
-    SYNC INSPECTOR
-    ==================================================*/
+    const flexDirectionInput =
+        document.getElementById(
+            "prop-flex-direction"
+        );
+
+    const gridColumnsInput =
+        document.getElementById(
+            "prop-grid-columns"
+        );
+
+    const groupTextContent =
+        document.getElementById(
+            "group-text-content"
+        );
+
+    const groupImageContent =
+        document.getElementById(
+            "group-image-content"
+        );
+
+    const groupVideoContent =
+        document.getElementById(
+            "group-video-content"
+        );
 
     function syncPropsToForm() {
 
         if (!selectedElement) return;
 
         const comp =
-            window.getComputedStyle(
+            getComputedStyle(
                 selectedElement
             );
 
@@ -1481,150 +1875,157 @@ document.addEventListener("DOMContentLoaded", () => {
                 "data-type"
             );
 
+        if (groupTextContent)
+            groupTextContent.style.display =
+                "none";
 
-        groupTextContent.style.display =
-            "none";
+        if (groupImageContent)
+            groupImageContent.style.display =
+                "none";
 
-        groupImageContent.style.display =
-            "none";
-
-        groupVideoContent.style.display =
-            "none";
-
+        if (groupVideoContent)
+            groupVideoContent.style.display =
+                "none";
 
         if (type === "image") {
 
-            groupImageContent.style.display =
-                "block";
+            if (groupImageContent)
+                groupImageContent.style.display =
+                    "block";
 
-            const image =
+            const img =
                 selectedElement.querySelector(
                     "img"
                 );
 
-            imageInput.value =
-                image ? image.src : "";
+            if (imageInput)
+                imageInput.value =
+                    img?.src || "";
 
         }
 
         else if (type === "video") {
 
-            groupVideoContent.style.display =
-                "block";
+            if (groupVideoContent)
+                groupVideoContent.style.display =
+                    "block";
 
             const iframe =
                 selectedElement.querySelector(
                     "iframe"
                 );
 
-            videoInput.value =
-                iframe ? iframe.src : "";
+            if (videoInput)
+                videoInput.value =
+                    iframe?.src || "";
 
         }
 
         else {
 
-            groupTextContent.style.display =
-                "block";
+            if (groupTextContent)
+                groupTextContent.style.display =
+                    "block";
 
-            textInput.value =
-                selectedElement.textContent;
+            if (textInput)
+                textInput.value =
+                    selectedElement.textContent;
 
         }
 
-
-        displayModeInput.value =
-            comp.display === "flex"
-                ? "flex"
-                : comp.display === "grid"
-                    ? "grid"
-                    : "block";
-
-
-        flexDirectionInput.value =
-            comp.flexDirection ||
-            "row";
-
-
-        bgColorInput.value =
-            rgbToHex(
-                comp.backgroundColor
-            );
-
-        textColorInput.value =
-            rgbToHex(
-                comp.color
-            );
-
-        fontSizeInput.value =
-            parseInt(
-                comp.fontSize
-            ) || 16;
-
-        widthInput.value =
-            comp.width || "100%";
-
-        heightInput.value =
-            comp.height || "auto";
-
-        paddingInput.value =
-            parseInt(
-                comp.paddingTop
-            ) || 12;
-
-        marginInput.value =
-            parseInt(
-                comp.marginTop
-            ) || 6;
-
-        borderStyleInput.value =
-            comp.borderTopStyle ||
-            "none";
-
-        borderWidthInput.value =
-            parseInt(
-                comp.borderTopWidth
-            ) || 1;
-
-        borderColorInput.value =
-            rgbToHex(
-                comp.borderTopColor
-            );
-
-        radiusInput.value =
-            parseInt(
-                comp.borderRadius
-            ) || 6;
-
-
-        document
-            .querySelectorAll(
-                ".align-btn"
-            )
-            .forEach(btn => {
-
-                btn.classList.toggle(
-                    "active",
-                    btn.getAttribute(
-                        "data-align"
-                    ) === comp.textAlign
+        if (bgColorInput)
+            bgColorInput.value =
+                rgbToHex(
+                    comp.backgroundColor
                 );
 
-            });
+        if (textColorInput)
+            textColorInput.value =
+                rgbToHex(
+                    comp.color
+                );
+
+        if (fontSizeInput)
+            fontSizeInput.value =
+                parseInt(comp.fontSize) || 16;
+
+        if (widthInput)
+            widthInput.value =
+                comp.width || "100%";
+
+        if (heightInput)
+            heightInput.value =
+                comp.height || "auto";
+
+        if (paddingInput)
+            paddingInput.value =
+                parseInt(
+                    comp.paddingTop
+                ) || 12;
+
+        if (marginInput)
+            marginInput.value =
+                parseInt(
+                    comp.marginTop
+                ) || 6;
+
+        if (borderStyleInput)
+            borderStyleInput.value =
+                comp.borderTopStyle ||
+                "none";
+
+        if (borderWidthInput)
+            borderWidthInput.value =
+                parseInt(
+                    comp.borderTopWidth
+                ) || 1;
+
+        if (borderColorInput)
+            borderColorInput.value =
+                rgbToHex(
+                    comp.borderTopColor
+                );
+
+        if (radiusInput)
+            radiusInput.value =
+                parseInt(
+                    comp.borderRadius
+                ) || 6;
+
+        if (displayModeInput)
+            displayModeInput.value =
+                ["flex", "grid"].includes(
+                    comp.display
+                )
+                    ? comp.display
+                    : "block";
+
+        if (flexDirectionInput)
+            flexDirectionInput.value =
+                comp.flexDirection ||
+                "row";
 
     }
 
-
     /*==================================================
-    INSPECTOR EVENTS
+    FEATURE: LIVE INSPECTOR CHANGES
     ==================================================*/
+
+    function afterInspectorChange() {
+
+        saveState();
+
+        updateLayers();
+
+        syncCanvasToCode();
+
+    }
 
     textInput?.addEventListener(
         "input",
-        event => {
+        e => {
 
-            if (!selectedElement)
-                return;
+            if (!selectedElement) return;
 
             const type =
                 selectedElement.getAttribute(
@@ -1632,34 +2033,23 @@ document.addEventListener("DOMContentLoaded", () => {
                 );
 
             if (
-                [
-                    "heading",
-                    "paragraph",
-                    "button",
-                    "container",
-                    "card",
-                    "flex",
-                    "grid",
-                    "icon"
-                ].includes(type)
+                type !== "image" &&
+                type !== "video"
             ) {
 
                 selectedElement.textContent =
-                    event.target.value;
+                    e.target.value;
 
-                updateLayers();
-
-                generateCodeFromCanvas();
+                afterInspectorChange();
 
             }
 
         }
     );
 
-
     imageInput?.addEventListener(
         "input",
-        event => {
+        e => {
 
             if (
                 !selectedElement ||
@@ -1668,11 +2058,10 @@ document.addEventListener("DOMContentLoaded", () => {
                 ) !== "image"
             ) return;
 
-            const url =
-                event.target.value.trim();
-
             selectedElement.innerHTML = "";
 
+            const url =
+                e.target.value.trim();
 
             if (url) {
 
@@ -1686,11 +2075,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
                 img.src = url;
 
-                selectedElement
-                    .appendChild(img);
+                selectedElement.appendChild(
+                    img
+                );
 
             }
-
             else {
 
                 const box =
@@ -1702,24 +2091,22 @@ document.addEventListener("DOMContentLoaded", () => {
                     "empty-img-placeholder";
 
                 box.innerHTML =
-                    "<span>🖼 No Image Selected</span>" +
-                    "<small>Paste image URL</small>";
+                    "🖼 No Image Selected";
 
-                selectedElement
-                    .appendChild(box);
+                selectedElement.appendChild(
+                    box
+                );
 
             }
 
-
-            generateCodeFromCanvas();
+            afterInspectorChange();
 
         }
     );
 
-
     videoInput?.addEventListener(
         "input",
-        event => {
+        e => {
 
             if (
                 !selectedElement ||
@@ -1728,11 +2115,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 ) !== "video"
             ) return;
 
-            const url =
-                event.target.value.trim();
-
             selectedElement.innerHTML = "";
-
 
             const iframe =
                 document.createElement(
@@ -1742,175 +2125,228 @@ document.addEventListener("DOMContentLoaded", () => {
             iframe.className =
                 "canvas-video-box";
 
-            iframe.src = url;
+            iframe.src =
+                e.target.value.trim();
 
             iframe.setAttribute(
                 "allowfullscreen",
                 ""
             );
 
-            selectedElement
-                .appendChild(iframe);
+            selectedElement.appendChild(
+                iframe
+            );
 
-            generateCodeFromCanvas();
+            afterInspectorChange();
 
         }
     );
 
+    bgColorInput?.addEventListener(
+        "input",
+        e => {
 
-    /*==================================================
-    STYLE INPUT HELPER
-    ==================================================*/
+            if (!selectedElement) return;
 
-    function styleInput(
-        input,
-        callback
-    ) {
+            selectedElement.style.backgroundColor =
+                e.target.value;
 
-        input?.addEventListener(
-            "input",
-            event => {
+            afterInspectorChange();
 
-                if (!selectedElement)
-                    return;
-
-                callback(
-                    event.target.value
-                );
-
-                generateCodeFromCanvas();
-
-            }
-        );
-
-    }
-
-
-    styleInput(
-        bgColorInput,
-        value => {
-            selectedElement.style
-                .backgroundColor =
-                value;
         }
     );
 
+    textColorInput?.addEventListener(
+        "input",
+        e => {
 
-    styleInput(
-        textColorInput,
-        value => {
-            selectedElement.style
-                .color =
-                value;
+            if (!selectedElement) return;
+
+            selectedElement.style.color =
+                e.target.value;
+
+            afterInspectorChange();
+
         }
     );
 
+    fontSizeInput?.addEventListener(
+        "input",
+        e => {
 
-    styleInput(
-        fontSizeInput,
-        value => {
-            selectedElement.style
-                .fontSize =
-                value + "px";
+            if (!selectedElement) return;
+
+            selectedElement.style.fontSize =
+                e.target.value + "px";
+
+            afterInspectorChange();
+
         }
     );
 
+    widthInput?.addEventListener(
+        "input",
+        e => {
 
-    styleInput(
-        widthInput,
-        value => {
-            selectedElement.style
-                .width =
-                value;
+            if (!selectedElement) return;
+
+            selectedElement.style.width =
+                e.target.value;
+
+            afterInspectorChange();
+
         }
     );
 
+    heightInput?.addEventListener(
+        "input",
+        e => {
 
-    styleInput(
-        heightInput,
-        value => {
-            selectedElement.style
-                .height =
-                value;
+            if (!selectedElement) return;
+
+            selectedElement.style.height =
+                e.target.value;
+
+            afterInspectorChange();
+
         }
     );
 
+    paddingInput?.addEventListener(
+        "input",
+        e => {
 
-    styleInput(
-        paddingInput,
-        value => {
-            selectedElement.style
-                .padding =
-                value + "px";
+            if (!selectedElement) return;
+
+            selectedElement.style.padding =
+                e.target.value + "px";
+
+            afterInspectorChange();
+
         }
     );
 
+    marginInput?.addEventListener(
+        "input",
+        e => {
 
-    styleInput(
-        marginInput,
-        value => {
-            selectedElement.style
-                .margin =
-                value + "px";
+            if (!selectedElement) return;
+
+            selectedElement.style.margin =
+                e.target.value + "px";
+
+            afterInspectorChange();
+
         }
     );
-
-
-    styleInput(
-        borderWidthInput,
-        value => {
-            selectedElement.style
-                .borderWidth =
-                value + "px";
-        }
-    );
-
-
-    styleInput(
-        borderColorInput,
-        value => {
-            selectedElement.style
-                .borderColor =
-                value;
-        }
-    );
-
-
-    styleInput(
-        radiusInput,
-        value => {
-            selectedElement.style
-                .borderRadius =
-                value + "px";
-        }
-    );
-
 
     borderStyleInput?.addEventListener(
         "change",
-        event => {
+        e => {
 
-            if (!selectedElement)
-                return;
+            if (!selectedElement) return;
 
-            selectedElement.style
-                .borderStyle =
-                event.target.value;
+            selectedElement.style.borderStyle =
+                e.target.value;
 
-            generateCodeFromCanvas();
+            afterInspectorChange();
 
         }
     );
 
+    borderWidthInput?.addEventListener(
+        "input",
+        e => {
+
+            if (!selectedElement) return;
+
+            selectedElement.style.borderWidth =
+                e.target.value + "px";
+
+            afterInspectorChange();
+
+        }
+    );
+
+    borderColorInput?.addEventListener(
+        "input",
+        e => {
+
+            if (!selectedElement) return;
+
+            selectedElement.style.borderColor =
+                e.target.value;
+
+            afterInspectorChange();
+
+        }
+    );
+
+    radiusInput?.addEventListener(
+        "input",
+        e => {
+
+            if (!selectedElement) return;
+
+            selectedElement.style.borderRadius =
+                e.target.value + "px";
+
+            afterInspectorChange();
+
+        }
+    );
+
+    displayModeInput?.addEventListener(
+        "change",
+        e => {
+
+            if (!selectedElement) return;
+
+            selectedElement.style.display =
+                e.target.value;
+
+            afterInspectorChange();
+
+        }
+    );
+
+    flexDirectionInput?.addEventListener(
+        "change",
+        e => {
+
+            if (!selectedElement) return;
+
+            selectedElement.style.flexDirection =
+                e.target.value;
+
+            afterInspectorChange();
+
+        }
+    );
+
+    gridColumnsInput?.addEventListener(
+        "change",
+        e => {
+
+            if (!selectedElement) return;
+
+            selectedElement.style.display =
+                "grid";
+
+            selectedElement.style.gridTemplateColumns =
+                e.target.value;
+
+            afterInspectorChange();
+
+        }
+    );
 
     /*==================================================
-    ALIGNMENT
+    FEATURE: ALIGNMENT
     ==================================================*/
 
     document
-        .querySelectorAll(
-            ".align-btn"
-        )
+        .querySelectorAll(".align-btn")
         .forEach(button => {
 
             button.addEventListener(
@@ -1925,103 +2361,69 @@ document.addEventListener("DOMContentLoaded", () => {
                             "data-align"
                         );
 
-
                     document
                         .querySelectorAll(
                             ".align-btn"
                         )
-                        .forEach(btn => {
-
-                            btn.classList
-                                .remove(
+                        .forEach(
+                            b =>
+                                b.classList.remove(
                                     "active"
-                                );
+                                )
+                        );
 
-                        });
+                    button.classList.add(
+                        "active"
+                    );
 
-
-                    button.classList
-                        .add("active");
-
-
-                    selectedElement.style
-                        .textAlign =
+                    selectedElement.style.textAlign =
                         align;
 
+                    if (align === "center") {
 
-                    generateCodeFromCanvas();
+                        selectedElement.style.marginLeft =
+                            "auto";
+
+                        selectedElement.style.marginRight =
+                            "auto";
+
+                    }
+
+                    else if (
+                        align === "right"
+                    ) {
+
+                        selectedElement.style.marginLeft =
+                            "auto";
+
+                        selectedElement.style.marginRight =
+                            "0";
+
+                    }
+
+                    else {
+
+                        selectedElement.style.marginLeft =
+                            "0";
+
+                        selectedElement.style.marginRight =
+                            "0";
+
+                    }
+
+                    afterInspectorChange();
 
                 }
             );
 
         });
 
-
     /*==================================================
-    DISPLAY MODE
-    ==================================================*/
-
-    displayModeInput?.addEventListener(
-        "change",
-        event => {
-
-            if (!selectedElement)
-                return;
-
-            selectedElement.style.display =
-                event.target.value;
-
-            generateCodeFromCanvas();
-
-        }
-    );
-
-
-    flexDirectionInput?.addEventListener(
-        "change",
-        event => {
-
-            if (!selectedElement)
-                return;
-
-            selectedElement.style
-                .flexDirection =
-                event.target.value;
-
-            generateCodeFromCanvas();
-
-        }
-    );
-
-
-    gridColumnsInput?.addEventListener(
-        "change",
-        event => {
-
-            if (!selectedElement)
-                return;
-
-            selectedElement.style.display =
-                "grid";
-
-            selectedElement.style
-                .gridTemplateColumns =
-                event.target.value;
-
-            generateCodeFromCanvas();
-
-        }
-    );
-
-
-    /*==================================================
-    DELETE ELEMENT
+    FEATURE: DELETE
     ==================================================*/
 
     document
-        .getElementById(
-            "btn-delete-el"
-        )
+        .getElementById("btn-delete-el")
         ?.addEventListener(
             "click",
             () => {
@@ -2033,9 +2435,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     );
 
                     return;
-
                 }
-
 
                 selectedElement.remove();
 
@@ -2043,26 +2443,23 @@ document.addEventListener("DOMContentLoaded", () => {
 
                 updateLayers();
 
-                updatePlaceholder();
+                rightSidebar?.classList.add(
+                    "hidden"
+                );
 
-                generateCodeFromCanvas();
+                saveState();
 
-                rightSidebar
-                    ?.classList
-                    .add("hidden");
+                syncCanvasToCode();
 
             }
         );
 
-
     /*==================================================
-    DUPLICATE ELEMENT
+    FEATURE: DUPLICATE
     ==================================================*/
 
     document
-        .getElementById(
-            "btn-duplicate-el"
-        )
+        .getElementById("btn-duplicate-el")
         ?.addEventListener(
             "click",
             () => {
@@ -2074,53 +2471,44 @@ document.addEventListener("DOMContentLoaded", () => {
                     );
 
                     return;
-
                 }
-
 
                 const clone =
                     selectedElement.cloneNode(
                         true
                     );
 
-
                 elementCounter++;
 
-
                 clone.id =
-                    "el-" +
-                    elementCounter;
+                    `el-${elementCounter}`;
 
+                clone.classList.remove(
+                    "selected"
+                );
 
-                clone.classList
-                    .remove(
-                        "selected"
-                    );
-
+                clone.dataset.sbBound =
+                    "false";
 
                 canvas.appendChild(
                     clone
                 );
 
-
-                bindElementClick(
-                    clone
-                );
+                bindCanvasElements();
 
                 updateLayers();
 
-                selectElement(
-                    clone
-                );
+                selectElement(clone);
 
-                generateCodeFromCanvas();
+                saveState();
+
+                syncCanvasToCode();
 
             }
         );
 
-
     /*==================================================
-    DEVICE SWITCHER
+    FEATURE: DEVICE SWITCHER
     ==================================================*/
 
     ["desktop", "tablet", "mobile"]
@@ -2128,246 +2516,170 @@ document.addEventListener("DOMContentLoaded", () => {
 
             document
                 .getElementById(
-                    "btn-" + mode
+                    `btn-${mode}`
                 )
                 ?.addEventListener(
                     "click",
-                    event => {
+                    e => {
 
                         document
                             .querySelectorAll(
                                 ".device-switcher button"
                             )
-                            .forEach(btn => {
-
-                                btn.classList
-                                    .remove(
+                            .forEach(
+                                b =>
+                                    b.classList.remove(
                                         "active"
-                                    );
+                                    )
+                            );
 
-                            });
-
-
-                        event.currentTarget
-                            .classList
-                            .add("active");
-
+                        e.currentTarget.classList.add(
+                            "active"
+                        );
 
                         canvas.className =
-                            "mode-" +
-                            mode;
+                            `mode-${mode}`;
 
                     }
                 );
 
         });
 
-
     /*==================================================
-    PREVIEW MODE
+    FEATURE: CANVAS CLICK
     ==================================================*/
 
-    const previewBtn =
-        document.getElementById(
-            "btn-preview"
-        );
+    canvas.addEventListener(
+        "click",
+        e => {
 
-    const floatingBackBtn =
-        document.getElementById(
-            "floating-back-btn"
-        );
-
-
-    function togglePreview() {
-
-        document.body
-            .classList
-            .toggle(
-                "preview-mode"
-            );
-
-
-        const active =
-            document.body
-                .classList
-                .contains(
-                    "preview-mode"
+            const target =
+                e.target.closest(
+                    ".canvas-element"
                 );
 
+            if (target) {
 
-        if (previewBtn) {
+                selectElement(target);
 
-            previewBtn.textContent =
-                active
-                    ? "❌ Exit Preview"
-                    : "👁 Preview";
-
-        }
-
-    }
-
-
-    previewBtn?.addEventListener(
-        "click",
-        togglePreview
-    );
-
-
-    floatingBackBtn?.addEventListener(
-        "click",
-        togglePreview
-    );
-
-
-    /*==================================================
-    BACK
-    ==================================================*/
-
-    document
-        .getElementById("btn-back")
-        ?.addEventListener(
-            "click",
-            () => {
-
-                window.history.back();
+                rightSidebar?.classList.remove(
+                    "hidden"
+                );
 
             }
-        );
 
+        }
+    );
 
     /*==================================================
-    SAVE PROJECT
+    FEATURE: SAVE
     ==================================================*/
 
     document
         .getElementById("btn-save")
         ?.addEventListener(
             "click",
-            saveProject
+            () => {
+
+                const data = {
+
+                    title:
+                        projectTitleInput?.value ||
+                        "My_Awesome_Page",
+
+                    html:
+                        canvas.innerHTML,
+
+                    codingHTML:
+                        htmlCodeBox?.value ||
+                        "",
+
+                    codingCSS:
+                        cssCodeBox?.value ||
+                        "",
+
+                    codingJS:
+                        jsCodeBox?.value ||
+                        "",
+
+                    savedAt:
+                        new Date().toISOString()
+
+                };
+
+                localStorage.setItem(
+                    "smartbazaar_page_project",
+                    JSON.stringify(data)
+                );
+
+                localStorage.setItem(
+                    "smartbazaar_page_content",
+                    canvas.innerHTML
+                );
+
+                alert(
+                    "Page saved successfully!"
+                );
+
+            }
         );
-
-
-    function saveProject() {
-
-        const project = {
-
-            title:
-                projectTitleInput.value,
-
-            canvasHTML:
-                canvas.innerHTML,
-
-            html:
-                htmlEditor
-                    ? htmlEditor.value
-                    : "",
-
-            css:
-                cssEditor
-                    ? cssEditor.value
-                    : "",
-
-            javascript:
-                jsEditor
-                    ? jsEditor.value
-                    : "",
-
-            canvasBackground:
-                canvas.style
-                    .backgroundColor || ""
-
-        };
-
-
-        localStorage.setItem(
-            "smartbazaar_project",
-            JSON.stringify(project)
-        );
-
-
-        localStorage.setItem(
-            "smartbazaar_page_content",
-            canvas.innerHTML
-        );
-
-
-        showCodingStatus(
-            "Project Saved ✓"
-        );
-
-    }
-
 
     /*==================================================
-    LOAD PROJECT
+    FEATURE: LOAD SAVED PROJECT
     ==================================================*/
 
-    function loadProject() {
+    function loadSavedProject() {
 
         const saved =
             localStorage.getItem(
-                "smartbazaar_project"
+                "smartbazaar_page_project"
             );
-
 
         if (!saved) return;
 
-
         try {
 
-            const project =
+            const data =
                 JSON.parse(saved);
 
+            if (data.html) {
 
-            projectTitleInput.value =
-                project.title ||
-                "My_Awesome_Page";
+                canvas.innerHTML =
+                    data.html;
 
+                bindCanvasElements();
 
-            canvas.innerHTML =
-                project.canvasHTML || "";
-
-
-            if (htmlEditor)
-                htmlEditor.value =
-                    project.html || "";
-
-
-            if (cssEditor)
-                cssEditor.value =
-                    project.css || "";
-
-
-            if (jsEditor)
-                jsEditor.value =
-                    project.javascript || "";
-
-
-            if (
-                project.canvasBackground
-            ) {
-
-                canvas.style
-                    .backgroundColor =
-                    project.canvasBackground;
+                updateLayers();
 
             }
 
+            if (htmlCodeBox) {
 
-            bindCanvasElements();
+                htmlCodeBox.value =
+                    data.codingHTML || "";
 
-            updateLayers();
+            }
 
-            updatePlaceholder();
+            if (cssCodeBox) {
 
-            updateCharacterCount();
+                cssCodeBox.value =
+                    data.codingCSS || "";
+
+            }
+
+            if (jsCodeBox) {
+
+                jsCodeBox.value =
+                    data.codingJS || "";
+
+            }
 
         }
 
         catch(error) {
 
-            console.error(
-                "Project Load Error:",
+            console.warn(
+                "Saved project could not be loaded.",
                 error
             );
 
@@ -2375,978 +2687,30 @@ document.addEventListener("DOMContentLoaded", () => {
 
     }
 
-
     /*==================================================
-    CODING EDITOR TABS
-    ==================================================*/
-
-    codeTabs.forEach(tab => {
-
-        tab.addEventListener(
-            "click",
-            () => {
-
-                const target =
-                    tab.getAttribute(
-                        "data-code-tab"
-                    );
-
-
-                codeTabs.forEach(t => {
-
-                    t.classList
-                        .remove(
-                            "active"
-                        );
-
-                });
-
-
-                tab.classList
-                    .add("active");
-
-
-                codePanes.forEach(
-                    pane => {
-
-                        pane.classList
-                            .remove(
-                                "active"
-                            );
-
-                    }
-                );
-
-
-                document
-                    .getElementById(
-                        "code-pane-" +
-                        target
-                    )
-                    ?.classList
-                    .add("active");
-
-            }
-        );
-
-    });
-
-
-    /*==================================================
-    OPEN CODE EDITOR
-    ==================================================*/
-
-    function openCodeEditor() {
-
-        document.body
-            .classList
-            .add(
-                "code-editor-open"
-            );
-
-
-        generateCodeFromCanvas();
-
-    }
-
-
-    /*==================================================
-    CLOSE CODE EDITOR
-    ==================================================*/
-
-    document
-        .getElementById(
-            "btn-code-close"
-        )
-        ?.addEventListener(
-            "click",
-            () => {
-
-                document.body
-                    .classList
-                    .remove(
-                        "code-editor-open"
-                    );
-
-            }
-        );
-
-
-    /*==================================================
-    CONNECT OPTIONS BUTTON TO CODE EDITOR
-    ==================================================*/
-
-    document
-        .getElementById(
-            "btn-options"
-        )
-        ?.addEventListener(
-            "dblclick",
-            openCodeEditor
-        );
-
-
-    /*==================================================
-    KEYBOARD SHORTCUT
-    CTRL + SHIFT + E
-    ==================================================*/
-
-    document.addEventListener(
-        "keydown",
-        event => {
-
-            if (
-                event.ctrlKey &&
-                event.shiftKey &&
-                event.key.toLowerCase() === "e"
-            ) {
-
-                event.preventDefault();
-
-                document.body
-                    .classList
-                    .toggle(
-                        "code-editor-open"
-                    );
-
-                if (
-                    document.body
-                        .classList
-                        .contains(
-                            "code-editor-open"
-                        )
-                ) {
-
-                    generateCodeFromCanvas();
-
-                }
-
-            }
-
-        }
-    );
-
-
-    /*==================================================
-    CODE EDITOR INPUT
-    ==================================================*/
-
-    htmlEditor?.addEventListener(
-        "input",
-        () => {
-
-            updateCharacterCount();
-
-            updateCodingPreview();
-
-        }
-    );
-
-
-    cssEditor?.addEventListener(
-        "input",
-        () => {
-
-            updateCharacterCount();
-
-            updateCodingPreview();
-
-        }
-    );
-
-
-    jsEditor?.addEventListener(
-        "input",
-        () => {
-
-            updateCharacterCount();
-
-            updateCodingPreview();
-
-        }
-    );
-
-
-    /*==================================================
-    RUN CODE BUTTON
-    ==================================================*/
-
-    document
-        .getElementById(
-            "btn-code-run"
-        )
-        ?.addEventListener(
-            "click",
-            () => {
-
-                updateCodingPreview();
-
-                showCodingStatus(
-                    "Code Running ✓"
-                );
-
-            }
-        );
-
-
-    /*==================================================
-    RESET CODE
-    ==================================================*/
-
-    document
-        .getElementById(
-            "btn-code-reset"
-        )
-        ?.addEventListener(
-            "click",
-            () => {
-
-                if (
-                    !confirm(
-                        "Reset coding editor?"
-                    )
-                ) return;
-
-
-                generateCodeFromCanvas();
-
-                showCodingStatus(
-                    "Code Reset"
-                );
-
-            }
-        );
-
-
-    /*==================================================
-    LIVE CODE PREVIEW
-    ==================================================*/
-
-    let codeUpdateTimer = null;
-
-
-    function updateCodingPreview() {
-
-        clearTimeout(
-            codeUpdateTimer
-        );
-
-
-        codeUpdateTimer =
-            setTimeout(
-                () => {
-
-                    const html =
-                        htmlEditor
-                            ? htmlEditor.value
-                            : "";
-
-                    const css =
-                        cssEditor
-                            ? cssEditor.value
-                            : "";
-
-                    const js =
-                        jsEditor
-                            ? jsEditor.value
-                            : "";
-
-
-                    if (
-                        !html.trim() &&
-                        !css.trim() &&
-                        !js.trim()
-                    ) {
-
-                        return;
-
-                    }
-
-
-                    renderCodeIntoCanvas(
-                        html,
-                        css,
-                        js
-                    );
-
-
-                    showCodingStatus(
-                        "Live Preview ✓"
-                    );
-
-                },
-                250
-            );
-
-    }
-
-
-    /*==================================================
-    RENDER CODE INTO SAME CANVAS
-    ==================================================*/
-
-    function renderCodeIntoCanvas(
-        html,
-        css,
-        js
-    ) {
-
-        canvas.innerHTML = "";
-
-
-        const style =
-            document.createElement(
-                "style"
-            );
-
-        style.setAttribute(
-            "data-live-code",
-            "true"
-        );
-
-        style.textContent =
-            css;
-
-
-        canvas.appendChild(
-            style
-        );
-
-
-        const content =
-            document.createElement(
-                "div"
-            );
-
-        content.className =
-            "coding-live-content";
-
-
-        content.innerHTML =
-            html;
-
-
-        canvas.appendChild(
-            content
-        );
-
-
-        if (js.trim()) {
-
-            try {
-
-                const script =
-                    document.createElement(
-                        "script"
-                    );
-
-                script.textContent =
-                    `
-                    (() => {
-                        ${js}
-                    })();
-                    `;
-
-
-                content.appendChild(
-                    script
-                );
-
-            }
-
-            catch(error) {
-
-                console.error(
-                    "JavaScript Error:",
-                    error
-                );
-
-                showCodingStatus(
-                    "JavaScript Error"
-                );
-
-            }
-
-        }
-
-
-        updatePlaceholder();
-
-    }
-
-
-    /*==================================================
-    GENERATE HTML/CSS/JS FROM CANVAS
-    ==================================================*/
-
-    function generateCodeFromCanvas() {
-
-        if (
-            !htmlEditor ||
-            !cssEditor ||
-            !jsEditor
-        ) return;
-
-
-        const elements =
-            canvas.querySelectorAll(
-                ".canvas-element"
-            );
-
-
-        if (
-            elements.length === 0
-        ) return;
-
-
-        let html = "";
-        let css = "";
-
-
-        elements.forEach(
-            (el, index) => {
-
-                const type =
-                    el.getAttribute(
-                        "data-type"
-                    );
-
-
-                const clone =
-                    el.cloneNode(true);
-
-
-                clone.classList
-                    .remove(
-                        "selected"
-                    );
-
-
-                const originalId =
-                    clone.id;
-
-
-                const className =
-                    "sb-element-" +
-                    (index + 1);
-
-
-                clone.classList
-                    .add(
-                        className
-                    );
-
-
-                clone.removeAttribute(
-                    "id"
-                );
-
-
-                html +=
-                    clone.outerHTML +
-                    "\n\n";
-
-
-                const comp =
-                    window.getComputedStyle(
-                        el
-                    );
-
-
-                css +=
-                    `.${className}{\n` +
-                    `  background-color:${comp.backgroundColor};\n` +
-                    `  color:${comp.color};\n` +
-                    `  font-size:${comp.fontSize};\n` +
-                    `  padding:${comp.padding};\n` +
-                    `  margin:${comp.margin};\n` +
-                    `  width:${comp.width};\n` +
-                    `  height:${comp.height};\n` +
-                    `  border:${comp.borderWidth} ${comp.borderStyle} ${comp.borderColor};\n` +
-                    `  border-radius:${comp.borderRadius};\n` +
-                    `  text-align:${comp.textAlign};\n` +
-                    `  box-shadow:${comp.boxShadow};\n` +
-                    `  display:${comp.display};\n` +
-                    `}\n\n`;
-
-            }
-        );
-
-
-        htmlEditor.value =
-            html.trim();
-
-
-        cssEditor.value =
-            css.trim();
-
-
-        updateCharacterCount();
-
-    }
-
-
-    /*==================================================
-    CHARACTER COUNTER
-    ==================================================*/
-
-    function updateCharacterCount() {
-
-        if (!characterCount)
-            return;
-
-
-        const htmlLength =
-            htmlEditor
-                ? htmlEditor.value.length
-                : 0;
-
-        const cssLength =
-            cssEditor
-                ? cssEditor.value.length
-                : 0;
-
-        const jsLength =
-            jsEditor
-                ? jsEditor.value.length
-                : 0;
-
-
-        characterCount.textContent =
-            `HTML: ${htmlLength} | ` +
-            `CSS: ${cssLength} | ` +
-            `JS: ${jsLength}`;
-
-    }
-
-
-    /*==================================================
-    CODING STATUS
-    ==================================================*/
-
-    function showCodingStatus(
-        message
-    ) {
-
-        if (!codingStatus)
-            return;
-
-
-        codingStatus.textContent =
-            message;
-
-    }
-
-
-    /*==================================================
-    RESIZABLE CODE EDITOR
-    ==================================================*/
-
-    let resizing = false;
-    let startY = 0;
-    let startHeight = 0;
-
-
-    resizeHandle?.addEventListener(
-        "pointerdown",
-        event => {
-
-            resizing = true;
-
-            startY =
-                event.clientY;
-
-            startHeight =
-                codingPanel
-                    .getBoundingClientRect()
-                    .height;
-
-
-            resizeHandle.setPointerCapture(
-                event.pointerId
-            );
-
-
-            document.body.style
-                .userSelect =
-                "none";
-
-        }
-    );
-
-
-    resizeHandle?.addEventListener(
-        "pointermove",
-        event => {
-
-            if (!resizing)
-                return;
-
-
-            const difference =
-                startY -
-                event.clientY;
-
-
-            let newHeight =
-                startHeight +
-                difference;
-
-
-            const minHeight =
-                180;
-
-            const maxHeight =
-                window.innerHeight *
-                0.70;
-
-
-            newHeight =
-                Math.max(
-                    minHeight,
-                    Math.min(
-                        maxHeight,
-                        newHeight
-                    )
-                );
-
-
-            codingPanel.style.height =
-                newHeight + "px";
-
-        }
-    );
-
-
-    resizeHandle?.addEventListener(
-        "pointerup",
-        () => {
-
-            resizing = false;
-
-            document.body.style
-                .userSelect =
-                "";
-
-        }
-    );
-
-
-    /*==================================================
-    MEDIA UPLOAD
-    ==================================================*/
-
-    const mediaInput =
-        document.getElementById(
-            "media-file-input"
-        );
-
-    const mediaGallery =
-        document.getElementById(
-            "media-gallery-list"
-        );
-
-
-    mediaInput?.addEventListener(
-        "change",
-        event => {
-
-            const file =
-                event.target.files[0];
-
-            if (!file) return;
-
-
-            const reader =
-                new FileReader();
-
-
-            reader.onload =
-                result => {
-
-                    const url =
-                        result.target.result;
-
-
-                    const image =
-                        document.createElement(
-                            "img"
-                        );
-
-                    image.src =
-                        url;
-
-                    image.style.width =
-                        "100%";
-
-                    image.style.borderRadius =
-                        "6px";
-
-                    image.style.marginBottom =
-                        "6px";
-
-
-                    mediaGallery
-                        ?.appendChild(
-                            image
-                        );
-
-
-                    if (
-                        selectedElement &&
-                        selectedElement.getAttribute(
-                            "data-type"
-                        ) === "image"
-                    ) {
-
-                        selectedElement
-                            .innerHTML =
-                            "";
-
-                        const canvasImage =
-                            document.createElement(
-                                "img"
-                            );
-
-                        canvasImage.src =
-                            url;
-
-                        canvasImage.className =
-                            "canvas-img-box";
-
-                        selectedElement
-                            .appendChild(
-                                canvasImage
-                            );
-
-                        generateCodeFromCanvas();
-
-                    }
-
-                };
-
-
-            reader.readAsDataURL(
-                file
-            );
-
-        }
-    );
-
-
-    /*==================================================
-    SETTINGS MODAL
-    ==================================================*/
-
-    const settingsModal =
-        document.getElementById(
-            "settings-modal"
-        );
-
-
-    document
-        .getElementById(
-            "btn-settings"
-        )
-        ?.addEventListener(
-            "click",
-            () => {
-
-                document
-                    .getElementById(
-                        "modal-project-title"
-                    )
-                    .value =
-                    projectTitleInput.value;
-
-
-                settingsModal.style.display =
-                    "flex";
-
-            }
-        );
-
-
-    document
-        .getElementById(
-            "close-settings-modal"
-        )
-        ?.addEventListener(
-            "click",
-            () => {
-
-                settingsModal.style.display =
-                    "none";
-
-            }
-        );
-
-
-    document
-        .getElementById(
-            "btn-save-settings"
-        )
-        ?.addEventListener(
-            "click",
-            () => {
-
-                projectTitleInput.value =
-                    document.getElementById(
-                        "modal-project-title"
-                    ).value;
-
-
-                canvas.style
-                    .backgroundColor =
-                    document.getElementById(
-                        "modal-canvas-bg"
-                    ).value;
-
-
-                settingsModal.style.display =
-                    "none";
-
-
-                saveProject();
-
-            }
-        );
-
-
-    /*==================================================
-    OPTIONS MODAL
-    ==================================================*/
-
-    const optionsModal =
-        document.getElementById(
-            "options-modal"
-        );
-
-
-    document
-        .getElementById(
-            "btn-options"
-        )
-        ?.addEventListener(
-            "click",
-            () => {
-
-                optionsModal.style.display =
-                    "flex";
-
-            }
-        );
-
-
-    document
-        .getElementById(
-            "close-options-modal"
-        )
-        ?.addEventListener(
-            "click",
-            () => {
-
-                optionsModal.style.display =
-                    "none";
-
-            }
-        );
-
-
-    /*==================================================
-    CLEAR CANVAS
-    ==================================================*/
-
-    document
-        .getElementById(
-            "modal-btn-clear"
-        )
-        ?.addEventListener(
-            "click",
-            () => {
-
-                if (
-                    !confirm(
-                        "Are you sure you want to clear all blocks?"
-                    )
-                ) return;
-
-
-                canvas.innerHTML =
-                    '<div class="placeholder-text">' +
-                    "Drag & drop blocks here or click Add (+) from top toolbar" +
-                    "</div>";
-
-
-                if (htmlEditor)
-                    htmlEditor.value = "";
-
-                if (cssEditor)
-                    cssEditor.value = "";
-
-                if (jsEditor)
-                    jsEditor.value = "";
-
-
-                updateLayers();
-
-                updatePlaceholder();
-
-                updateCharacterCount();
-
-                optionsModal.style.display =
-                    "none";
-
-
-                saveState();
-
-            }
-        );
-
-
-    /*==================================================
-    EXPORT COMPLETE WEBSITE
+    FEATURE: EXPORT
     ==================================================*/
 
     function exportProject() {
 
-        let html =
-            htmlEditor?.value ||
-            "";
-
-
-        let css =
-            cssEditor?.value ||
-            "";
-
-
-        let javascript =
-            jsEditor?.value ||
-            "";
-
-
-        if (!html.trim()) {
-
-            generateCodeFromCanvas();
-
-            html =
-                htmlEditor?.value ||
-                "";
-
-            css =
-                cssEditor?.value ||
-                "";
-
-        }
-
-
         const title =
-            projectTitleInput.value ||
-            "SmartBazaar_Page";
+            projectTitleInput?.value.trim() ||
+            "smartbazaar-page";
 
+        const html =
+            htmlCodeBox?.value.trim() ||
+            canvas.innerHTML;
 
-        const completeHTML =
-`<!DOCTYPE html>
+        const css =
+            cssCodeBox?.value ||
+            "";
+
+        const js =
+            jsCodeBox?.value ||
+            "";
+
+        const finalHTML = `
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -3372,119 +2736,350 @@ ${html}
 
 <script>
 
-${javascript}
+${js}
 
 <\/script>
 
 </body>
 
-</html>`;
-
+</html>
+`;
 
         const blob =
             new Blob(
-                [completeHTML],
+                [finalHTML],
                 {
                     type:
                         "text/html;charset=utf-8"
                 }
             );
 
-
         const url =
             URL.createObjectURL(
                 blob
             );
 
-
-        const link =
+        const a =
             document.createElement(
                 "a"
             );
 
+        a.href = url;
 
-        link.href =
-            url;
+        a.download =
+            `${title.replace(
+                /[^a-z0-9-_]/gi,
+                "_"
+            )}.html`;
 
+        document.body.appendChild(a);
 
-        link.download =
-            title
-                .replace(
-                    /[^a-z0-9_-]/gi,
-                    "_"
-                ) +
-            ".html";
+        a.click();
 
+        a.remove();
 
-        document.body
-            .appendChild(link);
-
-
-        link.click();
-
-
-        link.remove();
-
-
-        URL.revokeObjectURL(
-            url
-        );
-
-
-        showCodingStatus(
-            "Export Complete ✓"
+        setTimeout(
+            () =>
+                URL.revokeObjectURL(url),
+            1000
         );
 
     }
 
-
     document
-        .getElementById(
-            "btn-export"
-        )
+        .getElementById("btn-export")
         ?.addEventListener(
             "click",
             exportProject
         );
 
+    document
+        .getElementById("modal-btn-export")
+        ?.addEventListener(
+            "click",
+            exportProject
+        );
+
+    /*==================================================
+    FEATURE: CLEAR CANVAS
+    ==================================================*/
+
+    document
+        .getElementById("modal-btn-clear")
+        ?.addEventListener(
+            "click",
+            () => {
+
+                if (
+                    !confirm(
+                        "Are you sure you want to clear all blocks?"
+                    )
+                ) return;
+
+                canvas.innerHTML = `
+                    <div class="placeholder-text">
+                        Drag & drop blocks here or click Add (+) from top toolbar
+                    </div>
+                `;
+
+                selectedElement = null;
+
+                updateLayers();
+
+                saveState();
+
+                syncCanvasToCode();
+
+                document
+                    .getElementById(
+                        "options-modal"
+                    )
+                    ?.style &&
+                    (
+                        document.getElementById(
+                            "options-modal"
+                        ).style.display =
+                            "none"
+                    );
+
+            }
+        );
+
+    /*==================================================
+    FEATURE: SETTINGS MODAL
+    ==================================================*/
+
+    const settingsModal =
+        document.getElementById(
+            "settings-modal"
+        );
+
+    document
+        .getElementById("btn-settings")
+        ?.addEventListener(
+            "click",
+            () => {
+
+                const modalTitle =
+                    document.getElementById(
+                        "modal-project-title"
+                    );
+
+                if (modalTitle) {
+
+                    modalTitle.value =
+                        projectTitleInput?.value ||
+                        "";
+
+                }
+
+                if (settingsModal) {
+
+                    settingsModal.style.display =
+                        "flex";
+
+                }
+
+            }
+        );
 
     document
         .getElementById(
-            "modal-btn-export"
+            "close-settings-modal"
         )
         ?.addEventListener(
             "click",
             () => {
 
-                exportProject();
+                if (settingsModal) {
+
+                    settingsModal.style.display =
+                        "none";
+
+                }
 
             }
         );
 
+    document
+        .getElementById(
+            "btn-save-settings"
+        )
+        ?.addEventListener(
+            "click",
+            () => {
+
+                const title =
+                    document.getElementById(
+                        "modal-project-title"
+                    )?.value;
+
+                const bg =
+                    document.getElementById(
+                        "modal-canvas-bg"
+                    )?.value;
+
+                if (
+                    projectTitleInput &&
+                    title
+                ) {
+
+                    projectTitleInput.value =
+                        title;
+
+                    localStorage.setItem(
+                        "smartbazaar_project_name",
+                        title
+                    );
+
+                }
+
+                if (bg) {
+
+                    canvas.style.backgroundColor =
+                        bg;
+
+                }
+
+                if (settingsModal) {
+
+                    settingsModal.style.display =
+                        "none";
+
+                }
+
+                saveState();
+
+            }
+        );
 
     /*==================================================
-    ESCAPE HTML
+    FEATURE: OPTIONS MODAL
     ==================================================*/
 
-    function escapeHTML(
-        text
-    ) {
+    const optionsModal =
+        document.getElementById(
+            "options-modal"
+        );
 
-        const div =
-            document.createElement(
-                "div"
-            );
+    document
+        .getElementById("btn-options")
+        ?.addEventListener(
+            "click",
+            () => {
 
-        div.textContent =
-            text;
+                if (optionsModal) {
 
-        return div.innerHTML;
+                    optionsModal.style.display =
+                        "flex";
+
+                }
+
+            }
+        );
+
+    document
+        .getElementById(
+            "close-options-modal"
+        )
+        ?.addEventListener(
+            "click",
+            () => {
+
+                if (optionsModal) {
+
+                    optionsModal.style.display =
+                        "none";
+
+                }
+
+            }
+        );
+
+    /*==================================================
+    FEATURE: PROJECT TITLE
+    ==================================================*/
+
+    if (projectTitleInput) {
+
+        projectTitleInput.value =
+            localStorage.getItem(
+                "smartbazaar_project_name"
+            ) ||
+            "My_Awesome_Page";
+
+        projectTitleInput.addEventListener(
+            "input",
+            e => {
+
+                localStorage.setItem(
+                    "smartbazaar_project_name",
+                    e.target.value
+                );
+
+            }
+        );
 
     }
 
+    /*==================================================
+    FEATURE: PREVIEW MODE
+    ==================================================*/
+
+    const previewBtn =
+        document.getElementById(
+            "btn-preview"
+        );
+
+    const floatingBackBtn =
+        document.getElementById(
+            "floating-back-btn"
+        );
+
+    function togglePreview() {
+
+        document.body.classList.toggle(
+            "preview-mode"
+        );
+
+        if (!previewBtn) return;
+
+        previewBtn.textContent =
+            document.body.classList.contains(
+                "preview-mode"
+            )
+                ? "❌ Exit Preview"
+                : "👁 Preview";
+
+    }
+
+    previewBtn?.addEventListener(
+        "click",
+        togglePreview
+    );
+
+    floatingBackBtn?.addEventListener(
+        "click",
+        togglePreview
+    );
 
     /*==================================================
-    RGB TO HEX
+    FEATURE: BACK BUTTON
+    ==================================================*/
+
+    document
+        .getElementById("btn-back")
+        ?.addEventListener(
+            "click",
+            () => {
+
+                window.history.back();
+
+            }
+        );
+
+    /*==================================================
+    FEATURE: RGB → HEX
     ==================================================*/
 
     function rgbToHex(rgb) {
@@ -3500,7 +3095,6 @@ ${javascript}
 
         }
 
-
         if (
             rgb.startsWith("#")
         ) {
@@ -3509,27 +3103,33 @@ ${javascript}
 
         }
 
-
         const match =
             rgb.match(
-                /^rgba?\((\d+),\s*(\d+),\s*(\d+)/
+                /^rgba?\(
+                \s*(\d+),
+                \s*(\d+),
+                \s*(\d+)/x
             );
 
+        if (!match) {
 
-        if (!match)
             return "#27272a";
 
+        }
 
         return (
             "#" +
-            [match[1], match[2], match[3]]
+            [
+                match[1],
+                match[2],
+                match[3]
+            ]
                 .map(
-                    value =>
+                    x =>
                         (
                             "0" +
-                            parseInt(
-                                value
-                            ).toString(16)
+                            parseInt(x)
+                                .toString(16)
                         ).slice(-2)
                 )
                 .join("")
@@ -3537,42 +3137,97 @@ ${javascript}
 
     }
 
-
     /*==================================================
-    INITIALIZE
+    FEATURE: HTML ESCAPE
     ==================================================*/
 
-    loadProject();
+    function escapeHTML(value) {
+
+        return String(value)
+            .replace(
+                /&/g,
+                "&amp;"
+            )
+            .replace(
+                /</g,
+                "&lt;"
+            )
+            .replace(
+                />/g,
+                "&gt;"
+            )
+            .replace(
+                /"/g,
+                "&quot;"
+            )
+            .replace(
+                /'/g,
+                "&#039;"
+            );
+
+    }
+
+    /*==================================================
+    FEATURE: CLOSE MODALS BY BACKGROUND CLICK
+    ==================================================*/
+
+    document
+        .querySelectorAll(
+            ".modal-overlay"
+        )
+        .forEach(modal => {
+
+            modal.addEventListener(
+                "click",
+                e => {
+
+                    if (
+                        e.target === modal
+                    ) {
+
+                        modal.style.display =
+                            "none";
+
+                    }
+
+                }
+            );
+
+        });
+
+    /*==================================================
+    FEATURE: INITIALIZE EVERYTHING
+    ==================================================*/
+
+    createCodingSystem();
+
+    createCodingButton();
+
+    loadSavedProject();
 
     bindCanvasElements();
 
     updateLayers();
 
-    updatePlaceholder();
-
-    updateCharacterCount();
-
+    /*
+    IMPORTANT:
+    Do not immediately overwrite saved coding.
+    If no coding exists, generate it from canvas.
+    */
 
     if (
-        canvas.querySelectorAll(
-            ".canvas-element"
-        ).length > 0
+        htmlCodeBox &&
+        !htmlCodeBox.value.trim()
     ) {
 
-        generateCodeFromCanvas();
+        syncCanvasToCode();
 
     }
 
-
     saveState();
 
-
-    /*==================================================
-    FINAL READY MESSAGE
-    ==================================================*/
-
     console.log(
-        "SMARTBAZAAR PRO EDITOR READY ✓"
+        "SmartBazaar Pro Editor initialized successfully."
     );
 
 });
