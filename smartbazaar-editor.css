@@ -1579,3 +1579,70 @@ SMALL MOBILE
 
 }
 
+/*==================================================
+SMARTBAZAAR PRO
+FEATURE 2 — Desktop Preview
+FEATURE 3 — Tablet Preview
+FEATURE 4 — Mobile Preview
+FEATURE 29 — Live Preview Canvas
+CANVAS WIDTH FIX
+==================================================*/
+
+.preview-area,
+.canvas-area,
+.canvas-wrapper,
+.preview-wrapper{
+
+    min-width:0;
+    width:100%;
+
+}
+
+
+#preview,
+#livePreview,
+.preview-canvas{
+
+    margin-left:auto;
+    margin-right:auto;
+
+}
+
+
+/*==============================================
+TABLET PREVIEW
+==============================================*/
+
+.tablet-preview,
+.preview-tablet{
+
+    width:768px;
+    max-width:100%;
+
+}
+
+
+/*==============================================
+MOBILE PREVIEW
+==============================================*/
+
+.mobile-preview,
+.preview-mobile{
+
+    width:390px;
+    max-width:100%;
+
+}
+
+
+/*==============================================
+DESKTOP PREVIEW
+==============================================*/
+
+.desktop-preview,
+.preview-desktop{
+
+    width:100%;
+    max-width:1200px;
+
+}
