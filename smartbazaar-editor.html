@@ -1,537 +1,883 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SmartBazaar Pro - Website Builder</title>
-    <link rel="stylesheet" href="smartbazaar-editor.css">
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+content="width=device-width,initial-scale=1.0">
+
+<title>SMARTBAZAAR PRO — Code Studio</title>
+
+<link rel="stylesheet" href="smartbazaar-editor.css">
+
 </head>
+
 <body>
 
-    <!-- Header Container -->
-    <header id="editor-header">
-        <div class="header-top-row">
-            <div class="brand">SmartBazaar Pro</div>
-            <div class="device-switcher">
-                <button id="btn-desktop" class="active" title="Desktop View">💻</button>
-                <button id="btn-tablet" title="Tablet View">📱</button>
-                <button id="btn-mobile" title="Mobile View">📱</button>
-            </div>
-            <div class="header-actions">
-                <button id="btn-preview">👁 Preview</button>
-                <button id="btn-save">Save</button>
-                <button id="btn-export" class="publish-btn">Export</button>
-            </div>
-        </div>
-
-        <div class="header-bottom-row">
-            <button id="btn-back" class="toolbar-btn" title="Back">⬅</button>
-            <button id="btn-add-block" class="toolbar-btn active-blue" title="Add Blocks">➕</button>
-            
-            <input type="text" id="project-title-input" class="title-search-bar" placeholder="Enter page name...">
-            
-            <button id="btn-undo" class="toolbar-btn" title="Undo">↩</button>
-            <button id="btn-redo" class="toolbar-btn" title="Redo">↪</button>
-            <button id="btn-settings" class="toolbar-btn" title="Settings">⚙️</button>
-            <button id="btn-options" class="toolbar-btn" title="Options">⋮</button>
-        </div>
-    </header>
-
-    <!-- Main Workspace -->
-    <div id="editor-workspace">
-
-        <!-- Left Sidebar -->
-        <aside id="left-sidebar" class="sidebar">
-            <div class="sidebar-header-bar">
-                <span class="sidebar-title">Library & Structure</span>
-                <button class="sidebar-close-btn" id="close-left-sidebar" title="Close Panel">×</button>
-            </div>
-            <div class="sidebar-content-wrapper">
-                
-                <div class="sidebar-sub-tabs">
-                    <button class="sub-tab-btn active" data-target="tab-blocks">Blocks</button>
-                    <button class="sub-tab-btn" data-target="tab-patterns">Patterns</button>
-                    <button class="sub-tab-btn" data-target="tab-media">Media</button>
-                </div>
-
-                <!-- 1. بلاکس سیکشن (ڈریگ ایبل) -->
-                <div class="tab-pane active" id="tab-blocks">
-                    <div class="wp-search-box">
-                        <input type="text" id="element-search" placeholder="Search blocks...">
-                    </div>
-                    <div class="wp-category-title">LAYOUT & CONTAINERS</div>
-                    <div class="wp-grid">
-                        <div class="draggable-item" draggable="true" data-type="container"><span class="wp-icon">📦</span>Box</div>
-                        <div class="draggable-item" draggable="true" data-type="flex"><span class="wp-icon">📐</span>Flex</div>
-                        <div class="draggable-item" draggable="true" data-type="grid"><span class="wp-icon">🔲</span>Grid</div>
-                    </div>
-                    <div class="wp-category-title">COMPONENTS</div>
-                    <div class="wp-grid">
-                        <div class="draggable-item" draggable="true" data-type="heading"><span class="wp-icon">H</span>Heading</div>
-                        <div class="draggable-item" draggable="true" data-type="paragraph"><span class="wp-icon">¶</span>Text</div>
-                        <div class="draggable-item" draggable="true" data-type="image"><span class="wp-icon">🖼</span>Image</div>
-                        <div class="draggable-item" draggable="true" data-type="button"><span class="wp-icon">⏹</span>Button</div>
-                        <div class="draggable-item" draggable="true" data-type="icon"><span class="wp-icon">⭐</span>Icon</div>
-                        <div class="draggable-item" draggable="true" data-type="video"><span class="wp-icon">🎥</span>Video</div>
-                    </div>
-                </div>
-
-                <!-- 2. ریڈی میڈ پیٹرنز -->
-                <div class="tab-pane" id="tab-patterns">
-                    <div class="wp-category-title">READY SECTIONS</div>
-                    <div class="pattern-item" draggable="true" data-pattern="hero">⭐ <span>Hero Banner</span></div>
-                    <div class="pattern-item" draggable="true" data-pattern="image-box">🖼 <span>Image Card</span></div>
-                    <div class="pattern-item" draggable="true" data-pattern="pricing">💰 <span>Pricing Box</span></div>
-                    <div class="pattern-item" draggable="true" data-pattern="testimonial">💬 <span>Review Box</span></div>
-                </div>
-
-                <!-- 3. میڈیا سیکشن -->
-                <div class="tab-pane" id="tab-media">
-                    <div class="wp-category-title">UPLOADED MEDIA</div>
-                    <div class="media-upload-box">
-                        <input type="file" id="media-file-input" accept="image/*">
-                        <p>Click or drag images here</p>
-                    </div>
-                    <div id="media-gallery-list"></div>
-                </div>
-
-                <div class="layers-section">
-                    <h3>Page Layers</h3>
-                    <div id="layers-tree-view">
-                        <p class="no-layers">No layers added yet</p>
-                    </div>
-                </div>
-            </div>
-        </aside>
-
-        <!-- Center Canvas (Drop Zone) -->
-        <main id="canvas-container">
-            <div id="live-canvas" class="mode-desktop">
-                <div class="placeholder-text">Drag & drop blocks here or click Add (+) from top toolbar</div>
-            </div>
-        </main>
-
-        <!-- Right Sidebar (Inspector / Settings Panel) -->
-        <aside id="right-sidebar" class="sidebar">
-            <div class="sidebar-header-bar">
-                <button class="sidebar-close-btn" id="close-right-sidebar" title="Close Panel">×</button>
-                <span class="sidebar-title">Inspector & Settings</span>
-            </div>
-            <div class="sidebar-content-wrapper">
-                
-                <div class="sidebar-sub-tabs">
-                    <button class="sub-tab-btn active" data-target="tab-writing">Content</button>
-                    <button class="sub-tab-btn" data-target="tab-style">Style</button>
-                </div>
-
-                <!-- 1. کنٹینٹ پینل -->
-                <div class="tab-pane active" id="tab-writing">
-                    <div class="prop-group" id="group-text-content">
-                        <label>Text Content / Writing</label>
-                        <textarea id="prop-text-input" rows="3" placeholder="Type element content here..."></textarea>
-                    </div>
-                    <div class="prop-group" id="group-image-content" style="display: none;">
-                        <label>Image URL Source</label>
-                        <input type="text" id="prop-image-input" placeholder="https://example.com/image.jpg">
-                    </div>
-                    <div class="prop-group" id="group-video-content" style="display: none;">
-                        <label>Video Embed URL (YouTube/MP4)</label>
-                        <input type="text" id="prop-video-input" placeholder="https://www.youtube.com/embed/...">
-                    </div>
-                    <div class="prop-group">
-                        <label>Link URL</label>
-                        <input type="text" id="prop-link-input" placeholder="https://example.com">
-                    </div>
-                </div>
-
-                <!-- 2. اسٹائل اور ایڈوانسڈ لے آؤٹ پینل -->
-                <div class="tab-pane" id="tab-style">
-                    
-                    <!-- الائنمنٹ سیکشن -->
-                    <div class="accordion-item open">
-                        <div class="accordion-header"><span>📐 Alignment & Position</span> <span class="arrow">▼</span></div>
-                        <div class="accordion-body">
-                            <div class="prop-group">
-                                <label>Text / Box Alignment</label>
-                                <div class="alignment-buttons-group">
-                                    <button class="align-btn" data-align="left" title="Left Align">
-                                        <span class="l-line long"></span><span class="l-line short"></span><span class="l-line long"></span><span class="l-line short"></span>
-                                    </button>
-                                    <button class="align-btn" data-align="center" title="Center Align">
-                                        <span class="l-line center long"></span><span class="l-line center short"></span><span class="l-line center long"></span><span class="l-line center short"></span>
-                                    </button>
-                                    <button class="align-btn" data-align="right" title="Right Align">
-                                        <span class="l-line right long"></span><span class="l-line right short"></span><span class="l-line right long"></span><span class="l-line right short"></span>
-                                    </button>
-                                    <button class="align-btn" data-align="justify" title="Justify">
-                                        <span class="l-line full"></span><span class="l-line full"></span><span class="l-line full"></span><span class="l-line full"></span>
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- فلیکس اور گرڈ لے آؤٹ کنٹرولز -->
-                    <div class="accordion-item">
-                        <div class="accordion-header"><span>🔲 Flex & Grid Layout Engine</span> <span class="arrow">▼</span></div>
-                        <div class="accordion-body">
-                            <div class="form-row-2">
-                                <div class="prop-group">
-                                    <label>Display Mode</label>
-                                    <select id="prop-display-mode">
-                                        <option value="block">Block</option>
-                                        <option value="flex">Flexbox</option>
-                                        <option value="grid">Grid</option>
-                                    </select>
-                                </div>
-                                <div class="prop-group">
-                                    <label>Flex Direction</label>
-                                    <select id="prop-flex-direction">
-                                        <option value="row">Row (Side by Side)</option>
-                                        <option value="column">Column (Stack)</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="prop-group">
-                                <label>Grid Columns</label>
-                                <select id="prop-grid-columns">
-                                    <option value="1fr">1 Column</option>
-                                    <option value="1fr 1fr">2 Columns (Equal)</option>
-                                    <option value="1fr 1fr 1fr">3 Columns</option>
-                                    <option value="2fr 1fr">Custom (2:1)</option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="accordion-item">
-                        <div class="accordion-header"><span>🔤 Colors & Typography</span> <span class="arrow">▼</span></div>
-                        <div class="accordion-body">
-                            <div class="form-row-2">
-                                <div class="prop-group">
-                                    <label>Background Color</label>
-                                    <input type="color" id="prop-bg-color" value="#27272a">
-                                </div>
-                                <div class="prop-group">
-                                    <label>Text Color</label>
-                                    <input type="color" id="prop-text-color" value="#ffffff">
-                                </div>
-                            </div>
-                            <div class="prop-group">
-                                <label>Font Size (px)</label>
-                                <input type="number" id="prop-font-size" value="16">
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="accordion-item">
-                        <div class="accordion-header"><span>📐 Dimensions (Width & Height)</span> <span class="arrow">▼</span></div>
-                        <div class="accordion-body">
-                            <div class="form-row-2">
-                                <div class="prop-group">
-                                    <label>Width</label>
-                                    <input type="text" id="prop-width" value="100%">
-                                </div>
-                                <div class="prop-group">
-                                    <label>Height</label>
-                                    <input type="text" id="prop-height" value="auto">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="accordion-item">
-                        <div class="accordion-header"><span>📦 Spacing (Padding & Margin)</span> <span class="arrow">▼</span></div>
-                        <div class="accordion-body">
-                            <div class="form-row-2">
-                                <div class="prop-group">
-                                    <label>Padding (px)</label>
-                                    <input type="number" id="prop-padding" value="12">
-                                </div>
-                                <div class="prop-group">
-                                    <label>Margin (px)</label>
-                                    <input type="number" id="prop-margin" value="6">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="accordion-item">
-                        <div class="accordion-header"><span>⏹ Borders & Radius</span> <span class="arrow">▼</span></div>
-                        <div class="accordion-body">
-                            <div class="form-row-2">
-                                <div class="prop-group">
-                                    <label>Border Style</label>
-                                    <select id="prop-border-style">
-                                        <option value="none">None</option>
-                                        <option value="solid">Solid</option>
-                                        <option value="dashed">Dashed</option>
-                                        <option value="dotted">Dotted</option>
-                                    </select>
-                                </div>
-                                <div class="prop-group">
-                                    <label>Border Width</label>
-                                    <input type="number" id="prop-border-width" value="1">
-                                </div>
-                            </div>
-                            <div class="form-row-2">
-                                <div class="prop-group">
-                                    <label>Border Color</label>
-                                    <input type="color" id="prop-border-color" value="#3f3f46">
-                                </div>
-                                <div class="prop-group">
-                                    <label>Radius (px)</label>
-                                    <input type="number" id="prop-border-radius" value="6">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
-
-                <div class="prop-group action-buttons-group" style="margin-top: 20px;">
-                    <button id="btn-duplicate-el" class="sec-btn">📋 Duplicate</button>
-                    <button id="btn-delete-el" class="danger-btn">🗑 Delete</button>
-                </div>
-
-            </div>
-        </aside>
-
-    </div>
-
-    <!-- Settings Modal Popups -->
-    <div id="settings-modal" class="modal-overlay">
-        <div class="modal-box">
-            <div class="modal-header">
-                <h3>Page Settings & Configurations</h3>
-                <button id="close-settings-modal" class="modal-close">×</button>
-            </div>
-            <div class="modal-body">
-                <div class="prop-group">
-                    <label>Page Title</label>
-                    <input type="text" id="modal-project-title" placeholder="My Page Title">
-                </div>
-                <div class="prop-group">
-                    <label>SEO Meta Description</label>
-                    <textarea id="modal-meta-desc" rows="2" placeholder="Write page description..."></textarea>
-                </div>
-                <div class="prop-group">
-                    <label>Canvas Background Color</label>
-                    <input type="color" id="modal-canvas-bg" value="#1e1e24">
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button id="btn-save-settings" class="publish-btn">Save Changes</button>
-            </div>
-        </div>
-    </div>
-
-    <!--==================================================
+<!-- ==================================================
 SMARTBAZAAR PRO
-CODING EDITOR PANEL
-HTML + CSS + JAVASCRIPT
+FEATURES:
+29 Live Preview Canvas
+11 Add Elements Tab
+34 Content Tab
+35 Style Tab
+50 Layers Panel
+48 Element ID / Class
+92 Element Rename
+90 Element Lock
+91 Element Hide
+93 Element Search
+100 Grid / Guides
+99 Rulers
+================================================== -->
+
+
+<div class="app">
+
+
+<!-- ==================================================
+HEADER
+FEATURE 1 — Logo
+FEATURE 2 — Desktop Preview
+FEATURE 3 — Tablet Preview
+FEATURE 4 — Mobile Preview
+FEATURE 5 — Undo
+FEATURE 6 — Redo
+FEATURE 7 — Preview
+FEATURE 8 — Save
+FEATURE 10 — Settings
+================================================== -->
+
+<header class="topbar">
+
+    <div class="brand">
+        <span class="brand-icon">&lt;/&gt;</span>
+
+        <div>
+            <strong>SMARTBAZAAR</strong>
+            <small>PRO CODE STUDIO</small>
+        </div>
+    </div>
+
+
+    <div class="history-controls">
+
+        <button id="undoBtn">↶</button>
+        <button id="redoBtn">↷</button>
+
+    </div>
+
+
+    <div class="device-controls">
+
+        <button class="device active"
+                data-device="desktop">
+            Desktop
+        </button>
+
+        <button class="device"
+                data-device="tablet">
+            Tablet
+        </button>
+
+        <button class="device"
+                data-device="mobile">
+            Mobile
+        </button>
+
+    </div>
+
+
+    <div class="top-actions">
+
+        <button id="previewBtn">
+            Preview
+        </button>
+
+        <button id="saveBtn">
+            Save
+        </button>
+
+        <button id="settingsBtn">
+            ⚙
+        </button>
+
+    </div>
+
+</header>
+
+
+
+<!-- ==================================================
+MAIN BUILDER
+================================================== -->
+
+<div class="builder">
+
+
+<!-- ==================================================
+LEFT SIDEBAR
+FEATURE 11 — Add Elements Tab
+FEATURE 50 — Layers Panel
+FEATURE 93 — Element Search
+================================================== -->
+
+<aside class="left-sidebar">
+
+
+    <div class="sidebar-tabs">
+
+        <button class="left-tab active"
+                data-left="elements">
+            Elements
+        </button>
+
+        <button class="left-tab"
+                data-left="layers">
+            Layers
+        </button>
+
+    </div>
+
+
+    <!-- ELEMENTS -->
+
+    <section id="elementsPanel"
+             class="left-content">
+
+
+        <input
+            id="elementSearch"
+            class="search"
+            type="search"
+            placeholder="Search elements...">
+
+<!--==================================================
+FEATURE 11 — ADD ELEMENTS TAB
 ==================================================-->
 
-<section id="coding-editor-panel">
+<section id="elementsPanel"
+         class="left-content">
 
-    <!-- Coding Editor Header -->
-    <div id="coding-editor-header">
+    <button
+        id="addElementMain"
+        class="add-element-main">
 
-        <div class="coding-editor-title">
-            <span class="coding-icon">{"</>"}</span>
-            <span>Code Editor</span>
-        </div>
+        <span>＋</span>
 
-        <div class="coding-editor-actions">
-
-            <button
-                id="btn-code-run"
-                class="code-action-btn run-code-btn"
-                title="Run Code">
-                ▶ Run
-            </button>
-
-            <button
-                id="btn-code-reset"
-                class="code-action-btn"
-                title="Reset Code">
-                ↻ Reset
-            </button>
-
-            <button
-                id="btn-code-close"
-                class="code-action-btn"
-                title="Close Code Editor">
-                ×
-            </button>
-
-        </div>
-
-    </div>
-
-
-    <!-- Coding Tabs -->
-    <div id="coding-tabs">
-
-        <button
-            class="coding-tab active"
-            data-code-tab="html">
-            <span>HTML</span>
-        </button>
-
-        <button
-            class="coding-tab"
-            data-code-tab="css">
-            <span>CSS</span>
-        </button>
-
-        <button
-            class="coding-tab"
-            data-code-tab="javascript">
-            <span>JavaScript</span>
-        </button>
-
-    </div>
-
-
-    <!-- Coding Workspace -->
-    <div id="coding-workspace">
-
-
-        <!-- HTML Editor -->
-        <div
-            class="code-editor-pane active"
-            id="code-pane-html">
-
-            <div class="code-pane-header">
-
-                <span class="code-file-name">
-                    index.html
-                </span>
-
-                <span class="code-language">
-                    HTML
-                </span>
-
-            </div>
-
-            <textarea
-                id="html-code-editor"
-                class="code-editor-textarea"
-                spellcheck="false"
-                autocomplete="off"
-                autocorrect="off"
-                autocapitalize="off"
-                placeholder="Write your HTML here..."></textarea>
-
-        </div>
-
-
-        <!-- CSS Editor -->
-        <div
-            class="code-editor-pane"
-            id="code-pane-css">
-
-            <div class="code-pane-header">
-
-                <span class="code-file-name">
-                    style.css
-                </span>
-
-                <span class="code-language">
-                    CSS
-                </span>
-
-            </div>
-
-            <textarea
-                id="css-code-editor"
-                class="code-editor-textarea"
-                spellcheck="false"
-                autocomplete="off"
-                autocorrect="off"
-                autocapitalize="off"
-                placeholder="Write your CSS here..."></textarea>
-
-        </div>
-
-
-        <!-- JavaScript Editor -->
-        <div
-            class="code-editor-pane"
-            id="code-pane-javascript">
-
-            <div class="code-pane-header">
-
-                <span class="code-file-name">
-                    script.js
-                </span>
-
-                <span class="code-language">
-                    JavaScript
-                </span>
-
-            </div>
-
-            <textarea
-                id="javascript-code-editor"
-                class="code-editor-textarea"
-                spellcheck="false"
-                autocomplete="off"
-                autocorrect="off"
-                autocapitalize="off"
-                placeholder="Write your JavaScript here..."></textarea>
-
-        </div>
-
-
-    </div>
-
-
-    <!-- Resize Handle -->
-    <div
-        id="coding-resize-handle"
-        title="Drag to resize Code Editor">
-    </div>
-
-
-    <!-- Coding Status Bar -->
-    <div id="coding-status-bar">
-
-        <span id="coding-status">
-            Ready
+        <span>
+            Add Element
         </span>
 
-        <span id="coding-character-count">
-            HTML: 0 | CSS: 0 | JS: 0
+    </button>
+
+
+    <input
+        id="elementSearch"
+        class="search"
+        type="search"
+        placeholder="Search elements...">
+
+
+    <div class="elements-list">
+
+
+        <div class="element"
+             draggable="true"
+             data-type="heading"
+             data-name="Heading">
+
+            <span>H</span>
+            <b>Heading</b>
+
+        </div>
+
+
+        <div class="element"
+             draggable="true"
+             data-type="text"
+             data-name="Text">
+
+            <span>T</span>
+            <b>Text</b>
+
+        </div>
+
+
+        <div class="element"
+             draggable="true"
+             data-type="image"
+             data-name="Image">
+
+            <span>▧</span>
+            <b>Image</b>
+
+        </div>
+
+
+        <div class="element"
+             draggable="true"
+             data-type="button"
+             data-name="Button">
+
+            <span>▣</span>
+            <b>Button</b>
+
+        </div>
+
+
+        <div class="element"
+             draggable="true"
+             data-type="icon"
+             data-name="Icon">
+
+            <span>★</span>
+            <b>Icon</b>
+
+        </div>
+
+
+        <div class="element"
+             draggable="true"
+             data-type="container"
+             data-name="Container">
+
+            <span>□</span>
+            <b>Container</b>
+
+        </div>
+
+
+        <div class="element"
+             draggable="true"
+             data-type="flex"
+             data-name="Flex Container">
+
+            <span>↔</span>
+            <b>Flex</b>
+
+        </div>
+
+
+        <div class="element"
+             draggable="true"
+             data-type="grid"
+             data-name="Grid Container">
+
+            <span>▦</span>
+            <b>Grid</b>
+
+        </div>
+
+
+        <div class="element"
+             draggable="true"
+             data-type="divider"
+             data-name="Divider">
+
+            <span>━</span>
+            <b>Divider</b>
+
+        </div>
+
+
+        <div class="element"
+             draggable="true"
+             data-type="spacer"
+             data-name="Spacer">
+
+            <span>↕</span>
+            <b>Spacer</b>
+
+        </div>
+
+
+    </div>
+
+</section>
+
+
+
+    <!-- LAYERS -->
+
+    <section id="layersPanel"
+             class="left-content hidden">
+
+        <div class="layers-header">
+
+            <strong>Layers</strong>
+
+            <button id="refreshLayers">
+                ↻
+            </button>
+
+        </div>
+
+        <div id="layersList"></div>
+
+    </section>
+
+</aside>
+
+
+
+<!-- ==================================================
+CENTER CANVAS
+FEATURE 29 — Live Preview
+FEATURE 30 — Drag & Drop
+FEATURE 31 — Resize foundation
+FEATURE 33 — Alignment foundation
+FEATURE 99 — Rulers
+FEATURE 100 — Grid / Guides
+================================================== -->
+
+<main class="workspace">
+
+
+    <div class="canvas-toolbar">
+
+
+        <div>
+
+            <button id="gridBtn">
+                Grid
+            </button>
+
+            <button id="rulerBtn">
+                Rulers
+            </button>
+
+        </div>
+
+
+        <strong>
+            Live Preview
+        </strong>
+
+
+        <div>
+
+            <button id="zoomOut">
+                −
+            </button>
+
+            <span id="zoomValue">
+                100%
+            </span>
+
+            <button id="zoomIn">
+                +
+            </button>
+
+        </div>
+
+    </div>
+
+
+
+    <div id="canvasArea"
+         class="canvas-area">
+
+
+        <div id="rulerTop"
+             class="ruler-top"></div>
+
+
+        <div id="rulerLeft"
+             class="ruler-left"></div>
+
+
+        <div id="preview"
+             class="preview">
+
+
+            <div id="dropMessage"
+                 class="drop-message">
+
+                <div class="drop-plus">
+                    +
+                </div>
+
+                <h2>
+                    Start Building
+                </h2>
+
+                <p>
+                    Drag an element here
+                    or click an element
+                </p>
+
+            </div>
+
+
+        </div>
+
+    </div>
+
+</main>
+
+
+
+<!-- ==================================================
+RIGHT SIDEBAR
+FEATURE 34 — Content Tab
+FEATURE 35 — Style Tab
+FEATURE 48 — ID / Class
+FEATURE 92 — Rename
+FEATURE 90 — Lock
+FEATURE 91 — Hide
+================================================== -->
+
+<aside class="right-sidebar">
+
+
+    <div class="right-tabs">
+
+        <button class="right-tab active"
+                data-right="content">
+            Content
+        </button>
+
+        <button class="right-tab"
+                data-right="style">
+            Style
+        </button>
+
+    </div>
+
+
+
+    <!-- CONTENT -->
+
+    <section id="contentPanel"
+             class="right-content">
+
+
+        <div class="field">
+
+            <label>
+                Element Name
+            </label>
+
+            <input
+                id="elementName"
+                type="text">
+
+        </div>
+
+
+        <div class="field">
+
+            <label>
+                Element ID
+            </label>
+
+            <input
+                id="elementId"
+                type="text"
+                placeholder="my-element">
+
+        </div>
+
+
+        <div class="field">
+
+            <label>
+                CSS Class
+            </label>
+
+            <input
+                id="elementClass"
+                type="text"
+                placeholder="custom-class">
+
+        </div>
+
+
+        <div class="field">
+
+            <label>
+                Text / Content
+            </label>
+
+            <textarea
+                id="contentInput"></textarea>
+
+        </div>
+
+
+        <div class="element-actions">
+
+            <button id="duplicateBtn">
+                Duplicate
+            </button>
+
+            <button id="copyStyleBtn">
+                Copy Style
+            </button>
+
+            <button id="pasteStyleBtn">
+                Paste Style
+            </button>
+
+        </div>
+
+
+        <div class="element-actions">
+
+            <button id="lockBtn">
+                Lock
+            </button>
+
+            <button id="hideBtn">
+                Hide
+            </button>
+
+        </div>
+
+
+        <button id="deleteBtn"
+                class="danger">
+            Delete Element
+        </button>
+
+    </section>
+
+
+
+    <!-- STYLE -->
+
+    <section id="stylePanel"
+             class="right-content hidden">
+
+
+        <div class="field">
+
+            <label>
+                Font Size
+            </label>
+
+            <input
+                id="fontSize"
+                type="number"
+                value="20">
+
+        </div>
+
+
+        <div class="field">
+
+            <label>
+                Text Color
+            </label>
+
+            <input
+                id="textColor"
+                type="color"
+                value="#111827">
+
+        </div>
+
+
+        <div class="field">
+
+            <label>
+                Background
+            </label>
+
+            <input
+                id="background"
+                type="color"
+                value="#ffffff">
+
+        </div>
+
+
+        <div class="field">
+
+            <label>
+                Padding
+            </label>
+
+            <input
+                id="padding"
+                type="number"
+                value="10">
+
+        </div>
+
+
+        <div class="field">
+
+            <label>
+                Margin
+            </label>
+
+            <input
+                id="margin"
+                type="number"
+                value="8">
+
+        </div>
+
+
+        <div class="field">
+
+            <label>
+                Border Width
+            </label>
+
+            <input
+                id="borderWidth"
+                type="number"
+                value="0">
+
+        </div>
+
+
+        <div class="field">
+
+            <label>
+                Border Radius
+            </label>
+
+            <input
+                id="radius"
+                type="number"
+                value="10">
+
+        </div>
+
+
+        <div class="field">
+
+            <label>
+                Shadow
+            </label>
+
+            <select id="shadow">
+
+                <option value="none">
+                    None
+                </option>
+
+                <option value="small">
+                    Small
+                </option>
+
+                <option value="medium">
+                    Medium
+                </option>
+
+                <option value="large">
+                    Large
+                </option>
+
+            </select>
+
+        </div>
+
+
+        <div class="field">
+
+            <label>
+                Position
+            </label>
+
+            <select id="position">
+
+                <option value="static">
+                    Static
+                </option>
+
+                <option value="relative">
+                    Relative
+                </option>
+
+                <option value="absolute">
+                    Absolute
+                </option>
+
+            </select>
+
+        </div>
+
+
+        <div class="field">
+
+            <label>
+                Display
+            </label>
+
+            <select id="display">
+
+                <option value="block">
+                    Block
+                </option>
+
+                <option value="flex">
+                    Flex
+                </option>
+
+                <option value="grid">
+                    Grid
+                </option>
+
+            </select>
+
+        </div>
+
+
+        <div class="field">
+
+            <label>
+                Width
+            </label>
+
+            <input
+                id="width"
+                type="text"
+                value="auto">
+
+        </div>
+
+
+        <div class="field">
+
+            <label>
+                Height
+            </label>
+
+            <input
+                id="height"
+                type="text"
+                value="auto">
+
+        </div>
+
+
+        <div class="field">
+
+            <label>
+                Overflow
+            </label>
+
+            <select id="overflow">
+
+                <option value="visible">
+                    Visible
+                </option>
+
+                <option value="hidden">
+                    Hidden
+                </option>
+
+                <option value="auto">
+                    Auto
+                </option>
+
+            </select>
+
+        </div>
+
+    </section>
+
+</aside>
+
+</div>
+
+
+
+<!-- ==================================================
+CODE STUDIO
+FEATURE 187 — Code Editor
+FEATURE 47 — Custom CSS Box
+================================================== -->
+
+<section class="code-studio">
+
+
+    <div class="code-header">
+
+        <strong>
+            Code Studio
+        </strong>
+
+
+        <div class="code-tabs">
+
+            <button
+                class="code-tab active"
+                data-code="html">
+                HTML
+            </button>
+
+            <button
+                class="code-tab"
+                data-code="css">
+                CSS
+            </button>
+
+            <button
+                class="code-tab"
+                data-code="js">
+                JavaScript
+            </button>
+
+        </div>
+
+
+        <button id="runCode">
+            Run Code
+        </button>
+
+    </div>
+
+
+    <div class="code-area">
+
+
+        <textarea
+            id="htmlCode"
+            class="code-input"
+            spellcheck="false"></textarea>
+
+
+        <textarea
+            id="cssCode"
+            class="code-input hidden"
+            spellcheck="false"></textarea>
+
+
+        <textarea
+            id="jsCode"
+            class="code-input hidden"
+            spellcheck="false"></textarea>
+
+    </div>
+
+
+    <div class="code-status">
+
+        <span>
+            ● Live Code
+        </span>
+
+        <span id="saveStatus">
+            Ready
         </span>
 
     </div>
 
 </section>
 
-    <!-- Options Modal Popup -->
-    <div id="options-modal" class="modal-overlay">
-        <div class="modal-box">
-            <div class="modal-header">
-                <h3>Builder Options & Tools</h3>
-                <button id="close-options-modal" class="modal-close">×</button>
-            </div>
-            <div class="modal-body">
-                <div class="option-item-row">
-                    <span>Export Project as HTML</span>
-                    <button id="modal-btn-export" class="sec-btn">Export Code</button>
-                </div>
-                <div class="option-item-row" style="margin-top: 10px;">
-                    <span>Clear Entire Canvas</span>
-                    <button id="modal-btn-clear" class="danger-btn">Clear All</button>
-                </div>
-            </div>
-        </div>
-    </div>
 
-    <button id="floating-back-btn">⬅ Back to Editor</button>
+</div>
 
-    <script src="smartbazaar-editor.js"></script>
+
+<script src="smartbazaar-editor.js"></script>
+
 </body>
 </html>
