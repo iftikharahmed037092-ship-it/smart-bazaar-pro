@@ -1,7 +1,7 @@
 /*==================================================
 SMARTBAZAAR PRO
-PART 19.2
-PRODUCT EDITOR ENGINE
+PART 19.3
+PRODUCT EDITOR ENGINE — FIXED
 ==================================================*/
 
 import {
@@ -21,8 +21,7 @@ import {
 import {
     ref,
     uploadBytes,
-    getDownloadURL,
-    deleteObject
+    getDownloadURL
 } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-storage.js";
 
 
@@ -30,8 +29,7 @@ import {
 DOM
 ==================================================*/
 
-const form =
-    document.getElementById("product-editor-form");
+const form = document.getElementById("product-editor-form");
 
 const mainImageInput =
     document.getElementById("main-product-image");
@@ -69,7 +67,7 @@ let currentProductId = null;
 
 
 /*==================================================
-UTILITY
+PRODUCT ID
 ==================================================*/
 
 function generateProductId() {
@@ -80,7 +78,7 @@ function generateProductId() {
         "-" +
         Math.random()
             .toString(36)
-            .substring(2, 7)
+            .substring(2, 8)
             .toUpperCase()
     );
 
@@ -88,7 +86,7 @@ function generateProductId() {
 
 
 /*==================================================
-MAIN IMAGE
+MAIN IMAGE PREVIEW
 ==================================================*/
 
 if (mainImageInput) {
@@ -97,44 +95,56 @@ if (mainImageInput) {
         "change",
         function () {
 
-            const file =
-                this.files[0];
+            const file = this.files?.[0];
 
             if (!file) {
                 return;
             }
 
+
             if (!file.type.startsWith("image/")) {
 
-                alert(
-                    "Please select a valid image."
-                );
+                alert("Please select a valid image.");
+
+                this.value = "";
 
                 return;
             }
 
+
             mainImageFile = file;
+
 
             const imageURL =
                 URL.createObjectURL(file);
 
-            mainImagePreview.src =
-                imageURL;
 
-            mainImagePreview.style.display =
-                "block";
+            if (mainImagePreview) {
 
-            const placeholder =
-                mainImageBox.querySelector(
-                    ".upload-placeholder"
-                );
+                mainImagePreview.src = imageURL;
 
-            if (placeholder) {
-
-                placeholder.style.display =
-                    "none";
+                mainImagePreview.style.display = "block";
 
             }
+
+
+            if (mainImageBox) {
+
+                const placeholder =
+                    mainImageBox.querySelector(
+                        ".upload-placeholder"
+                    );
+
+                if (placeholder) {
+
+                    placeholder.style.display = "none";
+
+                }
+
+            }
+
+
+            updateLivePreview();
 
         }
     );
@@ -143,7 +153,7 @@ if (mainImageInput) {
 
 
 /*==================================================
-GALLERY
+GALLERY IMAGE SELECT
 ==================================================*/
 
 if (galleryInput) {
@@ -153,29 +163,33 @@ if (galleryInput) {
         function () {
 
             const files =
-                Array.from(this.files);
+                Array.from(this.files || []);
+
 
             if (!files.length) {
                 return;
             }
 
+
             files.forEach(file => {
 
-                if (
-                    !file.type.startsWith(
-                        "image/"
-                    )
-                ) {
-
+                if (!file.type.startsWith("image/")) {
                     return;
-
                 }
 
                 galleryFiles.push(file);
 
             });
 
+
             renderGallery();
+
+
+            /*
+             * Important:
+             * Input reset ہونے کے بعد دوبارہ وہی
+             * image بھی select کی جا سکتی ہے۔
+             */
 
             this.value = "";
 
@@ -212,7 +226,7 @@ function renderGallery() {
 
 
     galleryFiles.forEach(
-        function (file, index) {
+        (file, index) => {
 
             const wrapper =
                 document.createElement("div");
@@ -256,19 +270,26 @@ function renderGallery() {
             );
 
 
-            wrapper.appendChild(
-                image
-            );
+            wrapper.appendChild(image);
 
-            wrapper.appendChild(
-                removeButton
-            );
+            wrapper.appendChild(removeButton);
 
 
-            galleryGrid.insertBefore(
-                wrapper,
-                uploadButton
-            );
+            if (uploadButton) {
+
+                galleryGrid.insertBefore(
+                    wrapper,
+                    uploadButton
+                );
+
+            }
+            else {
+
+                galleryGrid.appendChild(
+                    wrapper
+                );
+
+            }
 
         }
     );
@@ -277,7 +298,7 @@ function renderGallery() {
 
 
 /*==================================================
-VIDEO
+VIDEO SELECT
 ==================================================*/
 
 if (videoInput) {
@@ -286,31 +307,24 @@ if (videoInput) {
         "change",
         function () {
 
-            const file =
-                this.files[0];
+            const file = this.files?.[0];
 
             if (!file) {
                 return;
             }
 
 
-            if (
-                !file.type.startsWith(
-                    "video/"
-                )
-            ) {
+            if (!file.type.startsWith("video/")) {
 
-                alert(
-                    "Please select a valid video."
-                );
+                alert("Please select a valid video.");
+
+                this.value = "";
 
                 return;
-
             }
 
 
-            productVideoFile =
-                file;
+            productVideoFile = file;
 
 
             renderVideo();
@@ -332,8 +346,7 @@ function renderVideo() {
     }
 
 
-    videoPreviewContainer.innerHTML =
-        "";
+    videoPreviewContainer.innerHTML = "";
 
 
     if (!productVideoFile) {
@@ -341,14 +354,22 @@ function renderVideo() {
     }
 
 
+    const wrapper =
+        document.createElement("div");
+
+    wrapper.className =
+        "product-video-preview";
+
+
     const video =
         document.createElement("video");
 
-    video.controls =
-        true;
 
-    video.preload =
-        "metadata";
+    video.controls = true;
+
+    video.preload = "metadata";
+
+    video.playsInline = true;
 
     video.src =
         URL.createObjectURL(
@@ -356,12 +377,18 @@ function renderVideo() {
         );
 
 
-    video.style.width =
-        "100%";
+    video.style.width = "100%";
+
+    video.style.maxWidth = "700px";
+
+    video.style.display = "block";
+
+
+    wrapper.appendChild(video);
 
 
     videoPreviewContainer.appendChild(
-        video
+        wrapper
     );
 
 }
@@ -381,6 +408,14 @@ async function uploadFile(
     }
 
 
+    const safeName =
+        file.name
+            .replace(
+                /[^a-zA-Z0-9._-]/g,
+                "_"
+            );
+
+
     const fileName =
         Date.now() +
         "_" +
@@ -388,7 +423,7 @@ async function uploadFile(
             .toString(36)
             .substring(2, 10) +
         "_" +
-        file.name;
+        safeName;
 
 
     const storageRef =
@@ -404,19 +439,15 @@ async function uploadFile(
     );
 
 
-    const url =
-        await getDownloadURL(
-            storageRef
-        );
-
-
-    return url;
+    return await getDownloadURL(
+        storageRef
+    );
 
 }
 
 
 /*==================================================
-FORM DATA
+GET PRODUCT DATA
 ==================================================*/
 
 function getProductData() {
@@ -594,7 +625,7 @@ function getVariants() {
             const name =
                 row.querySelector(
                     '[name="variantName[]"]'
-                )?.value || "";
+                )?.value.trim() || "";
 
 
             const options =
@@ -644,20 +675,18 @@ function getSpecifications() {
             const name =
                 row.querySelector(
                     '[name="specificationName[]"]'
-                )?.value || "";
+                )?.value.trim() || "";
 
 
             const value =
                 row.querySelector(
                     '[name="specificationValue[]"]'
-                )?.value || "";
+                )?.value.trim() || "";
 
 
             return {
-
                 name,
                 value
-
             };
 
         })
@@ -677,6 +706,11 @@ SAVE PRODUCT
 async function saveProduct(
     publish = false
 ) {
+
+    if (!form) {
+        return;
+    }
+
 
     if (!form.checkValidity()) {
 
@@ -751,8 +785,7 @@ async function saveProduct(
         GALLERY
         ========================================*/
 
-        product.gallery =
-            [];
+        product.gallery = [];
 
 
         for (
@@ -808,29 +841,65 @@ async function saveProduct(
 
 
         /*========================================
-        CREATE DOCUMENT
+        FIRESTORE
         ========================================*/
 
-        const docRef =
-            await addDoc(
-                collection(
+        let savedDocumentId;
+
+
+        /*
+         * اگر پہلے سے document موجود ہے
+         * تو update کریں گے۔
+         *
+         * ورنہ نئی document بنے گی۔
+         */
+
+        if (currentProductId &&
+            currentProductId.startsWith("SB-")) {
+
+            const docRef =
+                await addDoc(
+                    collection(
+                        db,
+                        "products"
+                    ),
+                    {
+                        ...product,
+                        createdAt:
+                            serverTimestamp()
+                    }
+                );
+
+
+            savedDocumentId =
+                docRef.id;
+
+
+            currentProductId =
+                docRef.id;
+
+        }
+        else {
+
+            await updateDoc(
+                doc(
                     db,
-                    "products"
+                    "products",
+                    currentProductId
                 ),
-                {
-
-                    ...product,
-
-                    createdAt:
-                        serverTimestamp()
-
-                }
+                product
             );
 
 
-        currentProductId =
-            docRef.id;
+            savedDocumentId =
+                currentProductId;
 
+        }
+
+
+        /*========================================
+        PRODUCT ID UI
+        ========================================*/
 
         const productIdElement =
             document.getElementById(
@@ -841,7 +910,7 @@ async function saveProduct(
         if (productIdElement) {
 
             productIdElement.textContent =
-                docRef.id;
+                savedDocumentId;
 
         }
 
@@ -859,6 +928,12 @@ async function saveProduct(
                 : "Product Saved"
         );
 
+
+        /*
+         * Files دوبارہ upload نہ ہوں۔
+         * Save کے بعد state صاف نہیں کر رہے
+         * کیونکہ preview برقرار رہنا چاہیے۔
+         */
 
     }
     catch (error) {
@@ -971,14 +1046,14 @@ function updateLivePreview() {
     const name =
         document.getElementById(
             "product-name"
-        )?.value ||
+        )?.value.trim() ||
         "Product Name";
 
 
     const brand =
         document.getElementById(
             "product-brand"
-        )?.value ||
+        )?.value.trim() ||
         "BRAND";
 
 
@@ -999,7 +1074,7 @@ function updateLivePreview() {
     const description =
         document.getElementById(
             "product-description"
-        )?.value ||
+        )?.value.trim() ||
         "Product description will appear here.";
 
 
@@ -1027,12 +1102,17 @@ function updateLivePreview() {
 
     setText(
         "card-preview-price",
-        `PKR ${Number(salePrice).toLocaleString()}`
+        `PKR ${Number(
+            salePrice
+        ).toLocaleString()}`
     );
+
 
     setText(
         "detail-preview-price",
-        `PKR ${Number(salePrice).toLocaleString()}`
+        `PKR ${Number(
+            salePrice
+        ).toLocaleString()}`
     );
 
 
@@ -1042,12 +1122,22 @@ function updateLivePreview() {
     );
 
 
-    if (mainImagePreview?.src) {
+    /*
+     * Main image کو Live Preview میں بھی دکھائیں۔
+     */
+
+    if (
+        mainImagePreview &&
+        mainImagePreview.src &&
+        mainImagePreview.src !==
+            window.location.href
+    ) {
 
         setImage(
             "card-preview-image",
             mainImagePreview.src
         );
+
 
         setImage(
             "detail-preview-image",
@@ -1071,6 +1161,7 @@ function setText(
     const element =
         document.getElementById(id);
 
+
     if (element) {
 
         element.textContent =
@@ -1093,13 +1184,15 @@ function setImage(
     const image =
         document.getElementById(id);
 
-    if (!image) {
+
+    if (!image || !src) {
         return;
     }
 
 
     image.src =
         src;
+
 
     image.style.display =
         "block";
@@ -1128,7 +1221,7 @@ LIVE INPUT
 
 form?.addEventListener(
     "input",
-    function () {
+    () => {
 
         updateLivePreview();
 
@@ -1140,25 +1233,29 @@ form?.addEventListener(
 PREVIEW BUTTON
 ==================================================*/
 
+function openPreview() {
+
+    updateLivePreview();
+
+
+    document
+        .getElementById(
+            "live-preview-panel"
+        )
+        ?.classList.add(
+            "active"
+        );
+
+}
+
+
 document
     .getElementById(
         "preview-button"
     )
     ?.addEventListener(
         "click",
-        () => {
-
-            updateLivePreview();
-
-            document
-                .getElementById(
-                    "live-preview-panel"
-                )
-                ?.classList.add(
-                    "active"
-                );
-
-        }
+        openPreview
     );
 
 
@@ -1168,21 +1265,13 @@ document
     )
     ?.addEventListener(
         "click",
-        () => {
-
-            updateLivePreview();
-
-            document
-                .getElementById(
-                    "live-preview-panel"
-                )
-                ?.classList.add(
-                    "active"
-                );
-
-        }
+        openPreview
     );
 
+
+/*==================================================
+CLOSE PREVIEW
+==================================================*/
 
 document
     .getElementById(
@@ -1285,6 +1374,11 @@ document
                 );
 
 
+            if (!container) {
+                return;
+            }
+
+
             const row =
                 document.createElement(
                     "div"
@@ -1311,7 +1405,6 @@ document
 
                 </div>
 
-
                 <div class="form-group">
 
                     <label>
@@ -1325,7 +1418,6 @@ document
                     >
 
                 </div>
-
 
                 <button
                     type="button"
@@ -1353,7 +1445,7 @@ REMOVE VARIANT
 
 document.addEventListener(
     "click",
-    function (event) {
+    event => {
 
         const button =
             event.target.closest(
@@ -1373,9 +1465,7 @@ document.addEventListener(
 
 
         if (rows.length <= 1) {
-
             return;
-
         }
 
 
@@ -1405,6 +1495,11 @@ document
                 document.getElementById(
                     "specifications-editor"
                 );
+
+
+            if (!container) {
+                return;
+            }
 
 
             const row =
@@ -1457,7 +1552,7 @@ REMOVE SPECIFICATION
 
 document.addEventListener(
     "click",
-    function (event) {
+    event => {
 
         const button =
             event.target.closest(
@@ -1582,6 +1677,10 @@ document
     );
 
 
+/*==================================================
+CONFIRM DELETE
+==================================================*/
+
 document
     .getElementById(
         "confirm-delete-button"
@@ -1636,10 +1735,13 @@ document
             catch (error) {
 
                 console.error(
+                    "DELETE ERROR:",
                     error
                 );
 
+
                 alert(
+                    "Delete failed.\n\n" +
                     error.message
                 );
 
@@ -1800,11 +1902,8 @@ function hideLoading() {
 INITIALIZE
 ==================================================*/
 
-document.addEventListener(
-    "DOMContentLoaded",
-    () => {
+updateLivePreview();
 
-        updateLivePreview();
-
-    }
+console.log(
+    "SmartBazaar Pro Product Editor loaded successfully."
 );
