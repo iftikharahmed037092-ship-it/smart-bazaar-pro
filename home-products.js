@@ -2,21 +2,16 @@
 SMARTBAZAAR PRO
 FEATURE 24.3
 HOME PRODUCTS SYSTEM
-FIREBASE → FEATURED PRODUCTS
-==================================================*/
-
-
-/*==================================================
-IMPORT FIREBASE PRODUCT FUNCTIONS
+FIRESTORE → PUBLISHED PRODUCTS
 ==================================================*/
 
 import {
-    getProducts
+    getPublishedProducts
 } from "./firebase-product.js";
 
 
 /*==================================================
-DOM ELEMENTS
+DOM
 ==================================================*/
 
 const productsContainer =
@@ -32,7 +27,7 @@ const viewAllProducts =
 
 
 /*==================================================
-PRODUCT LIMIT
+LIMIT
 ==================================================*/
 
 const FEATURED_PRODUCT_LIMIT = 8;
@@ -77,20 +72,15 @@ function escapeHTML(value) {
 
 
 /*==================================================
-FORMAT PRICE
+PRICE
 ==================================================*/
 
 function formatPrice(price) {
 
     const number =
-        Number(price || 0);
-
-
-    if (!number) {
-
-        return "Rs. 0";
-
-    }
+        Number(
+            price || 0
+        );
 
 
     return (
@@ -104,7 +94,70 @@ function formatPrice(price) {
 
 
 /*==================================================
-GET DISCOUNT
+PRODUCT IMAGE
+==================================================*/
+
+function getProductImage(
+    product
+) {
+
+    /* MAIN IMAGE */
+
+    if (
+        product.mainImage
+    ) {
+
+        return product.mainImage;
+
+    }
+
+
+    /* OLD IMAGE FIELD */
+
+    if (
+        product.image
+    ) {
+
+        return product.image;
+
+    }
+
+
+    /* GALLERY */
+
+    if (
+        Array.isArray(
+            product.gallery
+        ) &&
+        product.gallery.length
+    ) {
+
+        return product.gallery[0];
+
+    }
+
+
+    /* OLD IMAGES */
+
+    if (
+        Array.isArray(
+            product.images
+        ) &&
+        product.images.length
+    ) {
+
+        return product.images[0];
+
+    }
+
+
+    return "";
+
+}
+
+
+/*==================================================
+DISCOUNT
 ==================================================*/
 
 function calculateDiscount(
@@ -112,17 +165,21 @@ function calculateDiscount(
     oldPrice
 ) {
 
-    const currentPrice =
-        Number(price || 0);
+    const current =
+        Number(
+            price || 0
+        );
 
-    const previousPrice =
-        Number(oldPrice || 0);
+
+    const old =
+        Number(
+            oldPrice || 0
+        );
 
 
     if (
-        previousPrice <= 0 ||
-        currentPrice <= 0 ||
-        previousPrice <= currentPrice
+        old <= current ||
+        old <= 0
     ) {
 
         return "";
@@ -134,71 +191,25 @@ function calculateDiscount(
         Math.round(
             (
                 (
-                    previousPrice -
-                    currentPrice
+                    old -
+                    current
                 ) /
-                previousPrice
+                old
             ) * 100
         );
 
 
-    return discount > 0
-        ? `${discount}% OFF`
-        : "";
+    return (
+        discount > 0
+            ? `${discount}% OFF`
+            : ""
+    );
 
 }
 
 
 /*==================================================
-GET PRODUCT IMAGE
-==================================================*/
-
-function getProductImage(
-    product
-) {
-
-    /*==============================
-    MAIN IMAGE
-    ==============================*/
-
-    if (
-        product &&
-        product.image
-    ) {
-
-        return product.image;
-
-    }
-
-
-    /*==============================
-    IMAGE ARRAY
-    ==============================*/
-
-    if (
-        product &&
-        Array.isArray(
-            product.images
-        ) &&
-        product.images.length > 0
-    ) {
-
-        return product.images[0];
-
-    }
-
-
-    /*==============================
-    NO IMAGE
-    ==============================*/
-
-    return "";
-
-}
-
-
-/*==================================================
-PRODUCT BADGE
+BADGE
 ==================================================*/
 
 function getBadge(
@@ -222,16 +233,20 @@ function getBadge(
 
 
     return `
+
         <span class="product-badge">
+
             ${escapeHTML(badge)}
+
         </span>
+
     `;
 
 }
 
 
 /*==================================================
-RATING STARS
+RATING
 ==================================================*/
 
 function getRatingStars(
@@ -239,24 +254,32 @@ function getRatingStars(
 ) {
 
     const value =
-        Number(rating || 0);
+        Number(
+            rating || 0
+        );
 
 
     if (value <= 0) {
 
         return `
+
             <div class="product-rating">
+
                 <span class="no-rating">
                     No Rating
                 </span>
+
             </div>
+
         `;
 
     }
 
 
-    const roundedRating =
-        Math.round(value);
+    const rounded =
+        Math.round(
+            value
+        );
 
 
     let stars = "";
@@ -268,44 +291,41 @@ function getRatingStars(
         i++
     ) {
 
-        if (
-            i <= roundedRating
-        ) {
+        stars +=
+            i <= rounded
 
-            stars +=
-                `<i class="fa-solid fa-star"></i>`;
+                ? `<i class="fa-solid fa-star"></i>`
 
-        }
-
-        else {
-
-            stars +=
-                `<i class="fa-regular fa-star"></i>`;
-
-        }
+                : `<i class="fa-regular fa-star"></i>`;
 
     }
 
 
     return `
+
         <div class="product-rating">
 
             <span class="rating-stars">
+
                 ${stars}
+
             </span>
 
             <span class="rating-number">
+
                 ${value.toFixed(1)}
+
             </span>
 
         </div>
+
     `;
 
 }
 
 
 /*==================================================
-PRODUCT CARD
+CREATE PRODUCT CARD
 ==================================================*/
 
 function createProductCard(
@@ -320,38 +340,9 @@ function createProductCard(
 
 
     const name =
+        product.productName ||
         product.name ||
         "Unnamed Product";
-
-
-    const price =
-        Number(
-            product.price || 0
-        );
-
-
-    const oldPrice =
-        Number(
-            product.oldPrice || 0
-        );
-
-
-    const discount =
-        product.discount ||
-        calculateDiscount(
-            price,
-            oldPrice
-        );
-
-
-    const rating =
-        product.rating || 0;
-
-
-    const reviewCount =
-        Number(
-            product.reviewCount || 0
-        );
 
 
     const category =
@@ -359,9 +350,41 @@ function createProductCard(
         "Product";
 
 
-    const badge =
-        getBadge(
-            product
+    const price =
+        Number(
+            product.salePrice ||
+            product.regularPrice ||
+            product.price ||
+            0
+        );
+
+
+    const oldPrice =
+        Number(
+            product.regularPrice ||
+            product.oldPrice ||
+            0
+        );
+
+
+    const discount =
+        calculateDiscount(
+            price,
+            oldPrice
+        );
+
+
+    const rating =
+        Number(
+            product.rating ||
+            0
+        );
+
+
+    const reviewCount =
+        Number(
+            product.reviewCount ||
+            0
         );
 
 
@@ -373,19 +396,12 @@ function createProductCard(
 
     return `
 
-        <!--==================================
-        FEATURED PRODUCT CARD
-        FEATURE 24.3
-        ==================================-->
-
         <article
             class="product-card"
             data-product-id="${safeId}">
 
 
-            <!--==============================
-            PRODUCT IMAGE
-            ==============================-->
+            <!-- IMAGE -->
 
             <div class="product-image-box">
 
@@ -418,12 +434,8 @@ function createProductCard(
                 }
 
 
-                <!-- BADGE -->
+                ${getBadge(product)}
 
-                ${badge}
-
-
-                <!-- DISCOUNT -->
 
                 ${
                     discount
@@ -431,7 +443,11 @@ function createProductCard(
                     ? `
 
                     <span class="product-discount">
-                        ${escapeHTML(discount)}
+
+                        ${escapeHTML(
+                            discount
+                        )}
+
                     </span>
 
                     `
@@ -439,8 +455,6 @@ function createProductCard(
                     : ""
                 }
 
-
-                <!-- WISHLIST -->
 
                 <button
                     type="button"
@@ -456,14 +470,10 @@ function createProductCard(
             </div>
 
 
-            <!--==============================
-            PRODUCT INFORMATION
-            ==============================-->
+            <!-- INFORMATION -->
 
             <div class="product-info">
 
-
-                <!-- CATEGORY -->
 
                 <span class="product-category">
 
@@ -472,16 +482,12 @@ function createProductCard(
                 </span>
 
 
-                <!-- NAME -->
-
                 <h3 class="product-name">
 
                     ${escapeHTML(name)}
 
                 </h3>
 
-
-                <!-- RATING -->
 
                 ${getRatingStars(rating)}
 
@@ -503,12 +509,9 @@ function createProductCard(
                 }
 
 
-                <!--==============================
-                PRICE
-                ==============================-->
+                <!-- PRICE -->
 
                 <div class="product-price-row">
-
 
                     <span class="product-price">
 
@@ -524,7 +527,9 @@ function createProductCard(
 
                         <span class="product-old-price">
 
-                            ${formatPrice(oldPrice)}
+                            ${formatPrice(
+                                oldPrice
+                            )}
 
                         </span>
 
@@ -533,16 +538,13 @@ function createProductCard(
                         : ""
                     }
 
-
                 </div>
 
 
-                <!--==============================
-                DELIVERY
-                ==============================-->
+                <!-- DELIVERY -->
 
                 ${
-                    product.deliveryText
+                    product.deliveryTime
 
                     ? `
 
@@ -551,9 +553,11 @@ function createProductCard(
                         <i class="fa-solid fa-truck"></i>
 
                         <span>
+
                             ${escapeHTML(
-                                product.deliveryText
+                                product.deliveryTime
                             )}
+
                         </span>
 
                     </div>
@@ -564,9 +568,7 @@ function createProductCard(
                 }
 
 
-                <!--==============================
-                VIEW PRODUCT
-                ==============================-->
+                <!-- VIEW -->
 
                 <button
                     type="button"
@@ -591,7 +593,7 @@ function createProductCard(
 
 
 /*==================================================
-LOADING STATE
+LOADING
 ==================================================*/
 
 function showProductsLoading() {
@@ -621,7 +623,7 @@ function showProductsLoading() {
 
 
 /*==================================================
-EMPTY STATE
+EMPTY
 ==================================================*/
 
 function showProductsEmpty() {
@@ -644,7 +646,7 @@ function showProductsEmpty() {
             </h3>
 
             <p>
-                Products will appear here after publishing.
+                Published products will appear here.
             </p>
 
         </div>
@@ -655,7 +657,7 @@ function showProductsEmpty() {
 
 
 /*==================================================
-ERROR STATE
+ERROR
 ==================================================*/
 
 function showProductsError(
@@ -702,106 +704,61 @@ function showProductsError(
     `;
 
 
-    const retryButton =
-        document.getElementById(
+    document
+        .getElementById(
             "retryProductsBtn"
-        );
-
-
-    if (retryButton) {
-
-        retryButton.addEventListener(
+        )
+        ?.addEventListener(
             "click",
             loadFeaturedProducts
         );
-
-    }
 
 }
 
 
 /*==================================================
-FILTER ACTIVE PRODUCTS
+SORT PRODUCTS
 ==================================================*/
 
-function getActiveProducts(
+function sortProducts(
     products
 ) {
 
-    if (!products) {
+    return products.sort(
+        (
+            a,
+            b
+        ) => {
 
-        return [];
-
-    }
-
-
-    const productArray =
-        Object.entries(
-            products
-        )
-
-
-        .map(
-            function([
-                id,
-                product
-            ]) {
-
-                return {
-
-                    id: id,
-
-                    ...product
-
-                };
-
-            }
-        )
-
-
-        .filter(
-            function(product) {
-
-                return (
-                    String(
-                        product.status || ""
-                    ).toLowerCase()
-                    ===
-                    "active"
+            const aTime =
+                a.createdAt?.seconds
+                ? a.createdAt.seconds
+                : Number(
+                    a.createdAt || 0
                 );
 
-            }
-        );
 
+            const bTime =
+                b.createdAt?.seconds
+                ? b.createdAt.seconds
+                : Number(
+                    b.createdAt || 0
+                );
 
-    /*==============================
-    NEWEST PRODUCTS FIRST
-    ==============================*/
-
-    productArray.sort(
-        function(a, b) {
 
             return (
-                Number(
-                    b.createdAt || 0
-                )
-                -
-                Number(
-                    a.createdAt || 0
-                )
+                bTime -
+                aTime
             );
 
         }
     );
 
-
-    return productArray;
-
 }
 
 
 /*==================================================
-RENDER PRODUCTS
+RENDER
 ==================================================*/
 
 function renderProducts(
@@ -810,10 +767,6 @@ function renderProducts(
 
     if (!productsContainer) {
 
-        console.warn(
-            "products-container not found."
-        );
-
         return;
 
     }
@@ -821,7 +774,7 @@ function renderProducts(
 
     if (
         !products ||
-        products.length === 0
+        !products.length
     ) {
 
         showProductsEmpty();
@@ -831,26 +784,25 @@ function renderProducts(
     }
 
 
-    const featuredProducts =
-        products.slice(
+    const featured =
+        sortProducts(
+            products
+        ).slice(
             0,
             FEATURED_PRODUCT_LIMIT
         );
 
 
     productsContainer.innerHTML =
-        featuredProducts
-        .map(
-            function(product) {
-
-                return createProductCard(
-                    product,
-                    product.id
-                );
-
-            }
-        )
-        .join("");
+        featured
+            .map(
+                product =>
+                    createProductCard(
+                        product,
+                        product.id
+                    )
+            )
+            .join("");
 
 
     attachProductEvents();
@@ -859,98 +811,80 @@ function renderProducts(
 
 
 /*==================================================
-PRODUCT EVENTS
+EVENTS
 ==================================================*/
 
 function attachProductEvents() {
 
-
-    /*==============================
-    VIEW PRODUCT
-    ==============================*/
-
-    const viewButtons =
-        document.querySelectorAll(
+    document
+        .querySelectorAll(
             ".view-product-btn"
+        )
+        .forEach(
+            button => {
+
+                button.addEventListener(
+                    "click",
+                    function() {
+
+                        const productId =
+                            decodeURIComponent(
+                                this.dataset.productId
+                            );
+
+
+                        openProduct(
+                            productId
+                        );
+
+                    }
+                );
+
+            }
         );
 
 
-    viewButtons.forEach(
-        function(button) {
-
-            button.addEventListener(
-                "click",
-                function() {
-
-                    const productId =
-                        decodeURIComponent(
-                            this.dataset.productId
-                        );
-
-
-                    openProduct(
-                        productId
-                    );
-
-                }
-            );
-
-        }
-    );
-
-
-    /*==============================
-    WISHLIST
-    ==============================*/
-
-    const wishlistButtons =
-        document.querySelectorAll(
+    document
+        .querySelectorAll(
             ".product-wishlist"
-        );
+        )
+        .forEach(
+            button => {
+
+                button.addEventListener(
+                    "click",
+                    function(event) {
+
+                        event.preventDefault();
+
+                        event.stopPropagation();
 
 
-    wishlistButtons.forEach(
-        function(button) {
-
-            button.addEventListener(
-                "click",
-                function(event) {
-
-                    event.preventDefault();
-
-                    event.stopPropagation();
-
-
-                    this.classList.toggle(
-                        "active"
-                    );
-
-
-                    const icon =
-                        this.querySelector(
-                            "i"
+                        this.classList.toggle(
+                            "active"
                         );
 
 
-                    if (
-                        icon
-                    ) {
+                        const icon =
+                            this.querySelector(
+                                "i"
+                            );
 
-                        icon.classList.toggle(
+
+                        icon?.classList.toggle(
                             "fa-regular"
                         );
 
-                        icon.classList.toggle(
+
+                        icon?.classList.toggle(
                             "fa-solid"
                         );
 
                     }
+                );
 
-                }
-            );
-
-        }
-    );
+            }
+        );
 
 }
 
@@ -970,25 +904,11 @@ function openProduct(
     }
 
 
-    /*
-    Product detail page can be
-    connected later.
-
-    For now we store the ID
-    for the next page.
-    */
-
-
     localStorage.setItem(
         "selectedProductId",
         productId
     );
 
-
-    /*
-    If product-detail.html
-    exists, open it.
-    */
 
     window.location.href =
         `product-detail.html?id=${encodeURIComponent(
@@ -999,7 +919,7 @@ function openProduct(
 
 
 /*==================================================
-VIEW ALL PRODUCTS
+VIEW ALL
 ==================================================*/
 
 if (viewAllProducts) {
@@ -1009,12 +929,6 @@ if (viewAllProducts) {
         function(event) {
 
             event.preventDefault();
-
-
-            /*
-            Product listing page
-            can be connected here.
-            */
 
 
             window.location.href =
@@ -1027,16 +941,12 @@ if (viewAllProducts) {
 
 
 /*==================================================
-LOAD FEATURED PRODUCTS
+LOAD PRODUCTS
 ==================================================*/
 
 async function loadFeaturedProducts() {
 
     if (!productsContainer) {
-
-        console.warn(
-            "products-container not found."
-        );
 
         return;
 
@@ -1048,46 +958,21 @@ async function loadFeaturedProducts() {
 
     try {
 
-        /*==============================
-        GET FIREBASE PRODUCTS
-        ==============================*/
-
         const products =
-            await getProducts();
+            await getPublishedProducts();
 
 
         console.log(
-            "FIREBASE PRODUCTS:",
+            "PUBLISHED PRODUCTS:",
             products
         );
 
 
-        /*==============================
-        FILTER ACTIVE
-        ==============================*/
-
-        const activeProducts =
-            getActiveProducts(
-                products
-            );
-
-
-        console.log(
-            "ACTIVE PRODUCTS:",
-            activeProducts
-        );
-
-
-        /*==============================
-        RENDER
-        ==============================*/
-
         renderProducts(
-            activeProducts
+            products
         );
 
     }
-
 
     catch(error) {
 
@@ -1104,19 +989,23 @@ async function loadFeaturedProducts() {
 START
 ==================================================*/
 
-document.addEventListener(
-    "DOMContentLoaded",
-    function() {
+if (
+    document.readyState ===
+    "loading"
+) {
 
-        loadFeaturedProducts();
+    document.addEventListener(
+        "DOMContentLoaded",
+        loadFeaturedProducts
+    );
 
-    }
-);
+}
+else {
 
+    loadFeaturedProducts();
 
-/*==================================================
-INITIAL TEST
-==================================================*/
+}
+
 
 console.log(
     "SmartBazaar Pro Home Products loaded successfully."
