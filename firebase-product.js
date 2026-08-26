@@ -1,73 +1,134 @@
 /*==================================================
 SMARTBAZAAR PRO
-FIREBASE PRODUCT DATABASE
+FIRESTORE PRODUCT DATABASE
+PART 19.4
 ==================================================*/
 
 import {
-    getDatabase,
-    ref,
-    push,
-    set,
-    get,
-    remove,
-    update
-} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+
+    collection,
+    addDoc,
+    getDocs,
+    getDoc,
+    updateDoc,
+    deleteDoc,
+    doc,
+    query,
+    orderBy
+
+} from "https://www.gstatic.com/firebasejs/12.17.1/firebase-firestore.js";
+
 
 import {
-    app
+    db
 } from "./firebase-config.js";
 
 
 /*==================================================
-DATABASE
+PRODUCTS COLLECTION
 ==================================================*/
 
-const db = getDatabase(app);
-
-
-/*==================================================
-PRODUCTS REFERENCE
-==================================================*/
-
-const productsRef =
-    ref(db, "products");
+const productsCollection =
+    collection(
+        db,
+        "products"
+    );
 
 
 /*==================================================
 ADD PRODUCT
 ==================================================*/
 
-export async function addProduct(productData) {
+export async function addProduct(
+    productData
+) {
 
-    const newProductRef =
-        push(productsRef);
+    if (!productData) {
 
-    await set(
-        newProductRef,
-        productData
-    );
+        throw new Error(
+            "Product data is missing."
+        );
 
-    return newProductRef.key;
+    }
+
+
+    const document =
+        await addDoc(
+            productsCollection,
+            productData
+        );
+
+
+    return document.id;
 
 }
 
 
 /*==================================================
-GET PRODUCTS
+GET ALL PRODUCTS
 ==================================================*/
 
 export async function getProducts() {
 
     const snapshot =
-        await get(productsRef);
+        await getDocs(
+            productsCollection
+        );
 
-    if (!snapshot.exists()) {
+
+    if (snapshot.empty) {
 
         return null;
 
     }
 
-    return snapshot.val();
+
+    const products = {};
+
+
+    snapshot.forEach(
+        document => {
+
+            products[document.id] = {
+
+                id:
+                    document.id,
+
+                ...document.data()
+
+            };
+
+        }
+    );
+
+
+    return products;
+
+}
+
+
+/*==================================================
+GET PRODUCTS ARRAY
+==================================================*/
+
+export async function getProductsArray() {
+
+    const snapshot =
+        await getDocs(
+            productsCollection
+        );
+
+
+    return snapshot.docs.map(
+        document => ({
+
+            id:
+                document.id,
+
+            ...document.data()
+
+        })
+    );
 
 }
 
@@ -76,7 +137,9 @@ export async function getProducts() {
 GET SINGLE PRODUCT
 ==================================================*/
 
-export async function getProduct(productId) {
+export async function getProduct(
+    productId
+) {
 
     if (!productId) {
 
@@ -84,14 +147,20 @@ export async function getProduct(productId) {
 
     }
 
-    const productRef =
-        ref(
+
+    const productReference =
+        doc(
             db,
-            `products/${productId}`
+            "products",
+            productId
         );
 
+
     const snapshot =
-        await get(productRef);
+        await getDoc(
+            productReference
+        );
+
 
     if (!snapshot.exists()) {
 
@@ -99,7 +168,15 @@ export async function getProduct(productId) {
 
     }
 
-    return snapshot.val();
+
+    return {
+
+        id:
+            snapshot.id,
+
+        ...snapshot.data()
+
+    };
 
 }
 
@@ -121,16 +198,22 @@ export async function updateProduct(
 
     }
 
-    const productRef =
-        ref(
+
+    const productReference =
+        doc(
             db,
-            `products/${productId}`
+            "products",
+            productId
         );
 
-    await update(
-        productRef,
+
+    await updateDoc(
+        productReference,
         productData
     );
+
+
+    return true;
 
 }
 
@@ -151,14 +234,75 @@ export async function deleteProduct(
 
     }
 
-    const productRef =
-        ref(
+
+    const productReference =
+        doc(
             db,
-            `products/${productId}`
+            "products",
+            productId
         );
 
-    await remove(
-        productRef
+
+    await deleteDoc(
+        productReference
     );
 
+
+    return true;
+
 }
+
+
+/*==================================================
+GET PUBLISHED PRODUCTS
+==================================================*/
+
+export async function getPublishedProducts() {
+
+    const snapshot =
+        await getDocs(
+            productsCollection
+        );
+
+
+    if (snapshot.empty) {
+
+        return [];
+
+    }
+
+
+    const products =
+        snapshot.docs
+            .map(
+                document => ({
+
+                    id:
+                        document.id,
+
+                    ...document.data()
+
+                })
+            )
+            .filter(
+                product =>
+                    String(
+                        product.status || ""
+                    ).toLowerCase()
+                    ===
+                    "published"
+            );
+
+
+    return products;
+
+}
+
+
+/*==================================================
+EXPORT
+==================================================*/
+
+export {
+    productsCollection
+};
