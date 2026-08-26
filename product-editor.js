@@ -1,56 +1,115 @@
 /*==================================================
 SMARTBAZAAR PRO
 PART 19.3
-PRODUCT EDITOR ENGINE — FIXED
+PRODUCT EDITOR ENGINE
+FIREBASE REALTIME DATABASE + CLOUDINARY
+==================================================*/
+
+
+/*==================================================
+IMPORT FIREBASE DATABASE
 ==================================================*/
 
 import {
-    db,
-    storage
+    getDatabase,
+    ref,
+    push,
+    set,
+    get,
+    update,
+    remove
+} from "https://www.gstatic.com/firebasejs/12.17.1/firebase-database.js";
+
+
+/*==================================================
+FIREBASE APP
+==================================================*/
+
+import {
+    app
 } from "./firebase-config.js";
 
-import {
-    collection,
-    addDoc,
-    updateDoc,
-    doc,
-    deleteDoc,
-    serverTimestamp
-} from "https://www.gstatic.com/firebasejs/12.17.1/firebase-firestore.js";
+
+/*==================================================
+CLOUDINARY
+==================================================*/
 
 import {
-    ref,
-    uploadBytes,
-    getDownloadURL
-} from "https://www.gstatic.com/firebasejs/12.17.1/firebase-storage.js";
+    uploadImage,
+    cloudName,
+    uploadPreset
+} from "./cloudinary-config.js";
+
+
+/*==================================================
+DATABASE
+==================================================*/
+
+const database =
+    getDatabase(app);
+
+
+/*==================================================
+PRODUCTS REFERENCE
+==================================================*/
+
+const productsRef =
+    ref(
+        database,
+        "products"
+    );
 
 
 /*==================================================
 DOM
 ==================================================*/
 
-const form = document.getElementById("product-editor-form");
+const form =
+    document.getElementById(
+        "product-editor-form"
+    );
+
 
 const mainImageInput =
-    document.getElementById("main-product-image");
+    document.getElementById(
+        "main-product-image"
+    );
+
 
 const mainImagePreview =
-    document.getElementById("main-image-preview");
+    document.getElementById(
+        "main-image-preview"
+    );
+
 
 const mainImageBox =
-    document.getElementById("main-image-upload-box");
+    document.getElementById(
+        "main-image-upload-box"
+    );
+
 
 const galleryInput =
-    document.getElementById("product-gallery-images");
+    document.getElementById(
+        "product-gallery-images"
+    );
+
 
 const galleryGrid =
-    document.getElementById("gallery-upload-grid");
+    document.getElementById(
+        "gallery-upload-grid"
+    );
+
 
 const videoInput =
-    document.getElementById("product-video");
+    document.getElementById(
+        "product-video"
+    );
+
 
 const videoPreviewContainer =
-    document.getElementById("video-preview-container");
+    document.getElementById(
+        "video-preview-container"
+    );
 
 
 /*==================================================
@@ -64,6 +123,36 @@ let galleryFiles = [];
 let productVideoFile = null;
 
 let currentProductId = null;
+
+let existingMainImage = "";
+
+let existingGallery = [];
+
+let existingVideo = "";
+
+
+/*==================================================
+HELPERS
+==================================================*/
+
+function getValue(id) {
+
+    return (
+        document.getElementById(id)?.value ||
+        ""
+    );
+
+}
+
+
+function isChecked(id) {
+
+    return (
+        document.getElementById(id)?.checked ||
+        false
+    );
+
+}
 
 
 /*==================================================
@@ -95,35 +184,68 @@ if (mainImageInput) {
         "change",
         function () {
 
-            const file = this.files?.[0];
+            const file =
+                this.files?.[0];
+
 
             if (!file) {
+
                 return;
+
             }
 
 
-            if (!file.type.startsWith("image/")) {
+            if (
+                !file.type ||
+                !file.type.startsWith(
+                    "image/"
+                )
+            ) {
 
-                alert("Please select a valid image.");
+                alert(
+                    "Please select a valid image."
+                );
 
                 this.value = "";
 
                 return;
+
             }
 
 
-            mainImageFile = file;
+            if (
+                file.size >
+                10 * 1024 * 1024
+            ) {
+
+                alert(
+                    "Main image must be smaller than 10MB."
+                );
+
+                this.value = "";
+
+                return;
+
+            }
+
+
+            mainImageFile =
+                file;
 
 
             const imageURL =
-                URL.createObjectURL(file);
+                URL.createObjectURL(
+                    file
+                );
 
 
             if (mainImagePreview) {
 
-                mainImagePreview.src = imageURL;
+                mainImagePreview.src =
+                    imageURL;
 
-                mainImagePreview.style.display = "block";
+                mainImagePreview.style.display =
+                    "block";
 
             }
 
@@ -135,13 +257,27 @@ if (mainImageInput) {
                         ".upload-placeholder"
                     );
 
+
                 if (placeholder) {
 
-                    placeholder.style.display = "none";
+                    placeholder.style.display =
+                        "none";
 
                 }
 
             }
+
+
+            setImage(
+                "card-preview-image",
+                imageURL
+            );
+
+
+            setImage(
+                "detail-preview-image",
+                imageURL
+            );
 
 
             updateLivePreview();
@@ -163,33 +299,53 @@ if (galleryInput) {
         function () {
 
             const files =
-                Array.from(this.files || []);
+                Array.from(
+                    this.files || []
+                );
 
 
             if (!files.length) {
+
                 return;
+
             }
 
 
-            files.forEach(file => {
+            files.forEach(
+                file => {
 
-                if (!file.type.startsWith("image/")) {
-                    return;
+                    if (
+                        !file.type ||
+                        !file.type.startsWith(
+                            "image/"
+                        )
+                    ) {
+
+                        return;
+
+                    }
+
+
+                    if (
+                        file.size >
+                        10 * 1024 * 1024
+                    ) {
+
+                        return;
+
+                    }
+
+
+                    galleryFiles.push(
+                        file
+                    );
+
                 }
-
-                galleryFiles.push(file);
-
-            });
+            );
 
 
             renderGallery();
 
-
-            /*
-             * Important:
-             * Input reset ہونے کے بعد دوبارہ وہی
-             * image بھی select کی جا سکتی ہے۔
-             */
 
             this.value = "";
 
@@ -206,7 +362,9 @@ RENDER GALLERY
 function renderGallery() {
 
     if (!galleryGrid) {
+
         return;
+
     }
 
 
@@ -221,35 +379,52 @@ function renderGallery() {
             ".gallery-preview-item"
         )
         .forEach(
-            item => item.remove()
+            item =>
+                item.remove()
         );
 
 
     galleryFiles.forEach(
-        (file, index) => {
+        (
+            file,
+            index
+        ) => {
 
             const wrapper =
-                document.createElement("div");
+                document.createElement(
+                    "div"
+                );
+
 
             wrapper.className =
                 "gallery-preview-item";
 
 
             const image =
-                document.createElement("img");
+                document.createElement(
+                    "img"
+                );
+
 
             image.src =
-                URL.createObjectURL(file);
+                URL.createObjectURL(
+                    file
+                );
+
 
             image.alt =
                 "Gallery image";
 
 
             const removeButton =
-                document.createElement("button");
+                document.createElement(
+                    "button"
+                );
+
 
             removeButton.type =
                 "button";
+
 
             removeButton.innerHTML =
                 '<i class="fa-solid fa-xmark"></i>';
@@ -264,15 +439,21 @@ function renderGallery() {
                         1
                     );
 
+
                     renderGallery();
 
                 }
             );
 
 
-            wrapper.appendChild(image);
+            wrapper.appendChild(
+                image
+            );
 
-            wrapper.appendChild(removeButton);
+
+            wrapper.appendChild(
+                removeButton
+            );
 
 
             if (uploadButton) {
@@ -307,24 +488,37 @@ if (videoInput) {
         "change",
         function () {
 
-            const file = this.files?.[0];
+            const file =
+                this.files?.[0];
+
 
             if (!file) {
+
                 return;
+
             }
 
 
-            if (!file.type.startsWith("video/")) {
+            if (
+                !file.type ||
+                !file.type.startsWith(
+                    "video/"
+                )
+            ) {
 
-                alert("Please select a valid video.");
+                alert(
+                    "Please select a valid video."
+                );
 
                 this.value = "";
 
                 return;
+
             }
 
 
-            productVideoFile = file;
+            productVideoFile =
+                file;
 
 
             renderVideo();
@@ -342,34 +536,48 @@ VIDEO PREVIEW
 function renderVideo() {
 
     if (!videoPreviewContainer) {
+
         return;
+
     }
 
 
-    videoPreviewContainer.innerHTML = "";
+    videoPreviewContainer.innerHTML =
+        "";
 
 
     if (!productVideoFile) {
+
         return;
+
     }
 
 
     const wrapper =
-        document.createElement("div");
+        document.createElement(
+            "div"
+        );
+
 
     wrapper.className =
         "product-video-preview";
 
 
     const video =
-        document.createElement("video");
+        document.createElement(
+            "video"
+        );
 
 
-    video.controls = true;
+    video.controls =
+        true;
 
-    video.preload = "metadata";
+    video.preload =
+        "metadata";
 
-    video.playsInline = true;
+    video.playsInline =
+        true;
+
 
     video.src =
         URL.createObjectURL(
@@ -377,14 +585,21 @@ function renderVideo() {
         );
 
 
-    video.style.width = "100%";
-
-    video.style.maxWidth = "700px";
-
-    video.style.display = "block";
+    video.style.width =
+        "100%";
 
 
-    wrapper.appendChild(video);
+    video.style.maxWidth =
+        "700px";
+
+
+    video.style.display =
+        "block";
+
+
+    wrapper.appendChild(
+        video
+    );
 
 
     videoPreviewContainer.appendChild(
@@ -395,53 +610,115 @@ function renderVideo() {
 
 
 /*==================================================
-UPLOAD FILE
+CLOUDINARY VIDEO UPLOAD
 ==================================================*/
 
-async function uploadFile(
-    file,
-    folder
+async function uploadVideoToCloudinary(
+    file
 ) {
 
     if (!file) {
+
         return null;
+
     }
 
 
-    const safeName =
-        file.name
-            .replace(
-                /[^a-zA-Z0-9._-]/g,
-                "_"
-            );
+    if (
+        !file.type ||
+        !file.type.startsWith(
+            "video/"
+        )
+    ) {
 
-
-    const fileName =
-        Date.now() +
-        "_" +
-        Math.random()
-            .toString(36)
-            .substring(2, 10) +
-        "_" +
-        safeName;
-
-
-    const storageRef =
-        ref(
-            storage,
-            `${folder}/${fileName}`
+        throw new Error(
+            "Invalid video file."
         );
 
+    }
 
-    await uploadBytes(
-        storageRef,
+
+    const maxSize =
+        100 * 1024 * 1024;
+
+
+    if (file.size > maxSize) {
+
+        throw new Error(
+            "Video must be smaller than 100MB."
+        );
+
+    }
+
+
+    const formData =
+        new FormData();
+
+
+    formData.append(
+        "file",
         file
     );
 
 
-    return await getDownloadURL(
-        storageRef
+    formData.append(
+        "upload_preset",
+        uploadPreset
     );
+
+
+    const uploadURL =
+        `https://api.cloudinary.com/v1_1/${cloudName}/video/upload`;
+
+
+    const response =
+        await fetch(
+            uploadURL,
+            {
+                method: "POST",
+                body: formData
+            }
+        );
+
+
+    let data = {};
+
+
+    try {
+
+        data =
+            await response.json();
+
+    }
+    catch (error) {
+
+        throw new Error(
+            "Cloudinary video response could not be read."
+        );
+
+    }
+
+
+    if (!response.ok) {
+
+        throw new Error(
+            data?.error?.message ||
+            "Video upload failed."
+        );
+
+    }
+
+
+    if (!data.secure_url) {
+
+        throw new Error(
+            "Cloudinary did not return video URL."
+        );
+
+    }
+
+
+    return data.secure_url;
 
 }
 
@@ -452,155 +729,237 @@ GET PRODUCT DATA
 
 function getProductData() {
 
-    const data =
-        new FormData(form);
+    if (!form) {
+
+        return {};
+
+    }
+
+
+    const formData =
+        new FormData(
+            form
+        );
 
 
     return {
 
         productName:
-            data.get("productName") || "",
+            formData.get(
+                "productName"
+            ) || "",
+
 
         brand:
-            data.get("brand") || "",
+            formData.get(
+                "brand"
+            ) || "",
+
 
         category:
-            data.get("category") || "",
+            formData.get(
+                "category"
+            ) || "",
+
 
         subcategory:
-            data.get("subcategory") || "",
+            formData.get(
+                "subcategory"
+            ) || "",
+
 
         condition:
-            data.get("condition") || "new",
+            formData.get(
+                "condition"
+            ) || "new",
+
 
         shortDescription:
-            data.get("shortDescription") || "",
+            formData.get(
+                "shortDescription"
+            ) || "",
 
 
         regularPrice:
             Number(
-                data.get("regularPrice") || 0
+                formData.get(
+                    "regularPrice"
+                ) || 0
             ),
+
 
         salePrice:
             Number(
-                data.get("salePrice") || 0
+                formData.get(
+                    "salePrice"
+                ) || 0
             ),
 
+
         discountType:
-            data.get("discountType") || "none",
+            formData.get(
+                "discountType"
+            ) || "none",
+
 
         discountValue:
             Number(
-                data.get("discountValue") || 0
+                formData.get(
+                    "discountValue"
+                ) || 0
             ),
 
+
         featuredProduct:
-            document.getElementById(
+            isChecked(
                 "featured-product"
-            )?.checked || false,
+            ),
 
 
         sku:
-            data.get("sku") || "",
+            formData.get(
+                "sku"
+            ) || "",
+
 
         stockQuantity:
             Number(
-                data.get("stockQuantity") || 0
+                formData.get(
+                    "stockQuantity"
+                ) || 0
             ),
+
 
         lowStockLimit:
             Number(
-                data.get("lowStockLimit") || 0
+                formData.get(
+                    "lowStockLimit"
+                ) || 0
             ),
 
+
         stockStatus:
-            data.get("stockStatus") ||
-            "in-stock",
+            formData.get(
+                "stockStatus"
+            ) || "in-stock",
+
 
         manageStock:
-            document.getElementById(
+            isChecked(
                 "manage-stock"
-            )?.checked || false,
+            ),
 
 
         description:
-            data.get("description") || "",
+            formData.get(
+                "description"
+            ) || "",
+
 
         features:
-            data.get("features") || "",
+            formData.get(
+                "features"
+            ) || "",
+
 
         tags:
-            data.get("tags") || "",
+            formData.get(
+                "tags"
+            ) || "",
 
 
         shippingMethod:
-            data.get("shippingMethod") ||
-            "standard",
+            formData.get(
+                "shippingMethod"
+            ) || "standard",
+
 
         shippingCost:
             Number(
-                data.get("shippingCost") || 0
+                formData.get(
+                    "shippingCost"
+                ) || 0
             ),
 
+
         deliveryTime:
-            data.get("deliveryTime") || "",
+            formData.get(
+                "deliveryTime"
+            ) || "",
+
 
         returnDays:
             Number(
-                data.get("returnDays") || 0
+                formData.get(
+                    "returnDays"
+                ) || 0
             ),
 
+
         shippingDescription:
-            data.get(
+            formData.get(
                 "shippingDescription"
             ) || "",
 
+
         returnDescription:
-            data.get(
+            formData.get(
                 "returnDescription"
             ) || "",
 
 
         seoTitle:
-            data.get("seoTitle") || "",
+            formData.get(
+                "seoTitle"
+            ) || "",
+
 
         seoDescription:
-            data.get(
+            formData.get(
                 "seoDescription"
             ) || "",
 
+
         seoKeywords:
-            data.get("seoKeywords") || "",
+            formData.get(
+                "seoKeywords"
+            ) || "",
+
 
         slug:
-            data.get("slug") || "",
+            formData.get(
+                "slug"
+            ) || "",
 
 
         productVisible:
-            document.getElementById(
+            isChecked(
                 "product-visible"
-            )?.checked || false,
+            ),
+
 
         allowReviews:
-            document.getElementById(
+            isChecked(
                 "allow-reviews"
-            )?.checked || false,
+            ),
+
 
         allowQuestions:
-            document.getElementById(
+            isChecked(
                 "allow-questions"
-            )?.checked || false,
+            ),
+
 
         showRelatedProducts:
-            document.getElementById(
+            isChecked(
                 "show-related-products"
-            )?.checked || false,
+            ),
+
 
         enableWishlist:
-            document.getElementById(
+            isChecked(
                 "enable-wishlist"
-            )?.checked || false
+            )
 
     };
 
@@ -619,19 +978,25 @@ function getVariants() {
         );
 
 
-    return Array.from(rows)
-        .map(row => {
+    return Array.from(
+        rows
+    )
+    .map(
+        row => {
 
             const name =
                 row.querySelector(
                     '[name="variantName[]"]'
-                )?.value.trim() || "";
+                )?.value
+                    ?.trim() ||
+                "";
 
 
             const options =
                 row.querySelector(
                     '[name="variantOptions[]"]'
-                )?.value || "";
+                )?.value ||
+                "";
 
 
             return {
@@ -645,14 +1010,18 @@ function getVariants() {
                             item =>
                                 item.trim()
                         )
-                        .filter(Boolean)
+                        .filter(
+                            Boolean
+                        )
 
             };
 
-        })
-        .filter(
-            item => item.name
-        );
+        }
+    )
+    .filter(
+        item =>
+            item.name
+    );
 
 }
 
@@ -669,32 +1038,142 @@ function getSpecifications() {
         );
 
 
-    return Array.from(rows)
-        .map(row => {
+    return Array.from(
+        rows
+    )
+    .map(
+        row => {
 
             const name =
                 row.querySelector(
                     '[name="specificationName[]"]'
-                )?.value.trim() || "";
+                )?.value
+                    ?.trim() ||
+                "";
 
 
             const value =
                 row.querySelector(
                     '[name="specificationValue[]"]'
-                )?.value.trim() || "";
+                )?.value
+                    ?.trim() ||
+                "";
 
 
             return {
+
                 name,
+
                 value
+
             };
 
-        })
-        .filter(
-            item =>
-                item.name ||
-                item.value
+        }
+    )
+    .filter(
+        item =>
+            item.name ||
+            item.value
+    );
+
+}
+
+
+/*==================================================
+RELATED PRODUCTS
+==================================================*/
+
+function getRelatedProducts() {
+
+    const container =
+        document.getElementById(
+            "selected-related-products"
         );
+
+
+    if (!container) {
+
+        return [];
+
+    }
+
+
+    const products =
+        container.querySelectorAll(
+            "[data-product-id]"
+        );
+
+
+    return Array.from(
+        products
+    )
+    .map(
+        item =>
+            item.dataset.productId
+    )
+    .filter(
+        Boolean
+    );
+
+}
+
+
+/*==================================================
+UPLOAD MAIN IMAGE
+==================================================*/
+
+async function uploadMainImage() {
+
+    if (!mainImageFile) {
+
+        return existingMainImage ||
+            "";
+
+    }
+
+
+    return await uploadImage(
+        mainImageFile
+    );
+
+}
+
+
+/*==================================================
+UPLOAD GALLERY
+==================================================*/
+
+async function uploadGallery() {
+
+    const uploadedGallery =
+        [
+            ...existingGallery
+        ];
+
+
+    for (
+        const file
+        of galleryFiles
+    ) {
+
+        const url =
+            await uploadImage(
+                file
+            );
+
+
+        if (url) {
+
+            uploadedGallery.push(
+                url
+            );
+
+        }
+
+    }
+
+
+    return uploadedGallery;
 
 }
 
@@ -708,7 +1187,9 @@ async function saveProduct(
 ) {
 
     if (!form) {
+
         return;
+
     }
 
 
@@ -730,10 +1211,6 @@ async function saveProduct(
 
     try {
 
-        const product =
-            getProductData();
-
-
         /*========================================
         PRODUCT ID
         ========================================*/
@@ -744,6 +1221,14 @@ async function saveProduct(
                 generateProductId();
 
         }
+
+
+        /*========================================
+        BASIC DATA
+        ========================================*/
+
+        const product =
+            getProductData();
 
 
         product.productId =
@@ -767,60 +1252,43 @@ async function saveProduct(
 
 
         /*========================================
+        RELATED PRODUCTS
+        ========================================*/
+
+        product.relatedProducts =
+            getRelatedProducts();
+
+
+        /*========================================
         MAIN IMAGE
         ========================================*/
 
-        if (mainImageFile) {
-
-            product.mainImage =
-                await uploadFile(
-                    mainImageFile,
-                    "smartbazaar/products"
-                );
-
-        }
+        product.mainImage =
+            await uploadMainImage();
 
 
         /*========================================
         GALLERY
         ========================================*/
 
-        product.gallery = [];
-
-
-        for (
-            const file
-            of galleryFiles
-        ) {
-
-            const url =
-                await uploadFile(
-                    file,
-                    "smartbazaar/products/gallery"
-                );
-
-
-            if (url) {
-
-                product.gallery.push(
-                    url
-                );
-
-            }
-
-        }
+        product.gallery =
+            await uploadGallery();
 
 
         /*========================================
         VIDEO
         ========================================*/
 
+        product.video =
+            existingVideo ||
+            "";
+
+
         if (productVideoFile) {
 
             product.video =
-                await uploadFile(
-                    productVideoFile,
-                    "smartbazaar/products/videos"
+                await uploadVideoToCloudinary(
+                    productVideoFile
                 );
 
         }
@@ -837,62 +1305,64 @@ async function saveProduct(
 
 
         product.updatedAt =
-            serverTimestamp();
+            new Date().toISOString();
 
 
         /*========================================
-        FIRESTORE
+        CREATED AT
         ========================================*/
 
-        let savedDocumentId;
+        let productRef;
 
 
-        /*
-         * اگر پہلے سے document موجود ہے
-         * تو update کریں گے۔
-         *
-         * ورنہ نئی document بنے گی۔
-         */
-
-        if (currentProductId &&
-            currentProductId.startsWith("SB-")) {
-
-            const docRef =
-                await addDoc(
-                    collection(
-                        db,
-                        "products"
-                    ),
-                    {
-                        ...product,
-                        createdAt:
-                            serverTimestamp()
-                    }
-                );
+        const existingRef =
+            ref(
+                database,
+                `products/${currentProductId}`
+            );
 
 
-            savedDocumentId =
-                docRef.id;
+        const existingSnapshot =
+            await get(
+                existingRef
+            );
 
 
-            currentProductId =
-                docRef.id;
+        if (existingSnapshot.exists()) {
 
-        }
-        else {
+            const oldProduct =
+                existingSnapshot.val();
 
-            await updateDoc(
-                doc(
-                    db,
-                    "products",
-                    currentProductId
-                ),
+
+            product.createdAt =
+                oldProduct.createdAt ||
+                new Date().toISOString();
+
+
+            await update(
+                existingRef,
                 product
             );
 
 
-            savedDocumentId =
-                currentProductId;
+            productRef =
+                existingRef;
+
+        }
+        else {
+
+            product.createdAt =
+                new Date().toISOString();
+
+
+            await set(
+                existingRef,
+                product
+            );
+
+
+            productRef =
+                existingRef;
 
         }
 
@@ -910,10 +1380,14 @@ async function saveProduct(
         if (productIdElement) {
 
             productIdElement.textContent =
-                savedDocumentId;
+                currentProductId;
 
         }
 
+
+        /*========================================
+        STATUS UI
+        ========================================*/
 
         updateProductStatus(
             publish
@@ -922,6 +1396,44 @@ async function saveProduct(
         );
 
 
+        /*========================================
+        CLEAR NEW FILES
+        ========================================*/
+
+        mainImageFile =
+            null;
+
+
+        galleryFiles =
+            [];
+
+
+        productVideoFile =
+            null;
+
+
+        existingMainImage =
+            product.mainImage ||
+            "";
+
+
+        existingGallery =
+            Array.isArray(
+                product.gallery
+            )
+                ? product.gallery
+                : [];
+
+
+        existingVideo =
+            product.video ||
+            "";
+
+
+        /*========================================
+        TOAST
+        ========================================*/
+
         showToast(
             publish
                 ? "Product Published"
@@ -929,11 +1441,13 @@ async function saveProduct(
         );
 
 
-        /*
-         * Files دوبارہ upload نہ ہوں۔
-         * Save کے بعد state صاف نہیں کر رہے
-         * کیونکہ preview برقرار رہنا چاہیے۔
-         */
+        console.log(
+            "PRODUCT SAVED:",
+            currentProductId
+        );
+
+
+        return currentProductId;
 
     }
     catch (error) {
@@ -946,7 +1460,10 @@ async function saveProduct(
 
         alert(
             "Product save failed.\n\n" +
-            error.message
+            (
+                error?.message ||
+                "Unknown error"
+            )
         );
 
     }
@@ -960,7 +1477,7 @@ async function saveProduct(
 
 
 /*==================================================
-SAVE BUTTONS
+SAVE DRAFT BUTTON
 ==================================================*/
 
 document
@@ -971,11 +1488,17 @@ document
         "click",
         () => {
 
-            saveProduct(false);
+            saveProduct(
+                false
+            );
 
         }
     );
 
+
+/*==================================================
+LARGE SAVE DRAFT BUTTON
+==================================================*/
 
 document
     .getElementById(
@@ -985,11 +1508,17 @@ document
         "click",
         () => {
 
-            saveProduct(false);
+            saveProduct(
+                false
+            );
 
         }
     );
 
+
+/*==================================================
+HEADER PUBLISH
+==================================================*/
 
 document
     .getElementById(
@@ -999,11 +1528,17 @@ document
         "click",
         () => {
 
-            saveProduct(true);
+            saveProduct(
+                true
+            );
 
         }
     );
 
+
+/*==================================================
+LARGE PUBLISH
+==================================================*/
 
 document
     .getElementById(
@@ -1015,7 +1550,10 @@ document
 
             event.preventDefault();
 
-            saveProduct(true);
+
+            saveProduct(
+                true
+            );
 
         }
     );
@@ -1031,7 +1569,10 @@ form?.addEventListener(
 
         event.preventDefault();
 
-        saveProduct(true);
+
+        saveProduct(
+            true
+        );
 
     }
 );
@@ -1044,44 +1585,64 @@ LIVE PREVIEW
 function updateLivePreview() {
 
     const name =
-        document.getElementById(
+        getValue(
             "product-name"
-        )?.value.trim() ||
+        )
+        .trim() ||
         "Product Name";
 
 
     const brand =
-        document.getElementById(
+        getValue(
             "product-brand"
-        )?.value.trim() ||
+        )
+        .trim() ||
         "BRAND";
 
 
     const regularPrice =
-        document.getElementById(
-            "regular-price"
-        )?.value ||
-        0;
+        Number(
+            getValue(
+                "regular-price"
+            ) ||
+            0
+        );
+
+
+    const salePriceInput =
+        getValue(
+            "sale-price"
+        );
 
 
     const salePrice =
-        document.getElementById(
-            "sale-price"
-        )?.value ||
-        regularPrice;
+        salePriceInput
+            ? Number(
+                salePriceInput
+            )
+            : regularPrice;
 
 
     const description =
-        document.getElementById(
+        getValue(
             "product-description"
-        )?.value.trim() ||
+        )
+        .trim() ||
         "Product description will appear here.";
+
+
+    const stockStatus =
+        getValue(
+            "stock-status"
+        ) ||
+        "in-stock";
 
 
     setText(
         "card-preview-name",
         name
     );
+
 
     setText(
         "detail-preview-name",
@@ -1094,6 +1655,7 @@ function updateLivePreview() {
         brand
     );
 
+
     setText(
         "detail-preview-brand",
         brand
@@ -1102,17 +1664,13 @@ function updateLivePreview() {
 
     setText(
         "card-preview-price",
-        `PKR ${Number(
-            salePrice
-        ).toLocaleString()}`
+        `PKR ${salePrice.toLocaleString()}`
     );
 
 
     setText(
         "detail-preview-price",
-        `PKR ${Number(
-            salePrice
-        ).toLocaleString()}`
+        `PKR ${salePrice.toLocaleString()}`
     );
 
 
@@ -1122,15 +1680,15 @@ function updateLivePreview() {
     );
 
 
-    /*
-     * Main image کو Live Preview میں بھی دکھائیں۔
-     */
+    updatePreviewStock(
+        stockStatus
+    );
+
 
     if (
-        mainImagePreview &&
-        mainImagePreview.src &&
-        mainImagePreview.src !==
-            window.location.href
+        mainImagePreview?.src &&
+        mainImagePreview.style.display !==
+            "none"
     ) {
 
         setImage(
@@ -1150,6 +1708,61 @@ function updateLivePreview() {
 
 
 /*==================================================
+PREVIEW STOCK
+==================================================*/
+
+function updatePreviewStock(
+    status
+) {
+
+    const stockElement =
+        document.querySelector(
+            ".detail-preview-stock"
+        );
+
+
+    if (!stockElement) {
+
+        return;
+
+    }
+
+
+    if (
+        status ===
+        "out-of-stock"
+    ) {
+
+        stockElement.innerHTML = `
+            <i class="fa-solid fa-circle"></i>
+            Out of Stock
+        `;
+
+    }
+    else if (
+        status ===
+        "pre-order"
+    ) {
+
+        stockElement.innerHTML = `
+            <i class="fa-solid fa-circle"></i>
+            Pre Order
+        `;
+
+    }
+    else {
+
+        stockElement.innerHTML = `
+            <i class="fa-solid fa-circle"></i>
+            In Stock
+        `;
+
+    }
+
+}
+
+
+/*==================================================
 TEXT HELPER
 ==================================================*/
 
@@ -1159,7 +1772,9 @@ function setText(
 ) {
 
     const element =
-        document.getElementById(id);
+        document.getElementById(
+            id
+        );
 
 
     if (element) {
@@ -1182,11 +1797,18 @@ function setImage(
 ) {
 
     const image =
-        document.getElementById(id);
+        document.getElementById(
+            id
+        );
 
 
-    if (!image || !src) {
+    if (
+        !image ||
+        !src
+    ) {
+
         return;
+
     }
 
 
@@ -1375,7 +1997,9 @@ document
 
 
             if (!container) {
+
                 return;
+
             }
 
 
@@ -1405,6 +2029,7 @@ document
 
                 </div>
 
+
                 <div class="form-group">
 
                     <label>
@@ -1418,6 +2043,7 @@ document
                     >
 
                 </div>
+
 
                 <button
                     type="button"
@@ -1454,7 +2080,9 @@ document.addEventListener(
 
 
         if (!button) {
+
             return;
+
         }
 
 
@@ -1464,8 +2092,28 @@ document.addEventListener(
             );
 
 
-        if (rows.length <= 1) {
+        if (
+            rows.length <= 1
+        ) {
+
+            const inputs =
+                button.closest(
+                    ".variant-editor-row"
+                )
+                ?.querySelectorAll(
+                    "input"
+                );
+
+
+            inputs?.forEach(
+                input => {
+                    input.value = "";
+                }
+            );
+
+
             return;
+
         }
 
 
@@ -1498,7 +2146,9 @@ document
 
 
             if (!container) {
+
                 return;
+
             }
 
 
@@ -1520,11 +2170,13 @@ document
                     placeholder="Specification"
                 >
 
+
                 <input
                     type="text"
                     name="specificationValue[]"
                     placeholder="Value"
                 >
+
 
                 <button
                     type="button"
@@ -1561,7 +2213,40 @@ document.addEventListener(
 
 
         if (!button) {
+
             return;
+
+        }
+
+
+        const rows =
+            document.querySelectorAll(
+                ".specification-row"
+            );
+
+
+        if (
+            rows.length <= 1
+        ) {
+
+            const inputs =
+                button.closest(
+                    ".specification-row"
+                )
+                ?.querySelectorAll(
+                    "input"
+                );
+
+
+            inputs?.forEach(
+                input => {
+                    input.value = "";
+                }
+            );
+
+
+            return;
+
         }
 
 
@@ -1695,18 +2380,28 @@ document
                     "active"
                 );
 
+
+                alert(
+                    "No product selected."
+                );
+
+
                 return;
 
             }
 
 
+            showLoading(
+                "Deleting product..."
+            );
+
+
             try {
 
-                await deleteDoc(
-                    doc(
-                        db,
-                        "products",
-                        currentProductId
+                await remove(
+                    ref(
+                        database,
+                        `products/${currentProductId}`
                     )
                 );
 
@@ -1742,8 +2437,16 @@ document
 
                 alert(
                     "Delete failed.\n\n" +
-                    error.message
+                    (
+                        error?.message ||
+                        "Unknown error"
+                    )
                 );
+
+            }
+            finally {
+
+                hideLoading();
 
             }
 
@@ -1766,7 +2469,9 @@ function updateProductStatus(
 
 
     if (!element) {
+
         return;
+
     }
 
 
@@ -1808,7 +2513,9 @@ function showToast(
 
 
     if (!toast) {
+
         return;
+
     }
 
 
@@ -1860,7 +2567,9 @@ function showLoading(
 
 
     if (!loading) {
+
         return;
+
     }
 
 
@@ -1899,10 +2608,1236 @@ function hideLoading() {
 
 
 /*==================================================
+LOAD PRODUCT FOR EDIT
+==================================================*/
+
+async function loadProduct(
+    productId
+) {
+
+    if (!productId) {
+
+        return;
+
+    }
+
+
+    showLoading(
+        "Loading product..."
+    );
+
+
+    try {
+
+        const productSnapshot =
+            await get(
+                ref(
+                    database,
+                    `products/${productId}`
+                )
+            );
+
+
+        if (!productSnapshot.exists()) {
+
+            alert(
+                "Product not found."
+            );
+
+
+            return;
+
+        }
+
+
+        const product =
+            productSnapshot.val();
+
+
+        currentProductId =
+            productId;
+
+
+        existingMainImage =
+            product.mainImage ||
+            "";
+
+
+        existingGallery =
+            Array.isArray(
+                product.gallery
+            )
+                ? product.gallery
+                : [];
+
+
+        existingVideo =
+            product.video ||
+            "";
+
+
+        fillProductForm(
+            product
+        );
+
+
+        renderExistingMedia(
+            product
+        );
+
+
+        updateProductStatus(
+            product.status ===
+                "published"
+                ? "Published"
+                : "Draft"
+        );
+
+
+        const productIdElement =
+            document.getElementById(
+                "product-id"
+            );
+
+
+        if (productIdElement) {
+
+            productIdElement.textContent =
+                productId;
+
+        }
+
+
+        updateLivePreview();
+
+    }
+    catch (error) {
+
+        console.error(
+            "LOAD PRODUCT ERROR:",
+            error
+        );
+
+
+        alert(
+            "Product loading failed.\n\n" +
+            (
+                error?.message ||
+                "Unknown error"
+            )
+        );
+
+    }
+    finally {
+
+        hideLoading();
+
+    }
+
+}
+
+
+/*==================================================
+FILL PRODUCT FORM
+==================================================*/
+
+function fillProductForm(
+    product
+) {
+
+    const fieldMap = {
+
+        "product-name":
+            product.productName,
+
+        "product-brand":
+            product.brand,
+
+        "product-category":
+            product.category,
+
+        "product-subcategory":
+            product.subcategory,
+
+        "product-condition":
+            product.condition,
+
+        "short-description":
+            product.shortDescription,
+
+        "regular-price":
+            product.regularPrice,
+
+        "sale-price":
+            product.salePrice,
+
+        "discount-type":
+            product.discountType,
+
+        "discount-value":
+            product.discountValue,
+
+        "sku":
+            product.sku,
+
+        "stock-quantity":
+            product.stockQuantity,
+
+        "low-stock-limit":
+            product.lowStockLimit,
+
+        "stock-status":
+            product.stockStatus,
+
+        "product-description":
+            product.description,
+
+        "product-features":
+            product.features,
+
+        "product-tags":
+            product.tags,
+
+        "shipping-method":
+            product.shippingMethod,
+
+        "shipping-cost":
+            product.shippingCost,
+
+        "delivery-time":
+            product.deliveryTime,
+
+        "return-days":
+            product.returnDays,
+
+        "shipping-description":
+            product.shippingDescription,
+
+        "return-description":
+            product.returnDescription,
+
+        "seo-title":
+            product.seoTitle,
+
+        "seo-description":
+            product.seoDescription,
+
+        "seo-keywords":
+            product.seoKeywords,
+
+        "product-slug":
+            product.slug
+
+    };
+
+
+    Object.entries(
+        fieldMap
+    )
+    .forEach(
+        (
+            [
+                id,
+                value
+            ]
+        ) => {
+
+            const element =
+                document.getElementById(
+                    id
+                );
+
+
+            if (
+                element &&
+                value !== undefined &&
+                value !== null
+            ) {
+
+                element.value =
+                    value;
+
+            }
+
+        }
+    );
+
+
+    setChecked(
+        "featured-product",
+        product.featuredProduct
+    );
+
+
+    setChecked(
+        "manage-stock",
+        product.manageStock
+    );
+
+
+    setChecked(
+        "product-visible",
+        product.productVisible
+    );
+
+
+    setChecked(
+        "allow-reviews",
+        product.allowReviews
+    );
+
+
+    setChecked(
+        "allow-questions",
+        product.allowQuestions
+    );
+
+
+    setChecked(
+        "show-related-products",
+        product.showRelatedProducts
+    );
+
+
+    setChecked(
+        "enable-wishlist",
+        product.enableWishlist
+    );
+
+
+    loadVariants(
+        product.variants
+    );
+
+
+    loadSpecifications(
+        product.specifications
+    );
+
+}
+
+
+/*==================================================
+CHECKBOX HELPER
+==================================================*/
+
+function setChecked(
+    id,
+    value
+) {
+
+    const element =
+        document.getElementById(
+            id
+        );
+
+
+    if (element) {
+
+        element.checked =
+            Boolean(
+                value
+            );
+
+    }
+
+}
+
+
+/*==================================================
+LOAD VARIANTS
+==================================================*/
+
+function loadVariants(
+    variants
+) {
+
+    const container =
+        document.getElementById(
+            "variants-container"
+        );
+
+
+    if (!container) {
+
+        return;
+
+    }
+
+
+    container.innerHTML =
+        "";
+
+
+    const list =
+        Array.isArray(
+            variants
+        )
+            ? variants
+            : [];
+
+
+    if (!list.length) {
+
+        addEmptyVariantRow();
+
+        return;
+
+    }
+
+
+    list.forEach(
+        variant => {
+
+            const row =
+                document.createElement(
+                    "div"
+                );
+
+
+            row.className =
+                "variant-editor-row";
+
+
+            row.innerHTML = `
+
+                <div class="form-group">
+
+                    <label>
+                        Option Name
+                    </label>
+
+                    <input
+                        type="text"
+                        name="variantName[]"
+                        placeholder="e.g. Color"
+                        value="${escapeAttribute(
+                            variant.name || ""
+                        )}"
+                    >
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>
+                        Options
+                    </label>
+
+                    <input
+                        type="text"
+                        name="variantOptions[]"
+                        placeholder="Black, White, Blue"
+                        value="${escapeAttribute(
+                            (
+                                variant.options ||
+                                []
+                            ).join(", ")
+                        )}"
+                    >
+
+                </div>
+
+
+                <button
+                    type="button"
+                    class="remove-variant-button"
+                >
+
+                    <i class="fa-solid fa-trash"></i>
+
+                </button>
+
+            `;
+
+
+            container.appendChild(
+                row
+            );
+
+        }
+    );
+
+}
+
+
+/*==================================================
+EMPTY VARIANT
+==================================================*/
+
+function addEmptyVariantRow() {
+
+    const container =
+        document.getElementById(
+            "variants-container"
+        );
+
+
+    if (!container) {
+
+        return;
+
+    }
+
+
+    const row =
+        document.createElement(
+            "div"
+        );
+
+
+    row.className =
+        "variant-editor-row";
+
+
+    row.innerHTML = `
+
+        <div class="form-group">
+
+            <label>
+                Option Name
+            </label>
+
+            <input
+                type="text"
+                name="variantName[]"
+                placeholder="e.g. Color"
+            >
+
+        </div>
+
+
+        <div class="form-group">
+
+            <label>
+                Options
+            </label>
+
+            <input
+                type="text"
+                name="variantOptions[]"
+                placeholder="Black, White, Blue"
+            >
+
+        </div>
+
+
+        <button
+            type="button"
+            class="remove-variant-button"
+        >
+
+            <i class="fa-solid fa-trash"></i>
+
+        </button>
+
+    `;
+
+
+    container.appendChild(
+        row
+    );
+
+}
+
+
+/*==================================================
+LOAD SPECIFICATIONS
+==================================================*/
+
+function loadSpecifications(
+    specifications
+) {
+
+    const container =
+        document.getElementById(
+            "specifications-editor"
+        );
+
+
+    if (!container) {
+
+        return;
+
+    }
+
+
+    container.innerHTML =
+        "";
+
+
+    const list =
+        Array.isArray(
+            specifications
+        )
+            ? specifications
+            : [];
+
+
+    if (!list.length) {
+
+        addEmptySpecificationRow();
+
+        return;
+
+    }
+
+
+    list.forEach(
+        specification => {
+
+            const row =
+                document.createElement(
+                    "div"
+                );
+
+
+            row.className =
+                "specification-row";
+
+
+            row.innerHTML = `
+
+                <input
+                    type="text"
+                    name="specificationName[]"
+                    placeholder="Specification"
+                    value="${escapeAttribute(
+                        specification.name || ""
+                    )}"
+                >
+
+
+                <input
+                    type="text"
+                    name="specificationValue[]"
+                    placeholder="Value"
+                    value="${escapeAttribute(
+                        specification.value || ""
+                    )}"
+                >
+
+
+                <button
+                    type="button"
+                    class="remove-specification-button"
+                >
+
+                    <i class="fa-solid fa-trash"></i>
+
+                </button>
+
+            `;
+
+
+            container.appendChild(
+                row
+            );
+
+        }
+    );
+
+}
+
+
+/*==================================================
+EMPTY SPECIFICATION
+==================================================*/
+
+function addEmptySpecificationRow() {
+
+    const container =
+        document.getElementById(
+            "specifications-editor"
+        );
+
+
+    if (!container) {
+
+        return;
+
+    }
+
+
+    const row =
+        document.createElement(
+            "div"
+        );
+
+
+    row.className =
+        "specification-row";
+
+
+    row.innerHTML = `
+
+        <input
+            type="text"
+            name="specificationName[]"
+            placeholder="Specification"
+        >
+
+
+        <input
+            type="text"
+            name="specificationValue[]"
+            placeholder="Value"
+        >
+
+
+        <button
+            type="button"
+            class="remove-specification-button"
+        >
+
+            <i class="fa-solid fa-trash"></i>
+
+        </button>
+
+    `;
+
+
+    container.appendChild(
+        row
+    );
+
+}
+
+
+/*==================================================
+RENDER EXISTING MEDIA
+==================================================*/
+
+function renderExistingMedia(
+    product
+) {
+
+    if (
+        product.mainImage
+    ) {
+
+        if (mainImagePreview) {
+
+            mainImagePreview.src =
+                product.mainImage;
+
+            mainImagePreview.style.display =
+                "block";
+
+        }
+
+
+        const placeholder =
+            mainImageBox?.querySelector(
+                ".upload-placeholder"
+            );
+
+
+        if (placeholder) {
+
+            placeholder.style.display =
+                "none";
+
+        }
+
+    }
+
+
+    if (
+        Array.isArray(
+            product.gallery
+        )
+    ) {
+
+        renderExistingGallery(
+            product.gallery
+        );
+
+    }
+
+
+    if (
+        product.video
+    ) {
+
+        renderExistingVideo(
+            product.video
+        );
+
+    }
+
+}
+
+
+/*==================================================
+EXISTING GALLERY
+==================================================*/
+
+function renderExistingGallery(
+    gallery
+) {
+
+    if (!galleryGrid) {
+
+        return;
+
+    }
+
+
+    const uploadButton =
+        galleryGrid.querySelector(
+            ".gallery-upload-button"
+        );
+
+
+    galleryGrid
+        .querySelectorAll(
+            ".gallery-existing-item"
+        )
+        .forEach(
+            item =>
+                item.remove()
+        );
+
+
+    gallery.forEach(
+        (
+            url,
+            index
+        ) => {
+
+            const wrapper =
+                document.createElement(
+                    "div"
+                );
+
+
+            wrapper.className =
+                "gallery-preview-item gallery-existing-item";
+
+
+            const image =
+                document.createElement(
+                    "img"
+                );
+
+
+            image.src =
+                url;
+
+
+            image.alt =
+                "Product gallery";
+
+
+            const removeButton =
+                document.createElement(
+                    "button"
+                );
+
+
+            removeButton.type =
+                "button";
+
+
+            removeButton.innerHTML =
+                '<i class="fa-solid fa-xmark"></i>';
+
+
+            removeButton.addEventListener(
+                "click",
+                () => {
+
+                    existingGallery.splice(
+                        index,
+                        1
+                    );
+
+
+                    wrapper.remove();
+
+                }
+            );
+
+
+            wrapper.appendChild(
+                image
+            );
+
+
+            wrapper.appendChild(
+                removeButton
+            );
+
+
+            if (uploadButton) {
+
+                galleryGrid.insertBefore(
+                    wrapper,
+                    uploadButton
+                );
+
+            }
+            else {
+
+                galleryGrid.appendChild(
+                    wrapper
+                );
+
+            }
+
+        }
+    );
+
+}
+
+
+/*==================================================
+EXISTING VIDEO
+==================================================*/
+
+function renderExistingVideo(
+    url
+) {
+
+    if (!videoPreviewContainer) {
+
+        return;
+
+    }
+
+
+    videoPreviewContainer.innerHTML =
+        "";
+
+
+    const video =
+        document.createElement(
+            "video"
+        );
+
+
+    video.controls =
+        true;
+
+
+    video.preload =
+        "metadata";
+
+
+    video.playsInline =
+        true;
+
+
+    video.src =
+        url;
+
+
+    video.style.width =
+        "100%";
+
+
+    video.style.maxWidth =
+        "700px";
+
+
+    videoPreviewContainer.appendChild(
+        video
+    );
+
+}
+
+
+/*==================================================
+ESCAPE ATTRIBUTE
+==================================================*/
+
+function escapeAttribute(
+    value
+) {
+
+    return String(
+        value
+    )
+    .replace(
+        /&/g,
+        "&amp;"
+    )
+    .replace(
+        /"/g,
+        "&quot;"
+    )
+    .replace(
+        /</g,
+        "&lt;"
+    )
+    .replace(
+        />/g,
+        "&gt;"
+    );
+
+}
+
+
+/*==================================================
+DUPLICATE PRODUCT
+==================================================*/
+
+document
+    .getElementById(
+        "duplicate-product-button"
+    )
+    ?.addEventListener(
+        "click",
+        async () => {
+
+            try {
+
+                const product =
+                    getProductData();
+
+
+                product.productId =
+                    generateProductId();
+
+
+                product.variants =
+                    getVariants();
+
+
+                product.specifications =
+                    getSpecifications();
+
+
+                product.relatedProducts =
+                    getRelatedProducts();
+
+
+                product.mainImage =
+                    existingMainImage ||
+                    "";
+
+
+                product.gallery =
+                    [
+                        ...existingGallery
+                    ];
+
+
+                product.video =
+                    existingVideo ||
+                    "";
+
+
+                product.status =
+                    "draft";
+
+
+                product.createdAt =
+                    new Date().toISOString();
+
+
+                product.updatedAt =
+                    new Date().toISOString();
+
+
+                await set(
+                    ref(
+                        database,
+                        `products/${product.productId}`
+                    ),
+                    product
+                );
+
+
+                showToast(
+                    "Product Duplicated"
+                );
+
+
+                currentProductId =
+                    product.productId;
+
+
+                const productIdElement =
+                    document.getElementById(
+                        "product-id"
+                    );
+
+
+                if (productIdElement) {
+
+                    productIdElement.textContent =
+                        currentProductId;
+
+                }
+
+            }
+            catch (error) {
+
+                console.error(
+                    "DUPLICATE ERROR:",
+                    error
+                );
+
+
+                alert(
+                    "Duplicate failed.\n\n" +
+                    (
+                        error?.message ||
+                        "Unknown error"
+                    )
+                );
+
+            }
+
+        }
+    );
+
+
+/*==================================================
+CANCEL
+==================================================*/
+
+document
+    .getElementById(
+        "cancel-editor-button"
+    )
+    ?.addEventListener(
+        "click",
+        () => {
+
+            if (
+                confirm(
+                    "Are you sure you want to cancel?"
+                )
+            ) {
+
+                window.location.href =
+                    "admin-dashboard.html";
+
+            }
+
+        }
+    );
+
+
+/*==================================================
+MENU BUTTON
+==================================================*/
+
+document
+    .getElementById(
+        "editor-menu-button"
+    )
+    ?.addEventListener(
+        "click",
+        () => {
+
+            document
+                .getElementById(
+                    "editor-sidebar"
+                )
+                ?.classList.toggle(
+                    "active"
+                );
+
+        }
+    );
+
+
+/*==================================================
+CLOSE SIDEBAR AFTER NAVIGATION
+==================================================*/
+
+document
+    .querySelectorAll(
+        ".editor-nav-item"
+    )
+    .forEach(
+        button => {
+
+            button.addEventListener(
+                "click",
+                () => {
+
+                    if (
+                        window.innerWidth <=
+                        900
+                    ) {
+
+                        document
+                            .getElementById(
+                                "editor-sidebar"
+                            )
+                            ?.classList.remove(
+                                "active"
+                            );
+
+                    }
+
+                }
+            );
+
+        }
+    );
+
+
+/*==================================================
+LOAD PRODUCT FROM URL
+==================================================*/
+
+function getProductIdFromURL() {
+
+    const params =
+        new URLSearchParams(
+            window.location.search
+        );
+
+
+    return (
+        params.get(
+            "id"
+        ) ||
+        params.get(
+            "productId"
+        )
+    );
+
+}
+
+
+/*==================================================
 INITIALIZE
 ==================================================*/
 
-updateLivePreview();
+const urlProductId =
+    getProductIdFromURL();
+
+
+if (urlProductId) {
+
+    loadProduct(
+        urlProductId
+    );
+
+}
+else {
+
+    currentProductId =
+        null;
+
+
+    updateProductStatus(
+        "Draft"
+    );
+
+
+    updateLivePreview();
+
+}
+
 
 console.log(
     "SmartBazaar Pro Product Editor loaded successfully."
