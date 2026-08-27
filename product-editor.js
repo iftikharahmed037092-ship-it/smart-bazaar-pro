@@ -7,13 +7,12 @@ FIREBASE REALTIME DATABASE + CLOUDINARY
 
 
 /*==================================================
-IMPORT FIREBASE DATABASE
+FEATURE 19.3 — FIREBASE DATABASE IMPORT
 ==================================================*/
 
 import {
     getDatabase,
     ref,
-    push,
     set,
     get,
     update,
@@ -22,7 +21,7 @@ import {
 
 
 /*==================================================
-FIREBASE APP
+FEATURE 19.3 — FIREBASE APP
 ==================================================*/
 
 import {
@@ -31,7 +30,7 @@ import {
 
 
 /*==================================================
-CLOUDINARY
+FEATURE 19.3 — CLOUDINARY IMPORT
 ==================================================*/
 
 import {
@@ -42,26 +41,19 @@ import {
 
 
 /*==================================================
-DATABASE
+FEATURE 19.3 — DATABASE
 ==================================================*/
 
-const database =
-    getDatabase(app);
+const database = getDatabase(app);
+
+const productsRef = ref(
+    database,
+    "products"
+);
 
 
 /*==================================================
-PRODUCTS REFERENCE
-==================================================*/
-
-const productsRef =
-    ref(
-        database,
-        "products"
-    );
-
-
-/*==================================================
-DOM
+FEATURE 19.3 — DOM ELEMENTS
 ==================================================*/
 
 const form =
@@ -69,42 +61,35 @@ const form =
         "product-editor-form"
     );
 
-
 const mainImageInput =
     document.getElementById(
         "main-product-image"
     );
-
 
 const mainImagePreview =
     document.getElementById(
         "main-image-preview"
     );
 
-
 const mainImageBox =
     document.getElementById(
         "main-image-upload-box"
     );
-
 
 const galleryInput =
     document.getElementById(
         "product-gallery-images"
     );
 
-
 const galleryGrid =
     document.getElementById(
         "gallery-upload-grid"
     );
 
-
 const videoInput =
     document.getElementById(
         "product-video"
     );
-
 
 const videoPreviewContainer =
     document.getElementById(
@@ -113,7 +98,7 @@ const videoPreviewContainer =
 
 
 /*==================================================
-STATE
+FEATURE 19.3 — STATE
 ==================================================*/
 
 let mainImageFile = null;
@@ -132,7 +117,7 @@ let existingVideo = "";
 
 
 /*==================================================
-HELPERS
+FEATURE 19.3 — HELPERS
 ==================================================*/
 
 function getValue(id) {
@@ -147,16 +132,72 @@ function getValue(id) {
 
 function isChecked(id) {
 
-    return (
-        document.getElementById(id)?.checked ||
-        false
+    return Boolean(
+        document.getElementById(id)?.checked
     );
 
 }
 
 
+function setText(id, value) {
+
+    const element =
+        document.getElementById(id);
+
+    if (element) {
+
+        element.textContent =
+            value;
+
+    }
+
+}
+
+
+function setImage(id, src) {
+
+    const image =
+        document.getElementById(id);
+
+    if (!image || !src) {
+
+        return;
+
+    }
+
+    image.src = src;
+
+    image.style.display = "block";
+
+    const placeholder =
+        image.parentElement
+            ?.querySelector(
+                ".preview-image-placeholder"
+            );
+
+    if (placeholder) {
+
+        placeholder.style.display =
+            "none";
+
+    }
+
+}
+
+
+function escapeAttribute(value) {
+
+    return String(value ?? "")
+        .replace(/&/g, "&amp;")
+        .replace(/"/g, "&quot;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;");
+
+}
+
+
 /*==================================================
-PRODUCT ID
+FEATURE 19.3 — PRODUCT ID GENERATOR
 ==================================================*/
 
 function generateProductId() {
@@ -175,7 +216,7 @@ function generateProductId() {
 
 
 /*==================================================
-MAIN IMAGE PREVIEW
+FEATURE 19.3 — MAIN IMAGE SELECT
 ==================================================*/
 
 if (mainImageInput) {
@@ -187,19 +228,15 @@ if (mainImageInput) {
             const file =
                 this.files?.[0];
 
-
             if (!file) {
 
                 return;
 
             }
 
-
             if (
                 !file.type ||
-                !file.type.startsWith(
-                    "image/"
-                )
+                !file.type.startsWith("image/")
             ) {
 
                 alert(
@@ -211,7 +248,6 @@ if (mainImageInput) {
                 return;
 
             }
-
 
             if (
                 file.size >
@@ -228,16 +264,10 @@ if (mainImageInput) {
 
             }
 
-
-            mainImageFile =
-                file;
-
+            mainImageFile = file;
 
             const imageURL =
-                URL.createObjectURL(
-                    file
-                );
-
+                URL.createObjectURL(file);
 
             if (mainImagePreview) {
 
@@ -249,14 +279,12 @@ if (mainImageInput) {
 
             }
 
-
             if (mainImageBox) {
 
                 const placeholder =
                     mainImageBox.querySelector(
                         ".upload-placeholder"
                     );
-
 
                 if (placeholder) {
 
@@ -267,18 +295,15 @@ if (mainImageInput) {
 
             }
 
-
             setImage(
                 "card-preview-image",
                 imageURL
             );
 
-
             setImage(
                 "detail-preview-image",
                 imageURL
             );
-
 
             updateLivePreview();
 
@@ -289,7 +314,7 @@ if (mainImageInput) {
 
 
 /*==================================================
-GALLERY IMAGE SELECT
+FEATURE 19.3 — GALLERY IMAGE SELECT
 ==================================================*/
 
 if (galleryInput) {
@@ -303,49 +328,37 @@ if (galleryInput) {
                     this.files || []
                 );
 
-
             if (!files.length) {
 
                 return;
 
             }
 
+            files.forEach(file => {
 
-            files.forEach(
-                file => {
+                if (
+                    !file.type ||
+                    !file.type.startsWith("image/")
+                ) {
 
-                    if (
-                        !file.type ||
-                        !file.type.startsWith(
-                            "image/"
-                        )
-                    ) {
-
-                        return;
-
-                    }
-
-
-                    if (
-                        file.size >
-                        10 * 1024 * 1024
-                    ) {
-
-                        return;
-
-                    }
-
-
-                    galleryFiles.push(
-                        file
-                    );
+                    return;
 
                 }
-            );
 
+                if (
+                    file.size >
+                    10 * 1024 * 1024
+                ) {
+
+                    return;
+
+                }
+
+                galleryFiles.push(file);
+
+            });
 
             renderGallery();
-
 
             this.value = "";
 
@@ -356,7 +369,7 @@ if (galleryInput) {
 
 
 /*==================================================
-RENDER GALLERY
+FEATURE 19.3 — RENDER NEW GALLERY
 ==================================================*/
 
 function renderGallery() {
@@ -367,94 +380,63 @@ function renderGallery() {
 
     }
 
-
     const uploadButton =
         galleryGrid.querySelector(
             ".gallery-upload-button"
         );
 
-
     galleryGrid
         .querySelectorAll(
-            ".gallery-preview-item"
+            ".gallery-preview-item:not(.gallery-existing-item)"
         )
-        .forEach(
-            item =>
-                item.remove()
-        );
-
+        .forEach(item => item.remove());
 
     galleryFiles.forEach(
-        (
-            file,
-            index
-        ) => {
+        (file, index) => {
 
             const wrapper =
-                document.createElement(
-                    "div"
-                );
-
+                document.createElement("div");
 
             wrapper.className =
                 "gallery-preview-item";
 
-
             const image =
-                document.createElement(
-                    "img"
-                );
-
+                document.createElement("img");
 
             image.src =
-                URL.createObjectURL(
-                    file
-                );
-
+                URL.createObjectURL(file);
 
             image.alt =
                 "Gallery image";
 
-
             const removeButton =
-                document.createElement(
-                    "button"
-                );
-
+                document.createElement("button");
 
             removeButton.type =
                 "button";
 
-
             removeButton.innerHTML =
                 '<i class="fa-solid fa-xmark"></i>';
 
-
             removeButton.addEventListener(
                 "click",
-                function () {
+                () => {
 
                     galleryFiles.splice(
                         index,
                         1
                     );
 
-
                     renderGallery();
 
                 }
             );
 
-
-            wrapper.appendChild(
-                image
-            );
-
+            wrapper.appendChild(image);
 
             wrapper.appendChild(
                 removeButton
             );
-
 
             if (uploadButton) {
 
@@ -479,7 +461,7 @@ function renderGallery() {
 
 
 /*==================================================
-VIDEO SELECT
+FEATURE 19.3 — VIDEO SELECT
 ==================================================*/
 
 if (videoInput) {
@@ -491,19 +473,15 @@ if (videoInput) {
             const file =
                 this.files?.[0];
 
-
             if (!file) {
 
                 return;
 
             }
 
-
             if (
                 !file.type ||
-                !file.type.startsWith(
-                    "video/"
-                )
+                !file.type.startsWith("video/")
             ) {
 
                 alert(
@@ -516,10 +494,22 @@ if (videoInput) {
 
             }
 
+            if (
+                file.size >
+                100 * 1024 * 1024
+            ) {
 
-            productVideoFile =
-                file;
+                alert(
+                    "Video must be smaller than 100MB."
+                );
 
+                this.value = "";
+
+                return;
+
+            }
+
+            productVideoFile = file;
 
             renderVideo();
 
@@ -530,7 +520,7 @@ if (videoInput) {
 
 
 /*==================================================
-VIDEO PREVIEW
+FEATURE 19.3 — VIDEO PREVIEW
 ==================================================*/
 
 function renderVideo() {
@@ -541,10 +531,7 @@ function renderVideo() {
 
     }
 
-
-    videoPreviewContainer.innerHTML =
-        "";
-
+    videoPreviewContainer.innerHTML = "";
 
     if (!productVideoFile) {
 
@@ -552,55 +539,33 @@ function renderVideo() {
 
     }
 
-
     const wrapper =
-        document.createElement(
-            "div"
-        );
-
+        document.createElement("div");
 
     wrapper.className =
         "product-video-preview";
 
-
     const video =
-        document.createElement(
-            "video"
-        );
+        document.createElement("video");
 
+    video.controls = true;
 
-    video.controls =
-        true;
+    video.preload = "metadata";
 
-    video.preload =
-        "metadata";
-
-    video.playsInline =
-        true;
-
+    video.playsInline = true;
 
     video.src =
         URL.createObjectURL(
             productVideoFile
         );
 
+    video.style.width = "100%";
 
-    video.style.width =
-        "100%";
+    video.style.maxWidth = "700px";
 
+    video.style.display = "block";
 
-    video.style.maxWidth =
-        "700px";
-
-
-    video.style.display =
-        "block";
-
-
-    wrapper.appendChild(
-        video
-    );
-
+    wrapper.appendChild(video);
 
     videoPreviewContainer.appendChild(
         wrapper
@@ -610,12 +575,10 @@ function renderVideo() {
 
 
 /*==================================================
-CLOUDINARY VIDEO UPLOAD
+FEATURE 19.3 — CLOUDINARY VIDEO UPLOAD
 ==================================================*/
 
-async function uploadVideoToCloudinary(
-    file
-) {
+async function uploadVideoToCloudinary(file) {
 
     if (!file) {
 
@@ -623,12 +586,9 @@ async function uploadVideoToCloudinary(
 
     }
 
-
     if (
         !file.type ||
-        !file.type.startsWith(
-            "video/"
-        )
+        !file.type.startsWith("video/")
     ) {
 
         throw new Error(
@@ -637,12 +597,10 @@ async function uploadVideoToCloudinary(
 
     }
 
-
-    const maxSize =
-        100 * 1024 * 1024;
-
-
-    if (file.size > maxSize) {
+    if (
+        file.size >
+        100 * 1024 * 1024
+    ) {
 
         throw new Error(
             "Video must be smaller than 100MB."
@@ -650,26 +608,21 @@ async function uploadVideoToCloudinary(
 
     }
 
-
     const formData =
         new FormData();
-
 
     formData.append(
         "file",
         file
     );
 
-
     formData.append(
         "upload_preset",
         uploadPreset
     );
 
-
     const uploadURL =
         `https://api.cloudinary.com/v1_1/${cloudName}/video/upload`;
-
 
     const response =
         await fetch(
@@ -680,9 +633,7 @@ async function uploadVideoToCloudinary(
             }
         );
 
-
     let data = {};
-
 
     try {
 
@@ -690,14 +641,13 @@ async function uploadVideoToCloudinary(
             await response.json();
 
     }
-    catch (error) {
+    catch {
 
         throw new Error(
             "Cloudinary video response could not be read."
         );
 
     }
-
 
     if (!response.ok) {
 
@@ -708,7 +658,6 @@ async function uploadVideoToCloudinary(
 
     }
 
-
     if (!data.secure_url) {
 
         throw new Error(
@@ -717,14 +666,13 @@ async function uploadVideoToCloudinary(
 
     }
 
-
     return data.secure_url;
 
 }
 
 
 /*==================================================
-GET PRODUCT DATA
+FEATURE 19.3 — GET PRODUCT DATA
 ==================================================*/
 
 function getProductData() {
@@ -735,231 +683,132 @@ function getProductData() {
 
     }
 
-
     const formData =
-        new FormData(
-            form
-        );
-
+        new FormData(form);
 
     return {
 
         productName:
-            formData.get(
-                "productName"
-            ) || "",
-
+            formData.get("productName") || "",
 
         brand:
-            formData.get(
-                "brand"
-            ) || "",
-
+            formData.get("brand") || "",
 
         category:
-            formData.get(
-                "category"
-            ) || "",
-
+            formData.get("category") || "",
 
         subcategory:
-            formData.get(
-                "subcategory"
-            ) || "",
-
+            formData.get("subcategory") || "",
 
         condition:
-            formData.get(
-                "condition"
-            ) || "new",
-
+            formData.get("condition") || "new",
 
         shortDescription:
-            formData.get(
-                "shortDescription"
-            ) || "",
-
+            formData.get("shortDescription") || "",
 
         regularPrice:
             Number(
-                formData.get(
-                    "regularPrice"
-                ) || 0
+                formData.get("regularPrice") || 0
             ),
-
 
         salePrice:
             Number(
-                formData.get(
-                    "salePrice"
-                ) || 0
+                formData.get("salePrice") || 0
             ),
 
-
         discountType:
-            formData.get(
-                "discountType"
-            ) || "none",
-
+            formData.get("discountType") || "none",
 
         discountValue:
             Number(
-                formData.get(
-                    "discountValue"
-                ) || 0
+                formData.get("discountValue") || 0
             ),
-
 
         featuredProduct:
-            isChecked(
-                "featured-product"
-            ),
-
+            isChecked("featured-product"),
 
         sku:
-            formData.get(
-                "sku"
-            ) || "",
-
+            formData.get("sku") || "",
 
         stockQuantity:
             Number(
-                formData.get(
-                    "stockQuantity"
-                ) || 0
+                formData.get("stockQuantity") || 0
             ),
-
 
         lowStockLimit:
             Number(
-                formData.get(
-                    "lowStockLimit"
-                ) || 0
+                formData.get("lowStockLimit") || 0
             ),
-
 
         stockStatus:
-            formData.get(
-                "stockStatus"
-            ) || "in-stock",
-
+            formData.get("stockStatus") ||
+            "in-stock",
 
         manageStock:
-            isChecked(
-                "manage-stock"
-            ),
-
+            isChecked("manage-stock"),
 
         description:
-            formData.get(
-                "description"
-            ) || "",
-
+            formData.get("description") || "",
 
         features:
-            formData.get(
-                "features"
-            ) || "",
-
+            formData.get("features") || "",
 
         tags:
-            formData.get(
-                "tags"
-            ) || "",
-
+            formData.get("tags") || "",
 
         shippingMethod:
-            formData.get(
-                "shippingMethod"
-            ) || "standard",
-
+            formData.get("shippingMethod") ||
+            "standard",
 
         shippingCost:
             Number(
-                formData.get(
-                    "shippingCost"
-                ) || 0
+                formData.get("shippingCost") || 0
             ),
 
-
         deliveryTime:
-            formData.get(
-                "deliveryTime"
-            ) || "",
-
+            formData.get("deliveryTime") || "",
 
         returnDays:
             Number(
-                formData.get(
-                    "returnDays"
-                ) || 0
+                formData.get("returnDays") || 0
             ),
-
 
         shippingDescription:
             formData.get(
                 "shippingDescription"
             ) || "",
 
-
         returnDescription:
             formData.get(
                 "returnDescription"
             ) || "",
 
-
         seoTitle:
-            formData.get(
-                "seoTitle"
-            ) || "",
-
+            formData.get("seoTitle") || "",
 
         seoDescription:
-            formData.get(
-                "seoDescription"
-            ) || "",
-
+            formData.get("seoDescription") || "",
 
         seoKeywords:
-            formData.get(
-                "seoKeywords"
-            ) || "",
-
+            formData.get("seoKeywords") || "",
 
         slug:
-            formData.get(
-                "slug"
-            ) || "",
-
+            formData.get("slug") || "",
 
         productVisible:
-            isChecked(
-                "product-visible"
-            ),
-
+            isChecked("product-visible"),
 
         allowReviews:
-            isChecked(
-                "allow-reviews"
-            ),
-
+            isChecked("allow-reviews"),
 
         allowQuestions:
-            isChecked(
-                "allow-questions"
-            ),
-
+            isChecked("allow-questions"),
 
         showRelatedProducts:
-            isChecked(
-                "show-related-products"
-            ),
-
+            isChecked("show-related-products"),
 
         enableWishlist:
-            isChecked(
-                "enable-wishlist"
-            )
+            isChecked("enable-wishlist")
 
     };
 
@@ -967,7 +816,7 @@ function getProductData() {
 
 
 /*==================================================
-VARIANTS
+FEATURE 19.3 — VARIANTS
 ==================================================*/
 
 function getVariants() {
@@ -977,27 +826,19 @@ function getVariants() {
             ".variant-editor-row"
         );
 
-
-    return Array.from(
-        rows
-    )
-    .map(
-        row => {
+    return Array.from(rows)
+        .map(row => {
 
             const name =
                 row.querySelector(
                     '[name="variantName[]"]'
                 )?.value
-                    ?.trim() ||
-                "";
-
+                    ?.trim() || "";
 
             const options =
                 row.querySelector(
                     '[name="variantOptions[]"]'
-                )?.value ||
-                "";
-
+                )?.value || "";
 
             return {
 
@@ -1010,24 +851,18 @@ function getVariants() {
                             item =>
                                 item.trim()
                         )
-                        .filter(
-                            Boolean
-                        )
+                        .filter(Boolean)
 
             };
 
-        }
-    )
-    .filter(
-        item =>
-            item.name
-    );
+        })
+        .filter(item => item.name);
 
 }
 
 
 /*==================================================
-SPECIFICATIONS
+FEATURE 19.3 — SPECIFICATIONS
 ==================================================*/
 
 function getSpecifications() {
@@ -1037,50 +872,38 @@ function getSpecifications() {
             ".specification-row"
         );
 
-
-    return Array.from(
-        rows
-    )
-    .map(
-        row => {
+    return Array.from(rows)
+        .map(row => {
 
             const name =
                 row.querySelector(
                     '[name="specificationName[]"]'
                 )?.value
-                    ?.trim() ||
-                "";
-
+                    ?.trim() || "";
 
             const value =
                 row.querySelector(
                     '[name="specificationValue[]"]'
                 )?.value
-                    ?.trim() ||
-                "";
-
+                    ?.trim() || "";
 
             return {
-
                 name,
-
                 value
-
             };
 
-        }
-    )
-    .filter(
-        item =>
-            item.name ||
-            item.value
-    );
+        })
+        .filter(
+            item =>
+                item.name ||
+                item.value
+        );
 
 }
 
 
 /*==================================================
-RELATED PRODUCTS
+FEATURE 19.3 — RELATED PRODUCTS
 ==================================================*/
 
 function getRelatedProducts() {
@@ -1090,47 +913,37 @@ function getRelatedProducts() {
             "selected-related-products"
         );
 
-
     if (!container) {
 
         return [];
 
     }
 
-
-    const products =
+    return Array.from(
         container.querySelectorAll(
             "[data-product-id]"
-        );
-
-
-    return Array.from(
-        products
+        )
     )
-    .map(
-        item =>
-            item.dataset.productId
-    )
-    .filter(
-        Boolean
-    );
+        .map(
+            item =>
+                item.dataset.productId
+        )
+        .filter(Boolean);
 
 }
 
 
 /*==================================================
-UPLOAD MAIN IMAGE
+FEATURE 19.3 — MAIN IMAGE UPLOAD
 ==================================================*/
 
 async function uploadMainImage() {
 
     if (!mainImageFile) {
 
-        return existingMainImage ||
-            "";
+        return existingMainImage || "";
 
     }
-
 
     return await uploadImage(
         mainImageFile
@@ -1140,38 +953,27 @@ async function uploadMainImage() {
 
 
 /*==================================================
-UPLOAD GALLERY
+FEATURE 19.3 — GALLERY UPLOAD
 ==================================================*/
 
 async function uploadGallery() {
 
-    const uploadedGallery =
-        [
-            ...existingGallery
-        ];
+    const uploadedGallery = [
+        ...existingGallery
+    ];
 
-
-    for (
-        const file
-        of galleryFiles
-    ) {
+    for (const file of galleryFiles) {
 
         const url =
-            await uploadImage(
-                file
-            );
-
+            await uploadImage(file);
 
         if (url) {
 
-            uploadedGallery.push(
-                url
-            );
+            uploadedGallery.push(url);
 
         }
 
     }
-
 
     return uploadedGallery;
 
@@ -1179,7 +981,7 @@ async function uploadGallery() {
 
 
 /*==================================================
-SAVE PRODUCT
+FEATURE 19.3 — SAVE PRODUCT
 ==================================================*/
 
 async function saveProduct(
@@ -1192,7 +994,6 @@ async function saveProduct(
 
     }
 
-
     if (!form.checkValidity()) {
 
         form.reportValidity();
@@ -1201,19 +1002,13 @@ async function saveProduct(
 
     }
 
-
     showLoading(
         publish
             ? "Publishing product..."
             : "Saving product..."
     );
 
-
     try {
-
-        /*========================================
-        PRODUCT ID
-        ========================================*/
 
         if (!currentProductId) {
 
@@ -1222,67 +1017,29 @@ async function saveProduct(
 
         }
 
-
-        /*========================================
-        BASIC DATA
-        ========================================*/
-
         const product =
             getProductData();
-
 
         product.productId =
             currentProductId;
 
-
-        /*========================================
-        VARIANTS
-        ========================================*/
-
         product.variants =
             getVariants();
-
-
-        /*========================================
-        SPECIFICATIONS
-        ========================================*/
 
         product.specifications =
             getSpecifications();
 
-
-        /*========================================
-        RELATED PRODUCTS
-        ========================================*/
-
         product.relatedProducts =
             getRelatedProducts();
-
-
-        /*========================================
-        MAIN IMAGE
-        ========================================*/
 
         product.mainImage =
             await uploadMainImage();
 
-
-        /*========================================
-        GALLERY
-        ========================================*/
-
         product.gallery =
             await uploadGallery();
 
-
-        /*========================================
-        VIDEO
-        ========================================*/
-
         product.video =
-            existingVideo ||
-            "";
-
+            existingVideo || "";
 
         if (productVideoFile) {
 
@@ -1293,27 +1050,13 @@ async function saveProduct(
 
         }
 
-
-        /*========================================
-        STATUS
-        ========================================*/
-
         product.status =
             publish
                 ? "published"
                 : "draft";
 
-
         product.updatedAt =
             new Date().toISOString();
-
-
-        /*========================================
-        CREATED AT
-        ========================================*/
-
-        let productRef;
-
 
         const existingRef =
             ref(
@@ -1321,32 +1064,22 @@ async function saveProduct(
                 `products/${currentProductId}`
             );
 
-
         const existingSnapshot =
-            await get(
-                existingRef
-            );
-
+            await get(existingRef);
 
         if (existingSnapshot.exists()) {
 
             const oldProduct =
                 existingSnapshot.val();
 
-
             product.createdAt =
                 oldProduct.createdAt ||
                 new Date().toISOString();
-
 
             await update(
                 existingRef,
                 product
             );
-
-
-            productRef =
-                existingRef;
 
         }
         else {
@@ -1354,28 +1087,17 @@ async function saveProduct(
             product.createdAt =
                 new Date().toISOString();
 
-
             await set(
                 existingRef,
                 product
             );
 
-
-            productRef =
-                existingRef;
-
         }
-
-
-        /*========================================
-        PRODUCT ID UI
-        ========================================*/
 
         const productIdElement =
             document.getElementById(
                 "product-id"
             );
-
 
         if (productIdElement) {
 
@@ -1384,55 +1106,30 @@ async function saveProduct(
 
         }
 
-
-        /*========================================
-        STATUS UI
-        ========================================*/
-
         updateProductStatus(
             publish
                 ? "Published"
                 : "Draft"
         );
 
+        mainImageFile = null;
 
-        /*========================================
-        CLEAR NEW FILES
-        ========================================*/
+        galleryFiles = [];
 
-        mainImageFile =
-            null;
-
-
-        galleryFiles =
-            [];
-
-
-        productVideoFile =
-            null;
-
+        productVideoFile = null;
 
         existingMainImage =
-            product.mainImage ||
-            "";
-
+            product.mainImage || "";
 
         existingGallery =
-            Array.isArray(
-                product.gallery
-            )
+            Array.isArray(product.gallery)
                 ? product.gallery
                 : [];
 
-
         existingVideo =
-            product.video ||
-            "";
+            product.video || "";
 
-
-        /*========================================
-        TOAST
-        ========================================*/
+        renderGallery();
 
         showToast(
             publish
@@ -1440,12 +1137,10 @@ async function saveProduct(
                 : "Product Saved"
         );
 
-
         console.log(
             "PRODUCT SAVED:",
             currentProductId
         );
-
 
         return currentProductId;
 
@@ -1456,7 +1151,6 @@ async function saveProduct(
             "PRODUCT SAVE ERROR:",
             error
         );
-
 
         alert(
             "Product save failed.\n\n" +
@@ -1477,7 +1171,7 @@ async function saveProduct(
 
 
 /*==================================================
-SAVE DRAFT BUTTON
+FEATURE 19.3 — SAVE DRAFT
 ==================================================*/
 
 document
@@ -1486,19 +1180,15 @@ document
     )
     ?.addEventListener(
         "click",
-        () => {
+        event => {
 
-            saveProduct(
-                false
-            );
+            event.preventDefault();
+
+            saveProduct(false);
 
         }
     );
 
-
-/*==================================================
-LARGE SAVE DRAFT BUTTON
-==================================================*/
 
 document
     .getElementById(
@@ -1506,18 +1196,18 @@ document
     )
     ?.addEventListener(
         "click",
-        () => {
+        event => {
 
-            saveProduct(
-                false
-            );
+            event.preventDefault();
+
+            saveProduct(false);
 
         }
     );
 
 
 /*==================================================
-HEADER PUBLISH
+FEATURE 19.3 — PUBLISH
 ==================================================*/
 
 document
@@ -1526,19 +1216,15 @@ document
     )
     ?.addEventListener(
         "click",
-        () => {
+        event => {
 
-            saveProduct(
-                true
-            );
+            event.preventDefault();
+
+            saveProduct(true);
 
         }
     );
 
-
-/*==================================================
-LARGE PUBLISH
-==================================================*/
 
 document
     .getElementById(
@@ -1550,17 +1236,14 @@ document
 
             event.preventDefault();
 
-
-            saveProduct(
-                true
-            );
+            saveProduct(true);
 
         }
     );
 
 
 /*==================================================
-FORM SUBMIT
+FEATURE 19.3 — FORM SUBMIT
 ==================================================*/
 
 form?.addEventListener(
@@ -1569,121 +1252,88 @@ form?.addEventListener(
 
         event.preventDefault();
 
-
-        saveProduct(
-            true
-        );
+        saveProduct(true);
 
     }
 );
 
 
 /*==================================================
-LIVE PREVIEW
+FEATURE 19.3 — LIVE PREVIEW
 ==================================================*/
 
 function updateLivePreview() {
 
     const name =
-        getValue(
-            "product-name"
-        )
-        .trim() ||
+        getValue("product-name")
+            .trim() ||
         "Product Name";
 
-
     const brand =
-        getValue(
-            "product-brand"
-        )
-        .trim() ||
+        getValue("product-brand")
+            .trim() ||
         "BRAND";
-
 
     const regularPrice =
         Number(
-            getValue(
-                "regular-price"
-            ) ||
-            0
+            getValue("regular-price") || 0
         );
-
 
     const salePriceInput =
-        getValue(
-            "sale-price"
-        );
-
+        getValue("sale-price");
 
     const salePrice =
         salePriceInput
-            ? Number(
-                salePriceInput
-            )
+            ? Number(salePriceInput)
             : regularPrice;
 
-
     const description =
-        getValue(
-            "product-description"
-        )
-        .trim() ||
+        getValue("product-description")
+            .trim() ||
         "Product description will appear here.";
 
-
     const stockStatus =
-        getValue(
-            "stock-status"
-        ) ||
+        getValue("stock-status") ||
         "in-stock";
-
 
     setText(
         "card-preview-name",
         name
     );
 
-
     setText(
         "detail-preview-name",
         name
     );
-
 
     setText(
         "card-preview-brand",
         brand
     );
 
-
     setText(
         "detail-preview-brand",
         brand
     );
-
 
     setText(
         "card-preview-price",
         `PKR ${salePrice.toLocaleString()}`
     );
 
-
     setText(
         "detail-preview-price",
         `PKR ${salePrice.toLocaleString()}`
     );
-
 
     setText(
         "detail-preview-description",
         description
     );
 
-
     updatePreviewStock(
         stockStatus
     );
-
 
     if (
         mainImagePreview?.src &&
@@ -1696,7 +1346,6 @@ function updateLivePreview() {
             mainImagePreview.src
         );
 
-
         setImage(
             "detail-preview-image",
             mainImagePreview.src
@@ -1708,18 +1357,15 @@ function updateLivePreview() {
 
 
 /*==================================================
-PREVIEW STOCK
+FEATURE 19.3 — PREVIEW STOCK
 ==================================================*/
 
-function updatePreviewStock(
-    status
-) {
+function updatePreviewStock(status) {
 
     const stockElement =
         document.querySelector(
             ".detail-preview-stock"
         );
-
 
     if (!stockElement) {
 
@@ -1727,10 +1373,8 @@ function updatePreviewStock(
 
     }
 
-
     if (
-        status ===
-        "out-of-stock"
+        status === "out-of-stock"
     ) {
 
         stockElement.innerHTML = `
@@ -1740,8 +1384,7 @@ function updatePreviewStock(
 
     }
     else if (
-        status ===
-        "pre-order"
+        status === "pre-order"
     ) {
 
         stockElement.innerHTML = `
@@ -1763,110 +1406,28 @@ function updatePreviewStock(
 
 
 /*==================================================
-TEXT HELPER
-==================================================*/
-
-function setText(
-    id,
-    value
-) {
-
-    const element =
-        document.getElementById(
-            id
-        );
-
-
-    if (element) {
-
-        element.textContent =
-            value;
-
-    }
-
-}
-
-
-/*==================================================
-IMAGE HELPER
-==================================================*/
-
-function setImage(
-    id,
-    src
-) {
-
-    const image =
-        document.getElementById(
-            id
-        );
-
-
-    if (
-        !image ||
-        !src
-    ) {
-
-        return;
-
-    }
-
-
-    image.src =
-        src;
-
-
-    image.style.display =
-        "block";
-
-
-    const placeholder =
-        image.parentElement
-            ?.querySelector(
-                ".preview-image-placeholder"
-            );
-
-
-    if (placeholder) {
-
-        placeholder.style.display =
-            "none";
-
-    }
-
-}
-
-
-/*==================================================
-LIVE INPUT
+FEATURE 19.3 — LIVE INPUT
 ==================================================*/
 
 form?.addEventListener(
     "input",
-    () => {
-
-        updateLivePreview();
-
-    }
+    updateLivePreview
 );
 
 
 /*==================================================
-PREVIEW BUTTON
+FEATURE 19.3 — OPEN PREVIEW
 ==================================================*/
 
 function openPreview() {
 
     updateLivePreview();
 
-
     document
         .getElementById(
             "live-preview-panel"
         )
-        ?.classList.add(
-            "active"
-        );
+        ?.classList.add("active");
 
 }
 
@@ -1892,7 +1453,7 @@ document
 
 
 /*==================================================
-CLOSE PREVIEW
+FEATURE 19.3 — CLOSE PREVIEW
 ==================================================*/
 
 document
@@ -1916,70 +1477,62 @@ document
 
 
 /*==================================================
-PREVIEW TABS
+FEATURE 19.3 — PREVIEW TABS
 ==================================================*/
 
 document
     .querySelectorAll(
         ".preview-tab"
     )
-    .forEach(
-        button => {
+    .forEach(button => {
 
-            button.addEventListener(
-                "click",
-                function () {
+        button.addEventListener(
+            "click",
+            function () {
 
-                    document
-                        .querySelectorAll(
-                            ".preview-tab"
+                document
+                    .querySelectorAll(
+                        ".preview-tab"
+                    )
+                    .forEach(btn =>
+                        btn.classList.remove(
+                            "active"
                         )
-                        .forEach(
-                            btn =>
-                                btn.classList.remove(
-                                    "active"
-                                )
-                        );
+                    );
 
-
-                    document
-                        .querySelectorAll(
-                            ".preview-content"
+                document
+                    .querySelectorAll(
+                        ".preview-content"
+                    )
+                    .forEach(content =>
+                        content.classList.remove(
+                            "active"
                         )
-                        .forEach(
-                            content =>
-                                content.classList.remove(
-                                    "active"
-                                )
-                        );
+                    );
 
+                this.classList.add(
+                    "active"
+                );
 
-                    this.classList.add(
+                const type =
+                    this.dataset.preview;
+
+                document
+                    .getElementById(
+                        `${type}-preview`
+                    )
+                    ?.classList.add(
                         "active"
                     );
 
+            }
+        );
 
-                    const type =
-                        this.dataset.preview;
-
-
-                    document
-                        .getElementById(
-                            `${type}-preview`
-                        )
-                        ?.classList.add(
-                            "active"
-                        );
-
-                }
-            );
-
-        }
-    );
+    });
 
 
 /*==================================================
-ADD VARIANT
+FEATURE 19.3 — ADD VARIANT
 ==================================================*/
 
 document
@@ -1995,23 +1548,17 @@ document
                     "variants-container"
                 );
 
-
             if (!container) {
 
                 return;
 
             }
 
-
             const row =
-                document.createElement(
-                    "div"
-                );
-
+                document.createElement("div");
 
             row.className =
                 "variant-editor-row";
-
 
             row.innerHTML = `
 
@@ -2029,7 +1576,6 @@ document
 
                 </div>
 
-
                 <div class="form-group">
 
                     <label>
@@ -2044,7 +1590,6 @@ document
 
                 </div>
 
-
                 <button
                     type="button"
                     class="remove-variant-button"
@@ -2056,17 +1601,14 @@ document
 
             `;
 
-
-            container.appendChild(
-                row
-            );
+            container.appendChild(row);
 
         }
     );
 
 
 /*==================================================
-REMOVE VARIANT
+FEATURE 19.3 — REMOVE VARIANT
 ==================================================*/
 
 document.addEventListener(
@@ -2078,44 +1620,33 @@ document.addEventListener(
                 ".remove-variant-button"
             );
 
-
         if (!button) {
 
             return;
 
         }
 
-
         const rows =
             document.querySelectorAll(
                 ".variant-editor-row"
             );
 
+        if (rows.length <= 1) {
 
-        if (
-            rows.length <= 1
-        ) {
-
-            const inputs =
-                button.closest(
+            button
+                .closest(
                     ".variant-editor-row"
                 )
-                ?.querySelectorAll(
-                    "input"
-                );
+                ?.querySelectorAll("input")
+                .forEach(input => {
 
-
-            inputs?.forEach(
-                input => {
                     input.value = "";
-                }
-            );
 
+                });
 
             return;
 
         }
-
 
         button
             .closest(
@@ -2128,7 +1659,7 @@ document.addEventListener(
 
 
 /*==================================================
-ADD SPECIFICATION
+FEATURE 19.3 — ADD SPECIFICATION
 ==================================================*/
 
 document
@@ -2144,23 +1675,17 @@ document
                     "specifications-editor"
                 );
 
-
             if (!container) {
 
                 return;
 
             }
 
-
             const row =
-                document.createElement(
-                    "div"
-                );
-
+                document.createElement("div");
 
             row.className =
                 "specification-row";
-
 
             row.innerHTML = `
 
@@ -2170,13 +1695,11 @@ document
                     placeholder="Specification"
                 >
 
-
                 <input
                     type="text"
                     name="specificationValue[]"
                     placeholder="Value"
                 >
-
 
                 <button
                     type="button"
@@ -2189,17 +1712,14 @@ document
 
             `;
 
-
-            container.appendChild(
-                row
-            );
+            container.appendChild(row);
 
         }
     );
 
 
 /*==================================================
-REMOVE SPECIFICATION
+FEATURE 19.3 — REMOVE SPECIFICATION
 ==================================================*/
 
 document.addEventListener(
@@ -2211,44 +1731,33 @@ document.addEventListener(
                 ".remove-specification-button"
             );
 
-
         if (!button) {
 
             return;
 
         }
 
-
         const rows =
             document.querySelectorAll(
                 ".specification-row"
             );
 
+        if (rows.length <= 1) {
 
-        if (
-            rows.length <= 1
-        ) {
-
-            const inputs =
-                button.closest(
+            button
+                .closest(
                     ".specification-row"
                 )
-                ?.querySelectorAll(
-                    "input"
-                );
+                ?.querySelectorAll("input")
+                .forEach(input => {
 
-
-            inputs?.forEach(
-                input => {
                     input.value = "";
-                }
-            );
 
+                });
 
             return;
 
         }
-
 
         button
             .closest(
@@ -2261,61 +1770,55 @@ document.addEventListener(
 
 
 /*==================================================
-NAVIGATION
+FEATURE 19.3 — NAVIGATION
 ==================================================*/
 
 document
     .querySelectorAll(
         ".editor-nav-item"
     )
-    .forEach(
-        button => {
+    .forEach(button => {
 
-            button.addEventListener(
-                "click",
-                function () {
+        button.addEventListener(
+            "click",
+            function () {
 
-                    document
-                        .querySelectorAll(
-                            ".editor-nav-item"
+                document
+                    .querySelectorAll(
+                        ".editor-nav-item"
+                    )
+                    .forEach(item =>
+                        item.classList.remove(
+                            "active"
                         )
-                        .forEach(
-                            item =>
-                                item.classList.remove(
-                                    "active"
-                                )
-                        );
-
-
-                    this.classList.add(
-                        "active"
                     );
 
+                this.classList.add(
+                    "active"
+                );
 
-                    const section =
-                        document.getElementById(
-                            this.dataset.section
-                        );
+                const section =
+                    document.getElementById(
+                        this.dataset.section
+                    );
 
+                if (section) {
 
-                    if (section) {
-
-                        section.scrollIntoView({
-                            behavior: "smooth",
-                            block: "start"
-                        });
-
-                    }
+                    section.scrollIntoView({
+                        behavior: "smooth",
+                        block: "start"
+                    });
 
                 }
-            );
 
-        }
-    );
+            }
+        );
+
+    });
 
 
 /*==================================================
-DELETE MODAL
+FEATURE 19.3 — DELETE MODAL
 ==================================================*/
 
 const deleteModal =
@@ -2344,26 +1847,24 @@ document
     .querySelectorAll(
         "[data-close-modal]"
     )
-    .forEach(
-        button => {
+    .forEach(button => {
 
-            button.addEventListener(
-                "click",
-                () => {
+        button.addEventListener(
+            "click",
+            () => {
 
-                    deleteModal?.classList.remove(
-                        "active"
-                    );
+                deleteModal?.classList.remove(
+                    "active"
+                );
 
-                }
-            );
+            }
+        );
 
-        }
-    );
+    });
 
 
 /*==================================================
-CONFIRM DELETE
+FEATURE 19.3 — CONFIRM DELETE
 ==================================================*/
 
 document
@@ -2380,21 +1881,17 @@ document
                     "active"
                 );
 
-
                 alert(
                     "No product selected."
                 );
-
 
                 return;
 
             }
 
-
             showLoading(
                 "Deleting product..."
             );
-
 
             try {
 
@@ -2405,16 +1902,13 @@ document
                     )
                 );
 
-
                 deleteModal?.classList.remove(
                     "active"
                 );
 
-
                 showToast(
                     "Product Deleted"
                 );
-
 
                 setTimeout(
                     () => {
@@ -2433,7 +1927,6 @@ document
                     "DELETE ERROR:",
                     error
                 );
-
 
                 alert(
                     "Delete failed.\n\n" +
@@ -2455,18 +1948,15 @@ document
 
 
 /*==================================================
-STATUS
+FEATURE 19.3 — PRODUCT STATUS
 ==================================================*/
 
-function updateProductStatus(
-    status
-) {
+function updateProductStatus(status) {
 
     const element =
         document.querySelector(
             ".product-status"
         );
-
 
     if (!element) {
 
@@ -2474,15 +1964,12 @@ function updateProductStatus(
 
     }
 
-
     element.textContent =
         status;
-
 
     element.classList.remove(
         "draft"
     );
-
 
     if (
         status.toLowerCase() ===
@@ -2499,18 +1986,15 @@ function updateProductStatus(
 
 
 /*==================================================
-TOAST
+FEATURE 19.3 — TOAST
 ==================================================*/
 
-function showToast(
-    title
-) {
+function showToast(title) {
 
     const toast =
         document.getElementById(
             "editor-toast"
         );
-
 
     if (!toast) {
 
@@ -2518,12 +2002,10 @@ function showToast(
 
     }
 
-
     const strong =
         toast.querySelector(
             "strong"
         );
-
 
     if (strong) {
 
@@ -2532,11 +2014,9 @@ function showToast(
 
     }
 
-
     toast.classList.add(
         "active"
     );
-
 
     setTimeout(
         () => {
@@ -2553,18 +2033,15 @@ function showToast(
 
 
 /*==================================================
-LOADING
+FEATURE 19.3 — LOADING
 ==================================================*/
 
-function showLoading(
-    text
-) {
+function showLoading(text) {
 
     const loading =
         document.getElementById(
             "editor-loading"
         );
-
 
     if (!loading) {
 
@@ -2572,12 +2049,8 @@ function showLoading(
 
     }
 
-
     const paragraph =
-        loading.querySelector(
-            "p"
-        );
-
+        loading.querySelector("p");
 
     if (paragraph) {
 
@@ -2585,7 +2058,6 @@ function showLoading(
             text;
 
     }
-
 
     loading.classList.add(
         "active"
@@ -2608,12 +2080,10 @@ function hideLoading() {
 
 
 /*==================================================
-LOAD PRODUCT FOR EDIT
+FEATURE 19.3 — LOAD PRODUCT
 ==================================================*/
 
-async function loadProduct(
-    productId
-) {
+async function loadProduct(productId) {
 
     if (!productId) {
 
@@ -2621,15 +2091,13 @@ async function loadProduct(
 
     }
 
-
     showLoading(
         "Loading product..."
     );
 
-
     try {
 
-        const productSnapshot =
+        const snapshot =
             await get(
                 ref(
                     database,
@@ -2637,68 +2105,47 @@ async function loadProduct(
                 )
             );
 
-
-        if (!productSnapshot.exists()) {
+        if (!snapshot.exists()) {
 
             alert(
                 "Product not found."
             );
 
-
             return;
 
         }
 
-
         const product =
-            productSnapshot.val();
-
+            snapshot.val();
 
         currentProductId =
             productId;
 
-
         existingMainImage =
-            product.mainImage ||
-            "";
-
+            product.mainImage || "";
 
         existingGallery =
-            Array.isArray(
-                product.gallery
-            )
+            Array.isArray(product.gallery)
                 ? product.gallery
                 : [];
 
-
         existingVideo =
-            product.video ||
-            "";
+            product.video || "";
 
+        fillProductForm(product);
 
-        fillProductForm(
-            product
-        );
-
-
-        renderExistingMedia(
-            product
-        );
-
+        renderExistingMedia(product);
 
         updateProductStatus(
-            product.status ===
-                "published"
+            product.status === "published"
                 ? "Published"
                 : "Draft"
         );
-
 
         const productIdElement =
             document.getElementById(
                 "product-id"
             );
-
 
         if (productIdElement) {
 
@@ -2706,7 +2153,6 @@ async function loadProduct(
                 productId;
 
         }
-
 
         updateLivePreview();
 
@@ -2717,7 +2163,6 @@ async function loadProduct(
             "LOAD PRODUCT ERROR:",
             error
         );
-
 
         alert(
             "Product loading failed.\n\n" +
@@ -2738,12 +2183,10 @@ async function loadProduct(
 
 
 /*==================================================
-FILL PRODUCT FORM
+FEATURE 19.3 — FILL PRODUCT FORM
 ==================================================*/
 
-function fillProductForm(
-    product
-) {
+function fillProductForm(product) {
 
     const fieldMap = {
 
@@ -2830,85 +2273,65 @@ function fillProductForm(
 
     };
 
+    Object.entries(fieldMap)
+        .forEach(
+            ([id, value]) => {
 
-    Object.entries(
-        fieldMap
-    )
-    .forEach(
-        (
-            [
-                id,
-                value
-            ]
-        ) => {
+                const element =
+                    document.getElementById(id);
 
-            const element =
-                document.getElementById(
-                    id
-                );
+                if (
+                    element &&
+                    value !== undefined &&
+                    value !== null
+                ) {
 
+                    element.value =
+                        value;
 
-            if (
-                element &&
-                value !== undefined &&
-                value !== null
-            ) {
-
-                element.value =
-                    value;
+                }
 
             }
-
-        }
-    );
-
+        );
 
     setChecked(
         "featured-product",
         product.featuredProduct
     );
 
-
     setChecked(
         "manage-stock",
         product.manageStock
     );
-
 
     setChecked(
         "product-visible",
         product.productVisible
     );
 
-
     setChecked(
         "allow-reviews",
         product.allowReviews
     );
-
 
     setChecked(
         "allow-questions",
         product.allowQuestions
     );
 
-
     setChecked(
         "show-related-products",
         product.showRelatedProducts
     );
-
 
     setChecked(
         "enable-wishlist",
         product.enableWishlist
     );
 
-
     loadVariants(
         product.variants
     );
-
 
     loadSpecifications(
         product.specifications
@@ -2918,26 +2341,18 @@ function fillProductForm(
 
 
 /*==================================================
-CHECKBOX HELPER
+FEATURE 19.3 — CHECKBOX
 ==================================================*/
 
-function setChecked(
-    id,
-    value
-) {
+function setChecked(id, value) {
 
     const element =
-        document.getElementById(
-            id
-        );
-
+        document.getElementById(id);
 
     if (element) {
 
         element.checked =
-            Boolean(
-                value
-            );
+            Boolean(value);
 
     }
 
@@ -2945,18 +2360,15 @@ function setChecked(
 
 
 /*==================================================
-LOAD VARIANTS
+FEATURE 19.3 — LOAD VARIANTS
 ==================================================*/
 
-function loadVariants(
-    variants
-) {
+function loadVariants(variants) {
 
     const container =
         document.getElementById(
             "variants-container"
         );
-
 
     if (!container) {
 
@@ -2964,18 +2376,12 @@ function loadVariants(
 
     }
 
-
-    container.innerHTML =
-        "";
-
+    container.innerHTML = "";
 
     const list =
-        Array.isArray(
-            variants
-        )
+        Array.isArray(variants)
             ? variants
             : [];
-
 
     if (!list.length) {
 
@@ -2985,85 +2391,73 @@ function loadVariants(
 
     }
 
+    list.forEach(variant => {
 
-    list.forEach(
-        variant => {
+        const row =
+            document.createElement("div");
 
-            const row =
-                document.createElement(
-                    "div"
-                );
+        row.className =
+            "variant-editor-row";
 
+        row.innerHTML = `
 
-            row.className =
-                "variant-editor-row";
+            <div class="form-group">
 
+                <label>
+                    Option Name
+                </label>
 
-            row.innerHTML = `
-
-                <div class="form-group">
-
-                    <label>
-                        Option Name
-                    </label>
-
-                    <input
-                        type="text"
-                        name="variantName[]"
-                        placeholder="e.g. Color"
-                        value="${escapeAttribute(
-                            variant.name || ""
-                        )}"
-                    >
-
-                </div>
-
-
-                <div class="form-group">
-
-                    <label>
-                        Options
-                    </label>
-
-                    <input
-                        type="text"
-                        name="variantOptions[]"
-                        placeholder="Black, White, Blue"
-                        value="${escapeAttribute(
-                            (
-                                variant.options ||
-                                []
-                            ).join(", ")
-                        )}"
-                    >
-
-                </div>
-
-
-                <button
-                    type="button"
-                    class="remove-variant-button"
+                <input
+                    type="text"
+                    name="variantName[]"
+                    placeholder="e.g. Color"
+                    value="${escapeAttribute(
+                        variant.name || ""
+                    )}"
                 >
 
-                    <i class="fa-solid fa-trash"></i>
+            </div>
 
-                </button>
+            <div class="form-group">
 
-            `;
+                <label>
+                    Options
+                </label>
 
+                <input
+                    type="text"
+                    name="variantOptions[]"
+                    placeholder="Black, White, Blue"
+                    value="${escapeAttribute(
+                        (
+                            variant.options ||
+                            []
+                        ).join(", ")
+                    )}"
+                >
 
-            container.appendChild(
-                row
-            );
+            </div>
 
-        }
-    );
+            <button
+                type="button"
+                class="remove-variant-button"
+            >
+
+                <i class="fa-solid fa-trash"></i>
+
+            </button>
+
+        `;
+
+        container.appendChild(row);
+
+    });
 
 }
 
 
 /*==================================================
-EMPTY VARIANT
+FEATURE 19.3 — EMPTY VARIANT
 ==================================================*/
 
 function addEmptyVariantRow() {
@@ -3073,23 +2467,17 @@ function addEmptyVariantRow() {
             "variants-container"
         );
 
-
     if (!container) {
 
         return;
 
     }
 
-
     const row =
-        document.createElement(
-            "div"
-        );
-
+        document.createElement("div");
 
     row.className =
         "variant-editor-row";
-
 
     row.innerHTML = `
 
@@ -3107,7 +2495,6 @@ function addEmptyVariantRow() {
 
         </div>
 
-
         <div class="form-group">
 
             <label>
@@ -3122,7 +2509,6 @@ function addEmptyVariantRow() {
 
         </div>
 
-
         <button
             type="button"
             class="remove-variant-button"
@@ -3134,27 +2520,21 @@ function addEmptyVariantRow() {
 
     `;
 
-
-    container.appendChild(
-        row
-    );
+    container.appendChild(row);
 
 }
 
 
 /*==================================================
-LOAD SPECIFICATIONS
+FEATURE 19.3 — LOAD SPECIFICATIONS
 ==================================================*/
 
-function loadSpecifications(
-    specifications
-) {
+function loadSpecifications(specifications) {
 
     const container =
         document.getElementById(
             "specifications-editor"
         );
-
 
     if (!container) {
 
@@ -3162,18 +2542,12 @@ function loadSpecifications(
 
     }
 
-
-    container.innerHTML =
-        "";
-
+    container.innerHTML = "";
 
     const list =
-        Array.isArray(
-            specifications
-        )
+        Array.isArray(specifications)
             ? specifications
             : [];
-
 
     if (!list.length) {
 
@@ -3183,66 +2557,54 @@ function loadSpecifications(
 
     }
 
+    list.forEach(specification => {
 
-    list.forEach(
-        specification => {
+        const row =
+            document.createElement("div");
 
-            const row =
-                document.createElement(
-                    "div"
-                );
+        row.className =
+            "specification-row";
 
+        row.innerHTML = `
 
-            row.className =
-                "specification-row";
+            <input
+                type="text"
+                name="specificationName[]"
+                placeholder="Specification"
+                value="${escapeAttribute(
+                    specification.name || ""
+                )}"
+            >
 
+            <input
+                type="text"
+                name="specificationValue[]"
+                placeholder="Value"
+                value="${escapeAttribute(
+                    specification.value || ""
+                )}"
+            >
 
-            row.innerHTML = `
+            <button
+                type="button"
+                class="remove-specification-button"
+            >
 
-                <input
-                    type="text"
-                    name="specificationName[]"
-                    placeholder="Specification"
-                    value="${escapeAttribute(
-                        specification.name || ""
-                    )}"
-                >
+                <i class="fa-solid fa-trash"></i>
 
+            </button>
 
-                <input
-                    type="text"
-                    name="specificationValue[]"
-                    placeholder="Value"
-                    value="${escapeAttribute(
-                        specification.value || ""
-                    )}"
-                >
+        `;
 
+        container.appendChild(row);
 
-                <button
-                    type="button"
-                    class="remove-specification-button"
-                >
-
-                    <i class="fa-solid fa-trash"></i>
-
-                </button>
-
-            `;
-
-
-            container.appendChild(
-                row
-            );
-
-        }
-    );
+    });
 
 }
 
 
 /*==================================================
-EMPTY SPECIFICATION
+FEATURE 19.3 — EMPTY SPECIFICATION
 ==================================================*/
 
 function addEmptySpecificationRow() {
@@ -3252,23 +2614,17 @@ function addEmptySpecificationRow() {
             "specifications-editor"
         );
 
-
     if (!container) {
 
         return;
 
     }
 
-
     const row =
-        document.createElement(
-            "div"
-        );
-
+        document.createElement("div");
 
     row.className =
         "specification-row";
-
 
     row.innerHTML = `
 
@@ -3278,13 +2634,11 @@ function addEmptySpecificationRow() {
             placeholder="Specification"
         >
 
-
         <input
             type="text"
             name="specificationValue[]"
             placeholder="Value"
         >
-
 
         <button
             type="button"
@@ -3297,25 +2651,18 @@ function addEmptySpecificationRow() {
 
     `;
 
-
-    container.appendChild(
-        row
-    );
+    container.appendChild(row);
 
 }
 
 
 /*==================================================
-RENDER EXISTING MEDIA
+FEATURE 19.3 — EXISTING MEDIA
 ==================================================*/
 
-function renderExistingMedia(
-    product
-) {
+function renderExistingMedia(product) {
 
-    if (
-        product.mainImage
-    ) {
+    if (product.mainImage) {
 
         if (mainImagePreview) {
 
@@ -3327,12 +2674,10 @@ function renderExistingMedia(
 
         }
 
-
         const placeholder =
             mainImageBox?.querySelector(
                 ".upload-placeholder"
             );
-
 
         if (placeholder) {
 
@@ -3341,13 +2686,20 @@ function renderExistingMedia(
 
         }
 
+        setImage(
+            "card-preview-image",
+            product.mainImage
+        );
+
+        setImage(
+            "detail-preview-image",
+            product.mainImage
+        );
+
     }
 
-
     if (
-        Array.isArray(
-            product.gallery
-        )
+        Array.isArray(product.gallery)
     ) {
 
         renderExistingGallery(
@@ -3356,10 +2708,7 @@ function renderExistingMedia(
 
     }
 
-
-    if (
-        product.video
-    ) {
+    if (product.video) {
 
         renderExistingVideo(
             product.video
@@ -3371,12 +2720,10 @@ function renderExistingMedia(
 
 
 /*==================================================
-EXISTING GALLERY
+FEATURE 19.3 — EXISTING GALLERY
 ==================================================*/
 
-function renderExistingGallery(
-    gallery
-) {
+function renderExistingGallery(gallery) {
 
     if (!galleryGrid) {
 
@@ -3384,66 +2731,42 @@ function renderExistingGallery(
 
     }
 
-
     const uploadButton =
         galleryGrid.querySelector(
             ".gallery-upload-button"
         );
 
-
     galleryGrid
         .querySelectorAll(
             ".gallery-existing-item"
         )
-        .forEach(
-            item =>
-                item.remove()
-        );
-
+        .forEach(item => item.remove());
 
     gallery.forEach(
-        (
-            url,
-            index
-        ) => {
+        (url, index) => {
 
             const wrapper =
-                document.createElement(
-                    "div"
-                );
-
+                document.createElement("div");
 
             wrapper.className =
                 "gallery-preview-item gallery-existing-item";
 
-
             const image =
-                document.createElement(
-                    "img"
-                );
+                document.createElement("img");
 
-
-            image.src =
-                url;
-
+            image.src = url;
 
             image.alt =
                 "Product gallery";
 
-
             const removeButton =
-                document.createElement(
-                    "button"
-                );
-
+                document.createElement("button");
 
             removeButton.type =
                 "button";
 
-
             removeButton.innerHTML =
                 '<i class="fa-solid fa-xmark"></i>';
-
 
             removeButton.addEventListener(
                 "click",
@@ -3454,22 +2777,16 @@ function renderExistingGallery(
                         1
                     );
 
-
                     wrapper.remove();
 
                 }
             );
 
-
-            wrapper.appendChild(
-                image
-            );
-
+            wrapper.appendChild(image);
 
             wrapper.appendChild(
                 removeButton
             );
-
 
             if (uploadButton) {
 
@@ -3494,12 +2811,10 @@ function renderExistingGallery(
 
 
 /*==================================================
-EXISTING VIDEO
+FEATURE 19.3 — EXISTING VIDEO
 ==================================================*/
 
-function renderExistingVideo(
-    url
-) {
+function renderExistingVideo(url) {
 
     if (!videoPreviewContainer) {
 
@@ -3507,40 +2822,22 @@ function renderExistingVideo(
 
     }
 
-
-    videoPreviewContainer.innerHTML =
-        "";
-
+    videoPreviewContainer.innerHTML = "";
 
     const video =
-        document.createElement(
-            "video"
-        );
+        document.createElement("video");
 
+    video.controls = true;
 
-    video.controls =
-        true;
+    video.preload = "metadata";
 
+    video.playsInline = true;
 
-    video.preload =
-        "metadata";
+    video.src = url;
 
+    video.style.width = "100%";
 
-    video.playsInline =
-        true;
-
-
-    video.src =
-        url;
-
-
-    video.style.width =
-        "100%";
-
-
-    video.style.maxWidth =
-        "700px";
-
+    video.style.maxWidth = "700px";
 
     videoPreviewContainer.appendChild(
         video
@@ -3550,38 +2847,7 @@ function renderExistingVideo(
 
 
 /*==================================================
-ESCAPE ATTRIBUTE
-==================================================*/
-
-function escapeAttribute(
-    value
-) {
-
-    return String(
-        value
-    )
-    .replace(
-        /&/g,
-        "&amp;"
-    )
-    .replace(
-        /"/g,
-        "&quot;"
-    )
-    .replace(
-        /</g,
-        "&lt;"
-    )
-    .replace(
-        />/g,
-        "&gt;"
-    );
-
-}
-
-
-/*==================================================
-DUPLICATE PRODUCT
+FEATURE 19.3 — DUPLICATE PRODUCT
 ==================================================*/
 
 document
@@ -3597,50 +2863,35 @@ document
                 const product =
                     getProductData();
 
-
                 product.productId =
                     generateProductId();
-
 
                 product.variants =
                     getVariants();
 
-
                 product.specifications =
                     getSpecifications();
-
 
                 product.relatedProducts =
                     getRelatedProducts();
 
-
                 product.mainImage =
-                    existingMainImage ||
-                    "";
-
+                    existingMainImage || "";
 
                 product.gallery =
-                    [
-                        ...existingGallery
-                    ];
-
+                    [...existingGallery];
 
                 product.video =
-                    existingVideo ||
-                    "";
-
+                    existingVideo || "";
 
                 product.status =
                     "draft";
 
-
                 product.createdAt =
                     new Date().toISOString();
 
-
                 product.updatedAt =
                     new Date().toISOString();
-
 
                 await set(
                     ref(
@@ -3650,21 +2901,17 @@ document
                     product
                 );
 
-
                 showToast(
                     "Product Duplicated"
                 );
 
-
                 currentProductId =
                     product.productId;
-
 
                 const productIdElement =
                     document.getElementById(
                         "product-id"
                     );
-
 
                 if (productIdElement) {
 
@@ -3681,7 +2928,6 @@ document
                     error
                 );
 
-
                 alert(
                     "Duplicate failed.\n\n" +
                     (
@@ -3697,7 +2943,7 @@ document
 
 
 /*==================================================
-CANCEL
+FEATURE 19.3 — CANCEL
 ==================================================*/
 
 document
@@ -3724,7 +2970,7 @@ document
 
 
 /*==================================================
-MENU BUTTON
+FEATURE 19.3 — MENU BUTTON
 ==================================================*/
 
 document
@@ -3748,44 +2994,41 @@ document
 
 
 /*==================================================
-CLOSE SIDEBAR AFTER NAVIGATION
+FEATURE 19.3 — CLOSE SIDEBAR
 ==================================================*/
 
 document
     .querySelectorAll(
         ".editor-nav-item"
     )
-    .forEach(
-        button => {
+    .forEach(button => {
 
-            button.addEventListener(
-                "click",
-                () => {
+        button.addEventListener(
+            "click",
+            () => {
 
-                    if (
-                        window.innerWidth <=
-                        900
-                    ) {
+                if (
+                    window.innerWidth <= 900
+                ) {
 
-                        document
-                            .getElementById(
-                                "editor-sidebar"
-                            )
-                            ?.classList.remove(
-                                "active"
-                            );
-
-                    }
+                    document
+                        .getElementById(
+                            "editor-sidebar"
+                        )
+                        ?.classList.remove(
+                            "active"
+                        );
 
                 }
-            );
 
-        }
-    );
+            }
+        );
+
+    });
 
 
 /*==================================================
-LOAD PRODUCT FROM URL
+FEATURE 19.3 — GET PRODUCT ID FROM URL
 ==================================================*/
 
 function getProductIdFromURL() {
@@ -3795,26 +3038,20 @@ function getProductIdFromURL() {
             window.location.search
         );
 
-
     return (
-        params.get(
-            "id"
-        ) ||
-        params.get(
-            "productId"
-        )
+        params.get("id") ||
+        params.get("productId")
     );
 
 }
 
 
 /*==================================================
-INITIALIZE
+FEATURE 19.3 — INITIALIZE
 ==================================================*/
 
 const urlProductId =
     getProductIdFromURL();
-
 
 if (urlProductId) {
 
@@ -3825,14 +3062,11 @@ if (urlProductId) {
 }
 else {
 
-    currentProductId =
-        null;
-
+    currentProductId = null;
 
     updateProductStatus(
         "Draft"
     );
-
 
     updateLivePreview();
 
