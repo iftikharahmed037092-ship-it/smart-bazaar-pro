@@ -92,6 +92,27 @@ const bannerMessage =
 const bannerList =
     document.getElementById("bannerList");
 
+/*==================================================
+FEATURE — BANNER MANAGEMENT
+OPEN IMAGE GALLERY
+==================================================*/
+
+const bannerImageButton =
+    document.getElementById(
+        "bannerImageButton"
+    );
+
+
+bannerImageButton.addEventListener(
+    "click",
+    function () {
+
+        bannerImage.click();
+
+    }
+);
+
+
 
 /*==================================================
 FEATURE — BANNER MANAGEMENT
