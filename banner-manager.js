@@ -1,28 +1,55 @@
 /*==================================================
 SMARTBAZAAR PRO
+FEATURE — BANNER MANAGEMENT
 PART 20.2
 BANNER MANAGER JAVASCRIPT
+
+FLOW:
+Banner Image Box
+        ↓
+File Picker / Gallery
+        ↓
+Image Preview
+        ↓
+Cloudinary Upload
+        ↓
+Firebase Realtime Database
+        ↓
+Saved Banner List
 ==================================================*/
 
-alert("BANNER JS LOADED");
-/*==================================================
-CLOUDINARY CONFIG
-==================================================*/
-
-const cloudName = "jlrjn7lu";
-
-const uploadPreset = "smartbazaar_uploads";
-
 
 /*==================================================
-FIREBASE BANNER FUNCTIONS
+IMPORT FIREBASE
 ==================================================*/
 
 import {
-    addBanner,
-    getBanners,
-    deleteBanner
-} from "./firebase-banner.js";
+    database
+} from "./firebase-config.js";
+
+
+/*==================================================
+IMPORT FIREBASE REALTIME DATABASE FUNCTIONS
+==================================================*/
+
+import {
+    ref,
+    push,
+    set,
+    update,
+    remove,
+    onValue
+}
+from "https://www.gstatic.com/firebasejs/12.17.1/firebase-database.js";
+
+
+/*==================================================
+IMPORT CLOUDINARY
+==================================================*/
+
+import {
+    uploadImage
+} from "./cloudinary.js";
 
 
 /*==================================================
@@ -38,6 +65,24 @@ const bannerImage =
 const imagePreview =
     document.getElementById("imagePreview");
 
+const bannerTitle =
+    document.getElementById("bannerTitle");
+
+const bannerDescription =
+    document.getElementById("bannerDescription");
+
+const bannerBadge =
+    document.getElementById("bannerBadge");
+
+const bannerButtonText =
+    document.getElementById("bannerButtonText");
+
+const bannerButtonLink =
+    document.getElementById("bannerButtonLink");
+
+const bannerStatus =
+    document.getElementById("bannerStatus");
+
 const saveBannerBtn =
     document.getElementById("saveBannerBtn");
 
@@ -49,734 +94,27 @@ const bannerList =
 
 
 /*==================================================
-CHECK REQUIRED ELEMENTS
+FEATURE — BANNER MANAGEMENT
+BANNER IMAGE SELECTION
 ==================================================*/
 
-if (!bannerForm) {
-
-    console.error(
-        "ERROR: #bannerForm not found."
-    );
-
-}
-
-
-if (!bannerImage) {
-
-    console.error(
-        "ERROR: #bannerImage not found."
-    );
-
-}
-
-
-if (!imagePreview) {
-
-    console.error(
-        "ERROR: #imagePreview not found."
-    );
-
-}
-
-
-if (!saveBannerBtn) {
-
-    console.error(
-        "ERROR: #saveBannerBtn not found."
-    );
-
-}
-
-
-if (!bannerMessage) {
-
-    console.error(
-        "ERROR: #bannerMessage not found."
-    );
-
-}
-
-
-if (!bannerList) {
-
-    console.error(
-        "ERROR: #bannerList not found."
-    );
-
-}
-
-
-/*==================================================
-SELECTED IMAGE
-==================================================*/
-
-let selectedFile = null;
-
-
-/*==================================================
-SHOW MESSAGE
-==================================================*/
-
-function showMessage(
-    message,
-    type = ""
-) {
-
-    if (!bannerMessage) {
-
-        return;
-
-    }
-
-
-    bannerMessage.textContent =
-        message;
-
-
-    bannerMessage.className =
-        "banner-message";
-
-
-    if (type) {
-
-        bannerMessage.classList.add(
-            type
-        );
-
-    }
-
-}
-
-
-/*==================================================
-IMAGE PREVIEW
-==================================================*/
-
-function showImagePreview(file) {
-
-    if (!imagePreview) {
-
-        return;
-
-    }
-
-
-    const reader =
-        new FileReader();
-
-
-    reader.onload =
-        function(event) {
-
-            imagePreview.innerHTML = `
-
-                <img
-                    src="${event.target.result}"
-                    alt="Banner Preview">
-
-            `;
-
-
-            imagePreview.classList.add(
-                "active"
-            );
-
-        };
-
-
-    reader.onerror =
-        function() {
-
-            showMessage(
-                "Could not preview image.",
-                "error"
-            );
-
-        };
-
-
-    reader.readAsDataURL(file);
-
-}
+let selectedBannerFile = null;
 
 
 /*==================================================
 IMAGE SELECT
 ==================================================*/
 
-if (bannerImage) {
+bannerImage.addEventListener(
+    "change",
+    function () {
 
-    bannerImage.addEventListener(
-        "change",
-        function() {
+        const file =
+            this.files?.[0];
 
-            const file =
-                this.files &&
-                this.files[0];
+        if (!file) {
 
-
-            if (!file) {
-
-                selectedFile = null;
-
-                if (imagePreview) {
-
-                    imagePreview.innerHTML =
-                        "";
-
-                    imagePreview.classList.remove(
-                        "active"
-                    );
-
-                }
-
-                return;
-
-            }
-
-
-            /*==============================
-            CHECK IMAGE TYPE
-            ==============================*/
-
-            if (
-                !file.type ||
-                !file.type.startsWith(
-                    "image/"
-                )
-            ) {
-
-                showMessage(
-                    "Please select an image file.",
-                    "error"
-                );
-
-                this.value = "";
-
-                selectedFile = null;
-
-                return;
-
-            }
-
-
-            /*==============================
-            CHECK IMAGE SIZE
-            ==============================*/
-
-            const maxSize =
-                10 * 1024 * 1024;
-
-
-            if (
-                file.size > maxSize
-            ) {
-
-                showMessage(
-                    "Image must be smaller than 10MB.",
-                    "error"
-                );
-
-                this.value = "";
-
-                selectedFile = null;
-
-                return;
-
-            }
-
-
-            /*==============================
-            SAVE FILE
-            ==============================*/
-
-            selectedFile =
-                file;
-
-
-            /*==============================
-            SHOW PREVIEW
-            ==============================*/
-
-            showImagePreview(
-                file
-            );
-
-
-            showMessage(
-                "Image selected successfully.",
-                "success"
-            );
-
-        }
-    );
-
-}
-
-
-/*==================================================
-CLOUDINARY UPLOAD
-==================================================*/
-
-async function uploadToCloudinary(
-    file
-) {
-
-    if (!file) {
-
-        throw new Error(
-            "No image selected."
-        );
-
-    }
-
-
-    if (
-        !cloudName ||
-        cloudName === "YOUR_CLOUD_NAME"
-    ) {
-
-        throw new Error(
-            "Cloudinary Cloud Name is missing."
-        );
-
-    }
-
-
-    if (
-        !uploadPreset ||
-        uploadPreset === "YOUR_UPLOAD_PRESET"
-    ) {
-
-        throw new Error(
-            "Cloudinary Upload Preset is missing."
-        );
-
-    }
-
-
-    const formData =
-        new FormData();
-
-
-    formData.append(
-        "file",
-        file
-    );
-
-
-    formData.append(
-        "upload_preset",
-        uploadPreset
-    );
-
-
-    const uploadURL =
-        `https://api.cloudinary.com/v1_1/${cloudName}/image/upload`;
-
-
-    console.log(
-        "Cloudinary upload started..."
-    );
-
-
-    const response =
-        await fetch(
-            uploadURL,
-            {
-
-                method:
-                    "POST",
-
-                body:
-                    formData
-
-            }
-        );
-
-
-    const data =
-        await response.json();
-
-
-    console.log(
-        "Cloudinary response:",
-        data
-    );
-
-
-    if (!response.ok) {
-
-        throw new Error(
-            data.error?.message ||
-            "Cloudinary upload failed."
-        );
-
-    }
-
-
-    if (!data.secure_url) {
-
-        throw new Error(
-            "Cloudinary did not return an image URL."
-        );
-
-    }
-
-
-    return data.secure_url;
-
-}
-
-
-/*==================================================
-GET FORM VALUE
-==================================================*/
-
-function getValue(id) {
-
-    const element =
-        document.getElementById(id);
-
-
-    if (!element) {
-
-        return "";
-
-    }
-
-
-    return element.value.trim();
-
-}
-
-
-/*==================================================
-SAVE BANNER
-==================================================*/
-
-if (bannerForm) {
-
-    bannerForm.addEventListener(
-        "submit",
-        async function(event) {
-
-            event.preventDefault();
-
-
-            /*==============================
-            CHECK IMAGE
-            ==============================*/
-
-            if (!selectedFile) {
-
-                showMessage(
-                    "Please select a banner image first.",
-                    "error"
-                );
-
-                return;
-
-            }
-
-
-            /*==============================
-            GET FORM DATA
-            ==============================*/
-
-            const title =
-                getValue(
-                    "bannerTitle"
-                );
-
-
-            const description =
-                getValue(
-                    "bannerDescription"
-                );
-
-
-            const badge =
-                getValue(
-                    "bannerBadge"
-                );
-
-
-            const buttonText =
-                getValue(
-                    "bannerButtonText"
-                );
-
-
-            const buttonLink =
-                getValue(
-                    "bannerButtonLink"
-                );
-
-
-            const statusElement =
-                document.getElementById(
-                    "bannerStatus"
-                );
-
-
-            const status =
-                statusElement
-                    ? statusElement.value
-                    : "active";
-
-
-            /*==============================
-            TITLE REQUIRED
-            ==============================*/
-
-            if (!title) {
-
-                showMessage(
-                    "Please enter banner title.",
-                    "error"
-                );
-
-                return;
-
-            }
-
-
-            try {
-
-                /*==========================
-                DISABLE BUTTON
-                ==========================*/
-
-                if (saveBannerBtn) {
-
-                    saveBannerBtn.disabled =
-                        true;
-
-
-                    saveBannerBtn.innerHTML = `
-
-                        <i class="fa-solid fa-spinner fa-spin"></i>
-
-                        Uploading...
-
-                    `;
-
-                }
-
-
-                showMessage(
-                    "Uploading image..."
-                );
-
-
-                /*==========================
-                CLOUDINARY
-                ==========================*/
-
-                const imageURL =
-                    await uploadToCloudinary(
-                        selectedFile
-                    );
-
-
-                console.log(
-                    "Image URL received:",
-                    imageURL
-                );
-
-
-                showMessage(
-                    "Image uploaded. Saving banner..."
-                );
-
-
-                /*==========================
-                FIREBASE DATA
-                ==========================*/
-
-                const bannerData = {
-
-                    image:
-                        imageURL,
-
-                    title:
-                        title,
-
-                    description:
-                        description,
-
-                    badge:
-                        badge,
-
-                    buttonText:
-                        buttonText ||
-                        "Shop Now",
-
-                    buttonLink:
-                        buttonLink ||
-                        "#",
-
-                    status:
-                        status,
-
-                    createdAt:
-                        Date.now()
-
-                };
-
-
-                /*==========================
-                SAVE FIREBASE
-                ==========================*/
-
-                const bannerId =
-                    await addBanner(
-                        bannerData
-                    );
-
-
-                console.log(
-                    "Banner saved:",
-                    bannerId
-                );
-
-
-                /*==========================
-                SUCCESS
-                ==========================*/
-
-                showMessage(
-                    "Banner added successfully!",
-                    "success"
-                );
-
-
-                /*==========================
-                RESET FORM
-                ==========================*/
-
-                bannerForm.reset();
-
-
-                selectedFile =
-                    null;
-
-
-                if (imagePreview) {
-
-                    imagePreview.innerHTML =
-                        "";
-
-                    imagePreview.classList.remove(
-                        "active"
-                    );
-
-                }
-
-
-                /*==========================
-                LOAD BANNERS
-                ==========================*/
-
-                await loadBanners();
-
-            }
-
-
-            catch(error) {
-
-                console.error(
-                    "BANNER ERROR:",
-                    error
-                );
-
-
-                showMessage(
-                    error.message ||
-                    "Banner upload failed.",
-                    "error"
-                );
-
-            }
-
-
-            finally {
-
-                if (saveBannerBtn) {
-
-                    saveBannerBtn.disabled =
-                        false;
-
-
-                    saveBannerBtn.innerHTML = `
-
-                        <i class="fa-solid fa-cloud-arrow-up"></i>
-
-                        Upload & Save Banner
-
-                    `;
-
-                }
-
-            }
-
-        }
-    );
-
-}
-
-
-/*==================================================
-LOAD BANNERS
-==================================================*/
-
-async function loadBanners() {
-
-    if (!bannerList) {
-
-        return;
-
-    }
-
-
-    try {
-
-        bannerList.innerHTML = `
-
-            <p class="empty-message">
-                Loading banners...
-            </p>
-
-        `;
-
-
-        const banners =
-            await getBanners();
-
-
-        bannerList.innerHTML =
-            "";
-
-
-        /*==============================
-        NO BANNERS
-        ==============================*/
-
-        if (
-            !banners ||
-            Object.keys(banners).length === 0
-        ) {
-
-            bannerList.innerHTML = `
-
-                <p class="empty-message">
-
-                    No banners added yet.
-
-                </p>
-
-            `;
+            selectedBannerFile = null;
 
             return;
 
@@ -784,213 +122,519 @@ async function loadBanners() {
 
 
         /*==============================
-        CREATE BANNERS
+        VALIDATE IMAGE
         ==============================*/
 
-        Object.entries(
-            banners
-        )
-        .forEach(
-            function([
-                id,
-                banner
-            ]) {
+        if (!file.type.startsWith("image/")) {
 
-                const item =
-                    document.createElement(
-                        "div"
-                    );
+            showMessage(
+                "Please select a valid image.",
+                "error"
+            );
 
+            this.value = "";
 
-                item.className =
-                    "banner-item";
+            return;
 
-
-                item.innerHTML = `
-
-                    <div class="banner-item-image">
-
-                        <img
-                            src="${escapeAttribute(
-                                banner.image || ""
-                            )}"
-                            alt="${escapeAttribute(
-                                banner.title ||
-                                "Banner"
-                            )}">
-
-                    </div>
-
-
-                    <div class="banner-item-info">
-
-                        <h3>
-                            ${escapeHTML(
-                                banner.title ||
-                                "Untitled Banner"
-                            )}
-                        </h3>
-
-
-                        <p>
-                            ${escapeHTML(
-                                banner.description ||
-                                ""
-                            )}
-                        </p>
-
-
-                        <div class="banner-item-actions">
-
-                            <button
-                                type="button"
-                                class="banner-delete-btn"
-                                data-id="${escapeAttribute(id)}">
-
-                                <i class="fa-solid fa-trash"></i>
-
-                                Delete
-
-                            </button>
-
-                        </div>
-
-                    </div>
-
-                `;
-
-
-                bannerList.appendChild(
-                    item
-                );
-
-            }
-        );
+        }
 
 
         /*==============================
-        DELETE BUTTONS
+        MAX 10MB
         ==============================*/
 
-        bannerList
-        .querySelectorAll(
-            ".banner-delete-btn"
-        )
-        .forEach(
-            function(button) {
+        if (file.size > 10 * 1024 * 1024) {
 
-                button.addEventListener(
-                    "click",
-                    async function() {
+            showMessage(
+                "Image must be smaller than 10MB.",
+                "error"
+            );
 
-                        const id =
-                            this.dataset.id;
+            this.value = "";
 
+            return;
 
-                        if (!id) {
-
-                            return;
-
-                        }
+        }
 
 
-                        const confirmed =
-                            confirm(
-                                "Are you sure you want to delete this banner?"
-                            );
+        selectedBannerFile = file;
 
 
-                        if (!confirmed) {
+        /*==============================
+        LOCAL PREVIEW
+        ==============================*/
 
-                            return;
+        const imageURL =
+            URL.createObjectURL(file);
 
-                        }
-
-
-                        try {
-
-                            this.disabled =
-                                true;
-
-
-                            this.innerHTML = `
-
-                                <i class="fa-solid fa-spinner fa-spin"></i>
-
-                                Deleting...
-
-                            `;
-
-
-                            await deleteBanner(
-                                id
-                            );
-
-
-                            await loadBanners();
-
-
-                            showMessage(
-                                "Banner deleted successfully.",
-                                "success"
-                            );
-
-                        }
-
-
-                        catch(error) {
-
-                            console.error(
-                                "DELETE ERROR:",
-                                error
-                            );
-
-
-                            showMessage(
-                                error.message ||
-                                "Could not delete banner.",
-                                "error"
-                            );
-
-
-                            this.disabled =
-                                false;
-
-                        }
-
-                    }
-                );
-
-            }
-        );
-
-    }
-
-
-    catch(error) {
-
-        console.error(
-            "LOAD BANNERS ERROR:",
-            error
-        );
-
-
-        bannerList.innerHTML = `
-
-            <p class="empty-message">
-
-                Unable to load banners.
-
-            </p>
-
+        imagePreview.innerHTML = `
+            <img
+                src="${imageURL}"
+                alt="Banner Preview"
+            >
         `;
 
+        imagePreview.classList.add("active");
+
     }
+);
+
+
+/*==================================================
+FEATURE — BANNER MANAGEMENT
+SAVE BANNER
+==================================================*/
+
+bannerForm.addEventListener(
+    "submit",
+    async function (event) {
+
+        event.preventDefault();
+
+
+        /*==============================
+        VALIDATE IMAGE
+        ==============================*/
+
+        if (!selectedBannerFile) {
+
+            showMessage(
+                "Please select a banner image.",
+                "error"
+            );
+
+            return;
+
+        }
+
+
+        /*==============================
+        VALIDATE TITLE
+        ==============================*/
+
+        const title =
+            bannerTitle.value.trim();
+
+        if (!title) {
+
+            showMessage(
+                "Please enter banner title.",
+                "error"
+            );
+
+            bannerTitle.focus();
+
+            return;
+
+        }
+
+
+        /*==============================
+        BUTTON STATE
+        ==============================*/
+
+        saveBannerBtn.disabled = true;
+
+        saveBannerBtn.innerHTML = `
+            <i class="fa-solid fa-spinner fa-spin"></i>
+            Uploading Banner...
+        `;
+
+        clearMessage();
+
+
+        try {
+
+            /*========================================
+            FEATURE — CLOUDINARY BANNER UPLOAD
+            ========================================*/
+
+            const imageURL =
+                await uploadImage(
+                    selectedBannerFile
+                );
+
+
+            /*========================================
+            FEATURE — FIREBASE BANNER DATA
+            ========================================*/
+
+            const bannersRef =
+                ref(
+                    database,
+                    "banners"
+                );
+
+
+            const newBannerRef =
+                push(bannersRef);
+
+
+            const bannerData = {
+
+                id: newBannerRef.key,
+
+                imageURL: imageURL,
+
+                title: title,
+
+                description:
+                    bannerDescription.value.trim(),
+
+                badge:
+                    bannerBadge.value.trim(),
+
+                buttonText:
+                    bannerButtonText.value.trim() ||
+                    "Shop Now",
+
+                buttonLink:
+                    bannerButtonLink.value.trim(),
+
+                status:
+                    bannerStatus.value,
+
+                createdAt:
+                    Date.now(),
+
+                updatedAt:
+                    Date.now()
+
+            };
+
+
+            /*========================================
+            SAVE TO FIREBASE
+            ========================================*/
+
+            await set(
+                newBannerRef,
+                bannerData
+            );
+
+
+            /*========================================
+            SUCCESS
+            ========================================*/
+
+            showMessage(
+                "Banner uploaded and saved successfully.",
+                "success"
+            );
+
+
+            /*========================================
+            RESET FORM
+            ========================================*/
+
+            bannerForm.reset();
+
+            selectedBannerFile = null;
+
+            imagePreview.innerHTML = "";
+
+            imagePreview.classList.remove("active");
+
+
+        }
+
+        catch (error) {
+
+            console.error(
+                "Banner Save Error:",
+                error
+            );
+
+
+            showMessage(
+                error?.message ||
+                "Failed to save banner.",
+                "error"
+            );
+
+        }
+
+
+        finally {
+
+            saveBannerBtn.disabled = false;
+
+            saveBannerBtn.innerHTML = `
+                <i class="fa-solid fa-cloud-arrow-up"></i>
+                Upload & Save Banner
+            `;
+
+        }
+
+    }
+);
+
+
+/*==================================================
+FEATURE — BANNER MANAGEMENT
+LOAD SAVED BANNERS
+==================================================*/
+
+const bannersRef =
+    ref(
+        database,
+        "banners"
+    );
+
+
+onValue(
+    bannersRef,
+    function (snapshot) {
+
+        const data =
+            snapshot.val();
+
+
+        if (!data) {
+
+            bannerList.innerHTML = `
+                <p class="empty-message">
+                    No banners added yet.
+                </p>
+            `;
+
+            return;
+
+        }
+
+
+        const banners =
+            Object.values(data);
+
+
+        /*==============================
+        SORT NEWEST FIRST
+        ==============================*/
+
+        banners.sort(
+            (a, b) =>
+                (b.createdAt || 0) -
+                (a.createdAt || 0)
+        );
+
+
+        bannerList.innerHTML =
+            banners
+                .map(
+                    createBannerItem
+                )
+                .join("");
+
+
+        attachBannerActions();
+
+    }
+);
+
+
+/*==================================================
+FEATURE — BANNER MANAGEMENT
+CREATE BANNER ITEM
+==================================================*/
+
+function createBannerItem(
+    banner
+) {
+
+    const safeTitle =
+        escapeHTML(
+            banner.title || ""
+        );
+
+    const safeDescription =
+        escapeHTML(
+            banner.description || ""
+        );
+
+    const safeStatus =
+        escapeHTML(
+            banner.status || "inactive"
+        );
+
+
+    return `
+
+        <article
+            class="banner-item"
+            data-banner-id="${banner.id}"
+        >
+
+            <div class="banner-item-image">
+
+                <img
+                    src="${banner.imageURL}"
+                    alt="${safeTitle}"
+                >
+
+            </div>
+
+
+            <div class="banner-item-info">
+
+                <h3>
+                    ${safeTitle}
+                </h3>
+
+                <p>
+                    ${safeDescription}
+                </p>
+
+                <p>
+                    Status:
+                    <strong>
+                        ${safeStatus}
+                    </strong>
+                </p>
+
+
+                <div
+                    class="banner-item-actions"
+                >
+
+                    <button
+                        type="button"
+                        class="banner-delete-btn"
+                        data-action="delete"
+                        data-id="${banner.id}"
+                    >
+
+                        <i class="fa-solid fa-trash"></i>
+
+                        Delete
+
+                    </button>
+
+                </div>
+
+            </div>
+
+        </article>
+
+    `;
 
 }
 
 
 /*==================================================
+FEATURE — BANNER MANAGEMENT
+BANNER ACTIONS
+==================================================*/
+
+function attachBannerActions() {
+
+    const deleteButtons =
+        bannerList.querySelectorAll(
+            '[data-action="delete"]'
+        );
+
+
+    deleteButtons.forEach(
+        button => {
+
+            button.addEventListener(
+                "click",
+                async function () {
+
+                    const id =
+                        this.dataset.id;
+
+                    if (!id) {
+
+                        return;
+
+                    }
+
+
+                    const confirmed =
+                        confirm(
+                            "Are you sure you want to delete this banner?"
+                        );
+
+
+                    if (!confirmed) {
+
+                        return;
+
+                    }
+
+
+                    try {
+
+                        await remove(
+                            ref(
+                                database,
+                                `banners/${id}`
+                            )
+                        );
+
+
+                        showMessage(
+                            "Banner deleted successfully.",
+                            "success"
+                        );
+
+                    }
+
+                    catch (error) {
+
+                        console.error(
+                            "Banner Delete Error:",
+                            error
+                        );
+
+
+                        showMessage(
+                            error?.message ||
+                            "Failed to delete banner.",
+                            "error"
+                        );
+
+                    }
+
+                }
+            );
+
+        }
+    );
+
+}
+
+
+/*==================================================
+MESSAGE
+==================================================*/
+
+function showMessage(
+    message,
+    type
+) {
+
+    bannerMessage.textContent =
+        message;
+
+    bannerMessage.className =
+        `banner-message ${type}`;
+
+}
+
+
+function clearMessage() {
+
+    bannerMessage.textContent = "";
+
+    bannerMessage.className =
+        "banner-message";
+
+}
+
+
+/*==================================================
+FEATURE — SECURITY
 ESCAPE HTML
 ==================================================*/
 
@@ -999,52 +643,20 @@ function escapeHTML(
 ) {
 
     return String(value)
-
-        .replaceAll(
-            "&",
-            "&amp;"
-        )
-
-        .replaceAll(
-            "<",
-            "&lt;"
-        )
-
-        .replaceAll(
-            ">",
-            "&gt;"
-        )
-
-        .replaceAll(
-            '"',
-            "&quot;"
-        )
-
-        .replaceAll(
-            "'",
-            "&#039;"
-        );
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
 
 }
 
 
 /*==================================================
-ESCAPE ATTRIBUTE
+SMARTBAZAAR PRO
+BANNER MANAGER INITIALIZED
 ==================================================*/
 
-function escapeAttribute(
-    value
-) {
-
-    return escapeHTML(
-        value
-    );
-
-}
-
-
-/*==================================================
-INITIAL LOAD
-==================================================*/
-
-loadBanners();
+console.log(
+    "SMARTBAZAAR PRO — Banner Manager initialized."
+);
