@@ -86,7 +86,7 @@ ADD BANNER
     <form id="bannerForm">
 
 
-        <!-- IMAGE -->
+        <!-- IMAGE --
 
         <div class="form-group">
 
@@ -97,9 +97,9 @@ ADD BANNER
             </label>
 
 
-            <!--label
+            <--label
             for="bannerImage"
-            class="image-upload-box"-->
+            class="image-upload-box"--
 
                 <button
     type="button"
@@ -144,9 +144,49 @@ ADD BANNER
 
             </div>
 
-        </div>
+        </div-->
 
+<!--==================================================
+FEATURE — BANNER MANAGEMENT
+BANNER IMAGE
+==================================================-->
 
+<div class="form-group">
+
+    <label>
+        Banner Image
+    </label>
+
+    <button
+        type="button"
+        class="image-upload-box"
+        id="bannerImageButton">
+
+        <i class="fa-solid fa-cloud-arrow-up"></i>
+
+        <strong>
+            Choose Image
+        </strong>
+
+        <span>
+            Select image from Gallery
+        </span>
+
+    </button>
+
+    <input
+        type="file"
+        id="bannerImage"
+        accept="image/*"
+        hidden
+    >
+
+    <div
+        id="imagePreview"
+        class="image-preview">
+    </div>
+
+</div>
 
         <!-- TITLE -->
 
