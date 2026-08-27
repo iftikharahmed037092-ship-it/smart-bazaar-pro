@@ -5,22 +5,23 @@ PART 20.2
 BANNER MANAGER JAVASCRIPT
 
 FLOW:
-Banner Image Box
-        ↓
-File Picker / Gallery
-        ↓
-Image Preview
-        ↓
-Cloudinary Upload
-        ↓
-Firebase Realtime Database
-        ↓
-Saved Banner List
+
+IMAGE BOX
+    ↓
+DEVICE GALLERY
+    ↓
+IMAGE PREVIEW
+    ↓
+CLOUDINARY
+    ↓
+FIREBASE REALTIME DATABASE
+    ↓
+SAVED BANNER LIST
 ==================================================*/
 
 
 /*==================================================
-IMPORT FIREBASE
+IMPORT FIREBASE CONFIG
 ==================================================*/
 
 import {
@@ -29,14 +30,13 @@ import {
 
 
 /*==================================================
-IMPORT FIREBASE REALTIME DATABASE FUNCTIONS
+IMPORT FIREBASE REALTIME DATABASE
 ==================================================*/
 
 import {
     ref,
     push,
     set,
-    update,
     remove,
     onValue
 }
@@ -59,146 +59,198 @@ DOM ELEMENTS
 const bannerForm =
     document.getElementById("bannerForm");
 
+
+const bannerImageButton =
+    document.getElementById("bannerImageButton");
+
+
 const bannerImage =
     document.getElementById("bannerImage");
+
 
 const imagePreview =
     document.getElementById("imagePreview");
 
+
 const bannerTitle =
     document.getElementById("bannerTitle");
+
 
 const bannerDescription =
     document.getElementById("bannerDescription");
 
+
 const bannerBadge =
     document.getElementById("bannerBadge");
+
 
 const bannerButtonText =
     document.getElementById("bannerButtonText");
 
+
 const bannerButtonLink =
     document.getElementById("bannerButtonLink");
+
 
 const bannerStatus =
     document.getElementById("bannerStatus");
 
+
 const saveBannerBtn =
     document.getElementById("saveBannerBtn");
+
 
 const bannerMessage =
     document.getElementById("bannerMessage");
 
+
 const bannerList =
     document.getElementById("bannerList");
 
-/*==================================================
-FEATURE — BANNER MANAGEMENT
-OPEN IMAGE GALLERY
-==================================================*/
-
-const bannerImageButton =
-    document.getElementById(
-        "bannerImageButton"
-    );
-
-
-bannerImageButton.addEventListener(
-    "click",
-    function () {
-
-        bannerImage.click();
-
-    }
-);
-
-
 
 /*==================================================
 FEATURE — BANNER MANAGEMENT
-BANNER IMAGE SELECTION
+SELECTED FILE
 ==================================================*/
 
 let selectedBannerFile = null;
 
 
 /*==================================================
-IMAGE SELECT
+FEATURE — BANNER MANAGEMENT
+OPEN DEVICE GALLERY
+
+IMPORTANT:
+This section does NOT use Firebase.
+This section does NOT use Cloudinary.
+
+It only opens the browser/device file picker.
 ==================================================*/
 
-bannerImage.addEventListener(
-    "change",
-    function () {
+if (bannerImageButton && bannerImage) {
 
-        const file =
-            this.files?.[0];
+    bannerImageButton.addEventListener(
+        "click",
+        function () {
 
-        if (!file) {
-
-            selectedBannerFile = null;
-
-            return;
+            bannerImage.click();
 
         }
+    );
+
+}
 
 
-        /*==============================
-        VALIDATE IMAGE
-        ==============================*/
+/*==================================================
+FEATURE — BANNER MANAGEMENT
+IMAGE SELECTION
+==================================================*/
 
-        if (!file.type.startsWith("image/")) {
+if (bannerImage) {
 
-            showMessage(
-                "Please select a valid image.",
-                "error"
+    bannerImage.addEventListener(
+        "change",
+        function () {
+
+            const file =
+                this.files?.[0];
+
+
+            /*==============================
+            NO FILE
+            ==============================*/
+
+            if (!file) {
+
+                selectedBannerFile = null;
+
+                return;
+
+            }
+
+
+            /*==============================
+            VALIDATE IMAGE TYPE
+            ==============================*/
+
+            if (
+                !file.type ||
+                !file.type.startsWith("image/")
+            ) {
+
+                showMessage(
+                    "Please select a valid image.",
+                    "error"
+                );
+
+                this.value = "";
+
+                selectedBannerFile = null;
+
+                return;
+
+            }
+
+
+            /*==============================
+            MAXIMUM 10MB
+            ==============================*/
+
+            if (
+                file.size >
+                10 * 1024 * 1024
+            ) {
+
+                showMessage(
+                    "Image must be smaller than 10MB.",
+                    "error"
+                );
+
+                this.value = "";
+
+                selectedBannerFile = null;
+
+                return;
+
+            }
+
+
+            /*==============================
+            SAVE SELECTED FILE
+            ==============================*/
+
+            selectedBannerFile = file;
+
+
+            /*==============================
+            CREATE PREVIEW
+            ==============================*/
+
+            const imageURL =
+                URL.createObjectURL(file);
+
+
+            imagePreview.innerHTML = `
+
+                <img
+                    src="${imageURL}"
+                    alt="Banner Preview"
+                >
+
+            `;
+
+
+            imagePreview.classList.add(
+                "active"
             );
 
-            this.value = "";
 
-            return;
-
-        }
-
-
-        /*==============================
-        MAX 10MB
-        ==============================*/
-
-        if (file.size > 10 * 1024 * 1024) {
-
-            showMessage(
-                "Image must be smaller than 10MB.",
-                "error"
-            );
-
-            this.value = "";
-
-            return;
+            clearMessage();
 
         }
+    );
 
-
-        selectedBannerFile = file;
-
-
-        /*==============================
-        LOCAL PREVIEW
-        ==============================*/
-
-        const imageURL =
-            URL.createObjectURL(file);
-
-        imagePreview.innerHTML = `
-            <img
-                src="${imageURL}"
-                alt="Banner Preview"
-            >
-        `;
-
-        imagePreview.classList.add("active");
-
-    }
-);
+}
 
 
 /*==================================================
@@ -206,189 +258,221 @@ FEATURE — BANNER MANAGEMENT
 SAVE BANNER
 ==================================================*/
 
-bannerForm.addEventListener(
-    "submit",
-    async function (event) {
+if (bannerForm) {
 
-        event.preventDefault();
+    bannerForm.addEventListener(
+        "submit",
+        async function (event) {
 
-
-        /*==============================
-        VALIDATE IMAGE
-        ==============================*/
-
-        if (!selectedBannerFile) {
-
-            showMessage(
-                "Please select a banner image.",
-                "error"
-            );
-
-            return;
-
-        }
+            event.preventDefault();
 
 
-        /*==============================
-        VALIDATE TITLE
-        ==============================*/
+            /*==============================
+            IMAGE VALIDATION
+            ==============================*/
 
-        const title =
-            bannerTitle.value.trim();
+            if (!selectedBannerFile) {
 
-        if (!title) {
-
-            showMessage(
-                "Please enter banner title.",
-                "error"
-            );
-
-            bannerTitle.focus();
-
-            return;
-
-        }
-
-
-        /*==============================
-        BUTTON STATE
-        ==============================*/
-
-        saveBannerBtn.disabled = true;
-
-        saveBannerBtn.innerHTML = `
-            <i class="fa-solid fa-spinner fa-spin"></i>
-            Uploading Banner...
-        `;
-
-        clearMessage();
-
-
-        try {
-
-            /*========================================
-            FEATURE — CLOUDINARY BANNER UPLOAD
-            ========================================*/
-
-            const imageURL =
-                await uploadImage(
-                    selectedBannerFile
+                showMessage(
+                    "Please select a banner image first.",
+                    "error"
                 );
 
+                return;
 
-            /*========================================
-            FEATURE — FIREBASE BANNER DATA
-            ========================================*/
+            }
 
-            const bannersRef =
-                ref(
-                    database,
-                    "banners"
+
+            /*==============================
+            TITLE VALIDATION
+            ==============================*/
+
+            const title =
+                bannerTitle.value.trim();
+
+
+            if (!title) {
+
+                showMessage(
+                    "Please enter banner title.",
+                    "error"
                 );
 
+                bannerTitle.focus();
 
-            const newBannerRef =
-                push(bannersRef);
+                return;
 
-
-            const bannerData = {
-
-                id: newBannerRef.key,
-
-                imageURL: imageURL,
-
-                title: title,
-
-                description:
-                    bannerDescription.value.trim(),
-
-                badge:
-                    bannerBadge.value.trim(),
-
-                buttonText:
-                    bannerButtonText.value.trim() ||
-                    "Shop Now",
-
-                buttonLink:
-                    bannerButtonLink.value.trim(),
-
-                status:
-                    bannerStatus.value,
-
-                createdAt:
-                    Date.now(),
-
-                updatedAt:
-                    Date.now()
-
-            };
+            }
 
 
-            /*========================================
-            SAVE TO FIREBASE
-            ========================================*/
+            /*==============================
+            BUTTON STATE
+            ==============================*/
 
-            await set(
-                newBannerRef,
-                bannerData
-            );
+            saveBannerBtn.disabled = true;
 
-
-            /*========================================
-            SUCCESS
-            ========================================*/
-
-            showMessage(
-                "Banner uploaded and saved successfully.",
-                "success"
-            );
-
-
-            /*========================================
-            RESET FORM
-            ========================================*/
-
-            bannerForm.reset();
-
-            selectedBannerFile = null;
-
-            imagePreview.innerHTML = "";
-
-            imagePreview.classList.remove("active");
-
-
-        }
-
-        catch (error) {
-
-            console.error(
-                "Banner Save Error:",
-                error
-            );
-
-
-            showMessage(
-                error?.message ||
-                "Failed to save banner.",
-                "error"
-            );
-
-        }
-
-
-        finally {
-
-            saveBannerBtn.disabled = false;
 
             saveBannerBtn.innerHTML = `
-                <i class="fa-solid fa-cloud-arrow-up"></i>
-                Upload & Save Banner
+
+                <i class="fa-solid fa-spinner fa-spin"></i>
+
+                Uploading Banner...
+
             `;
 
-        }
 
-    }
-);
+            clearMessage();
+
+
+            try {
+
+
+                /*==================================================
+                FEATURE — CLOUDINARY
+                UPLOAD BANNER IMAGE
+                ==================================================*/
+
+                const imageURL =
+                    await uploadImage(
+                        selectedBannerFile
+                    );
+
+
+                /*==================================================
+                FEATURE — FIREBASE
+                BANNER DATABASE REFERENCE
+                ==================================================*/
+
+                const bannersRef =
+                    ref(
+                        database,
+                        "banners"
+                    );
+
+
+                /*==================================================
+                CREATE NEW BANNER
+                ==================================================*/
+
+                const newBannerRef =
+                    push(
+                        bannersRef
+                    );
+
+
+                /*==================================================
+                BANNER DATA
+                ==================================================*/
+
+                const bannerData = {
+
+                    id:
+                        newBannerRef.key,
+
+                    imageURL:
+                        imageURL,
+
+                    title:
+                        title,
+
+                    description:
+                        bannerDescription.value.trim(),
+
+                    badge:
+                        bannerBadge.value.trim(),
+
+                    buttonText:
+                        bannerButtonText.value.trim() ||
+                        "Shop Now",
+
+                    buttonLink:
+                        bannerButtonLink.value.trim(),
+
+                    status:
+                        bannerStatus.value,
+
+                    createdAt:
+                        Date.now(),
+
+                    updatedAt:
+                        Date.now()
+
+                };
+
+
+                /*==================================================
+                SAVE TO FIREBASE
+                ==================================================*/
+
+                await set(
+                    newBannerRef,
+                    bannerData
+                );
+
+
+                /*==================================================
+                SUCCESS
+                ==================================================*/
+
+                showMessage(
+                    "Banner uploaded and saved successfully.",
+                    "success"
+                );
+
+
+                /*==================================================
+                RESET
+                ==================================================*/
+
+                bannerForm.reset();
+
+                selectedBannerFile = null;
+
+                imagePreview.innerHTML = "";
+
+                imagePreview.classList.remove(
+                    "active"
+                );
+
+            }
+
+
+            catch (error) {
+
+                console.error(
+                    "Banner Save Error:",
+                    error
+                );
+
+
+                showMessage(
+                    error?.message ||
+                    "Failed to upload and save banner.",
+                    "error"
+                );
+
+            }
+
+
+            finally {
+
+                saveBannerBtn.disabled = false;
+
+
+                saveBannerBtn.innerHTML = `
+
+                    <i class="fa-solid fa-cloud-arrow-up"></i>
+
+                    Upload & Save Banner
+
+                `;
+
+            }
+
+        }
+    );
+
+}
 
 
 /*==================================================
@@ -411,12 +495,20 @@ onValue(
             snapshot.val();
 
 
+        /*==============================
+        NO BANNERS
+        ==============================*/
+
         if (!data) {
 
             bannerList.innerHTML = `
+
                 <p class="empty-message">
+
                     No banners added yet.
+
                 </p>
+
             `;
 
             return;
@@ -424,12 +516,16 @@ onValue(
         }
 
 
+        /*==============================
+        CONVERT OBJECT TO ARRAY
+        ==============================*/
+
         const banners =
             Object.values(data);
 
 
         /*==============================
-        SORT NEWEST FIRST
+        NEWEST FIRST
         ==============================*/
 
         banners.sort(
@@ -439,15 +535,37 @@ onValue(
         );
 
 
+        /*==============================
+        DISPLAY
+        ==============================*/
+
         bannerList.innerHTML =
             banners
-                .map(
-                    createBannerItem
-                )
+                .map(createBannerItem)
                 .join("");
 
 
         attachBannerActions();
+
+    },
+
+    function (error) {
+
+        console.error(
+            "Banner Load Error:",
+            error
+        );
+
+
+        bannerList.innerHTML = `
+
+            <p class="empty-message">
+
+                Failed to load banners.
+
+            </p>
+
+        `;
 
     }
 );
@@ -455,41 +573,63 @@ onValue(
 
 /*==================================================
 FEATURE — BANNER MANAGEMENT
-CREATE BANNER ITEM
+CREATE SAVED BANNER ITEM
 ==================================================*/
 
 function createBannerItem(
     banner
 ) {
 
+    const safeId =
+        escapeHTML(
+            banner.id || ""
+        );
+
+
     const safeTitle =
         escapeHTML(
             banner.title || ""
         );
+
 
     const safeDescription =
         escapeHTML(
             banner.description || ""
         );
 
-    const safeStatus =
+
+    const safeImageURL =
         escapeHTML(
-            banner.status || "inactive"
+            banner.imageURL || ""
         );
+
+
+    const safeStatus =
+        banner.status === "active"
+            ? "active"
+            : "inactive";
+
+
+    const statusText =
+        safeStatus === "active"
+            ? "Active"
+            : "Inactive";
 
 
     return `
 
         <article
             class="banner-item"
-            data-banner-id="${banner.id}"
+            data-banner-id="${safeId}"
         >
+
 
             <div class="banner-item-image">
 
                 <img
-                    src="${banner.imageURL}"
+                    src="${safeImageURL}"
                     alt="${safeTitle}"
+                    loading="lazy"
                 >
 
             </div>
@@ -501,16 +641,19 @@ function createBannerItem(
                     ${safeTitle}
                 </h3>
 
+
                 <p>
                     ${safeDescription}
                 </p>
 
-                <p>
-                    Status:
-                    <strong>
-                        ${safeStatus}
-                    </strong>
-                </p>
+
+                <span
+                    class="banner-status ${safeStatus}"
+                >
+
+                    ${statusText}
+
+                </span>
 
 
                 <div
@@ -521,7 +664,7 @@ function createBannerItem(
                         type="button"
                         class="banner-delete-btn"
                         data-action="delete"
-                        data-id="${banner.id}"
+                        data-id="${safeId}"
                     >
 
                         <i class="fa-solid fa-trash"></i>
@@ -543,7 +686,7 @@ function createBannerItem(
 
 /*==================================================
 FEATURE — BANNER MANAGEMENT
-BANNER ACTIONS
+DELETE BANNER
 ==================================================*/
 
 function attachBannerActions() {
@@ -555,7 +698,7 @@ function attachBannerActions() {
 
 
     deleteButtons.forEach(
-        button => {
+        function (button) {
 
             button.addEventListener(
                 "click",
@@ -563,6 +706,7 @@ function attachBannerActions() {
 
                     const id =
                         this.dataset.id;
+
 
                     if (!id) {
 
@@ -601,6 +745,7 @@ function attachBannerActions() {
 
                     }
 
+
                     catch (error) {
 
                         console.error(
@@ -635,8 +780,16 @@ function showMessage(
     type
 ) {
 
+    if (!bannerMessage) {
+
+        return;
+
+    }
+
+
     bannerMessage.textContent =
         message;
+
 
     bannerMessage.className =
         `banner-message ${type}`;
@@ -646,7 +799,16 @@ function showMessage(
 
 function clearMessage() {
 
-    bannerMessage.textContent = "";
+    if (!bannerMessage) {
+
+        return;
+
+    }
+
+
+    bannerMessage.textContent =
+        "";
+
 
     bannerMessage.className =
         "banner-message";
@@ -664,18 +826,39 @@ function escapeHTML(
 ) {
 
     return String(value)
-        .replaceAll("&", "&amp;")
-        .replaceAll("<", "&lt;")
-        .replaceAll(">", "&gt;")
-        .replaceAll('"', "&quot;")
-        .replaceAll("'", "&#039;");
+
+        .replaceAll(
+            "&",
+            "&amp;"
+        )
+
+        .replaceAll(
+            "<",
+            "&lt;"
+        )
+
+        .replaceAll(
+            ">",
+            "&gt;"
+        )
+
+        .replaceAll(
+            '"',
+            "&quot;"
+        )
+
+        .replaceAll(
+            "'",
+            "&#039;"
+        );
 
 }
 
 
 /*==================================================
 SMARTBAZAAR PRO
-BANNER MANAGER INITIALIZED
+FEATURE — BANNER MANAGEMENT
+INITIALIZED
 ==================================================*/
 
 console.log(
