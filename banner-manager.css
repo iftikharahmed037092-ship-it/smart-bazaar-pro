@@ -1,52 +1,82 @@
-//*==================================================
+/*==================================================
 SMARTBAZAAR PRO
+FEATURE — BANNER MANAGEMENT
 PART 20.1
 BANNER MANAGER CSS
 ==================================================*/
 
 
-/*==============================
+/*==================================================
 RESET
-==============================*/
+==================================================*/
 
 *{
-
     margin:0;
     padding:0;
     box-sizing:border-box;
+}
 
+
+html{
+    scroll-behavior:smooth;
 }
 
 
 body{
 
-    font-family:Arial, sans-serif;
+    font-family:
+        Arial,
+        Helvetica,
+        sans-serif;
 
     background:#f5f7fb;
 
     color:#1f2937;
-
-}
-
-
-
-/*==============================
-MAIN CONTAINER
-==============================*/
-
-.banner-manager{
 
     min-height:100vh;
 
 }
 
 
+button,
+input,
+textarea,
+select{
+    font-family:inherit;
+}
 
-/*==============================
+
+button{
+    border:none;
+    outline:none;
+}
+
+
+a{
+    text-decoration:none;
+}
+
+
+/*==================================================
+MAIN
+==================================================*/
+
+.banner-manager{
+
+    width:100%;
+
+    min-height:100vh;
+
+}
+
+
+/*==================================================
 HEADER
-==============================*/
+==================================================*/
 
 .banner-manager-header{
+
+    width:100%;
 
     background:#ffffff;
 
@@ -62,21 +92,37 @@ HEADER
 
     border-bottom:1px solid #e5e7eb;
 
-    box-shadow:0 3px 15px rgba(0,0,0,.06);
+    box-shadow:
+        0 3px 15px rgba(0,0,0,.06);
 
 }
 
 
-.banner-manager-header h1{
+.header-info h1{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:10px;
 
     font-size:27px;
+
+    color:#1f2937;
 
     margin-bottom:5px;
 
 }
 
 
-.banner-manager-header p{
+.header-info h1 i{
+
+    color:#2e7d32;
+
+}
+
+
+.header-info p{
 
     color:#6b7280;
 
@@ -85,21 +131,21 @@ HEADER
 }
 
 
-.banner-manager-header > a{
+.dashboard-btn{
 
     display:flex;
 
     align-items:center;
 
-    gap:8px;
+    justify-content:center;
 
-    text-decoration:none;
+    gap:8px;
 
     background:#2e7d32;
 
     color:#ffffff;
 
-    padding:11px 17px;
+    padding:11px 18px;
 
     border-radius:10px;
 
@@ -110,19 +156,18 @@ HEADER
 }
 
 
-.banner-manager-header > a:hover{
+.dashboard-btn:hover{
 
-    background:#256628;
+    background:#1b5e20;
 
     transform:translateY(-2px);
 
 }
 
 
-
-/*==============================
-CONTENT
-==============================*/
+/*==================================================
+MAIN CONTENT
+==================================================*/
 
 .banner-manager-content{
 
@@ -130,23 +175,24 @@ CONTENT
 
     max-width:1200px;
 
-    margin:auto;
+    margin:0 auto;
 
     padding:30px;
 
     display:grid;
 
-    grid-template-columns:1fr 1fr;
+    grid-template-columns:
+        minmax(0,1fr)
+        minmax(0,1fr);
 
     gap:25px;
 
 }
 
 
-
-/*==============================
+/*==================================================
 CARDS
-==============================*/
+==================================================*/
 
 .banner-form-card,
 .banner-list-card{
@@ -157,39 +203,73 @@ CARDS
 
     padding:25px;
 
-    box-shadow:0 5px 25px rgba(0,0,0,.07);
+    box-shadow:
+        0 5px 25px rgba(0,0,0,.07);
 
 }
 
 
-.banner-form-card h2,
-.banner-list-card h2{
+.card-heading{
 
     display:flex;
 
     align-items:center;
 
-    gap:10px;
-
-    font-size:20px;
+    gap:12px;
 
     margin-bottom:25px;
 
 }
 
 
-.banner-form-card h2 i,
-.banner-list-card h2 i{
+.heading-icon{
+
+    width:44px;
+
+    height:44px;
+
+    flex-shrink:0;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    border-radius:12px;
+
+    background:#eaf6ec;
 
     color:#2e7d32;
+
+    font-size:19px;
 
 }
 
 
+.card-heading h2{
 
-/*==============================
-FORM
-==============================*/
+    font-size:20px;
+
+    color:#1f2937;
+
+    margin-bottom:3px;
+
+}
+
+
+.card-heading p{
+
+    font-size:12px;
+
+    color:#8a919c;
+
+}
+
+
+/*==================================================
+FORM GROUP
+==================================================*/
 
 .form-group{
 
@@ -198,7 +278,7 @@ FORM
 }
 
 
-.form-group label:not(.image-upload-box){
+.field-label{
 
     display:block;
 
@@ -206,10 +286,16 @@ FORM
 
     font-weight:600;
 
+    color:#374151;
+
     margin-bottom:8px;
 
 }
 
+
+/*==================================================
+INPUTS
+==================================================*/
 
 .form-group input,
 .form-group textarea,
@@ -227,6 +313,8 @@ FORM
 
     font-size:14px;
 
+    color:#1f2937;
+
     outline:none;
 
     transition:.25s ease;
@@ -234,11 +322,27 @@ FORM
 }
 
 
+.form-group input{
+
+    height:46px;
+
+}
+
+
 .form-group textarea{
+
+    min-height:100px;
 
     resize:vertical;
 
-    min-height:100px;
+}
+
+
+.form-group select{
+
+    height:46px;
+
+    cursor:pointer;
 
 }
 
@@ -249,25 +353,30 @@ FORM
 
     border-color:#2e7d32;
 
-    box-shadow:0 0 0 3px rgba(46,125,50,.10);
+    box-shadow:
+        0 0 0 3px rgba(46,125,50,.10);
 
 }
 
 
-
-/*==============================
+/*==================================================
+FEATURE — BANNER IMAGE
 IMAGE UPLOAD BOX
-==============================*/
+==================================================*/
 
 .image-upload-box{
 
     width:100%;
 
-    min-height:170px;
+    min-height:190px;
+
+    padding:25px;
 
     border:2px dashed #aab7b0;
 
     border-radius:16px;
+
+    background:#fafcfb;
 
     display:flex;
 
@@ -281,9 +390,12 @@ IMAGE UPLOAD BOX
 
     cursor:pointer;
 
-    background:#fafcfb;
+    color:#1f2937;
 
-    transition:.25s ease;
+    transition:
+        border-color .25s ease,
+        background .25s ease,
+        transform .25s ease;
 
 }
 
@@ -297,11 +409,32 @@ IMAGE UPLOAD BOX
 }
 
 
-.image-upload-box i{
+.image-upload-box:active{
 
-    font-size:38px;
+    transform:scale(.99);
+
+}
+
+
+.upload-icon{
+
+    width:58px;
+
+    height:58px;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    border-radius:50%;
+
+    background:#eaf6ec;
 
     color:#2e7d32;
+
+    font-size:25px;
 
     margin-bottom:12px;
 
@@ -312,40 +445,52 @@ IMAGE UPLOAD BOX
 
     font-size:16px;
 
-    color:#1f2937;
+    font-weight:700;
 
 }
 
 
-.image-upload-box span{
+.upload-text{
+
+    margin-top:5px;
 
     font-size:12px;
 
     color:#6b7280;
 
-    margin-top:5px;
+}
+
+
+.image-upload-box small{
+
+    margin-top:8px;
+
+    color:#9ca3af;
+
+    font-size:11px;
 
 }
 
 
-
-/*==============================
+/*==================================================
 IMAGE PREVIEW
-==============================*/
+==================================================*/
 
 .image-preview{
 
     display:none;
 
-    margin-top:12px;
+    width:100%;
 
-    position:relative;
+    margin-top:12px;
 
     overflow:hidden;
 
     border-radius:14px;
 
     background:#f1f5f9;
+
+    border:1px solid #e5e7eb;
 
 }
 
@@ -363,37 +508,22 @@ IMAGE PREVIEW
 
     width:100%;
 
-    max-height:260px;
+    max-height:280px;
 
     object-fit:cover;
 
 }
 
 
-
-/*==============================
+/*==================================================
 SAVE BUTTON
-==============================*/
+==================================================*/
 
 .save-banner-btn{
 
     width:100%;
 
-    border:none;
-
-    background:#2e7d32;
-
-    color:#ffffff;
-
-    padding:14px 18px;
-
-    border-radius:11px;
-
-    font-size:15px;
-
-    font-weight:600;
-
-    cursor:pointer;
+    min-height:48px;
 
     display:flex;
 
@@ -403,6 +533,20 @@ SAVE BUTTON
 
     gap:9px;
 
+    background:#2e7d32;
+
+    color:#ffffff;
+
+    padding:13px 18px;
+
+    border-radius:11px;
+
+    font-size:15px;
+
+    font-weight:600;
+
+    cursor:pointer;
+
     transition:.25s ease;
 
 }
@@ -410,7 +554,7 @@ SAVE BUTTON
 
 .save-banner-btn:hover{
 
-    background:#256628;
+    background:#1b5e20;
 
     transform:translateY(-2px);
 
@@ -428,16 +572,15 @@ SAVE BUTTON
 }
 
 
-
-/*==============================
+/*==================================================
 MESSAGE
-==============================*/
+==================================================*/
 
 .banner-message{
 
     margin-top:15px;
 
-    padding:0;
+    min-height:0;
 
     font-size:13px;
 
@@ -472,10 +615,9 @@ MESSAGE
 }
 
 
-
-/*==============================
-BANNER LIST
-==============================*/
+/*==================================================
+SAVED BANNERS
+==================================================*/
 
 .banner-list{
 
@@ -501,18 +643,17 @@ BANNER LIST
 }
 
 
-
-/*==============================
-SAVED BANNER ITEM
-==============================*/
+/*==================================================
+BANNER ITEM
+==================================================*/
 
 .banner-item{
+
+    overflow:hidden;
 
     border:1px solid #e5e7eb;
 
     border-radius:14px;
-
-    overflow:hidden;
 
     background:#ffffff;
 
@@ -523,7 +664,7 @@ SAVED BANNER ITEM
 
     width:100%;
 
-    height:150px;
+    height:160px;
 
     background:#f1f5f9;
 
@@ -552,6 +693,8 @@ SAVED BANNER ITEM
 
     font-size:16px;
 
+    color:#1f2937;
+
     margin-bottom:6px;
 
 }
@@ -565,8 +708,49 @@ SAVED BANNER ITEM
 
     line-height:1.5;
 
+    margin-bottom:5px;
+
 }
 
+
+.banner-status{
+
+    display:inline-flex;
+
+    margin-top:5px;
+
+    padding:4px 9px;
+
+    border-radius:20px;
+
+    font-size:11px;
+
+    font-weight:700;
+
+}
+
+
+.banner-status.active{
+
+    background:#e9f8ed;
+
+    color:#187333;
+
+}
+
+
+.banner-status.inactive{
+
+    background:#f1f5f9;
+
+    color:#6b7280;
+
+}
+
+
+/*==================================================
+ACTIONS
+==================================================*/
 
 .banner-item-actions{
 
@@ -591,14 +775,7 @@ SAVED BANNER ITEM
 
     font-size:12px;
 
-}
-
-
-.banner-edit-btn{
-
-    background:#eef5ff;
-
-    color:#2563eb;
+    transition:.2s ease;
 
 }
 
@@ -612,10 +789,16 @@ SAVED BANNER ITEM
 }
 
 
+.banner-delete-btn:hover{
 
-/*==============================
+    background:#fee2e2;
+
+}
+
+
+/*==================================================
 TABLET
-==============================*/
+==================================================*/
 
 @media(max-width:900px){
 
@@ -628,10 +811,9 @@ TABLET
 }
 
 
-
-/*==============================
+/*==================================================
 MOBILE
-==============================*/
+==================================================*/
 
 @media(max-width:600px){
 
@@ -644,21 +826,21 @@ MOBILE
     }
 
 
-    .banner-manager-header h1{
+    .header-info h1{
 
         font-size:21px;
 
     }
 
 
-    .banner-manager-header p{
+    .header-info p{
 
         font-size:12px;
 
     }
 
 
-    .banner-manager-header > a{
+    .dashboard-btn{
 
         padding:9px 11px;
 
@@ -686,8 +868,7 @@ MOBILE
     }
 
 
-    .banner-form-card h2,
-    .banner-list-card h2{
+    .card-heading h2{
 
         font-size:18px;
 
@@ -696,24 +877,27 @@ MOBILE
 
     .image-upload-box{
 
-        min-height:150px;
+        min-height:165px;
 
     }
 
 
-    .image-upload-box i{
+    .upload-icon{
 
-        font-size:32px;
+        width:52px;
+
+        height:52px;
+
+        font-size:22px;
 
     }
 
 }
 
 
-
-/*==============================
+/*==================================================
 SMALL MOBILE
-==============================*/
+==================================================*/
 
 @media(max-width:400px){
 
@@ -724,11 +908,9 @@ SMALL MOBILE
     }
 
 
-    .banner-manager-header > a{
+    .dashboard-btn{
 
         width:100%;
-
-        justify-content:center;
 
     }
 
@@ -736,6 +918,14 @@ SMALL MOBILE
     .banner-manager-content{
 
         padding:10px;
+
+    }
+
+
+    .banner-form-card,
+    .banner-list-card{
+
+        padding:15px;
 
     }
 
