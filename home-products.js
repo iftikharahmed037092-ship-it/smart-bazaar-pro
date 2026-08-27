@@ -2,7 +2,13 @@
 SMARTBAZAAR PRO
 FEATURE 24.3
 HOME PRODUCTS SYSTEM
-FIRESTORE → PUBLISHED PRODUCTS
+PUBLISHED PRODUCTS
+PRODUCT CARD + PRODUCT DETAIL NAVIGATION
+==================================================*/
+
+
+/*==================================================
+IMPORT PRODUCTS
 ==================================================*/
 
 import {
@@ -42,37 +48,32 @@ function escapeHTML(value) {
     return String(
         value ?? ""
     )
-
-    .replaceAll(
-        "&",
-        "&amp;"
-    )
-
-    .replaceAll(
-        "<",
-        "&lt;"
-    )
-
-    .replaceAll(
-        ">",
-        "&gt;"
-    )
-
-    .replaceAll(
-        '"',
-        "&quot;"
-    )
-
-    .replaceAll(
-        "'",
-        "&#039;"
-    );
+        .replaceAll(
+            "&",
+            "&amp;"
+        )
+        .replaceAll(
+            "<",
+            "&lt;"
+        )
+        .replaceAll(
+            ">",
+            "&gt;"
+        )
+        .replaceAll(
+            '"',
+            "&quot;"
+        )
+        .replaceAll(
+            "'",
+            "&#039;"
+        );
 
 }
 
 
 /*==================================================
-PRICE
+FORMAT PRICE
 ==================================================*/
 
 function formatPrice(price) {
@@ -94,59 +95,114 @@ function formatPrice(price) {
 
 
 /*==================================================
-PRODUCT IMAGE
+GET PRODUCT ID
+==================================================*/
+
+function getProductId(
+    product,
+    fallbackId = ""
+) {
+
+    return String(
+        product?.productId ||
+        product?.id ||
+        fallbackId ||
+        ""
+    ).trim();
+
+}
+
+
+/*==================================================
+GET PRODUCT IMAGE
 ==================================================*/
 
 function getProductImage(
     product
 ) {
 
-    /* MAIN IMAGE */
+    /*----------------------------------------------
+    MAIN IMAGE
+    ----------------------------------------------*/
 
     if (
-        product.mainImage
+        typeof product?.mainImage ===
+        "string" &&
+        product.mainImage.trim()
     ) {
 
-        return product.mainImage;
+        return product.mainImage.trim();
 
     }
 
 
-    /* OLD IMAGE FIELD */
+    /*----------------------------------------------
+    OLD IMAGE FIELD
+    ----------------------------------------------*/
 
     if (
-        product.image
+        typeof product?.image ===
+        "string" &&
+        product.image.trim()
     ) {
 
-        return product.image;
+        return product.image.trim();
 
     }
 
 
-    /* GALLERY */
+    /*----------------------------------------------
+    GALLERY
+    ----------------------------------------------*/
 
     if (
         Array.isArray(
-            product.gallery
+            product?.gallery
         ) &&
         product.gallery.length
     ) {
 
-        return product.gallery[0];
+        const image =
+            product.gallery.find(
+                item =>
+                    typeof item === "string" &&
+                    item.trim()
+            );
+
+
+        if (image) {
+
+            return image.trim();
+
+        }
 
     }
 
 
-    /* OLD IMAGES */
+    /*----------------------------------------------
+    OLD IMAGES FIELD
+    ----------------------------------------------*/
 
     if (
         Array.isArray(
-            product.images
+            product?.images
         ) &&
         product.images.length
     ) {
 
-        return product.images[0];
+        const image =
+            product.images.find(
+                item =>
+                    typeof item === "string" &&
+                    item.trim()
+            );
+
+
+        if (image) {
+
+            return image.trim();
+
+        }
 
     }
 
@@ -157,7 +213,7 @@ function getProductImage(
 
 
 /*==================================================
-DISCOUNT
+CALCULATE DISCOUNT
 ==================================================*/
 
 function calculateDiscount(
@@ -209,7 +265,7 @@ function calculateDiscount(
 
 
 /*==================================================
-BADGE
+GET BADGE
 ==================================================*/
 
 function getBadge(
@@ -218,7 +274,7 @@ function getBadge(
 
     const badge =
         String(
-            product.badge || ""
+            product?.badge || ""
         ).trim();
 
 
@@ -236,7 +292,9 @@ function getBadge(
 
         <span class="product-badge">
 
-            ${escapeHTML(badge)}
+            ${escapeHTML(
+                badge
+            )}
 
         </span>
 
@@ -246,7 +304,7 @@ function getBadge(
 
 
 /*==================================================
-RATING
+RATING STARS
 ==================================================*/
 
 function getRatingStars(
@@ -277,8 +335,14 @@ function getRatingStars(
 
 
     const rounded =
-        Math.round(
-            value
+        Math.max(
+            0,
+            Math.min(
+                5,
+                Math.round(
+                    value
+                )
+            )
         );
 
 
@@ -294,9 +358,19 @@ function getRatingStars(
         stars +=
             i <= rounded
 
-                ? `<i class="fa-solid fa-star"></i>`
+                ? `
+                    <i
+                        class="fa-solid fa-star"
+                        aria-hidden="true">
+                    </i>
+                `
 
-                : `<i class="fa-regular fa-star"></i>`;
+                : `
+                    <i
+                        class="fa-regular fa-star"
+                        aria-hidden="true">
+                    </i>
+                `;
 
     }
 
@@ -340,29 +414,29 @@ function createProductCard(
 
 
     const name =
-        product.productName ||
-        product.name ||
+        product?.productName ||
+        product?.name ||
         "Unnamed Product";
 
 
     const category =
-        product.category ||
+        product?.category ||
         "Product";
 
 
     const price =
         Number(
-            product.salePrice ||
-            product.regularPrice ||
-            product.price ||
+            product?.salePrice ||
+            product?.regularPrice ||
+            product?.price ||
             0
         );
 
 
     const oldPrice =
         Number(
-            product.regularPrice ||
-            product.oldPrice ||
+            product?.regularPrice ||
+            product?.oldPrice ||
             0
         );
 
@@ -376,32 +450,51 @@ function createProductCard(
 
     const rating =
         Number(
-            product.rating ||
+            product?.rating ||
             0
         );
 
 
     const reviewCount =
         Number(
-            product.reviewCount ||
+            product?.reviewCount ||
             0
         );
 
 
     const safeId =
         encodeURIComponent(
-            productId
+            getProductId(
+                product,
+                productId
+            )
         );
 
+
+    /*----------------------------------------------
+    PRODUCT CARD
+    IMPORTANT:
+    WHOLE CARD IS CLICKABLE
+    ----------------------------------------------*/
 
     return `
 
         <article
             class="product-card"
-            data-product-id="${safeId}">
+            data-product-id="${escapeHTML(
+                safeId
+            )}"
+            data-product-url="product-detail.html?id=${safeId}"
+            role="button"
+            tabindex="0"
+            aria-label="View ${escapeHTML(
+                name
+            )}">
 
 
-            <!-- IMAGE -->
+            <!--====================================
+            PRODUCT IMAGE
+            ====================================-->
 
             <div class="product-image-box">
 
@@ -412,9 +505,14 @@ function createProductCard(
 
                     <img
                         class="product-image"
-                        src="${escapeHTML(image)}"
-                        alt="${escapeHTML(name)}"
-                        loading="lazy">
+                        src="${escapeHTML(
+                            image
+                        )}"
+                        alt="${escapeHTML(
+                            name
+                        )}"
+                        loading="lazy"
+                        decoding="async">
 
                     `
 
@@ -422,7 +520,10 @@ function createProductCard(
 
                     <div class="product-no-image">
 
-                        <i class="fa-regular fa-image"></i>
+                        <i
+                            class="fa-regular fa-image"
+                            aria-hidden="true">
+                        </i>
 
                         <span>
                             No Image
@@ -456,13 +557,18 @@ function createProductCard(
                 }
 
 
+                <!-- WISHLIST -->
+
                 <button
                     type="button"
                     class="product-wishlist"
                     data-wishlist-id="${safeId}"
                     aria-label="Add to wishlist">
 
-                    <i class="fa-regular fa-heart"></i>
+                    <i
+                        class="fa-regular fa-heart"
+                        aria-hidden="true">
+                    </i>
 
                 </button>
 
@@ -470,26 +576,34 @@ function createProductCard(
             </div>
 
 
-            <!-- INFORMATION -->
+            <!--====================================
+            PRODUCT INFORMATION
+            ====================================-->
 
             <div class="product-info">
 
 
                 <span class="product-category">
 
-                    ${escapeHTML(category)}
+                    ${escapeHTML(
+                        category
+                    )}
 
                 </span>
 
 
                 <h3 class="product-name">
 
-                    ${escapeHTML(name)}
+                    ${escapeHTML(
+                        name
+                    )}
 
                 </h3>
 
 
-                ${getRatingStars(rating)}
+                ${getRatingStars(
+                    rating
+                )}
 
 
                 ${
@@ -499,7 +613,9 @@ function createProductCard(
 
                     <span class="product-reviews">
 
-                        (${reviewCount})
+                        (${escapeHTML(
+                            reviewCount
+                        )})
 
                     </span>
 
@@ -509,13 +625,17 @@ function createProductCard(
                 }
 
 
-                <!-- PRICE -->
+                <!--================================
+                PRICE
+                =================================-->
 
                 <div class="product-price-row">
 
                     <span class="product-price">
 
-                        ${formatPrice(price)}
+                        ${formatPrice(
+                            price
+                        )}
 
                     </span>
 
@@ -541,16 +661,21 @@ function createProductCard(
                 </div>
 
 
-                <!-- DELIVERY -->
+                <!--================================
+                DELIVERY
+                =================================-->
 
                 ${
-                    product.deliveryTime
+                    product?.deliveryTime
 
                     ? `
 
                     <div class="product-delivery">
 
-                        <i class="fa-solid fa-truck"></i>
+                        <i
+                            class="fa-solid fa-truck"
+                            aria-hidden="true">
+                        </i>
 
                         <span>
 
@@ -568,14 +693,19 @@ function createProductCard(
                 }
 
 
-                <!-- VIEW -->
+                <!--================================
+                VIEW PRODUCT BUTTON
+                =================================-->
 
                 <button
                     type="button"
                     class="view-product-btn"
                     data-product-id="${safeId}">
 
-                    <i class="fa-regular fa-eye"></i>
+                    <i
+                        class="fa-regular fa-eye"
+                        aria-hidden="true">
+                    </i>
 
                     View Product
 
@@ -609,7 +739,10 @@ function showProductsLoading() {
 
         <div class="products-loading">
 
-            <i class="fa-solid fa-spinner fa-spin"></i>
+            <i
+                class="fa-solid fa-spinner fa-spin"
+                aria-hidden="true">
+            </i>
 
             <span>
                 Loading products...
@@ -639,7 +772,10 @@ function showProductsEmpty() {
 
         <div class="products-empty">
 
-            <i class="fa-solid fa-box-open"></i>
+            <i
+                class="fa-solid fa-box-open"
+                aria-hidden="true">
+            </i>
 
             <h3>
                 No Featured Products
@@ -665,7 +801,7 @@ function showProductsError(
 ) {
 
     console.error(
-        "HOME PRODUCTS ERROR:",
+        "SMARTBAZAAR PRO FEATURE 24.3 ERROR:",
         error
     );
 
@@ -681,7 +817,10 @@ function showProductsError(
 
         <div class="products-error">
 
-            <i class="fa-solid fa-triangle-exclamation"></i>
+            <i
+                class="fa-solid fa-triangle-exclamation"
+                aria-hidden="true">
+            </i>
 
             <h3>
                 Products could not be loaded
@@ -694,6 +833,11 @@ function showProductsError(
             <button
                 type="button"
                 id="retryProductsBtn">
+
+                <i
+                    class="fa-solid fa-rotate-right"
+                    aria-hidden="true">
+                </i>
 
                 Try Again
 
@@ -724,41 +868,80 @@ function sortProducts(
     products
 ) {
 
-    return products.sort(
-        (
-            a,
-            b
-        ) => {
+    return [
+        ...(Array.isArray(
+            products
+        )
+            ? products
+            : [])
+    ]
+        .sort(
+            (
+                a,
+                b
+            ) => {
 
-            const aTime =
-                a.createdAt?.seconds
-                ? a.createdAt.seconds
-                : Number(
-                    a.createdAt || 0
+                const aCreated =
+                    a?.createdAt;
+
+
+                const bCreated =
+                    b?.createdAt;
+
+
+                const aTime =
+                    aCreated?.seconds
+                        ? Number(
+                            aCreated.seconds
+                        ) * 1000
+
+                        : (
+                            typeof aCreated ===
+                            "string"
+
+                                ? Date.parse(
+                                    aCreated
+                                ) || 0
+
+                                : Number(
+                                    aCreated || 0
+                                )
+                        );
+
+
+                const bTime =
+                    bCreated?.seconds
+                        ? Number(
+                            bCreated.seconds
+                        ) * 1000
+
+                        : (
+                            typeof bCreated ===
+                            "string"
+
+                                ? Date.parse(
+                                    bCreated
+                                ) || 0
+
+                                : Number(
+                                    bCreated || 0
+                                )
+                        );
+
+
+                return (
+                    bTime -
+                    aTime
                 );
 
-
-            const bTime =
-                b.createdAt?.seconds
-                ? b.createdAt.seconds
-                : Number(
-                    b.createdAt || 0
-                );
-
-
-            return (
-                bTime -
-                aTime
-            );
-
-        }
-    );
+            }
+        );
 
 }
 
 
 /*==================================================
-RENDER
+RENDER PRODUCTS
 ==================================================*/
 
 function renderProducts(
@@ -773,7 +956,9 @@ function renderProducts(
 
 
     if (
-        !products ||
+        !Array.isArray(
+            products
+        ) ||
         !products.length
     ) {
 
@@ -784,23 +969,54 @@ function renderProducts(
     }
 
 
-    const featured =
+    const sortedProducts =
         sortProducts(
             products
-        ).slice(
+        );
+
+
+    const featured =
+        sortedProducts.slice(
             0,
             FEATURED_PRODUCT_LIMIT
         );
 
 
+    const validProducts =
+        featured.filter(
+            product =>
+                getProductId(
+                    product
+                )
+        );
+
+
+    if (!validProducts.length) {
+
+        showProductsEmpty();
+
+        return;
+
+    }
+
+
     productsContainer.innerHTML =
-        featured
+        validProducts
             .map(
-                product =>
-                    createProductCard(
+                product => {
+
+                    const id =
+                        getProductId(
+                            product
+                        );
+
+
+                    return createProductCard(
                         product,
-                        product.id
-                    )
+                        id
+                    );
+
+                }
             )
             .join("");
 
@@ -811,25 +1027,167 @@ function renderProducts(
 
 
 /*==================================================
-EVENTS
+OPEN PRODUCT DETAIL
+==================================================*/
+
+function openProduct(
+    productId
+) {
+
+    const id =
+        String(
+            productId || ""
+        ).trim();
+
+
+    if (!id) {
+
+        console.error(
+            "PRODUCT DETAIL ERROR: Product ID is missing."
+        );
+
+        return;
+
+    }
+
+
+    /*----------------------------------------------
+    SAVE SELECTED PRODUCT
+    ----------------------------------------------*/
+
+    try {
+
+        localStorage.setItem(
+            "selectedProductId",
+            id
+        );
+
+    }
+    catch (error) {
+
+        console.warn(
+            "Could not save selectedProductId:",
+            error
+        );
+
+    }
+
+
+    /*----------------------------------------------
+    OPEN DETAIL PAGE
+    ----------------------------------------------*/
+
+    window.location.href =
+        `product-detail.html?id=${encodeURIComponent(
+            id
+        )}`;
+
+}
+
+
+/*==================================================
+PRODUCT CARD EVENTS
 ==================================================*/
 
 function attachProductEvents() {
 
-    document
+    if (!productsContainer) {
+
+        return;
+
+    }
+
+
+    /*==============================================
+    WHOLE PRODUCT CARD CLICK
+    ==============================================*/
+
+    productsContainer
         .querySelectorAll(
-            ".view-product-btn"
+            ".product-card"
         )
         .forEach(
-            button => {
+            card => {
 
-                button.addEventListener(
+                card.addEventListener(
                     "click",
-                    function() {
+                    function(event) {
+
+                        /*--------------------------------
+                        IGNORE BUTTONS / LINKS / INPUTS
+                        --------------------------------*/
+
+                        if (
+                            event.target.closest(
+                                "button, a, input, select, textarea"
+                            )
+                        ) {
+
+                            return;
+
+                        }
+
+
+                        const encodedId =
+                            this.dataset.productId;
+
+
+                        if (!encodedId) {
+
+                            return;
+
+                        }
+
 
                         const productId =
                             decodeURIComponent(
-                                this.dataset.productId
+                                encodedId
+                            );
+
+
+                        openProduct(
+                            productId
+                        );
+
+                    }
+                );
+
+
+                /*--------------------------------------
+                KEYBOARD SUPPORT
+                --------------------------------------*/
+
+                card.addEventListener(
+                    "keydown",
+                    function(event) {
+
+                        if (
+                            event.key !== "Enter" &&
+                            event.key !== " "
+                        ) {
+
+                            return;
+
+                        }
+
+
+                        event.preventDefault();
+
+
+                        const encodedId =
+                            this.dataset.productId;
+
+
+                        if (!encodedId) {
+
+                            return;
+
+                        }
+
+
+                        const productId =
+                            decodeURIComponent(
+                                encodedId
                             );
 
 
@@ -844,7 +1202,113 @@ function attachProductEvents() {
         );
 
 
-    document
+    /*==============================================
+    VIEW PRODUCT BUTTON
+    ==============================================*/
+
+    productsContainer
+        .querySelectorAll(
+            ".view-product-btn"
+        )
+        .forEach(
+            button => {
+
+                button.addEventListener(
+                    "click",
+                    function(event) {
+
+                        event.preventDefault();
+
+                        event.stopPropagation();
+
+
+                        const encodedId =
+                            this.dataset.productId;
+
+
+                        if (!encodedId) {
+
+                            return;
+
+                        }
+
+
+                        const productId =
+                            decodeURIComponent(
+                                encodedId
+                            );
+
+
+                        openProduct(
+                            productId
+                        );
+
+                    }
+                );
+
+            }
+        );
+
+
+    /*==============================================
+    PRODUCT IMAGE CLICK
+    ==============================================*/
+
+    productsContainer
+        .querySelectorAll(
+            ".product-image"
+        )
+        .forEach(
+            image => {
+
+                image.addEventListener(
+                    "click",
+                    function(event) {
+
+                        event.preventDefault();
+
+                        event.stopPropagation();
+
+
+                        const card =
+                            this.closest(
+                                ".product-card"
+                            );
+
+
+                        const encodedId =
+                            card?.dataset.productId;
+
+
+                        if (!encodedId) {
+
+                            return;
+
+                        }
+
+
+                        const productId =
+                            decodeURIComponent(
+                                encodedId
+                            );
+
+
+                        openProduct(
+                            productId
+                        );
+
+                    }
+                );
+
+            }
+        );
+
+
+    /*==============================================
+    WISHLIST
+    ==============================================*/
+
+    productsContainer
         .querySelectorAll(
             ".product-wishlist"
         )
@@ -871,13 +1335,36 @@ function attachProductEvents() {
                             );
 
 
-                        icon?.classList.toggle(
-                            "fa-regular"
+                        if (!icon) {
+
+                            return;
+
+                        }
+
+
+                        const isActive =
+                            this.classList.contains(
+                                "active"
+                            );
+
+
+                        icon.classList.toggle(
+                            "fa-regular",
+                            !isActive
                         );
 
 
-                        icon?.classList.toggle(
-                            "fa-solid"
+                        icon.classList.toggle(
+                            "fa-solid",
+                            isActive
+                        );
+
+
+                        this.setAttribute(
+                            "aria-label",
+                            isActive
+                                ? "Remove from wishlist"
+                                : "Add to wishlist"
                         );
 
                     }
@@ -890,36 +1377,7 @@ function attachProductEvents() {
 
 
 /*==================================================
-OPEN PRODUCT
-==================================================*/
-
-function openProduct(
-    productId
-) {
-
-    if (!productId) {
-
-        return;
-
-    }
-
-
-    localStorage.setItem(
-        "selectedProductId",
-        productId
-    );
-
-
-    window.location.href =
-        `product-detail.html?id=${encodeURIComponent(
-            productId
-        )}`;
-
-}
-
-
-/*==================================================
-VIEW ALL
+VIEW ALL PRODUCTS
 ==================================================*/
 
 if (viewAllProducts) {
@@ -941,12 +1399,16 @@ if (viewAllProducts) {
 
 
 /*==================================================
-LOAD PRODUCTS
+LOAD FEATURED PRODUCTS
 ==================================================*/
 
 async function loadFeaturedProducts() {
 
     if (!productsContainer) {
+
+        console.warn(
+            "FEATURE 24.3: #products-container not found."
+        );
 
         return;
 
@@ -963,7 +1425,7 @@ async function loadFeaturedProducts() {
 
 
         console.log(
-            "PUBLISHED PRODUCTS:",
+            "SMARTBAZAAR PRO FEATURE 24.3 — PUBLISHED PRODUCTS:",
             products
         );
 
@@ -973,8 +1435,7 @@ async function loadFeaturedProducts() {
         );
 
     }
-
-    catch(error) {
+    catch (error) {
 
         showProductsError(
             error
@@ -986,7 +1447,7 @@ async function loadFeaturedProducts() {
 
 
 /*==================================================
-START
+START SYSTEM
 ==================================================*/
 
 if (
@@ -996,7 +1457,10 @@ if (
 
     document.addEventListener(
         "DOMContentLoaded",
-        loadFeaturedProducts
+        loadFeaturedProducts,
+        {
+            once: true
+        }
     );
 
 }
@@ -1007,6 +1471,10 @@ else {
 }
 
 
+/*==================================================
+SYSTEM READY
+==================================================*/
+
 console.log(
-    "SmartBazaar Pro Home Products loaded successfully."
+    "SMARTBAZAAR PRO FEATURE 24.3 — HOME PRODUCTS SYSTEM LOADED."
 );
